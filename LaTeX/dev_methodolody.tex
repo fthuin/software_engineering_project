@@ -107,24 +107,49 @@ The data should minimum contains :
 
 \subsection{Use cases}
 \subsubsection{Registration of a player}
+
+Name : Register to the tournament. \newline
+Identifier : UC01 \newline
+Basics course of action : \newline
+\begin{itemize}
+	\item Players register by indicating their tennis partner, personal informations, extras 	options and their payment method.
+	\item Players can also select another player to team up with and a specific court to play on.
+	\item System verifies that all informations are filled.
+	\item System assigns a specific number to each pair of players.
+	\item System sends an email to each member of the pair to confirm their inscription.
+	\item Staff members can edit all the informations of the players enrolled in the tournament.
+	\item System display to the staff a list of all players enrolled in the tournament with links to their informations.
+\end{itemize}
+
 \subsubsection{Registration of the owner of a court}
 
-As a court owner, I can register my court with a bunch of information :
-
+Name : Register a course owner in the database. \newline
+Identifier : UC02 \newline
+Basics course of action : \newline
 \begin{itemize}
-    \item (ID)
-    \item Court number
-    \item Address of the court
-    \item Court surface (multiple choice)
-    \item Type of court (private owner, club - multiple choice)
-    \item Geographical zone
-    \item (maybe we can find an alternative)From now, on which map it is
-        located, a large plan is given to the players in the afternoon
-        to find the courts.
-    \item Special instructions for accessing the court
-    \item Address of the owner
+	\item Owners of a court can fill a web form to create an account which will be saved in the database.
+	\item Owners of a court will have the possibility to write comments with the form to add any useful information.
+	\item System sends a mail to each owners of a court to verify if their email address is correct; if it is the court is added to the database.
+	\item Owners of a court receive an email to ensure that the court is available on the tournament date.
+	\item Owners of a court are able to change any informations related to their account.
+	\item Owners of multiple courts can add all their courts on the same account.
+	\item Staff members can add comments only visible by other staff members about any courts.
+	\item Staff members are able to edit all the informations related to the courts.
+	\item Staff members can search through all the database a specific court.
 \end{itemize}
 
 
-
 \subsubsection{Creation of a group}
+
+Name : Create a group of players. \newline
+Identifier : UC03 \newline
+Basics course of action : \newline
+\begin{itemize}
+	\item Staff members create groups of players based on several requirements (gender, age).
+	\item System verifies that the court used and the age category are correct.
+	\item System sends an email to each member of the group with the informations of their match.
+	\item System sends an email with the HQ informations to each group's leader and players with payment issues.
+	\item System displays the different pairs and allow the staff to modify the group.
+	\item System allows the informations about the group, the players and the courts to be printed.
+	\item Staff members encore the results of the matches once finished into the database.
+\end{itemize}
