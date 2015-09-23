@@ -1,8 +1,34 @@
 \section{Choice of the development methodology (25/09/2015)}
 
 \subsection{Software development method}
+\subsubsection{What is Agile?}
 
+Agile is a methodology for software developement. It is iterative which means it is based on tide cycles. Those cycles start with the requirements of what is going to be done during that period of time.
+It is followed by the analysis, design and coding. After that comes the testing and it ends with the evaluation of the cycle.
+It favors quick meetings and short documentations over huge requirements that are frozen at the beginning of the projet coupled with a huge documentation.
+Agile is based on time and not on features. We have a certain periode of time to try to at least do a certain number of features. If there is some time left , we can keep going and implements another one.
+Is is also very colaborative and for the most part requiers the whole team to work together.
+
+\subsubsection{Why use agile for this project?}
+
+This project has features in different categories (Must have,Should have,Could have,Would like to have). If we used a non agile methodology, we would have to chose at the very begining all the features that we want to implement.
+It is not an optimal solution for an university project since we have some other work to do. It is very hard at the begining of the semester to know how much we will be able to implement. This is why it is interresting to use a methodology that favorise change like Agile.
+We are also used to code in a Agile way since we started having project. In team project we would always code with different poeple working on the same project to exchange idea or coordonate in an easier way.
+We have weekly meetings with the project leader which fits well for Agile since we have to deliver something every week.
+To conclude, there might be some more busy weeks because of other classes assignments and an agile methodology will allow us to be more flexible on the features we will implement during a periode.
+
+\iffalse
 \subsubsection{Development method}
+Scrum is an agile methodology to manage a project and is usually used to manage software development. It's more of a framework for managing process than a real methodology.\newline
+
+The main idea behind scrum and behind agile methodology in general is not to provide a full detailed description of how everything has to be done. It leaves it to the scrum software development team who will know best how to solve those problems. We speak about the desired outcome not the implementation details.\newline
+
+There is two mains roles in Scrum. The ScrumMaster, a coach really, helping the team members to use the scrum process to perform at the highest level. And the Product Owner (PO) who is the customers or users and guides the team toward building the right product. In our case it is the ASBL.\newline
+
+Scrum works with a backlog containing the list of all the functionality. This list is ordered and the team always works on the most valuable features first. This backlog is created at the start of the project. It's usually composed of user stories which is a short descriptions of functionality described from the perspective of a user or a customer.\newline
+
+Scrum works with sprints. It's a short period of item from one to four week long (usually two weeks) where the team works and provide a potentially shippable product at the end of it. There is a planning meeting at the start of each sprint. During the meeting the team decide how many items they can commit to. The sprint backlog is then created. All those features will be done, coded, tested and integrated with the evolving product. At the end of each sprint, the team show to the PO their work and he can provide feedback that could influence the next sprint. This may lead to add, remove or revise items in the product backlog.\newline
+
 We decide to choose \enquote{Agile} and Scrum as a development method because
 everyone in the team worked at least once with this method (in the 4th
 project of computer science bachelor) and it fits perfectly with this
@@ -30,173 +56,14 @@ There are lots of tool to build the website design. The three main tools are HTM
 We are using \textbf{Git} to have a repository for our codes and reports or the project. We'll also use \textbf{Trello}, a free web-based project management application using kanban paradigm. Both \textbf{Git} and \textbf{Trello} were used in the project 4 last year and we all are familiar with these tools.
 
 We will use Trello as a kanban and GitHub as a host for the code. \newline
-
+\fi
 \subsection{Initial planning}
 \todo[inline]{A faire pour le 25 septembre\ldots reprendre la partie dates des réunions et
 des remises}
 \subsection{Requirements}
 Based on the customer desired functions and features, we end up with the following requirements (Must-have, Should-have, Could-have, Would-have):
 
-\subsubsection{Must-have}
-
-\begin{enumerate}
-	 \item Players must be able to register via a web interface
-	 \item Players must be able to indicate:
-		 \begin{itemize}
-		 	\item their tennis partner
-		 	\item their personal information
-		 	\item optional extras they choose (BBQ, for instance)
-		 	\item their payment method
-		\end{itemize}
-	\item Staff members must be able to encode and edit pairs by hand
-    \item Staff members can edit the number and the type of optional extras, in another control panel, with a corresponding price
-    \item Players can choose a payment method
-   		 \begin{itemize}
-    			\item Paypal
-    			\item Credit or debit card
-    			\item Bank transfer
-    			\item Cash
-    		\end{itemize}
-     \item The system must do basic checks, so that players can fully complete the form
-   	 \item Players can give wishes without constraints, such as:
-    		\begin{itemize}
-    			\item Play with another pair
-    			\item Play on a specific court
-    		\end{itemize}
-    	\item When a pair is created, it must have an identification number assigned
-    	\item When a pair is created, an email confirmation is sent to the players of the pair
-    	\item Staff members must be able to view a list of player registrations, and look for detailed information when clicking on a pair
-   	 \item Staff members must be able to access to detailed information of a pair via their identification number or partial information of a pair (such as part of the name)
-   	 \item All addressed (mail and postal) of players, who played in previous tournaments, must be available (making it possible to send them invitation)
-    	\item Only one invitation has to be sent for multiple players living in the same house
-    	\item Court owners must be able to register their court via a web based form
-    	\item Staff members must be able to add comments to a court
-    	\item Comments from staff of a court must be present and persist year after year (such as "only for small kids")
-    	\item When the court registration form is fully completed, an email confirmation is sent to the court owner
-    	\item Staff members must be able to create or edit or delete the courts manually
-    	\item The system must detect if the court already exists in the database, and update it if so
-    	\item When a new court is created, an identification number must be assigned to it
-    	\item Staff members should be able to list and search for courts
-    		\begin{itemize}
-    			\item List: click for detailed information
-    			\item Search: by identification number or partial information
-   		\end{itemize}
-    \item Staff members must be able to create groups of pairs playing in the morning, and do it based on:
-    		\begin{itemize}
-    			\item Player registration (age, category, wishes)
-    			\item Available courts
-    			\item Wishes from court owners
-    		\end{itemize}
-    \item Group creation cannot have errors, such as:
-    		\begin{itemize}
-    			\item Not authorized court
-    			\item Wrong age category
-    		\end{itemize}
-    \item Once a group is completed, an email must be sent to players with where they have to play
-    \item When groups are created, group leaders must be assigned (he/she is a member of the group)
-    \item When groups are created, players with payment issues must receive an email, with HQ address, inviting them to resolve it there
-    \item When group leaders are assigned, they receive an email with HQ address, inviting them to get the score board before going to the court where they have to play
-    \item The group creation must have a friendly interface for the staff members, in order to handle wishes of owners and players
-    \item When all groups are created, all group information must be printable as a score board
-    \item Staff members must be able to encode the match results (once the players come back with the score board)
-    \item Staff members (responsible for given category) must be able to choose the size of the knock-off table
-    \item Staff members (responsible for given category) must be able to add players and courts to the knock-off table (courts are encoded until final match)
-    \item When the knock-off tournament table is ready (that is, complete without any score), the following things must be given to the players:
-    		\begin{itemize}
-    			\item Printable knock-off table
-    			\item Addresses of courts
-    			\item Contact information of the adversary
-    		\end{itemize}
-    \item Staff members (responsible for given category) must be able to encode the results of the knock-off tournament matches
-    \item A specific web page must indicate the winners and finalists of each tournament at the end of the day
-    \item An admin must be able to create a personal user account for each staff member
-    \item An admin must be able to define the roles for each staff member account
-    \item Staff members must have roles (responsible for a specific category, or responsible for the court management)
-    \item Staff members must have their information (phone number, name, email)
-    \item Documents, sent by staff member to players or court owners, must have their information (phone number, name, email) and their current role(s)
-\end{enumerate}
-
-\subsubsection{Should-have}
-
-\begin{enumerate}
-	\item Modifications by staff members should be recorded
-		\begin{itemize}
-			\item Modification of a pair, a group, a knock-off table
-			\item Modifications are dated, and displayed on the corresponding page and on the user history page
-		\end{itemize}
-	\item Players should be linked year after year
-		\begin{itemize}
-			\item It should keep track of their evolution
-			\item It should allow to complete missing data during the registration
-		\end{itemize}
-	\item Automatic email check:
-		\begin{itemize}
-			\item The user has to click on a link in his/her email inbox to validate his/her email address
-			\item Staff members are notified if an email address has not been validated
-		\end{itemize}
-	\item The knock-off tournament should be generated automatically
-		\begin{itemize}
-			\item It should be based on the morning results
-			\item Wishes of players are not considered
-			\item Knock-off tables should be editable by staff member once generated
-		\end{itemize}
-\end{enumerate}
-
-\subsubsection{Could-have}
-
-\begin{enumerate}
-	\item Automatic payment fully done online
-		\begin{itemize}
-			\item Still leave players the possibility to use another payment method
-		\end{itemize}
-	\item Individual registration could be authorized:
-		\begin{itemize}
-			\item These players have to play with another unknown player
-			\item The implementation of this feature must be like the classical by-pair registration
-			\item These players have to pay once a playmate has been assigned to his/her pair
-		\end{itemize}
-	\item Groups could be automatically generated, based on:
-		\begin{itemize}
-			\item Wishes of the players
-			\item Wishes of the court owners
-			\item Addresses of the players
-			\item Addresses of the courts
-			\item Notes:
-				\begin{itemize}
-					\item Groups and group leaders are assigned to minimize player movement
-					\item An estimation of individual carbon footprint car be sent to the players
-				\end{itemize}
-		\end{itemize}
-	\item Rain weather conditions could be handled:
-		\begin{itemize}
-			\item Players play on covered courts in clubs
-			\item The number of matches are reduced as follow:
-				\begin{itemize}
-					\item Given the number of available courts
-					\item New smaller groups are made
-					\item Only the winners of each group are qualified (instead of the 2 best of a group)
-				\end{itemize}
-		\end{itemize}
-	\item Players and court owners could have a user account:
-		\begin{itemize}
-			\item So that they can see their progression
-			\item So that it eases the registration year after year
-			\item other benefit: for court owners, see who player on their courts
-		\end{itemize}
-	\item Step-by-step procedure to be followed by staff members, when they have to contact court owners by phone (so that no information is missing during the call)
-	\item Mobile friendly website, so that it is handy for the staff to go on the courts to see the players
-\end{enumerate}
-
-\subsubsection{Would-have}
-
-\begin{enumerate}
-	\item Check for cheaters by looking at their AFT ranking
-	\item Submit match results via smartphones
-		\begin{itemize}
-			\item Players use their player user account in order to set the scores
-		\end{itemize}
-	\item Location and player scores are available in live on a public website
-\end{enumerate}
+\input{requirements.tex}
 
 \subsection{Activity diagrams}
 \todo[inline]{A faire pour le 25 septembre\ldots}
@@ -277,30 +144,38 @@ Name : Register to the tournament. \newline
 Identifier : UC01 \newline
 Basics course of action : \newline
 \begin{itemize}
-	\item Players register by indicating their tennis partner, personal informations, extras 	options and their payment method.
-	\item Players can also select another player to team up with and a specific court to play on.
-	\item System verifies that all informations are filled.
-	\item System assigns a specific number to each pair of players.
-	\item System sends an email to each member of the pair to confirm their inscription.
-	\item Staff members can edit all the informations of the players enrolled in the tournament.
-	\item System display to the staff a list of all players enrolled in the tournament with links to their informations.
+	\item US01 (players only).
+	\item US02.
+	\item US03.
+	\item US04.
+	\item US05.
+	\item US06.
+	\item US07.
+	\item US08.
+	\item US09.
+	\item US10.
+	\item US11.
+	\item US12.
+	\item US13.
 \end{itemize}
 
 \subsubsection{Registration of the owner of a court}
 
-Name : Register a course owner in the database. \newline
+Name : Register a court in the database. \newline
 Identifier : UC02 \newline
 Basics course of action : \newline
 \begin{itemize}
-	\item Owners of a court can fill a web form to create an account which will be saved in the database.
-	\item Owners of a court will have the possibility to write comments with the form to add any useful information.
-	\item System sends a mail to each owners of a court to verify if their email address is correct; if it is the court is added to the database.
-	\item Owners of a court receive an email to ensure that the court is available on the tournament date.
-	\item Owners of a court are able to change any informations related to their account.
-	\item Owners of multiple courts can add all their courts on the same account.
-	\item Staff members can add comments only visible by other staff members about any courts.
-	\item Staff members are able to edit all the informations related to the courts.
-	\item Staff members can search through all the database a specific court.
+	\item US01 (owners only).
+	\item US13.
+	\item US14.
+	\item US15.
+	\item US16.
+	\item US17.
+	\item US18.
+	\item US19.
+	\item US20.
+	\item US21.
+	\item US22.
 \end{itemize}
 
 
@@ -310,11 +185,14 @@ Name : Create a group of players. \newline
 Identifier : UC03 \newline
 Basics course of action : \newline
 \begin{itemize}
-	\item Staff members create groups of players based on several requirements (gender, age).
-	\item System verifies that the court used and the age category are correct.
-	\item System sends an email to each member of the group with the informations of their match.
-	\item System sends an email with the HQ informations to each group's leader and players with payment issues.
-	\item System displays the different pairs and allow the staff to modify the group.
-	\item System allows the informations about the group, the players and the courts to be printed.
-	\item Staff members encore the results of the matches once finished into the database.
+	\item US23.
+	\item US24.
+	\item US25.
+	\item US26.
+	\item US27.
+	\item US28.
+	\item US29.
+	\item US30.
+	\item US31.
+	\item US32.
 \end{itemize}
