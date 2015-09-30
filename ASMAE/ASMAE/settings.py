@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tennis'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -67,7 +68,11 @@ TEMPLATES = [
         },
     },
 ]
-
+'''
+TEMPLATES_DIRS = (
+    os.path.join(BASE_DIR, 'templates'),
+)
+'''
 WSGI_APPLICATION = 'ASMAE.wsgi.application'
 
 
