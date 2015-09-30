@@ -1,0 +1,162 @@
+\section{Software development method}
+
+For this project we had to pick a software development methodology. After some discussions with the team, we chose to go for Agile.
+
+\subsection{Why agile for this project?}
+
+This project has many features split in different categories (Must have, Should have, Could have, Would like to have). If we used a non-agile methodology, we would have to choose at the very beginning all the features that we want to implement.
+It is not an optimal solution for an university project, since we have some other projects to work on. It is very hard at the beginning of the semester to evaluate how many features we will be able to implement, which is why it is appropriate to use a methodology that favoring changes like Agile.\newline
+
+Another good reason to use Agile is that we are used to work in team in a Agile way with previous university projects. In the project team, we would always code with different people working on the same project to exchange idea in an easier way.
+We will have weekly meetings with the project leader, which fits well with Agile as we have to deliver a product every 2 weeks.\newline
+
+To conclude, an agile methodology allows us to be more flexible on the features we will implement during a Sprint, considering we will have other classes assignments at the same time during the semester.
+
+\subsection{Work organization}
+Working with Agile will allow us to adjust deadlines in terms of the real velocity reached in each Sprint.\newline
+
+Everybody's role will be redefined at the beginning of each Sprint, to better consider the type of work that needs to be done.
+
+
+\subsection{Development methodology}
+Scrum is an agile methodology to manage a project and is usually used to manage software development projects. It is more of a framework for managing process than a real methodology.\newline
+
+The main idea behind Scrum, and behind Agile methodology in general, is to not provide a full detailed description of how everything will be be done. It leaves it to the Scrum software development team, who will know best how to solve those problems at the given time. The matter is the desired outcome, and not the implementation details.\newline
+
+There are two main roles in Scrum. The Scrum Master, kind of a coach, who is helping the team members to use the Scrum process to perform at the highest level possible. And the Product Owners (PO), who are the customers or users, and guide the team toward building the right product. In our case it will be the ASBL.\newline
+
+Scrum works with items called backlog, containing the list of all the features to implement. This list is ordered, so that the team works in priority with the most valuable features first. This backlog is created at the beginning of the project. It is usually composed of user stories, which are short descriptions of features described from the user or customer point of view.\newline
+
+Scrum works with Sprints, a short period of time from one to four week(s) long (usually two weeks), where the team works and provides a potentially deliverable product at the end of it. There is a planning meeting at the start of each Sprint. During the meeting, the team decides how many items they can deal with for the Sprint. The Sprint backlog is then established. All these features will be done, coded, tested and integrated with the evolving product. At the end of each Sprint, the team shows to the PO their work, and he/she can provide feedback that could be taken into account for the next Sprint. This may lead to adding, removing or revising items in the product backlog.\newline
+
+\iffalse
+\subsubsection{Back-End development}
+The back-end handles everything related to the web server and the database. Using a framework will allow us to focus on the website development, without worrying too much about security, user management, administration panel, etc.\newline
+
+We are going to use \textbf{Django}, an open-source framework, for the back-end. It has a large community and is easy to learn. Some group members already have some experience with this framework, making it easier for everybody to get started quickly.\newline
+
+Another advantage of \textbf{Django} is the database management. \textbf{Django} uses Django-ORM which makes it really easy to communicate with the database. Django-ORM writes the SQL statements by itself. This allows us to use any type of database (sqLite, mySQL, PostgreSQL) and change it during the project development without impacting the rest of the project.
+\textbf{Django} uses python as programming language. Python is easy to learn and, as we have to learn it for our Artificial Intelligence course, learning it won't increase the work load.
+Python is also very clean and easy to read thanks to its indentation syntax. Once again, multiple team members had experience with python, which is best to get started faster.\newline
+
+We also looked at the possibility of doing our website with PHP. Beside the fact that PHP is getting very old, it is still the most used back-end language on the web. Its historical security problems, and the fact that the code is included inside the HTML code, are two main reasons to not choose PHP in our project.\newline
+
+Ruby seems like a pretty good option as well, and looked a lot like python, but none of our team members had experience with it. JavaScript was another option, but the only framework that some team member know with it is \textbf{NodeJS}, which was used in a previous project. Most people didn't really like using it (setting up the project may be long and there are a lot of different middle-wares to install to make your project run).
+
+\subsubsection{Front-End development}
+
+There are a lot of tools to build a website design. The three main tools are HTML (creates the website elements), CSS (customizes elements with color, placement, and more) and JavaScript (uses for validation, animation, forms, etc). Like for the back-end, there are frameworks built around those tools, making the work on the design easier, better, and faster. We will mainly use \textbf{Bootstrap}. It is a framework using HTML, CSS and JavaScript for developing responsive website for desktop and mobile. \textbf{Bootstrap} alone is not enough to build the whole website design. Another framework we are planning to use is \textbf{Angular JS}. It extends HTML with new attributes to handle events, forms, inputs, validations, and more. With those two frameworks, we will be able to build most parts of the application. We will just need to add some more CSS to customize it.
+
+\subsubsection{Management}
+
+We are using \textbf{Git} to have a repository for our codes and reports of the project. We will also use \textbf{Trello}, a free web-based project management application using the Kanban paradigm. Both \textbf{Git} and \textbf{Trello} were used in the programming project of last year, so we all are quite familiar with these tools.
+
+We will use Trello as a Kanban, and GitHub as a host for the code. \newline
+\fi
+
+\section{User stories (requirements)}
+Based on the customer desired functions and features, we end up with the
+following requirements (Must-have, Should-have, Could-have, and Would like
+to have):
+
+\input{requirements.tex}
+
+\section{Use cases diagrams}
+\subsection{Registration of a player}
+
+\noindent \underline{Name} : Register to the tournament. \newline
+\underline{Identifier} : UC01 \newline
+\underline{Basics course of action} : Figure~\ref{playerregistrationfig} \newline
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.9\linewidth]{PlayerRegistration.png}
+    \caption{Use case diagram : Registration of a player}
+    \label{playerregistrationfig}
+\end{figure}
+\FloatBarrier
+
+\subsection{Registration of a court}
+
+\noindent \underline{Name} : Register a court in the database. \newline
+\underline{Identifier} : UC02 \newline
+\underline{Basics course of action} : Figure~\ref{courtownerregfig} \newline
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{CourtOwnerRegistration.png}
+    \caption{Use case diagram : Registration of a court}
+    \label{courtownerregfig}
+\end{figure}
+\FloatBarrier
+
+\subsection{Knock-off Tournament}
+
+\noindent \underline{Name} : Create a knock-off tournament. \newline
+\underline{Identifier} : UC04 \newline
+\underline{Basics course of action} : Figure~\ref{knockofftournamentfig}\newline
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.625\linewidth]{KnockOffTournament.png}
+    \caption{Use case diagram : Knock-off tournament}
+    \label{knockofftournamentfig}
+\end{figure}
+\FloatBarrier
+
+\subsection{Creation of a group}
+
+\noindent \underline{Name} : Create a group of players. \newline
+\underline{Identifier} : UC03 \newline
+\underline{Basics course of action} : Figure~\ref{groupcreationfig} \newline
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.825\linewidth]{GroupCreation.png}
+    \caption{Use case diagram : Creation of a group}
+    \label{groupcreationfig}
+\end{figure}
+\FloatBarrier
+
+\section{Activity diagrams}
+
+%\newgeometry{top=0.5cm,bottom=0.5cm,left=0.5cm,right=0.5cm,includefoot}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\linewidth]{Activity-diagram-PR-01-v2.png}
+    \caption{Activity diagram : Player registration (1)}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=\linewidth]{Activity-diagram-PR-01-v2_2.png}
+    \caption{Activity diagram : Player registration (2)}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\linewidth]{Activity-diagram-CR-02-v2.png}
+    \caption{Activity diagram : Court registration (1)}
+    \includegraphics[width=\linewidth]{Activity-diagram-CR-02-v2_2.png}
+    \caption{Activity diagram : Court registration (2)}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+     \includegraphics[width=\linewidth]{Activity-diagram-GC-03-v2.png}
+     \caption{Activity diagram : Group creation}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+    \includegraphics[width=\linewidth]{Activity-diagram-KT-04-v2.png}
+    \caption{Activity diagram : Knock-off tournament}
+\end{figure}
+
+\FloatBarrier
+%\restoregeometry
+
+\section{Initial planning}
+
+\input{Reunions.tex}
