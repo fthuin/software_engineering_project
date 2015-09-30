@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static from staticfiles %}
   <title>ASMAE Tennis Tournament</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="{% static 'tennis/css/tennis.css' %}">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
 <body>
     
-    <h1>ASMAE TENNIS<h1>
+    <center><img class="brand" src="{% static 'tennis/img/logo.jpg' %}" alt="Le Charles de lorraine"> </center>
+
+    <!--<div class="brand">Business Casual</div>-->
         <!-- Navigation -->
     <nav class="navbar navbar-default" role="navigation">
         <div class="container">
