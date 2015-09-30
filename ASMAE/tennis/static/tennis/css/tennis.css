@@ -1,0 +1,24 @@
+.brand{
+    display: none;
+}
+
+
+@media screen and (min-width:768px) {
+
+    .navbar-nav>li>a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    line-height: 20px;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+    .brand {
+        display: inherit;
+        padding: 30px 0 10px;
+    }
+
+    .navbar-header {
+        display: none;
+    }
+}

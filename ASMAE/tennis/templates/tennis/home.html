@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static from staticfiles %}
+  <title>{% block title %}ASMAE Tennis Tournament{% endblock %}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="{% static 'tennis/css/tennis.css' %}">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+<body>
+    
+    <center><img class="brand" src="{% static 'tennis/img/logo.jpg' %}" alt="Le Charles de lorraine"> </center>
+
+    <!--<div class="brand">Business Casual</div>-->
+        <!-- Navigation -->
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- navbar-brand is hidden on larger screens, but visible when the menu is collapsed -->
+                <a class="navbar-brand" href="index.html">ASMAE Tennis Tournament</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a  href="{% url "tennis.views.home" %}">Accueil</a>
+                    </li>
+                    <li>
+                        <a href="{% url "tennis.views.joueurs" %}">Liste Joueurs</a>
+                    </li>
+                    <li>
+                        <a href="">Blog</a>
+                    </li>
+                    <li>
+                        <a href="">Contact</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+        <li><a href="{% url "tennis.views.register" %}"><span class="glyphicon glyphicon-user"></span> Inscription</a></li>
+        <li><a href="{% url "tennis.views.login" %}"><span class="glyphicon glyphicon-log-in"></span> Connexion</a></li>
+      </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    {% block body %}
+
+    <div class="container">
+
+        <h1>HOME PAGE</h1>
+
+        <h1>Carousel with previous pictures?</h1>
+
+        <h1>TIMER until next tournament?</h1>
+        
+    </div>
+
+    {% endblock %}
+
+
+
+
+</body>
+</html
