@@ -3,4 +3,7 @@ from django.contrib import admin
 
 urlpatterns = patterns('tennis.views',
 	url(r'^$','home'),
+	url(r'^connexion$','login'),
+	url(r'^inscription$','register'),
+	url(r'^joueurs$','joueurs'),
 )
