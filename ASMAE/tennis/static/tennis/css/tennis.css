@@ -37,7 +37,6 @@
         padding: 30px 0 15px;
         display:inherit;
         margin:auto;
-        width:720px;
     }
 
     .navbar-nav>li>a {
@@ -74,8 +73,7 @@
         text-align: center;
     }
 
-    .navbar-header,
-    .onlist {
+    .navbar-header {
         display: none !important;
     }
 }
