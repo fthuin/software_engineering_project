@@ -1,8 +1,72 @@
+/* Used to stick footer to bottom */
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  position: relative;
+  margin: 0;
+  padding-bottom: 6rem;
+  min-height: 100%;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Background image */
+body,
+html{
+    background-image: url("../img/bg.jpg");
+}
+
+/* navbar */
 nav {
-    background-image: url("../img/bg_middle.jpg");
-    background-repeat: repeat-y;
-    background-position: center;
-    background-size: cover;
+
+    font-size: 16px;
+    background-color: rgba(238, 231, 203, 1);
+    background: -webkit-linear-gradient(top, rgba(209, 199, 159, 1) 0%, rgba(238, 231, 203, 1) 100%);
+    background: linear-gradient(to bottom, rgba(209, 199, 159, 1) 0%, rgba(238, 231, 203, 1) 100%);
+    border-bottom-width: 0px!important;
+    border-width: 0px!important;
+}
+
+/* shadow effect navbar */
+.effect6
+{
+    position:relative;
+    -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+       -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+            box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+}
+.effect6:before, .effect6:after
+{
+    content:"";
+    position:absolute;
+    z-index:-1;
+    -webkit-box-shadow:0 0 20px rgba(0,0,0,0.8);
+    -moz-box-shadow:0 0 20px rgba(0,0,0,0.8);
+    box-shadow:0 0 20px rgba(0,0,0,0.8);
+    top:50%;
+    bottom:0;
+    left:10px;
+    right:10px;
+    -moz-border-radius:100px / 10px;
+    border-radius:100px / 10px;
+}
+.effect6:after
+{
+    right:10px;
+    left:auto;
+    -webkit-transform:skew(8deg) rotate(3deg);
+       -moz-transform:skew(8deg) rotate(3deg);
+        -ms-transform:skew(8deg) rotate(3deg);
+         -o-transform:skew(8deg) rotate(3deg);
+            transform:skew(8deg) rotate(3deg);
 }
 
 /* title */
@@ -23,20 +87,43 @@ nav {
 .navbar-default .navbar-nav > li > a:focus {
     color: white !important;
     background-color: #D4542D !important;
-    border-radius: 20px;
+    border-radius: 5px;
 }
 .navbar-default .navbar-nav > .active > a, 
 .navbar-default .navbar-nav > .active > a:hover, 
 .navbar-default .navbar-nav > .active > a:focus {
     color: white !important;
     background-color: #D4542D !important;
-    border-radius: 20px;
+    border-radius: 5px;
+}
+
+/*Button when collapsed */
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+    background-color: #BF4C28 !important;
+}
+
+.navbar-default .navbar-toggle {
+    border-color: #BF4C28 !important;
+    background-color: #D4542D !important;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: white !important;
 }
 
 /* username Button */
-.btn-username>{
+.btn-group-vertical>.btn, .btn-group>.btn {
     color:white;
-    background-color: #red;
+    background-color: #D4542D;
+}
+/* username Button */
+.btn-group-vertical>.btn:focus, .btn-group>.btn:focus {
+    color:white;
+    background-color: #D4542D;
+}
+.btn-group-vertical>.btn:hover, .btn-group>.btn:hover {
+    color:white;
+    background-color: #BF4C28;
 }
 
 .username,
@@ -44,16 +131,33 @@ nav {
     display: none !important;
 }
 
-.divider{
-    color: black;
-    height: 5px;
-}
-
+/*username in collapsed*/
 .nav-user{
     text-align: center;
+    color: #D4542D;
+    border-top : solid 1px #eee;
+    border-bottom : solid 1px #eee;
+    margin: 0;
+    padding: 8px;
+}
+/* end of navbar */
+
+/* Image slider */
+.carousel{
+    max-width:857px;
+    margin:auto;
+}
+
+/* min margin pour le carousel */
+@media(max-width: 867px) {
+    .carousel{
+        margin-right: 10px;
+        margin-left: 10px;
+    }
 }
 
 @media(min-width:768px) {
+    /*user button*/
     .username,
     .navbar-img{
         display: inherit!important;
@@ -62,16 +166,19 @@ nav {
         text-align: right;
     }
 
+    /*logo*/
     .navbar-img{
         display: inherit;
     }
 
+    /*navbar user and titlle*/
     .nav-user,
     .navbar-title,
     .navbar-right{
         display:none !important;
     }
 
+    /*link align center */
     .navbar .navbar-nav {
         display: inline-block;
         float: none;
@@ -81,4 +188,18 @@ nav {
     .navbar .navbar-collapse {
         text-align: center;
     }
+}
+
+
+/* Footer */
+.footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: rgba(238, 231, 203, 1);
+  background: -webkit-linear-gradient(top, rgba(209, 199, 159, 1) 0%, rgba(238, 231, 203, 1) 100%);
+  background: linear-gradient(to bottom, rgba(209, 199, 159, 1) 0%, rgba(238, 231, 203, 1) 100%);
+  text-align: center;
 }
