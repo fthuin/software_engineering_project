@@ -1,66 +1,75 @@
-.brand,
-.headerSign{
-    display: none;
-}
-.center {
-  margin: auto;
-  padding: 0;
-  width:400px;
-  text-align: center; 
+nav {
+    background-image: url("../img/bg_middle.jpg");
+    background-repeat: repeat-y;
+    background-position: center;
+    background-size: cover;
 }
 
-.center>p{
-    font-size: 20px;
+/* title */
+.navbar-default .navbar-brand {
+    color: black !important;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: #D4542D !important;
 }
 
-#myCarousel{
-    width:428px;
-    height:175px;
-    margin: auto;
+/* link */
+.navbar-default .navbar-nav > li > a {
+    color: #D4542D !important;
+    font-weight: bold;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    color: white !important;
+    background-color: #D4542D !important;
+    border-radius: 20px;
+}
+.navbar-default .navbar-nav > .active > a, 
+.navbar-default .navbar-nav > .active > a:hover, 
+.navbar-default .navbar-nav > .active > a:focus {
+    color: white !important;
+    background-color: #D4542D !important;
+    border-radius: 20px;
 }
 
-
-
-@media screen and (min-width:550px) {
-    #myCarousel{
-    width:500px;
-    height:205px;
-    margin: auto;
-    }
-
+/* username Button */
+.btn-username>{
+    color:white;
+    background-color: #red;
 }
 
+.username,
+.navbar-img{
+    display: none !important;
+}
 
-@media screen and (min-width:768px) {
+.divider{
+    color: black;
+    height: 5px;
+}
 
-    .headerSign{
-        padding: 30px 0 15px;
-        display:inherit;
-        margin:auto;
+.nav-user{
+    text-align: center;
+}
+
+@media(min-width:768px) {
+    .username,
+    .navbar-img{
+        display: inherit!important;
+        float:right;
+        padding-top:15px; 
+        text-align: right;
     }
 
-    .navbar-nav>li>a {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    line-height: 20px;
-    font-size: 18px;
-    text-transform: uppercase;
-    }
-
-    #myCarousel{
-    width:600px;
-    height:245px;
-    margin: auto;
-    }
-
-    .center{
-        padding: 15px;
-        width:430px;
-    }
-
-    .brand {
+    .navbar-img{
         display: inherit;
-        padding: 30px 0 10px;
+    }
+
+    .nav-user,
+    .navbar-title,
+    .navbar-right{
+        display:none !important;
     }
 
     .navbar .navbar-nav {
@@ -72,18 +81,4 @@
     .navbar .navbar-collapse {
         text-align: center;
     }
-
-    .navbar-header {
-        display: none !important;
-    }
-}
-
-@media screen and (min-width:1000px) {
-
-    #myCarousel{
-    width:857px;
-    height:350px;
-    margin: auto;
-    }
-
 }
