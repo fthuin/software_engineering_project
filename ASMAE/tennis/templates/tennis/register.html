@@ -1,9 +1,128 @@
-{% extends "tennis/home.html" %}
+{% extends "tennis/base.html" %}
 
 {% block title %}ASMAE - Inscription{% endblock %}
 
 {% block body %}
 
-<h1>Inscription</h1>
+<div class="container">
+	
+			{% if error %}
+			<div class="alert alert-danger">
+			    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			    <strong>Error!</strong> {{ error }}
+			  </div>
+			 {% endif %}
+				<div class="content-box">
+				<h2 class="center">Inscription</h2>
+				<hr class="line">
+				<form class="form-horizontal" role="form" method="post" action="{% url "tennis.views.register" %}" >
+					{% csrf_token %}
+					<div class="row">
+						<div class="col-lg-6">
+							<!-- Utilisateur -->
+							<div class="form-group">
+						      <label class="control-label col-sm-4" for="username">Nom d'utilisateur</label>
+						      <div class="col-sm-8">
+						      	<input type="text" class="form-control" name="username" placeholder="Nom d'utilsiateur" value="{{ username }}">
+						      </div>
+						    </div>
+						    <!-- mot de passe -->
+							<div class="form-group">
+						      <label class="control-label col-sm-4" for="password">Mot de passe</label>
+						      <div class="col-sm-8">
+						      	<input type="password" class="form-control" name="password" placeholder="Mot de passe">
+						      </div>
+						    </div>
+						    <!-- nom -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="lastname">Nom</label>
+						      <div class="col-sm-8">
+						      	<input type="text" class="form-control" name="lastname" placeholder="Nom" value="{{ lastname }}">
+						      </div>
+						    </div>
+						    <!-- prenom -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="firstname">Prénom</label>
+						      <div class="col-sm-8">
+						      	<input type="text" class="form-control" name="firstname" placeholder="Prénom" value="{{ firstname }}">
+						      </div>
+						    </div>
+						    <!-- email -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="email">Email</label>
+						      <div class="col-sm-8">
+						      	<input type="email" class="form-control" name="email" placeholder="exemple@email.com" value="{{ email }}">
+						      </div>
+						    </div>
+						    <!-- telephone -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="tel">Téléphone</label>
+						      <div class="col-sm-8">
+						      	<input type="tel" class="form-control" name="tel" placeholder="" value="{{ tel }}">
+						      </div>
+						    </div>
+						    <!-- gsm -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="gsm">GSM</label>
+						      <div class="col-sm-8">
+						      	<input type="tel" class="form-control" name="gsm" placeholder="" value="{{ gsm }}">
+						      </div>
+						    </div>
+						</div>
+						<div class="col-lg-6">
+							<!-- rue -->
+							<div class="form-group">
+						      <label class="control-label col-sm-4" for="rue">Rue</label>
+						      <div class="col-sm-8">
+						      	<input type="text" class="form-control" name="rue" placeholder="Nom de rue" value="{{ rue }}">
+						      </div>
+						    </div>
+						    <!-- numero -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="numero">Numero/Boite</label>
+						      <div class="col-sm-8">
+						      	<input type="text" class="form-control" name="numero" placeholder="Numero / Boite" value="{{ numero }}">
+						      </div>
+						    </div>
+						    <!-- localité -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="localite">Localité</label>
+						      <div class="col-sm-8">
+						      	<input type="text" class="form-control" name="localite" placeholder="Localité" value="{{ localite }}">
+						      </div>
+						    </div>
+						    <!-- code postal -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="codepost">Code Postal</label>
+						      <div class="col-sm-8">
+						      	<input type="text" class="form-control" name="codepost" placeholder="Code postal" value="{{ codepost }}">
+						      </div>
+						    </div>
+						    <!-- date de naissance -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="birthdate">Date de Naissance</label>
+						      <div class="col-sm-8">
+						      	<input type="date" class="form-control" name="birthdate" placeholder="date" value="{{ birthdate }}">
+						      </div>
+						    </div>
+						    <!-- classement -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="classement">Classement</label>
+						      <div class="col-sm-8">
+						      	<input type="text" class="form-control" name="classement" placeholder="Classement" value="{{ classement }}">
+						      </div>
+						    </div>
+						    <!-- deja participe -->
+						    <div class="checkbox col-sm-offset-4">
+						      <label><input type="checkbox"> Déjà participé</label>
+						    </div>
+						</div>
+					</div>
+				    
+				    <button type="submit" class="btn btn-default pull-right" style="margin-top:20px;">Inscription</button>
+				    <button type="button" class="btn btn-default" onClick="location.href='{% url "tennis.views.connect" %}';" style="margin-top:20px;">Déjà membre?</button>
+				  </form>
+			</div>
+</div>
 
 {% endblock %}
