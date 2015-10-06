@@ -111,21 +111,6 @@ nav {
     background-color: white !important;
 }
 
-/* username Button */
-.btn-group-vertical>.btn, .btn-group>.btn {
-    color:white;
-    background-color: #D4542D;
-}
-/* username Button */
-.btn-group-vertical>.btn:focus, .btn-group>.btn:focus {
-    color:white;
-    background-color: #D4542D;
-}
-.btn-group-vertical>.btn:hover, .btn-group>.btn:hover {
-    color:white;
-    background-color: #BF4C28;
-}
-
 .username,
 .navbar-img{
     display: none !important;
@@ -188,6 +173,42 @@ nav {
     .navbar .navbar-collapse {
         text-align: center;
     }
+}
+
+/*Content box */
+.content-box{
+
+    background-color: white;
+    background-color: rgba(238, 231, 203, 1);
+    border-radius: 8px;
+    padding-top: 30px;
+    padding-bottom: 50px;
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+.center{
+    text-align:center;
+}
+
+/*Button*/
+.btn-default{
+    background-color: #D4542D !important;
+    border-color: #BF4C28 !important;
+    color:white !important;
+}
+
+.btn-default:hover,
+.btn-default:focus{
+    background-color: #BF4C28 !important;
+    border-color: #BF4C28 !important;
+    color:white !important;
+}
+
+/* break line */
+hr.line {
+    border-color: #D4542D;
+    border-width: 2px;
 }
 
 

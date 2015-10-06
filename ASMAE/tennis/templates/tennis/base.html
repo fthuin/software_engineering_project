@@ -31,17 +31,28 @@
               <span class="icon-bar"></span>
             </button>
             <!-- Brand Title -->
-            <a class="navbar-brand navbar-img" style="padding-bottom:70px;" href="#"><img src="{% static 'tennis/img/logo.png' %}"></a>
-            <a class="navbar-brand navbar-title" href="#">Le Charles de Lorraine</a>
+            <a class="navbar-brand navbar-img" style="padding-bottom:70px;" href="{% url "tennis.views.home" %}"><img src="{% static 'tennis/img/logo.png' %}"></a>
+            <a class="navbar-brand navbar-title" href="{% url "tennis.views.home" %}">Le Charles de Lorraine</a>
+
+
                       
             <!-- Boutton utilisateur avec dropdown menu -->
             <div class="username btn-group pull-right navbar-btn">
-              <button class="btn btn-username dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Username
+              {% if user.is_authenticated %}
+              <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{ user.username }}
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu">
-                  <li><a href="#">Editer profil</a></li>
-                  <li><a href="#">Deconnexion</a></li>
+                  <li><a href="#"><span class="glyphicon glyphicon-pencil"></span> Editer profil</a></li>
+                  <li><a href="{% url "tennis.views.deconnect" %}"><span class="glyphicon glyphicon-log-out"></span> Deconnexion</a></li>
                 </ul>
+                {% else %}
+              <div class="btn-group">
+                <button type="button" onClick="location.href='{% url "tennis.views.connect" %}';" class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span> Connexion</button>
+                <button type="button" onClick="location.href='{% url "tennis.views.register" %}';" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> Inscription</button>
+              </div>
+              {% endif %}
+              
+              
             </div>
           </div>
 
@@ -49,20 +60,28 @@
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <!-- Nos liens -->
             <ul class="nav navbar-nav">
-              <li {% block nav-home %}{% endblock %}><a href="#"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a></li>
+              <li {% block nav-home %}{% endblock %}><a href="{% url "tennis.views.home" %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a></li>
               <li {% block nav-link1 %}{% endblock %}><a href="#"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Link 1</a></li>
               <li {% block nav-link2 %}{% endblock %}><a href="#"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Link 2</a></li>
               <li {% block nav-link3 %}{% endblock %}><a href="#"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Link 3</a></li>
               </ul>
               <!-- utilisateur -->
+              {% if user.is_authenticated %}
               <ul class="nav navbar-nav nav-user">
-                <li>Username</li>
+                <li style="font-weight:bold;">{{ user.username }}</li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
               <li class="divider"></li>
-              <li class=""><a href="#">Editer Profil</a></li>
-              <li class=""><a href="#">Déconnexion</a></li>
+              <li class=""><a href="#"><span class="glyphicon glyphicon-pencil"></span> Editer Profil</a></li>
+              <li class=""><a href="{% url "tennis.views.deconnect" %}"><span class="glyphicon glyphicon-log-out"></span> Déconnexion</a></li>
             </ul>
+            {% else %}
+            <ul class="nav navbar-nav navbar-right">
+              <li class="divider"></li>
+              <li class=""><a href="{% url "tennis.views.connect" %}"><span class="glyphicon glyphicon-log-in"></span> Connexion</a></li>
+              <li class=""><a href="{% url "tennis.views.register" %}"><span class="glyphicon glyphicon-user"></span> Inscription</a></li>
+            </ul>
+            {% endif %}
           </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
       </nav>
@@ -70,13 +89,6 @@
     <!-- Block contenant le contenu de la page -->
     <div class="demo">
       {% block body %}
-
-      <p> HELLO </p>
-      <p> HELLO </p>
-      <p> HELLO </p>
-      <p> HELLO </p>
-      <p> HELLO </p>
-      <p> HELLO </p>
 
      {% endblock %}
     </div>
