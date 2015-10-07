@@ -1,6 +1,21 @@
-document.getElementById("foot01").innerHTML =
-"<p>&copy;  " + new Date().getFullYear() + " ASMAE. All rights reserved.</p>";
+function initialize() {
+    var mapCanvas = document.getElementById('map');
+    var mapOptions = {
+      scrollwheel: false,
+      navigationControl: false,
+      center: new google.maps.LatLng(50.8539717, 4.4002427),
+      zoom: 16,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
 
+    var map = new google.maps.Map(mapCanvas, mapOptions);
+    var marker = new google.maps.Marker({
+    position: {lat: 50.8539717, lng: 4.4002427},
+    animation: google.maps.Animation.DROP,
+    map: map,
+    title: 'Cogefis'
+  });
+  }
 /*
 * Validation du formulaire d'inscription
 * Vérification des champs et de la validité du numero de tel email et addresse
@@ -126,3 +141,8 @@ function validateRegister() {
 
 	return valid;
 }
+
+document.getElementById("foot01").innerHTML =
+"<p>&copy;  " + new Date().getFullYear() + " ASMAE. All rights reserved.</p>";
+
+google.maps.event.addDomListener(window, 'load', initialize);

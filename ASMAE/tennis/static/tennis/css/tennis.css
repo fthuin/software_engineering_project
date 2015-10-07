@@ -131,6 +131,7 @@ nav {
 .carousel{
     max-width:857px;
     margin:auto;
+    margin-bottom: 15px;
 }
 
 /* min margin pour le carousel */
@@ -184,6 +185,7 @@ nav {
     padding-bottom: 50px;
     padding-right: 30px;
     padding-left: 30px;
+    margin-bottom: 15px;
 }
 
 .center{
@@ -210,11 +212,23 @@ hr.line {
     border-width: 2px;
 }
 
+
+.sponsors{
+    padding:10px;
+    margin:auto;
+    vertical-align: middle;
+}
+
 /* Hint formulaire */
 .hint {
     color:red;
     margin-bottom: 0;
     font-weight: bold;
+}
+
+/* TextArea */
+textarea {
+  resize: vertical; /* user can resize vertically, but width is fixed */
 }
 
 
