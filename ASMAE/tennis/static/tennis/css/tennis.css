@@ -210,6 +210,13 @@ hr.line {
     border-width: 2px;
 }
 
+/* Hint formulaire */
+.hint {
+    color:red;
+    margin-bottom: 0;
+    font-weight: bold;
+}
+
 
 /* Footer */
 .footer {
