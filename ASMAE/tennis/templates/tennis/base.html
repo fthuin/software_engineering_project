@@ -60,10 +60,9 @@
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <!-- Nos liens -->
             <ul class="nav navbar-nav">
-              <li {% block nav-home %}{% endblock %}><a href="{% url "tennis.views.home" %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a></li>
-              <li {% block nav-link1 %}{% endblock %}><a href="#"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Link 1</a></li>
-              <li {% block nav-link2 %}{% endblock %}><a href="#"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Link 2</a></li>
-              <li {% block nav-link3 %}{% endblock %}><a href="#"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Link 3</a></li>
+              <li {% block nav-home %}{% endblock %}><a href="{% url "tennis.views.home" %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Accueil</a></li>
+              <li {% block nav-sponsors %}{% endblock %}><a href="{% url "tennis.views.sponsors" %}"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> Sponsors</a></li>
+              <li {% block nav-contact %}{% endblock %}><a href="{% url "tennis.views.contact" %}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Contact</a></li>
               </ul>
               <!-- utilisateur -->
               {% if user.is_authenticated %}

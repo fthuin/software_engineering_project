@@ -84,14 +84,20 @@
 						    </div>
 						</div>
 						<div class="col-lg-6">
-							<!-- genre -->
+							<!-- Titre -->
 							<div class="form-group">
-						      <label class="control-label col-sm-4" for="street">Titre *</label>
+						      <label class="control-label col-sm-4" for="title">Titre *</label>
 						      <div class="col-sm-8">
-						      	<select class="form-control" name="titre">
-								    <option>Mr</option>
+						      	<select class="form-control" name="title">
+						      	{% if title == "Mme" %}
+						      		<option>Mr</option>
+								    <option selected="selected">Mme</option>
+								{% else %}
+									<option>Mr</option>
 								    <option>Mme</option>
-								  </select>
+						      	{% endif %}
+								</select>
+
 						      </div>
 						    </div>
 							<!-- rue -->

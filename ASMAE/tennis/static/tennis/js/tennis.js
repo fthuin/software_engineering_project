@@ -15,7 +15,7 @@ function validateRegister() {
 		document.getElementById("hint-username").innerHTML = " ! Entrer un nom d'utilisateur";
 		valid = false;
 	}else{
-		if(username.length<2){
+		if(username.length<3){
 			document.getElementById("hint-username").innerHTML = " ! Votre nom d'utilisateur doit contenir au moins 3 caractères";
 			valid = false;
 		}else{
@@ -29,13 +29,12 @@ function validateRegister() {
 		document.getElementById("hint-password").innerHTML = " ! Entrer un mot de passe";
 		valid = false;
 	}else{
-		if(password.length<2){
+		if(password.length<3){
 			document.getElementById("hint-password").innerHTML = " ! Votre mot de passe doit contenir au moins 3 caractères";
 			valid = false;
 		}else{
 			document.getElementById("hint-password").innerHTML = "";
 		}
-		document.getElementById("hint-password").innerHTML = "";
 	}
 
 	//Verification nom présent
@@ -92,7 +91,7 @@ function validateRegister() {
 		document.getElementById("hint-number").innerHTML = " ! Entrer votre numéro/boite";
 		valid = false;
 	}else{
-		document.getElementById("hint-password").innerHTML = "";
+		document.getElementById("hint-number").innerHTML = "";
 	}
 
 	//Verification code postal présent

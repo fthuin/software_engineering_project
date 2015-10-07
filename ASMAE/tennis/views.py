@@ -8,6 +8,12 @@ from tennis.forms import LoginForm
 def home(request):
 	return render(request,'tennis/home.html',locals())
 
+def sponsors(request):
+	return render(request,'tennis/sponsors.html',locals())
+
+def contact(request):
+	return render(request,'tennis/contact.html',locals())
+
 def connect(request):
 	if request.method == "POST":
 		#Recuperation des donnees
@@ -69,18 +75,22 @@ def register(request):
 		email = request.POST['email']
 		tel = request.POST['tel']
 		gsm = request.POST['gsm']
+		fax = request.POST['fax']
+		title = request.POST['title']
 		street = request.POST['street']
 		number = request.POST['number']
 		locality = request.POST['locality']
 		postalcode = request.POST['postalcode']
 		birthdate = request.POST['birthdate']
 		classement = request.POST['classement']
+		
+
 		#participated = request.POST['participated']
 
 
 		#check champs
-		if (username=="" or password=="" or firstname=="" or lastname=="" or email=="" or tel=="" 
-		or gsm=="" or street=="" or number=="" or locality=="" or postalcode=="" or birthdate==""):
+		if (username=="" or password=="" or firstname=="" or lastname=="" or email=="" or (tel=="" 
+		and gsm=="") or street=="" or number=="" or locality=="" or postalcode=="" or birthdate==""):
 			error = "Veuillez remplir tous les champs obligatoires !"
 			return render(request,'tennis/register.html',locals())
 

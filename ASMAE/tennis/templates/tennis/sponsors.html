@@ -1,0 +1,15 @@
+{% extends "tennis/base.html" %}
+
+{% block title %}Sponsors{% endblock %}
+{% block nav-sponsors %}class="active"{% endblock %}
+
+{% block body %}
+{% load static from staticfiles %}
+<div class="container">
+	<div class="content-box">
+		<h2>Un GRAND merci aux sponsors de leur fidèle soutien :</h2>
+		<img class="img-responsive" src="{% static 'tennis/img/sponsors.jpg' %}" alt="Sponsors">
+	</div>
+</div>
+
+{% endblock %}
