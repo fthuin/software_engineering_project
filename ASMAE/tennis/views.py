@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -24,13 +26,13 @@ def connect(request):
 		if username=="":
 			error = "Veuillez entrer un nom d'utilisateur valide !"
 			return render(request,'tennis/login.html',locals())
-		
+
 		#check password
 		if password=="":
 			error = "Veuillez entrer un mot de passe !"
 			return render(request,'tennis/login.html',locals())
 
-		#Connection	
+		#Connection
 		user = authenticate(username=username, password=password)
 		#Si l'utilisateur existe et qu'il est actif on le connecte sinon on affiche un message d'erreur
 		if user is not None:
@@ -83,13 +85,13 @@ def register(request):
 		postalcode = request.POST['postalcode']
 		birthdate = request.POST['birthdate']
 		classement = request.POST['classement']
-		
+
 
 		#participated = request.POST['participated']
 
 
 		#check champs
-		if (username=="" or password=="" or firstname=="" or lastname=="" or email=="" or (tel=="" 
+		if (username=="" or password=="" or firstname=="" or lastname=="" or email=="" or (tel==""
 		and gsm=="") or street=="" or number=="" or locality=="" or postalcode=="" or birthdate==""):
 			error = "Veuillez remplir tous les champs obligatoires !"
 			return render(request,'tennis/register.html',locals())
@@ -118,7 +120,7 @@ def register(request):
 
 
 		#Account creation & redirect
-		
+
 	if request.user.is_authenticated():
 		return redirect(reverse(home))
 	return render(request,'tennis/register.html',locals())

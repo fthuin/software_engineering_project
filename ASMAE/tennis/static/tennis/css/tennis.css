@@ -134,6 +134,13 @@ nav {
     margin-bottom: 15px;
 }
 
+/* hauteur du timer */
+@media(min-width: 1200px) {
+    .timer{
+        height:306px;
+    }
+}
+
 /* min margin pour le carousel */
 @media(max-width: 867px) {
     .carousel{
