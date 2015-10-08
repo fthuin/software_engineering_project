@@ -1,6 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Participant(models.Model):
+	user = models..OneToOneField(User)
 	titre = models.CharField(max_length=5)
 	nom = models.CharField(max_length=30)
 	prenom = models.CharField(max_length=30)
