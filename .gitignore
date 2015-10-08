@@ -7,3 +7,7 @@
 *.toc
 *.pyc
 *.synctex.gz*
+
+./ASMAE/venv
+*.pyc
+staticfiles
