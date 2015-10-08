@@ -1,6 +1,6 @@
 \documentclass[a4paper,12pt]{article}
 
-\usepackage[french,english]{babel}
+\usepackage[frenchb]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
@@ -43,40 +43,37 @@
     \haut{\includegraphics[scale=0.15]{logo_ucl.png}}{\blurb}{\includegraphics[scale=0.4]{logo_epl.png}}
     %\vfill
     \vspace{75mm}
-    \ligne{\huge \textbf{LINGI2255 - Software engineering project}}
+    \ligne{\huge \textbf{Site web d'ASMAE}}
     \vspace{7mm}
-    \ligne{\large \textbf{Frameworks, wireframes, architectural choices}}
+    \ligne{\large \textbf{Documentation}}
     \vspace{40mm}
     \ligne{\Large{\today}}
     \vspace{20mm}
     %\vfill
     \ligne{%
       \begin{tabular}{c}
-          \textit{Project leader} : Christophe Limbrée \\
-          \textit{Project manager} : Florian Thuin \\
-          \\
-          \textsc{Group G :}
+          \textsc{Groupe G :}
       \end{tabular}}
     \vspace{5mm}
     \ligne{%
       \begin{tabular}{l|l|l|l}
-         Last name & First name & NOMA & Email Address \\
+         Nom & Prénom & Adresse email \\
          \hline
-         \textsc{Dizier} & Romain & 42471000 &
+         \textsc{Dizier} & Romain &
          romain.dizier@student.uclouvain.be \\
-         \textsc{Georges} & Benjamin & 15221200 &
+         \textsc{Georges} & Benjamin &
          benjamin.georges@student.uclouvain.be \\
-         \textsc{Gusbin} & Quentin & 53801200 &
+         \textsc{Gusbin} & Quentin &
          quentin.gusbin@student.uclouvain.be \\
-         \textsc{Kerger} & Zacharie & 41861200 &
+         \textsc{Kerger} & Zacharie &
          zacharie.kerger@student.uclouvain.be \\
-         \textsc{Kühn} & Alexandre & 70261200 &
+         \textsc{Kühn} & Alexandre &
          alexandre.kuhn@student.uclouvain.be \\
-         \textsc{Thuin}& Florian & 06561100 &
+         \textsc{Thuin}& Florian &
          florian.thuin@student.uclouvain.be \\
-         \textsc{de Vogelaere} & Cyril & 28141100 &
+         \textsc{de Vogelaere} & Cyril &
          cyril.devogelaere@student.uclouvain.be  \\
-         \textsc{Vrielynck} & Nicolas & 80991000 &
+         \textsc{Vrielynck} & Nicolas &
          nicolas.vrielynck@student.uclouvain.be \\
       \end{tabular}}
   }%
@@ -89,16 +86,7 @@
 \newpage
 \setcounter{page}{1}
 
-% Architectural choices - frameworks choices
-\input{choices.tex}
-
-% Wireframes
-\input{wireframes.tex}
-
-% Database
-\input{orm.tex}
-
-% Conclusion
-\input{conclusion.tex}
+% Presentation of the architecture
+\input{architecture.tex}
 
 \end{document}

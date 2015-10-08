@@ -6,4 +6,4 @@
 *.pdf
 *.toc
 *.pyc
-*.synctex.gz
+*.synctex.gz*
