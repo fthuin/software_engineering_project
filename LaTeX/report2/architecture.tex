@@ -11,8 +11,8 @@ implementation and testing of the software system but also its maintenance
 and evolutions.\newline
 
 Great attention was thus given to the choice of a software architecture
-perfectly tailoring the need of our project and after extensively analysing
-the various architecture that exist, we settled on a 3-tier client-server
+perfectly tailoring the need of our project and after extensively analyzing
+the various architectures that exist, we settled on a 3-tier client-server
 architecture. \newline
 
 \begin{figure}[H]
@@ -28,23 +28,23 @@ an application server without any loses. The transport of request/responses
 between the client browser and our server will be guaranteed by the http(s)
 protocol. \newline
 
-The application server which process the various request of the clients
-will then acces/update the databases, following the need it faces. As this
+The application server which processes the various requests of the clients
+will then access/update the databases, following the need it faces. As this
 database connexion must be lossless to avoid critical errors, we will make
 use the TCP protocol to guarantee that everything comes through without
 losses. \newline
 
-This allow for a simple yet scalable architecture that is highly evolutive.
+This allows for a simple yet scalable architecture that is highly evolutive.
 In fact, switching to a 4-tier or 5-tier architecture of the same model
-remains possible with minor change if the needs arise. Those n-tier
+remains possible with minor changes if the needs arise. Those n-tier
 architecture can contain additional layer proposing various utilities such
 as load balancing to redirect the traffic between application server or
 small additional servers that are tailored to process a certain part of the
 request. \newline
 
 As you can see, this type of architecture is perfectly suited for this
-project as everything can be handled through request, be it forms, searches
-or any other aspects of the program to code. This type architecture will
+project as everything can be handled through request, whether forms, searches
+or any other aspects of the program we have to code. This type architecture will
 also allow us to easily set up backup databases that would preserve the
 data in case of failure. \newline
 
