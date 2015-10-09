@@ -41,12 +41,55 @@ After a long process of careful consideration and investigation, we decided on u
 
 The main advantage of this framework being his architecture which is extremely well suited for implementing system based on a 3-tier client-server architecture (See figure 2). As you can see, \textbf{Django} relies on multiple layer of processes to handle request as swiftly and efficiently as possible. Each process having it's own role and being called only if necessary.  \newline
 
+\begin{enumerate}
 \begin{figure}
-	\centering
-	\includegraphics[width=0.85\linewidth]{DjangoArchitecture.png}
-	\caption{Diagram of Django's architecture}
-	\label{fig:length_eight_mouse}
+    \begin{minipage}{\linewidth}
+        \centering
+        \begin{minipage}{0.45\linewidth}
+                \item The URL dispatcher (urls.py) maps the requested URL
+                    to a view function and calls it. If caching is enabled,
+                    the view function can check to see if a cached version
+                    of the page exists and bypass all further steps,
+                    returning the cached version, instead. Note that this
+                    page-level caching is only one available caching option
+                    in Django. You can cache more granularly, as well.
+                \item The view function (usually in views.py) performs the
+                    requested action, which typically involves reading or
+                    writing to the database. It may include other tasks, as
+                    well.
+                \item The model (usually in models.py) defines the data in
+                    Python and interacts with it. Although typically
+                    contained in a relational database (MySQL, PostgreSQL,
+                    SQLite, etc.) other data storage mechanisms are
+                    possible as well (XML, text files, LDAP, etc.)
+                \item After performing any requested tasks, the view
+                    returns an HTTP response object (usually after passing
+                    the data through a template) to the web browser.
+                    Optionally, the view can save a version of the HTTP
+                    response object in the caching system for a specified
+                    length of time.
+        \end{minipage}
+        \begin{minipage}{0.05\linewidth}
+            \vline
+        \end{minipage}
+        \begin{minipage}{0.45\linewidth}
+            \begin{center}
+            \includegraphics[width=\linewidth]{DjangoArchitecture.png}
+            \caption{Diagram of Django's architecture}
+            \label{fig:length_eight_mouse}
+            \end{center}
+                \item Templates typically return HTML pages. The Django
+                    template language offers HTML authors a simple-to-learn
+                    syntax while providing all the power needed for
+                    presentation logic.
+                \item Templates typically return HTML pages. The Django
+                    template language offers HTML authors a simple-to-learn
+                    syntax while providing all the power needed for
+                    presentation logic.
+        \end{minipage}
+    \end{minipage}
 \end{figure}
+\end{enumerate}
 
 Another advantage of \textbf{Django} is the database management. \textbf{Django} uses Django-ORM which makes it really easy to communicate with the database. Django-ORM writes the SQL statements by itself. This allows us to use any type of database (sqLite, mySQL, PostgreSQL) and change it during the project development without impacting the rest of the project.
 \textbf{Django} uses python as programming language. Python is easy to learn and, as we have to use it for our Artificial Intelligence course, learning it won't increase the work load at all.
