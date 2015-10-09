@@ -24,14 +24,14 @@ architecture. \newline
 
 This easily scalable architecture is perfectly tailored to the
 implementation of website in general as it allows multiple request to reach
-an application server without any loses. The transport of request/responses
+an application server without any loss. The transport of request/responses
 between the client browser and our server will be guaranteed by the http(s)
 protocol. \newline
 
 The application server which processes the various requests of the clients
 will then access/update the databases, following the need it faces. As this
 database connexion must be lossless to avoid critical errors, we will make
-use the TCP protocol to guarantee that everything comes through without
+use of the TCP protocol to guarantee that everything comes through without
 losses. \newline
 
 This allows for a simple yet scalable architecture that is highly evolutive.
@@ -48,7 +48,7 @@ or any other aspects of the program we have to code. This type architecture will
 also allow us to easily set up backup databases that would preserve the
 data in case of failure. \newline
 
-In short this architecture will allow us to rapidly implement a working
+In short this architecture will allow us to implement soon a working
 version of the project while using only the crucial component of the n-tier
 architecture. All while conserving the opportunity to easily scale up
 should the need arise. We believe that this scalable architecture will not
