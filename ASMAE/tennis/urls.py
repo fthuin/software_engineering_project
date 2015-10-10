@@ -10,5 +10,7 @@ urlpatterns = patterns('tennis.views',
 	url(r'^profil$','profil'),
 	url(r'^sponsors$','sponsors'),
 	url(r'^contact$','contact'),
-	url(r'^mapage$','mapage'),
+	url(r'^tournois$','tournoi'),
+	url(r'^terrain$','terrain'),
+	url(r'^staff$','staff'),
 )

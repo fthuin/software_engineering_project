@@ -1,0 +1,119 @@
+{% extends "tennis/base.html" %}
+
+{% block title %}Ma page{% endblock %}
+{% block nav-tournoi %}class="active"{% endblock %}
+
+{% block body %}
+
+<div class="container">
+	
+	<!-- Affichage Normal : Inscription - Historique - Agenda -->
+	<div class="row">
+		<div class="col-lg-4">
+			<!-- Les différents tournoi -->
+			<!-- TODO set info -->
+			<div class="content-box">
+				<h2 class="center">Inscription</h2>
+				<hr class="line">
+
+				<!-- Selecteur -->
+				<div class="row" style="margin-bottom: 20px;">
+					<div class="col-xs-3 info">
+						Type
+					</div>
+					<div class="col-lg-8 col-sm-4 col-xs-8">
+					   	<select class="form-control" name="title">
+							<option>Toutes cette année</option>
+						    <option>???</option>
+						    <option>???</option>
+						    <option>???</option>
+						</select>
+		    		</div>
+				</div>
+
+				<!-- Panel infos -->
+				<div class="panel panel-default">
+					<div class="panel-heading">Mes Inscriptions</div>
+					<ul class="list-group">
+		  				<li class="list-group-item">8945 - Seniors (hommes)</li>
+						<li class="list-group-item">7991 - Familles</li>
+					</ul>
+				</div>
+
+				<!-- Inscription -->
+				<button class="btn btn-default b-center">S'inscrire à un tournoi</button>
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<!-- Les historique de matchs -->
+			<!-- TODO set info -->
+			<div class="content-box">
+				<h2 class="center">Historique</h2>
+				<hr class="line">
+
+				<!-- Selecteur -->
+				<div class="row" style="margin-bottom: 20px;">
+					<div class="col-xs-3 info">
+						Tournoi
+					</div>
+					<div class="col-lg-8 col-sm-4 col-xs-8">
+					   	<select class="form-control" name="title">
+							<option>Senior (homme)</option>
+						    <option>???</option>
+						    <option>???</option>
+						    <option>???</option>
+						</select>
+		    		</div>
+				</div>
+
+				<!-- Panel infos -->
+				<div class="panel panel-default">
+					<div class="panel-heading">Derniers match joués</div>
+					<ul class="list-group">
+		  				<li class="list-group-item">14h30 - Paires 8945 vs 12345 - Victoire</li>
+						<li class="list-group-item">13h30 - Paires 8945 vs 10119 - Victoire</li>
+					</ul>
+				</div>
+
+				<!-- Consulter -->
+				<button class="btn btn-default b-center">Consulter tout l'historique</button>
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<!-- Agenda -->
+			<!-- TODO set info -->
+			<div class="content-box">
+				<h2 class="center">Agenda</h2>
+				<hr class="line">
+
+				<!-- Selecteur -->
+				<div class="row" style="margin-bottom: 20px;">
+					<div class="col-xs-3 info">
+						Tournoi
+					</div>
+					<div class="col-lg-8 col-sm-4 col-xs-8">
+					   	<select class="form-control" name="title">
+							<option>Senior (homme)</option>
+						    <option>???</option>
+						    <option>???</option>
+						    <option>???</option>
+						</select>
+		    		</div>
+				</div>
+				
+				<!-- Panel infos -->
+				<div class="panel panel-default">
+					<div class="panel-heading">Prochains matchs</div>
+					<ul class="list-group">
+		  				<li class="list-group-item">15h30 - Paires 8945 vs 9655</li>
+					</ul>
+				</div>
+
+				<!-- Consulter -->
+				<button class="btn btn-default b-center">Consulter la table du tournoi</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

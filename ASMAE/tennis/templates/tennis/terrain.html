@@ -1,0 +1,83 @@
+{% extends "tennis/base.html" %}
+
+{% block title %}Ma page{% endblock %}
+{% block nav-terrain %}class="active"{% endblock %}
+
+{% block body %}
+
+<div class="container">
+	<!-- Affichage Normal : Gestion de terrains -->
+	<div class="row">
+		<div class="col-lg-7">
+			<!-- Les différents terrains -->
+			<!-- TODO set info -->
+			<div class="content-box">
+				<h2 class="center">Mes terrains</h2>
+				<hr class="line">
+
+				<!-- Selecteur -->
+				<div class="row" style="margin-bottom: 20px;">
+					<div class="col-xs-3 info">
+						Type
+					</div>
+					<div class="col-lg-8 col-sm-4 col-xs-8">
+					   	<select class="form-control" name="title">
+							<option>Disponible cette année</option>
+						    <option>???</option>
+						    <option>???</option>
+						    <option>???</option>
+						</select>
+		    		</div>
+				</div>
+
+				<!-- Panel infos -->
+				<div class="panel panel-default">
+					<div class="panel-heading">Mes terrains</div>
+					<ul class="list-group">
+		  				<li class="list-group-item">345 - Adresse - Terre battue <a href="" class="pull-right">Supprimer</a><p class="pull-right">&nbsp;|&nbsp;</p><a href="" class="pull-right">Editer</a></li>
+						<li class="list-group-item">346 - Adresse - Synthétique <a href="" class="pull-right">Supprimer</a><p class="pull-right">&nbsp;|&nbsp;</p><a href="" class="pull-right">Editer</a></li>
+					</ul>
+				</div>
+
+				<!-- Inscription -->
+				<button class="btn btn-default b-center">Enregistrer un nouveau terrain</button>
+			</div>
+		</div>
+		<div class="col-lg-5">
+			<!-- Les activités -->
+			<!-- TODO set info -->
+			<div class="content-box">
+				<h2 class="center">Activités</h2>
+				<hr class="line">
+
+				<!-- Selecteur -->
+				<div class="row" style="margin-bottom: 20px;">
+					<div class="col-xs-3 info">
+						Terrain
+					</div>
+					<div class="col-lg-8 col-sm-4 col-xs-8">
+					   	<select class="form-control" name="title">
+							<option>345</option>
+						    <option>346</option>
+						</select>
+		    		</div>
+				</div>
+
+				<!-- Panel infos -->
+				<div class="panel panel-default">
+					<div class="panel-heading">Prochains match sur mes terrains</div>
+					<ul class="list-group">
+		  				<li class="list-group-item">15h30 - Terrain 345 - Paires 8945 vs 12345</li>
+						<li class="list-group-item">16h30 - Terrain 345 - Paires 14846 vs 13674</li>
+					</ul>
+				</div>
+
+				<!-- Consulter -->
+				<button class="btn btn-default b-center">Consulter toutes les activités</button>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}

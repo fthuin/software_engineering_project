@@ -16,8 +16,20 @@ def sponsors(request):
 def contact(request):
 	return render(request,'tennis/contact.html',locals())
 
-def mapage(request):
-	return render(request,'tennis/mapage.html',locals())
+def tournoi(request):
+	if request.user.is_authenticated():
+		return render(request,'tennis/tournoi.html',locals())
+	return redirect(reverse(home))
+
+def terrain(request):
+	if request.user.is_authenticated():
+		return render(request,'tennis/terrain.html',locals())
+	return redirect(reverse(home))
+
+def staff(request):
+	if request.user.is_authenticated():
+		return render(request,'tennis/staff.html',locals())
+	return redirect(reverse(home))
 
 def profil(request):
 	if request.user.is_authenticated():
