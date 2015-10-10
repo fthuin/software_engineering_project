@@ -58,7 +58,7 @@ def connect(request):
 		if user is not None:
 			if user.is_active:
 				login(request, user)
-				return redirect(reverse(mapage))
+				return redirect(reverse(tournoi))
 			else:
 				error="Ce compte a été désactivé !"
 				return render(request,'tennis/login.html',locals())
