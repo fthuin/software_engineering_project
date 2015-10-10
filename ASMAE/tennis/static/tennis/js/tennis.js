@@ -16,6 +16,12 @@ function initialize() {
     title: 'Cogefis'
   });
   }
+
+
+function changeProfilPannel(){
+	document.getElementById("Info").style.display="none";
+	document.getElementById("editInfo").style.display="inherit"
+}
 /*
 * Validation du formulaire d'inscription
 * Vérification des champs et de la validité du numero de tel email et addresse
@@ -23,9 +29,8 @@ function initialize() {
 */
 function validateRegister() {
 	var valid = true;
-
 	//Verification username présent et > 2
-	var username = document.forms["registerForm"]["username"].value;
+	var username = document.getElementById("username").value;
 	if(username==null || username == ""){
 		document.getElementById("hint-username").innerHTML = " ! Entrer un nom d'utilisateur";
 		valid = false;
@@ -39,7 +44,7 @@ function validateRegister() {
 	}
 
 	//Verification mot de passe présent et > 2
-	var password = document.forms["registerForm"]["password"].value;
+	var password = document.getElementById("password").value;
 	if(password==null || password == ""){
 		document.getElementById("hint-password").innerHTML = " ! Entrer un mot de passe";
 		valid = false;
@@ -53,7 +58,7 @@ function validateRegister() {
 	}
 
 	//Verification nom présent
-	var lastname = document.forms["registerForm"]["lastname"].value;
+	var lastname = document.getElementById("lastname").value;
 	if(lastname==null || lastname == ""){
 		document.getElementById("hint-lastname").innerHTML = " ! Entrer votre nom";
 		valid = false;
@@ -62,7 +67,7 @@ function validateRegister() {
 	}
 
 	//Verification prénom présent
-	var firstname = document.forms["registerForm"]["firstname"].value;
+	var firstname = document.getElementById("firstname").value;
 	if(firstname==null || firstname == ""){
 		document.getElementById("hint-firstname").innerHTML = " ! Entrer votre prénom";
 		valid = false;
@@ -71,7 +76,7 @@ function validateRegister() {
 	}
 
 	//Verification email présent
-	var email = document.forms["registerForm"]["email"].value;
+	var email = document.getElementById("email").value;
 	if(email==null || email == ""){
 		document.getElementById("hint-email").innerHTML = " ! Entrer un email valide";
 		valid = false;
@@ -81,18 +86,16 @@ function validateRegister() {
 	}
 
 	//Verification telephone présent
-	var tel = document.forms["registerForm"]["tel"].value;
-	var gsm = document.forms["registerForm"]["gsm"].value;
-	if((tel==null || tel == "") && (gsm==null || gsm == "")){
-		document.getElementById("hint-tel").innerHTML = " ! Entrer votre numéro de téléphone ou GSM";
+	var tel = document.getElementById("tel").value;
+	if(tel==null || tel == ""){
+		document.getElementById("hint-tel").innerHTML = " ! Entrer votre numéro de téléphone";
 		valid = false;
 	}else{
 		//Verify number validity TODO
 		document.getElementById("hint-tel").innerHTML = "";
 	}
-
 	//Verification rue présent
-	var street = document.forms["registerForm"]["street"].value;
+	var street = document.getElementById("street").value;
 	if(street==null || street == ""){
 		document.getElementById("hint-street").innerHTML = " ! Entrer votre rue";
 		valid = false;
@@ -101,7 +104,7 @@ function validateRegister() {
 	}
 
 	//Verification numero présent
-	var number = document.forms["registerForm"]["number"].value;
+	var number = document.getElementById("number").value;
 	if(number==null || number == ""){
 		document.getElementById("hint-number").innerHTML = " ! Entrer votre numéro/boite";
 		valid = false;
@@ -110,7 +113,7 @@ function validateRegister() {
 	}
 
 	//Verification code postal présent
-	var postalcode = document.forms["registerForm"]["postalcode"].value;
+	var postalcode = document.getElementById("postalcode").value;
 	if(postalcode==null || postalcode == ""){
 		document.getElementById("hint-postalcode").innerHTML = " ! Entrer votre code postal";
 		valid = false;
@@ -119,7 +122,7 @@ function validateRegister() {
 	}
 
 	//Verification localité présent
-	var locality = document.forms["registerForm"]["locality"].value;
+	var locality = document.getElementById("locality").value;
 	if(locality==null || locality == ""){
 		document.getElementById("hint-locality").innerHTML = " ! Entrer votre localité";
 		valid = false;
@@ -130,16 +133,16 @@ function validateRegister() {
 	//TODO vérification addresse correcte
 
 	//Verification date de naissance présent
-	var birthdate = document.forms["registerForm"]["birthdate"].value;
+	var birthdate = document.getElementById("birthdate").value;
 	if(birthdate==null || birthdate == ""){
 		document.getElementById("hint-birthdate").innerHTML = " ! Entrer votre date de naissance";
 		valid = false;
 	}else{
 		document.getElementById("hint-birthdate").innerHTML = "";
 	}
+	
 
-
-	return valid;
+	return false;
 }
 
 document.getElementById("foot01").innerHTML =

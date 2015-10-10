@@ -7,6 +7,8 @@ urlpatterns = patterns('tennis.views',
 	url(r'^deconnexion$', 'deconnect'),
 	url(r'^inscription$','register'),
 	url(r'^recuperation$','recover'),
+	url(r'^profil$','profil'),
 	url(r'^sponsors$','sponsors'),
 	url(r'^contact$','contact'),
+	url(r'^mapage$','mapage'),
 )

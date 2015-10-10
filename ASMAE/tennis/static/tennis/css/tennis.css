@@ -24,6 +24,15 @@ html{
     background-image: url("../img/bg.jpg");
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: bold !important;
+}
+
 /* navbar */
 nav {
 
@@ -185,7 +194,6 @@ nav {
 
 /*Content box */
 .content-box{
-    background-color: white;
     background-color: rgba(238, 231, 203, 1);
     border-radius: 8px;
     padding-top: 30px;
@@ -238,6 +246,31 @@ textarea {
   resize: vertical; /* user can resize vertically, but width is fixed */
 }
 
+/* Panel */
+.panel-body{
+    background-color: rgba(238, 231, 203, 1);
+}
+
+.panel-heading{
+    background-color: #D4542D !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+.panel-default{
+    border: solid 2px #BF4C28 !important;
+}
+
+p.info{
+    padding-top: 7px;
+    font-weight: bold;
+    color: #D4542D;
+}
+
+label.info{
+    padding-top: 7px;
+    text-align: right;
+}
 
 /* Footer */
 .footer {

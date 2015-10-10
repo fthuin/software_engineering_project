@@ -16,6 +16,14 @@ def sponsors(request):
 def contact(request):
 	return render(request,'tennis/contact.html',locals())
 
+def mapage(request):
+	return render(request,'tennis/mapage.html',locals())
+
+def profil(request):
+	if request.user.is_authenticated():
+		return render(request,'tennis/profil.html',locals())
+	return redirect(reverse(home))
+
 def connect(request):
 	if request.method == "POST":
 		#Recuperation des donnees
@@ -38,7 +46,7 @@ def connect(request):
 		if user is not None:
 			if user.is_active:
 				login(request, user)
-				return redirect(reverse(home))
+				return redirect(reverse(mapage))
 			else:
 				error="Ce compte a été désactivé !"
 				return render(request,'tennis/login.html',locals())
@@ -47,7 +55,7 @@ def connect(request):
 			error = "Nom d'utilisateur ou mot de passe non conforme !"
 			return render(request,'tennis/login.html',locals())
 	if request.user.is_authenticated():
-		return redirect(reverse(home))
+		return redirect(reverse(mapage))
 	return render(request,'tennis/login.html',locals())
 
 def deconnect(request):
@@ -76,7 +84,6 @@ def register(request):
 		lastname = request.POST['lastname']
 		email = request.POST['email']
 		tel = request.POST['tel']
-		gsm = request.POST['gsm']
 		fax = request.POST['fax']
 		title = request.POST['title']
 		street = request.POST['street']
