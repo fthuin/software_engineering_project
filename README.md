@@ -11,10 +11,17 @@ the website.
 ## Contributors
 
 DE VOGELAERE Cyril
+
 DIZIER ROMAIN
+
 GEORGES Benjamin
+
 GUSBIN Quentin
+
 KERGER Zacharie
+
 KUHN Alexandre
+
 THUIN Florian
+
 VRIELYNCK Nicolas
