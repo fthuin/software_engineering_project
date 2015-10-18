@@ -12,7 +12,7 @@ the website.
 
 DE VOGELAERE Cyril
 
-DIZIER ROMAIN
+DIZIER Romain
 
 GEORGES Benjamin
 
