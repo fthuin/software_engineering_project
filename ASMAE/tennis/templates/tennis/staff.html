@@ -5,66 +5,81 @@
 
 {% block body %}
 
+	
+
+
 <div class="container">
 	<ul class="nav nav-tabs">
-    <li class="active"><a href="#">Tournois</a></li>
-    <li><a href="#">Terrains</a></li>
-    <li><a href="#">Paires</a></li>
-    <li><a href="#">Extras</a></li>
+    <li class="active" id="tournoi"><a onclick="ongletTournoi()" href="javascript:void(0);">Tournois</a></li>
+    <li id="terrain"><a onclick="ongletTerrain()" href="javascript:void(0);">Terrains</a></li>
+    <li id="paire"><a onclick="ongletPaire()" href="javascript:void(0);">Paires</a></li>
+    <li id="extra"><a onclick="ongletExtra()" href="javascript:void(0);">Extras</a></li>
   </ul>
-</div>
 
-
-<div class="container">
-	<div class="content-box">
+	<div class="content-box" id="gestionTournoi">
 		<h2 class="center">Gestionnaire des tournois</h2>
-		<hr class="line">
-
-
-<!--
+		<hr class="line">	
+	</div>
+	<div class="content-box" id="gestionTerrain" style="display:none;">
+		<h2 class="center">Gestionnaire des terrains</h2>
+		<hr class="line">	
+	</div>
+	<div class="content-box" id="gestionPaire" style="display:none;">
+		<h2 class="center">Gestionnaire des paires</h2>
+		<hr class="line">	
+	</div>
+	<div class="content-box" id="gestionExtra" style="display:none;">
+		<h2 class="center">Gestionnaire des extras</h2>
+		<hr class="line">	
 		<div class="row">
-			<div class="col-lg-3 col-sm-6">
+			<div class="col-md-4">
 				<div class="panel panel-default">
-					<div class="panel-heading">Tournois</div>
-					<div class="panel-body">
-						<div class="text-center">
-							<div class="btn-group">
-								<button class="btn-default btn" >Poules</button>
-								<button class="btn-default btn" >Arbre</button>
-							</div>
-						</div>
-					</div>
+					<div class="panel-heading">Liste des extras</div>
+					<ul class="list-group">
+		  				<li class="list-group-item">Extra 1 <a href="" class="pull-right">Supprimer</a><p class="pull-right">&nbsp;|&nbsp;</p><a href="" class="pull-right">Editer</a></li>
+						<li class="list-group-item">Extra 2 <a href="" class="pull-right">Supprimer</a><p class="pull-right">&nbsp;|&nbsp;</p><a href="" class="pull-right">Editer</a></li>
+					</ul>
 				</div>
+				
+			    <a href="#" class="center center-block">Ajouter un extra</a>
 			</div>
-			<div class="col-lg-3 col-sm-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">Terrains</div>
-					<div class="panel-body">
-						<button class="btn-default btn center-block">Consulter</button>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-3 col-sm-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">Paires</div>
-					<div class="panel-body">
-						<button class="btn-default btn center-block">Consulter</button>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-3 col-sm-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">Extras</div>
-					<div class="panel-body">
-						<button class="btn-default btn center-block">Editer</button>
-					</div>
-				</div>
+
+			<div class="col-md-8">
+				<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.register" %}" onsubmit="return validateRegister()" >
+					{% csrf_token %}
+					<!-- Nom -->
+					<div class="form-group">
+				      <label class="control-label col-sm-2" for="username">Nom</label>
+				      <div class="col-sm-10">
+				      	<input type="text" class="form-control" maxlength="30" name="name" id="name" value="{{ username }}">
+				      	<p class="hint" id="hint-username"></p>
+				      </div>
+				    </div>
+
+				    <!-- Prix -->
+					<div class="form-group">
+				      <label class="control-label col-sm-2" for="username">Prix</label>
+				      <div class="col-sm-10">
+				      	<input type="text" class="form-control" maxlength="30" name="price" id="price" value="{{ username }}">
+				      	<p class="hint" id="hint-username"></p>
+				      </div>
+				    </div>
+
+				    <!-- Commentaire -->
+					<div class="form-group">
+				      <label class="control-label col-sm-2" for="username">Commentaires</label>
+				      <div class="col-sm-10">
+				      	<textarea class="form-control" rows="5" name="message"></textarea>
+				      	<p class="hint" id="hint-username"></p>
+				      </div>
+				    </div>
+
+					<button class="btn-default btn center-block">Editer</button>
+					
+				  </form>
 			</div>
 		</div>
-	-->
-		
 	</div>
-	
 </div>
 
 {% endblock %}

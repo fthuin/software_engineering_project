@@ -67,7 +67,7 @@ def connect(request):
 			error = "Nom d'utilisateur ou mot de passe non conforme !"
 			return render(request,'tennis/login.html',locals())
 	if request.user.is_authenticated():
-		return redirect(reverse(mapage))
+		return redirect(reverse(tournoi))
 	return render(request,'tennis/login.html',locals())
 
 def deconnect(request):
@@ -141,7 +141,7 @@ def register(request):
 		#Account creation & redirect
 
 	if request.user.is_authenticated():
-		return redirect(reverse(home))
+		return redirect(reverse(tournoi))
 	return render(request,'tennis/register.html',locals())
 
 def recover(request):
