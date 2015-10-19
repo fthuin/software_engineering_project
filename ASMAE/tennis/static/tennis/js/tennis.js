@@ -46,13 +46,27 @@ function ongletExtra(){
 	document.getElementById("gestionExtra").style.display = "inherit";
 }
 
-function extra(extra){
+function extra(nom,prix,comment){
 	document.getElementById("editExtra").style.display = "inherit";
 	document.getElementById("newExtra").style.display = "none";
 
-	document.getElementById("extraName").value = "Extra"+extra;
-	document.getElementById("extraPrice").value = "TODO"
-	document.getElementById("extracommentaire").innerHTML = "TODO"
+	var c = document.getElementById("listExtra").children
+	for (i = 0; i < c.length; i++) {
+		if(c[i].innerHTML==nom){
+			c[i].className="list-group-item active"
+		}else{
+			c[i].className="list-group-item"
+		}
+    }
+
+	document.getElementById("extraName").value = nom;
+	document.getElementById("extraPrice").value = prix;
+	document.getElementById("extracommentaire").innerHTML = comment;
+}
+
+function activeExtra(){
+	var c = document.getElementById("listExtra").children
+	c[0].className="list-group-item active"
 }
 
 function addExtra(){
@@ -212,3 +226,4 @@ document.getElementById("foot01").innerHTML =
 "<p>&copy;  " + new Date().getFullYear() + " ASMAE. All rights reserved.</p>";
 
 google.maps.event.addDomListener(window, 'load', initialize);
+activeExtra();

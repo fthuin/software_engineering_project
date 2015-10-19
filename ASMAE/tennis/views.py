@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra,Participant
+from tennis.models import Extra, Participant
 
 # Create your views here.
 def home(request):
@@ -34,6 +34,8 @@ def registerTerrain(request):
 
 def staff(request):
 	if request.user.is_authenticated():
+		Ex = Extra.objects.all()
+		print(Ex[0])
 		return render(request,'tennis/staff.html',locals())
 	return redirect(reverse(home))
 

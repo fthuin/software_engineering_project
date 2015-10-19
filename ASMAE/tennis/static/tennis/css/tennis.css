@@ -291,6 +291,11 @@ div.info{
     border-color: #D4542D !important;
 }
 
+.list-group-item.active{
+    color:#D4542D !important;
+    font-weight: bold;;
+}
+
 /* Navtabs in staff */
 .nav-tabs > li, .nav-pills > li {
     float:none !important;
