@@ -14,9 +14,9 @@ class Participant(models.Model):
 	telephone = models.CharField(max_length=30,null=True)
 	fax = models.CharField(max_length=30,null=True)
 	gsm = models.CharField(max_length=30,null=True)
-	datenaissance = models.DateTimeField()
+	datenaissance = models.DateTimeField(null=True)
 	classement = models.CharField(max_length=10,null=True)
-	oldparticipant = models.BooleanField()
+	oldparticipant = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.prenom +" "+ self.nom

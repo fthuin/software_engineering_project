@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
+from tennis.models import Extra,Participant
 
 # Create your views here.
 def home(request):
@@ -93,6 +94,7 @@ def email_present(email):
 
 def register(request):
 	if request.method == "POST":
+		print("ici")
 
 		#Recuperation des donnees
 		username = request.POST['username']
@@ -100,9 +102,11 @@ def register(request):
 		firstname = request.POST['firstname']
 		lastname = request.POST['lastname']
 		email = request.POST['email']
+		gsm = request.POST['gsm']
 		tel = request.POST['tel']
 		fax = request.POST['fax']
 		title = request.POST['title']
+		boite = request.POST['boite']
 		street = request.POST['street']
 		number = request.POST['number']
 		locality = request.POST['locality']
@@ -140,11 +144,14 @@ def register(request):
 			return render(request,'tennis/register.html',locals())
 
 		#Check numero de tel addresse et email valide TODO
+		
 
 
 
 		#Account creation & redirect
-
+		user = User.ocjects.create_user(username,email,password)
+		user.save()
+		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement = classement).save()
 	if request.user.is_authenticated():
 		return redirect(reverse(tournoi))
 	return render(request,'tennis/register.html',locals())
