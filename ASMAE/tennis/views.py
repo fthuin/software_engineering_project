@@ -26,6 +26,11 @@ def terrain(request):
 		return render(request,'tennis/terrain.html',locals())
 	return redirect(reverse(home))
 
+def registerTerrain(request):
+	if request.user.is_authenticated():
+		return render(request,'tennis/registerTerrain.html',locals())
+	return redirect(reverse(home))
+
 def staff(request):
 	if request.user.is_authenticated():
 		return render(request,'tennis/staff.html',locals())

@@ -9,49 +9,56 @@
 
 
 <div class="container">
+	<!-- Onglet de navigations -->
 	<ul class="nav nav-tabs">
-    <li class="active" id="tournoi"><a onclick="ongletTournoi()" href="javascript:void(0);">Tournois</a></li>
-    <li id="terrain"><a onclick="ongletTerrain()" href="javascript:void(0);">Terrains</a></li>
-    <li id="paire"><a onclick="ongletPaire()" href="javascript:void(0);">Paires</a></li>
-    <li id="extra"><a onclick="ongletExtra()" href="javascript:void(0);">Extras</a></li>
-  </ul>
+	    <li class="active" id="tournoi"><a onclick="ongletTournoi()" href="javascript:void(0);">Tournois</a></li>
+	    <li id="terrain"><a onclick="ongletTerrain()" href="javascript:void(0);">Terrains</a></li>
+	    <li id="paire"><a onclick="ongletPaire()" href="javascript:void(0);">Paires</a></li>
+	    <li id="extra"><a onclick="ongletExtra()" href="javascript:void(0);">Extras</a></li>
+  	</ul>
 
+	<!-- Gestionnaire des tournois -->
 	<div class="content-box" id="gestionTournoi">
 		<h2 class="center">Gestionnaire des tournois</h2>
 		<hr class="line">	
 	</div>
+	<!-- Gestionnaire des terrains -->
 	<div class="content-box" id="gestionTerrain" style="display:none;">
 		<h2 class="center">Gestionnaire des terrains</h2>
 		<hr class="line">	
 	</div>
+	<!-- Gestionnaire des paires -->
 	<div class="content-box" id="gestionPaire" style="display:none;">
 		<h2 class="center">Gestionnaire des paires</h2>
 		<hr class="line">	
 	</div>
+	<!-- Gestionnaire des extras -->
 	<div class="content-box" id="gestionExtra" style="display:none;">
 		<h2 class="center">Gestionnaire des extras</h2>
 		<hr class="line">	
 		<div class="row">
+			<!-- selection des extras -->
 			<div class="col-md-4">
 				<div class="panel panel-default">
 					<div class="panel-heading">Liste des extras</div>
 					<ul class="list-group">
-		  				<li class="list-group-item">Extra 1 <a href="" class="pull-right">Supprimer</a><p class="pull-right">&nbsp;|&nbsp;</p><a href="" class="pull-right">Editer</a></li>
-						<li class="list-group-item">Extra 2 <a href="" class="pull-right">Supprimer</a><p class="pull-right">&nbsp;|&nbsp;</p><a href="" class="pull-right">Editer</a></li>
+		  				<li class="list-group-item">Extra 1 <a href="" class="pull-right">Supprimer</a><p class="pull-right">&nbsp;|&nbsp;</p><a onclick="extra(1)" href="javascript:void(0);" class="pull-right">Editer</a></li>
+						<li class="list-group-item">Extra 2 <a href="" class="pull-right">Supprimer</a><p class="pull-right">&nbsp;|&nbsp;</p><a onclick="extra(2)" href="javascript:void(0);" class="pull-right">Editer</a></li>
+						<li class="list-group-item">Extra 3 <a href="" class="pull-right">Supprimer</a><p class="pull-right">&nbsp;|&nbsp;</p><a onclick="extra(3)" href="javascript:void(0);" class="pull-right">Editer</a></li>
 					</ul>
 				</div>
-				
-			    <a href="#" class="center center-block">Ajouter un extra</a>
+			    <a onclick="addExtra()" href="javascript:void(0);" class="center center-block">Ajouter un extra</a>
 			</div>
 
+			<!-- Modification des extras -->
 			<div class="col-md-8">
-				<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.register" %}" onsubmit="return validateRegister()" >
+				<form class="form-horizontal" name="editExtra" id="editExtra" role="form" method="post" action="{% url "tennis.views.register" %}" onsubmit="return validateRegister()" >
 					{% csrf_token %}
 					<!-- Nom -->
 					<div class="form-group">
 				      <label class="control-label col-sm-2" for="username">Nom</label>
 				      <div class="col-sm-10">
-				      	<input type="text" class="form-control" maxlength="30" name="name" id="name" value="{{ username }}">
+				      	<input type="text" class="form-control" maxlength="30" name="name" id="extraName" value="Extra1">
 				      	<p class="hint" id="hint-username"></p>
 				      </div>
 				    </div>
@@ -60,7 +67,7 @@
 					<div class="form-group">
 				      <label class="control-label col-sm-2" for="username">Prix</label>
 				      <div class="col-sm-10">
-				      	<input type="text" class="form-control" maxlength="30" name="price" id="price" value="{{ username }}">
+				      	<input type="text" class="form-control" maxlength="30" name="price" id="extraPrice" value="TODO">
 				      	<p class="hint" id="hint-username"></p>
 				      </div>
 				    </div>
@@ -69,12 +76,45 @@
 					<div class="form-group">
 				      <label class="control-label col-sm-2" for="username">Commentaires</label>
 				      <div class="col-sm-10">
-				      	<textarea class="form-control" rows="5" name="message"></textarea>
+				      	<textarea class="form-control" rows="5" name="message" id="extracommentaire">TODO</textarea>
 				      	<p class="hint" id="hint-username"></p>
 				      </div>
 				    </div>
 
 					<button class="btn-default btn center-block">Editer</button>
+					
+				  </form>
+
+				  <form class="form-horizontal" name="newExtra" id="newExtra" role="form" method="post" action="{% url "tennis.views.register" %}" onsubmit="return validateRegister()" style="display:none" >
+					{% csrf_token %}
+					<!-- Nom -->
+					<div class="form-group">
+				      <label class="control-label col-sm-2" for="username">Nom</label>
+				      <div class="col-sm-10">
+				      	<input type="text" class="form-control" maxlength="30" name="name" id="name" placeholder="Nom de l'extra">
+				      	<p class="hint" id="hint-username"></p>
+				      </div>
+				    </div>
+
+				    <!-- Prix -->
+					<div class="form-group">
+				      <label class="control-label col-sm-2" for="username">Prix</label>
+				      <div class="col-sm-10">
+				      	<input type="text" class="form-control" maxlength="30" name="price" id="price" placeholder="Prix de l'extra">
+				      	<p class="hint" id="hint-username"></p>
+				      </div>
+				    </div>
+
+				    <!-- Commentaire -->
+					<div class="form-group">
+				      <label class="control-label col-sm-2" for="username">Commentaires</label>
+				      <div class="col-sm-10">
+				      	<textarea class="form-control" rows="5" name="message" placeholder="Commentaires"></textarea>
+				      	<p class="hint" id="hint-username"></p>
+				      </div>
+				    </div>
+
+					<button class="btn-default btn center-block">Sauver</button>
 					
 				  </form>
 			</div>

@@ -98,12 +98,16 @@
 								    <!-- telephone -->
 								    <div class="form-group">
 								      <label class="control-label col-sm-4" for="tel">Téléphone *</label>
-								      <div class="col-sm-7">
+								      <div class="col-sm-8">
 								      	<input type="tel" class="form-control" name="tel" id="tel" placeholder="" value="{{ tel }}">
-								      	<p class="hint" id="hint-tel"></p>
 								      </div>
-								      <div class="col-sm-1" style="padding-left:0;">
-								      	<a onclick="addTel()" href="javascript:void(0);" ><span class="control-label glyphicon glyphicon-plus"></span></a>
+								    </div>
+								    <!-- gsm -->
+								    <div class="form-group">
+								      <label class="control-label col-sm-4" for="gsm">GSM *</label>
+								      <div class="col-sm-8">
+								      	<input type="gsm" class="form-control" name="gsm" id="gsm" placeholder="" value="{{ gsm }}">
+								      	<p class="hint" id="hint-tel"></p>
 								      </div>
 								    </div>
 								    <!-- fax -->
@@ -128,10 +132,18 @@
 								    </div>
 								    <!-- numero -->
 								    <div class="form-group">
-								      <label class="control-label col-sm-4" for="number">Numéro/Boite *</label>
+								      <label class="control-label col-sm-4" for="number">Numéro *</label>
 								      <div class="col-sm-8">
-								      	<input type="text" class="form-control" name="number" id="number" placeholder="Numero / Boite" value="{{ number }}">
+								      	<input type="text" class="form-control" name="number" id="number" placeholder="Numero" value="{{ number }}">
 								      	<p class="hint" id="hint-number"></p>
+								      </div>
+								    </div>
+								    <!-- boite -->
+								    <div class="form-group">
+								      <label class="control-label col-sm-4" for="boite">Boite</label>
+								      <div class="col-sm-8">
+								      	<input type="text" class="form-control" name="boite" id="boite" placeholder="Boite" value="{{ boite }}">
+								      	<p class="hint" id="hint-boite"></p>
 								      </div>
 								    </div>
 								    <!-- code postal -->

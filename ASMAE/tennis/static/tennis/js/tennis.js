@@ -1,49 +1,63 @@
 function ongletTournoi(){
-	document.getElementById("tournoi").className = "active"
-	document.getElementById("terrain").className = " "
-	document.getElementById("paire").className = " "
-	document.getElementById("extra").className = " "
+	document.getElementById("tournoi").className = "active";
+	document.getElementById("terrain").className = " ";
+	document.getElementById("paire").className = " ";
+	document.getElementById("extra").className = " ";
 
-	document.getElementById("gestionTournoi").style.display = "inherit"
-	document.getElementById("gestionTerrain").style.display = "none"
-	document.getElementById("gestionPaire").style.display = "none"
-	document.getElementById("gestionExtra").style.display = "none"
+	document.getElementById("gestionTournoi").style.display = "inherit";
+	document.getElementById("gestionTerrain").style.display = "none";
+	document.getElementById("gestionPaire").style.display = "none";
+	document.getElementById("gestionExtra").style.display = "none";
 }
 
 function ongletTerrain(){
-	document.getElementById("tournoi").className = " "
-	document.getElementById("terrain").className = "active"
-	document.getElementById("paire").className = " "
-	document.getElementById("extra").className = " "
+	document.getElementById("tournoi").className = " ";
+	document.getElementById("terrain").className = "active";
+	document.getElementById("paire").className = " ";
+	document.getElementById("extra").className = " ";
 
-	document.getElementById("gestionTournoi").style.display = "none"
-	document.getElementById("gestionTerrain").style.display = "inherit"
-	document.getElementById("gestionPaire").style.display = "none"
-	document.getElementById("gestionExtra").style.display = "none"
+	document.getElementById("gestionTournoi").style.display = "none";
+	document.getElementById("gestionTerrain").style.display = "inherit";
+	document.getElementById("gestionPaire").style.display = "none";
+	document.getElementById("gestionExtra").style.display = "none";
 }
 
 function ongletPaire(){
-	document.getElementById("tournoi").className = " "
-	document.getElementById("terrain").className = " "
-	document.getElementById("paire").className = "active"
-	document.getElementById("extra").className = " "
+	document.getElementById("tournoi").className = " ";
+	document.getElementById("terrain").className = " ";
+	document.getElementById("paire").className = "active";
+	document.getElementById("extra").className = " ";
 
-	document.getElementById("gestionTournoi").style.display = "none"
-	document.getElementById("gestionTerrain").style.display = "none"
-	document.getElementById("gestionPaire").style.display = "inherit"
-	document.getElementById("gestionExtra").style.display = "none"
+	document.getElementById("gestionTournoi").style.display = "none";
+	document.getElementById("gestionTerrain").style.display = "none";
+	document.getElementById("gestionPaire").style.display = "inherit";
+	document.getElementById("gestionExtra").style.display = "none";
 }
 
 function ongletExtra(){
-	document.getElementById("tournoi").className = " "
-	document.getElementById("terrain").className = " "
-	document.getElementById("paire").className = " "
-	document.getElementById("extra").className = "active"
+	document.getElementById("tournoi").className = " ";
+	document.getElementById("terrain").className = " ";
+	document.getElementById("paire").className = " ";
+	document.getElementById("extra").className = "active";
 
-	document.getElementById("gestionTournoi").style.display = "none"
-	document.getElementById("gestionTerrain").style.display = "none"
-	document.getElementById("gestionPaire").style.display = "none"
-	document.getElementById("gestionExtra").style.display = "inherit"
+	document.getElementById("gestionTournoi").style.display = "none";
+	document.getElementById("gestionTerrain").style.display = "none";
+	document.getElementById("gestionPaire").style.display = "none";
+	document.getElementById("gestionExtra").style.display = "inherit";
+}
+
+function extra(extra){
+	document.getElementById("editExtra").style.display = "inherit";
+	document.getElementById("newExtra").style.display = "none";
+
+	document.getElementById("extraName").value = "Extra"+extra;
+	document.getElementById("extraPrice").value = "TODO"
+	document.getElementById("extracommentaire").innerHTML = "TODO"
+}
+
+function addExtra(){
+	document.getElementById("editExtra").style.display = "none";
+	document.getElementById("newExtra").style.display = "inherit";
 }
 
 function initialize() {
@@ -135,8 +149,9 @@ function validateRegister() {
 
 	//Verification telephone présent
 	var tel = document.getElementById("tel").value;
-	if(tel==null || tel == ""){
-		document.getElementById("hint-tel").innerHTML = " ! Entrer votre numéro de téléphone";
+	var gsm = document.getElementById("gsm").value;
+	if((tel==null || tel == "") && (gsm==null || gsm == "")){
+		document.getElementById("hint-tel").innerHTML = " ! Entrer votre numéro de téléphone ou de GSM";
 		valid = false;
 	}else{
 		//Verify number validity TODO
