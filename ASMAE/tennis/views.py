@@ -81,6 +81,7 @@ def updatePassword(request):
 		return render(request,'tennis/register.html',locals())
 
 	request.user.set_password(password1)
+	successMDP = "Le mot de passe a bien été changé"
 	return render(request,'tennis/profil.html',locals())
 	
 		
