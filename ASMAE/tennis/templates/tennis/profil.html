@@ -6,7 +6,7 @@
 
 <div class="container">
 		<div class="content-box">
-		<h2 class="center">Mon profil (TODO set info)</h2>
+		<h2 class="center">Mon profil</h2>
 		<hr class="line">
 		<!-- Information du compte-->
 		<!-- TODO set real info-->
@@ -16,21 +16,21 @@
 				<div class="panel-body">
 					<!-- email -->
 					<div class="form-group">
-				      <label class="info col-sm-4 col-sm-offset-2" for="email">Email</label>
+				      <label class="info col-sm-4 col-sm-offset-2" for="email">Email :</label>
 				      <div class="col-sm-4">
-				      	<p class="info">fou@insane.dingue</p>
+				      	<p class="info">{{ user.email }}</p>
 				      </div>
 				    </div>
 				    <!-- user -->
 					<div class="form-group">
-						<label class="info col-sm-4 col-sm-offset-2" for="title">Nom d'utilisateur</label>
+						<label class="info col-sm-4 col-sm-offset-2" for="title">Nom d'utilisateur :</label>
 						<div class="col-sm-4">
-							<p class="info">Jean-Michel-Poireaux</p>
+							<p class="info">{{ user.username }}</p>
 						</div>
 					</div>
 					<!-- mdp -->
 					<div class="form-group">
-						<label class="info col-sm-4 col-sm-offset-2" for="title">Mot de passe</label>
+						<label class="info col-sm-4 col-sm-offset-2" for="title">Mot de passe :</label>
 						<div class="col-sm-4">
 							<p class="info">********</p>
 						</div>
@@ -77,44 +77,69 @@
 						<div class="col-lg-6">
 							<!-- Titre -->
 							<div class="form-group">
-						      <label class="info col-sm-4" for="title">Titre</label>
+						      <label class="info col-sm-4" for="title">Titre :</label>
 						      <div class="col-sm-8">
-						      	<p class="info">Mr</p>
+						      	<p class="info">{{ user.participant.titre }}</p>
 						      </div>
 						    </div>
 						    <!-- nom -->
 						    <div class="form-group">
-						      <label class="info col-sm-4" for="lastname">Nom</label>
+						      <label class="info col-sm-4" for="lastname">Nom :</label>
 						      <div class="col-sm-8">
-						      	<p class="info">Smith</p>
+						      	<p class="info">{{ user.participant.nom }}</p>
 						      </div>
 						    </div>
 						    <!-- prenom -->
 						    <div class="form-group">
-						      <label class="info col-sm-4" for="firstname">Prénom</label>
+						      <label class="info col-sm-4" for="firstname">Prénom :</label>
 						      <div class="col-sm-8">
-						      	<p class="info">Jean</p>
+						      	<p class="info">{{ user.participant.prenom }}</p>
 						      </div>
 						    </div>
 						    <!-- date de naissance -->
 						    <div class="form-group">
-						      <label class="info col-sm-4" for="birthdate">Date de Naissance</label>
+						      <label class="info col-sm-4" for="birthdate">Date de Naissance :</label>
 						      <div class="col-sm-8">
-						      	<p class="info">05 juin 1990</p>
+						      	<p class="info">{{ user.participant.datenaissance }}</p>
 						      </div>
 						    </div>
 						    <!-- telephone -->
 						    <div class="form-group">
-						      <label class="info col-sm-4" for="tel">Téléphone</label>
+						      <label class="info col-sm-4" for="tel">Téléphone :</label>
 						      <div class="col-sm-7">
-						      	<p class="info">0475 75 75 75</p>
+						      	<p class="info">
+						      		{% if user.participant.telephone %}
+						      		{{ user.participant.telephone }}
+						      		{% else %}
+						      		-
+						      		{% endif %}
+						      	</p>
+						      </div>
+						    </div>
+						    <!-- gsm -->
+						    <div class="form-group">
+						      <label class="info col-sm-4" for="tel">GSM :</label>
+						      <div class="col-sm-7">
+						      	<p class="info">
+						      		{% if user.participant.gsm %}
+						      		{{ user.participant.gsm }}
+						      		{% else %}
+						      		-
+						      		{% endif %}
+						      	</p>
 						      </div>
 						    </div>
 						    <!-- fax -->
 						    <div class="form-group">
-						      <label class="info col-sm-4" for="fax">Fax</label>
+						      <label class="info col-sm-4" for="fax">Fax :</label>
 						      <div class="col-sm-8">
-						      	<p class="info"> - </p>
+						      	<p class="info">
+						      		{% if user.participant.fax %}
+						      		{{ user.participant.fax }}
+						      		{% else %}
+						      		-
+						      		{% endif %}
+						      	</p>
 						      </div>
 						    </div>
 						</div>
@@ -122,44 +147,69 @@
 						<div class="col-lg-6">
 							<!-- rue -->
 							<div class="form-group">
-						      <label class="info col-sm-4" for="street">Rue</label>
+						      <label class="info col-sm-4" for="street">Rue :</label>
 						      <div class="col-sm-8">
-						      	<p class="info">Rue de la bullshit</p>
+						      	<p class="info">{{ user.participant.rue }}</p>
 						      </div>
 						    </div>
 						    <!-- numero -->
 						    <div class="form-group">
-						      <label class="info col-sm-4" for="number">Numéro</label>
+						      <label class="info col-sm-4" for="number">Numéro :</label>
 						      <div class="col-sm-8">
-						      	<p class="info">666</p>
+						      	<p class="info">{{ user.participant.numero }}</p>
 						      </div>
 						    </div>
 						    <!-- boite -->
 						    <div class="form-group">
-						      <label class="info col-sm-4" for="number">Boite</label>
+						      <label class="info col-sm-4" for="number">Boite :</label>
 						      <div class="col-sm-8">
-						      	<p class="info"> - </p>
+						      	<p class="info">
+						      		{% if user.participant.boite %}
+						      		{{ user.participant.boite }}
+						      		{% else %}
+						      		-
+						      		{% endif %}
+						      	</p>
 						      </div>
 						    </div>
 						    <!-- code postal -->
 						    <div class="form-group">
-						      <label class="info col-sm-4" for="postalcode">Code Postal</label>
+						      <label class="info col-sm-4" for="postalcode">Code Postal :</label>
 						      <div class="col-sm-8">
-						      	<p class="info">6666</p>
+						      	<p class="info">{{ user.participant.codepostal }}</p>
 						      </div>
 						    </div>
 						    <!-- localité -->
 						    <div class="form-group">
-						      <label class="info col-sm-4" for="locality">Localité</label>
+						      <label class="info col-sm-4" for="locality">Localité :</label>
 						      <div class="col-sm-8">
-						      	<p class="info">Enfer-sur-Mer</p>
+						      	<p class="info">{{ user.participant.localite }}</p>
 						      </div>
 						    </div>
 						    <!-- classement -->
 						    <div class="form-group">
-						      <label class="info col-sm-4" for="classement">Classement</label>
+						      <label class="info col-sm-4" for="classement">Classement :</label>
 						      <div class="col-sm-8">
-						      	<p class="info">Triple A eco+ 2000</p>
+						      	<p class="info">
+						      		{% if user.participant.classement %}
+						      		{{ user.participant.classement }}
+						      		{% else %}
+						      		-
+						      		{% endif %}
+						      	</p>
+						      </div>
+						    </div>
+						    <!-- participée -->
+						    <div class="form-group">
+						      <label class="info col-sm-4" for="locality">Déjà participé :</label>
+						      <div class="col-sm-8">
+						      	<p class="info">
+						      		{% if user.participant.oldparticipant %}
+						      		Oui
+						      		{% else %}
+						      		Non
+						      		{% endif %}
+						      	</p>
 						      </div>
 						    </div>
 						</div>

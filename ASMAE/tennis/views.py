@@ -22,6 +22,11 @@ def tournoi(request):
 		return render(request,'tennis/tournoi.html',locals())
 	return redirect(reverse(home))
 
+def inscriptionTournoi(request):
+	if request.user.is_authenticated():
+		return render(request,'tennis/inscriptionTournoi.html',locals())
+	return redirect(reverse(home))
+
 def terrain(request):
 	if request.user.is_authenticated():
 		return render(request,'tennis/terrain.html',locals())

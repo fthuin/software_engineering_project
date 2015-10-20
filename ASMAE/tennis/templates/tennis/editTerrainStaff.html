@@ -1,6 +1,6 @@
 {% extends "tennis/staff.html" %}
 
-{% block title %}Editer terrain{% endblock %}
+{% block title %}Validation terrain{% endblock %}
 
 {% block body %}
 <div class="container">
@@ -17,7 +17,7 @@
 							Rue du lalala, 21<br>
 							1332 Genval<br> 
 							Tél : 32 (0)2 / 742 03 01 <br> 
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;32 (0)2 / 742 03 06<br>
+							GSM : 0475 75 75 75 <br>
 							Fax : 32 (0)2 / 742 03 13<br>
          				 </address>
 					</div>
@@ -54,6 +54,11 @@
 			    <div class="form-group">
 			      <label for="text">Votre Commentaire</label>
 			      <textarea class="form-control" rows="5" name="message" placeholder="Entrer votre commentaire"></textarea>
+			    </div>
+
+			    <!-- deja participe -->
+			    <div class="checkbox ">
+			      <label><input type="checkbox" name="participated"> Terrain validé</label>
 			    </div>
 
 			    <button type="submit" class="btn btn-default center-block">Sauver</button>

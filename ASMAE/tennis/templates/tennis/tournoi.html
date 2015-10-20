@@ -1,6 +1,6 @@
 {% extends "tennis/base.html" %}
 
-{% block title %}Ma page{% endblock %}
+{% block title %}Tournoi{% endblock %}
 {% block nav-tournoi %}class="active"{% endblock %}
 
 {% block body %}
@@ -41,7 +41,7 @@
 				</div>
 
 				<!-- Inscription -->
-				<button class="btn btn-default b-center">S'inscrire à un tournoi</button>
+				<button onClick="location.href='{% url "tennis.views.inscriptionTournoi" %}';" class="btn btn-default b-center">S'inscrire à un tournoi</button>
 			</div>
 		</div>
 		<div class="col-lg-4">
