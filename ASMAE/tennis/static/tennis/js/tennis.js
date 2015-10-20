@@ -96,12 +96,12 @@ function initialize() {
 
 function changeProfilPannel(){
 	document.getElementById("Info").style.display="none";
-	document.getElementById("editInfo").style.display="inherit"
+	document.getElementById("editInfo").style.display="inherit";
 }
 
 function changeMDP(){
 	document.getElementById("compteInfo").style.display="none";
-	document.getElementById("editMDP").style.display="inherit"
+	document.getElementById("editMDP").style.display="inherit";
 }
 /*
 * Validation du formulaire d'inscription
