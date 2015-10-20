@@ -98,6 +98,11 @@ function changeProfilPannel(){
 	document.getElementById("Info").style.display="none";
 	document.getElementById("editInfo").style.display="inherit"
 }
+
+function changeMDP(){
+	document.getElementById("compteInfo").style.display="none";
+	document.getElementById("editMDP").style.display="inherit"
+}
 /*
 * Validation du formulaire d'inscription
 * Vérification des champs et de la validité du numero de tel email et addresse

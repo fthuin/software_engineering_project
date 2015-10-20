@@ -5,257 +5,308 @@
 {% block body %}
 
 <div class="container">
-				<div class="content-box">
-				<h2 class="center">Mon profil</h2>
-				<hr class="line">
-				<!-- Information du compte-->
-				<!-- TODO set real info-->
-				<div style="margin-bottom:20px;">
-					<div class="panel panel-default" >
-						<div class="panel-heading">Information du compte</div>
-						<div class="panel-body">
-							<div class="form-group">
-								<label class="info col-sm-4 col-sm-offset-2" for="title">Nom d'utilisateur</label>
-								<div class="col-sm-4">
-									<p class="info">Jean-Michel-Poireaux</p>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="info col-sm-4 col-sm-offset-2" for="title">Mot de passe</label>
-								<div class="col-sm-4">
-									<p class="info">********</p>
-								</div>
-							</div>
+		<div class="content-box">
+		<h2 class="center">Mon profil (TODO set info)</h2>
+		<hr class="line">
+		<!-- Information du compte-->
+		<!-- TODO set real info-->
+		<div style="margin-bottom:20px;" id="compteInfo">
+			<div class="panel panel-default" >
+				<div class="panel-heading">Information du compte</div>
+				<div class="panel-body">
+					<!-- email -->
+					<div class="form-group">
+				      <label class="info col-sm-4 col-sm-offset-2" for="email">Email</label>
+				      <div class="col-sm-4">
+				      	<p class="info">fou@insane.dingue</p>
+				      </div>
+				    </div>
+				    <!-- user -->
+					<div class="form-group">
+						<label class="info col-sm-4 col-sm-offset-2" for="title">Nom d'utilisateur</label>
+						<div class="col-sm-4">
+							<p class="info">Jean-Michel-Poireaux</p>
 						</div>
 					</div>
-					<button onClick="changeMDP()" class="btn btn-default b-center" style="margin-top:20px;">Changer le mot de passe</button>
+					<!-- mdp -->
+					<div class="form-group">
+						<label class="info col-sm-4 col-sm-offset-2" for="title">Mot de passe</label>
+						<div class="col-sm-4">
+							<p class="info">********</p>
+						</div>
+					</div>
 				</div>
-
-				<!-- Information personnelle-->
-				<!-- TODO set real info-->
-				<div id="Info">
-					<div class="panel panel-default" >
-						<div class="panel-heading">Information personnelle</div>
-						<div class="panel-body">
-							<div class="row">
-								<div class="col-lg-6">
-									<!-- Titre -->
-									<div class="form-group">
-								      <label class="info col-sm-4" for="title">Titre</label>
-								      <div class="col-sm-8">
-								      	<p class="info">Mr</p>
-								      </div>
-								    </div>
-								    <!-- nom -->
-								    <div class="form-group">
-								      <label class="info col-sm-4" for="lastname">Nom</label>
-								      <div class="col-sm-8">
-								      	<p class="info">Smith</p>
-								      </div>
-								    </div>
-								    <!-- prenom -->
-								    <div class="form-group">
-								      <label class="info col-sm-4" for="firstname">Prénom</label>
-								      <div class="col-sm-8">
-								      	<p class="info">Jean</p>
-								      </div>
-								    </div>
-								    <!-- date de naissance -->
-								    <div class="form-group">
-								      <label class="info col-sm-4" for="birthdate">Date de Naissance</label>
-								      <div class="col-sm-8">
-								      	<p class="info">05 juin 1990</p>
-								      </div>
-								    </div>
-								    <!-- telephone -->
-								    <div class="form-group">
-								      <label class="info col-sm-4" for="tel">Téléphone</label>
-								      <div class="col-sm-7">
-								      	<p class="info">0475 75 75 75</p>
-								      </div>
-								    </div>
-								    <!-- fax -->
-								    <div class="form-group">
-								      <label class="info col-sm-4" for="fax">Fax</label>
-								      <div class="col-sm-8">
-								      	<p class="info"> - </p>
-								      </div>
-								    </div>
-								</div>
-
-								<div class="col-lg-6">
-									<!-- email -->
-									<div class="form-group">
-								      <label class="info col-sm-4" for="email">Email</label>
-								      <div class="col-sm-8">
-								      	<p class="info">fou@insane.dingue</p>
-								      </div>
-								    </div>
-									<!-- rue -->
-									<div class="form-group">
-								      <label class="info col-sm-4" for="street">Rue</label>
-								      <div class="col-sm-8">
-								      	<p class="info">Rue de la bullshit</p>
-								      </div>
-								    </div>
-								    <!-- numero -->
-								    <div class="form-group">
-								      <label class="info col-sm-4" for="number">Numéro/Boite</label>
-								      <div class="col-sm-8">
-								      	<p class="info">666</p>
-								      </div>
-								    </div>
-								    <!-- code postal -->
-								    <div class="form-group">
-								      <label class="info col-sm-4" for="postalcode">Code Postal</label>
-								      <div class="col-sm-8">
-								      	<p class="info">6666</p>
-								      </div>
-								    </div>
-								    <!-- localité -->
-								    <div class="form-group">
-								      <label class="info col-sm-4" for="locality">Localité</label>
-								      <div class="col-sm-8">
-								      	<p class="info">Enfer-sur-Mer</p>
-								      </div>
-								    </div>
-								    <!-- classement -->
-								    <div class="form-group">
-								      <label class="info col-sm-4" for="classement">Classement</label>
-								      <div class="col-sm-8">
-								      	<p class="info">Triple A eco+ 2000</p>
-								      </div>
-								    </div>
-								</div>
-							</div><!-- Row -->
-						</div><!-- Pannel-content -->
-					</div><!-- Pannel -->
-					<button onClick="changeProfilPannel()" class="btn btn-default b-center" style="margin-top:20px;">Editer info</button>
-				</div><!-- Info -->
-
-
-				<!-- Information personnelle Edit-->
-				<!-- TODO set info du mec connecté -->
-				<form class="form-horizontal" name="registerForm" id="editInfo" role="form" method="post" action="" onsubmit="return validateRegister()" style="display:none" >
-					{% csrf_token %}
-					<div class="panel panel-default">
-						<div class="panel-heading">Information personnelle</div>
-						<div class="panel-body">
-							<div class="row">
-								<div class="col-lg-6">
-									<!-- Titre -->
-									<div class="form-group">
-								      <label class="control-label col-sm-4" for="title">Titre :</label>
-								      <div class="col-sm-8">
-								      	<select class="form-control" name="title">
-											<option>Mr</option>
-										    <option>Mme</option>
-										</select>
-								      </div>
-								    </div>
-								    <!-- nom -->
-								    <div class="form-group">
-								      <label class="control-label col-sm-4" for="lastname">Nom</label>
-								      <div class="col-sm-8">
-								      	<input type="text" class="form-control" name="lastname" id="lastname" placeholder="Nom" value="{{ lastname }}">
-								      	<p class="hint" id="hint-lastname"></p>
-								      </div>
-								    </div>
-								    <!-- prenom -->
-								    <div class="form-group">
-								      <label class="control-label col-sm-4" for="firstname">Prénom</label>
-								      <div class="col-sm-8">
-								      	<input type="text" class="form-control" name="firstname" id="firstname" placeholder="Prénom" value="{{ firstname }}">
-								      	<p class="hint" id="hint-firstname"></p>
-								      </div>
-								    </div>
-								    <!-- date de naissance -->
-								    <div class="form-group">
-								      <label class="control-label col-sm-4" for="birthdate">Date de Naissance</label>
-								      <div class="col-sm-8">
-								      	<input type="date" class="form-control" name="birthdate" id="birthdate" placeholder="date" value="{{ birthdate }}">
-								      	<p class="hint" id="hint-birthdate"></p>
-								      </div>
-								    </div>
-								    <!-- telephone -->
-								    <div class="form-group">
-								      <label class="control-label col-sm-4" for="tel">Téléphone</label>
-								      <div class="col-sm-7">
-								      	<input type="tel" class="form-control" name="tel" id="tel" placeholder="" value="{{ tel }}">
-								      	<p class="hint" id="hint-tel"></p>
-								      </div>
-								      <div class="col-sm-1" style="padding-left:0;">
-								      	<a onclick="addTel()" href="javascript:void(0);" ><span class="control-label glyphicon glyphicon-plus"></span></a>
-								      </div>
-								    </div>
-								    <!-- fax -->
-								    <div class="form-group">
-								      <label class="control-label col-sm-4" for="fax">Fax</label>
-								      <div class="col-sm-8">
-								      	<input type="tel" class="form-control" name="fax" id="fax" placeholder="" value="{{ fax }}">
-								      	<p class="hint" id="hint-fax"></p>
-								      </div>
-								    </div>
-								</div>
-
-								<div class="col-lg-6">
-									<!-- email -->
-								    <div class="form-group">
-								      <label class="control-label col-sm-4" for="email">Email</label>
-								      <div class="col-sm-8">
-								      	<input type="email" class="form-control" name="email" id="email" placeholder="exemple@email.com" value="{{ email }}">
-								      	<p class="hint" id="hint-email"></p>
-								      </div>
-								    </div>
-									<!-- rue -->
-									<div class="form-group">
-								      <label class="control-label col-sm-4" for="street">Rue</label>
-								      <div class="col-sm-8">
-								      	<input type="text" class="form-control" name="street" id="street" placeholder="Nom de rue" value="{{ street }}">
-								      	<p class="hint" id="hint-street"></p>
-								      </div>
-								    </div>
-								    <!-- numero -->
-								    <div class="form-group">
-								      <label class="control-label col-sm-4" for="number">Numéro/Boite</label>
-								      <div class="col-sm-8">
-								      	<input type="text" class="form-control" name="number" id="number" placeholder="Numero / Boite" value="{{ number }}">
-								      	<p class="hint" id="hint-number"></p>
-								      </div>
-								    </div>
-								    <!-- code postal -->
-								    <div class="form-group">
-								      <label class="control-label col-sm-4" for="postalcode">Code Postal</label>
-								      <div class="col-sm-8">
-								      	<input type="text" class="form-control" name="postalcode" id="postalcode" placeholder="Code postal" value="{{ postalcode }}">
-								      	<p class="hint" id="hint-postalcode"></p>
-								      </div>
-								    </div>
-								    <!-- localité -->
-								    <div class="form-group">
-								      <label class="control-label col-sm-4" for="locality">Localité</label>
-								      <div class="col-sm-8">
-								      	<input type="text" class="form-control" name="locality" id="locality" placeholder="Localité" value="{{ locality }}">
-								      	<p class="hint" id="hint-locality"></p>
-								      </div>
-								    </div>
-								    <!-- classement -->
-								    <div class="form-group">
-								      <label class="control-label col-sm-4" for="classement">Classement</label>
-								      <div class="col-sm-8">
-								      	<input type="text" class="form-control" name="classement" id="classement" placeholder="Classement" value="{{ classement }}">
-								      	<p class="hint" id="hint-classement"></p>
-								      </div>
-								    </div>
-								</div>
-							</div><!-- Row -->
-						</div><!-- Pannel-content -->
-					</div><!-- Pannel -->
-
-					<!-- Bottom button -->
-				    <button type="submit" class="btn btn-default b-center" style="margin-top:20px;">Save change</button>
-				  </form>
 			</div>
+			<button onClick="changeMDP()" class="btn btn-default b-center" style="margin-top:20px;">Changer le mot de passe</button>
+		</div>
+
+		<!-- Edit mot de passe -->
+		<form class="form-horizontal" name="registerForm" id="editMDP" role="form" method="post" action="" onsubmit="return validateRegister()" style="display:none" >
+			{% csrf_token %}
+			<div class="panel panel-default" >
+				<div class="panel-heading">Information du compte</div>
+				<div class="panel-body">
+					<!-- mdp1 -->
+				    <div class="form-group">
+				      <label class="control-label col-sm-4" for="password1">Nouveau *</label>
+				      <div class="col-sm-8" style="max-width:600px;">
+				      	<input type="password" class="form-control" name="password1" id="password1">
+				      	<p class="hint" id="hint-password1"></p>
+				      </div>
+				    </div>
+				    <!-- mdp1 -->
+				    <div class="form-group">
+				      <label class="control-label col-sm-4" for="password2">Confirmer *</label>
+				      <div class="col-sm-8" style="max-width:600px;">
+				      	<input type="password" class="form-control" name="password2" id="password2">
+				      	<p class="hint" id="hint-password2"></p>
+				      </div>
+				    </div>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-default b-center" style="margin-top:20px; margin-bottom:20px;">Sauver</button>
+		</form>
+
+		<!-- Information personnelle-->
+		<!-- TODO set real info-->
+		<div id="Info">
+			<div class="panel panel-default" >
+				<div class="panel-heading">Information personnelle</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-lg-6">
+							<!-- Titre -->
+							<div class="form-group">
+						      <label class="info col-sm-4" for="title">Titre</label>
+						      <div class="col-sm-8">
+						      	<p class="info">Mr</p>
+						      </div>
+						    </div>
+						    <!-- nom -->
+						    <div class="form-group">
+						      <label class="info col-sm-4" for="lastname">Nom</label>
+						      <div class="col-sm-8">
+						      	<p class="info">Smith</p>
+						      </div>
+						    </div>
+						    <!-- prenom -->
+						    <div class="form-group">
+						      <label class="info col-sm-4" for="firstname">Prénom</label>
+						      <div class="col-sm-8">
+						      	<p class="info">Jean</p>
+						      </div>
+						    </div>
+						    <!-- date de naissance -->
+						    <div class="form-group">
+						      <label class="info col-sm-4" for="birthdate">Date de Naissance</label>
+						      <div class="col-sm-8">
+						      	<p class="info">05 juin 1990</p>
+						      </div>
+						    </div>
+						    <!-- telephone -->
+						    <div class="form-group">
+						      <label class="info col-sm-4" for="tel">Téléphone</label>
+						      <div class="col-sm-7">
+						      	<p class="info">0475 75 75 75</p>
+						      </div>
+						    </div>
+						    <!-- fax -->
+						    <div class="form-group">
+						      <label class="info col-sm-4" for="fax">Fax</label>
+						      <div class="col-sm-8">
+						      	<p class="info"> - </p>
+						      </div>
+						    </div>
+						</div>
+
+						<div class="col-lg-6">
+							<!-- rue -->
+							<div class="form-group">
+						      <label class="info col-sm-4" for="street">Rue</label>
+						      <div class="col-sm-8">
+						      	<p class="info">Rue de la bullshit</p>
+						      </div>
+						    </div>
+						    <!-- numero -->
+						    <div class="form-group">
+						      <label class="info col-sm-4" for="number">Numéro</label>
+						      <div class="col-sm-8">
+						      	<p class="info">666</p>
+						      </div>
+						    </div>
+						    <!-- boite -->
+						    <div class="form-group">
+						      <label class="info col-sm-4" for="number">Boite</label>
+						      <div class="col-sm-8">
+						      	<p class="info"> - </p>
+						      </div>
+						    </div>
+						    <!-- code postal -->
+						    <div class="form-group">
+						      <label class="info col-sm-4" for="postalcode">Code Postal</label>
+						      <div class="col-sm-8">
+						      	<p class="info">6666</p>
+						      </div>
+						    </div>
+						    <!-- localité -->
+						    <div class="form-group">
+						      <label class="info col-sm-4" for="locality">Localité</label>
+						      <div class="col-sm-8">
+						      	<p class="info">Enfer-sur-Mer</p>
+						      </div>
+						    </div>
+						    <!-- classement -->
+						    <div class="form-group">
+						      <label class="info col-sm-4" for="classement">Classement</label>
+						      <div class="col-sm-8">
+						      	<p class="info">Triple A eco+ 2000</p>
+						      </div>
+						    </div>
+						</div>
+					</div><!-- Row -->
+				</div><!-- Pannel-content -->
+			</div><!-- Pannel -->
+			<button onClick="changeProfilPannel()" class="btn btn-default b-center" style="margin-top:20px;">Editer info</button>
+		</div><!-- Info -->
+
+
+		<!-- Information personnelle Edit-->
+		<!-- TODO set info du mec connecté -->
+		<form class="form-horizontal" name="registerForm" id="editInfo" role="form" method="post" action="" onsubmit="return validateRegister()" style="display:none" >
+			{% csrf_token %}
+			<!-- Information personnelle-->
+			<div class="panel panel-default">
+				<div class="panel-heading">Information personnelle</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-lg-6">
+							<!-- Titre -->
+							<div class="form-group">
+						      <label class="control-label col-sm-4" for="title">Titre *</label>
+						      <div class="col-sm-8">
+						      	<select class="form-control" name="title">
+						      	{% if title == "Mme" %}
+						      		<option>Mr</option>
+								    <option selected="selected">Mme</option>
+								{% else %}
+									<option>Mr</option>
+								    <option>Mme</option>
+						      	{% endif %}
+								</select>
+
+						      </div>
+						    </div>
+						    <!-- nom -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="lastname">Nom *</label>
+						      <div class="col-sm-8">
+						      	<input type="text" class="form-control" name="lastname" id="lastname" placeholder="Nom" value="{{ lastname }}">
+						      	<p class="hint" id="hint-lastname"></p>
+						      </div>
+						    </div>
+						    <!-- prenom -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="firstname">Prénom *</label>
+						      <div class="col-sm-8">
+						      	<input type="text" class="form-control" name="firstname" id="firstname" placeholder="Prénom" value="{{ firstname }}">
+						      	<p class="hint" id="hint-firstname"></p>
+						      </div>
+						    </div>
+						    <!-- date de naissance -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="birthdate">Date de Naissance *</label>
+						      <div class="col-sm-8">
+						      	<input type="date" class="form-control" name="birthdate" id="birthdate" placeholder="date" value="{{ birthdate }}">
+						      	<p class="hint" id="hint-birthdate"></p>
+						      </div>
+						    </div>
+						    <!-- telephone -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="tel">Téléphone *</label>
+						      <div class="col-sm-8">
+						      	<input type="tel" class="form-control" name="tel" id="tel" placeholder="" value="{{ tel }}">
+						      </div>
+						    </div>
+						    <!-- gsm -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="gsm">GSM *</label>
+						      <div class="col-sm-8">
+						      	<input type="gsm" class="form-control" name="gsm" id="gsm" placeholder="" value="{{ gsm }}">
+						      	<p class="hint" id="hint-tel"></p>
+						      </div>
+						    </div>
+						    <!-- fax -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="fax">Fax</label>
+						      <div class="col-sm-8">
+						      	<input type="tel" class="form-control" name="fax" id="fax" placeholder="" value="{{ fax }}">
+						      	<p class="hint" id="hint-fax"></p>
+						      </div>
+						    </div>
+						</div>
+
+						<div class="col-lg-6">
+							
+							<!-- rue -->
+							<div class="form-group">
+						      <label class="control-label col-sm-4" for="street">Rue *</label>
+						      <div class="col-sm-8">
+						      	<input type="text" class="form-control" name="street" id="street" placeholder="Nom de rue" value="{{ street }}">
+						      	<p class="hint" id="hint-street"></p>
+						      </div>
+						    </div>
+						    <!-- numero -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="number">Numéro *</label>
+						      <div class="col-sm-8">
+						      	<input type="text" class="form-control" name="number" id="number" placeholder="Numero" value="{{ number }}">
+						      	<p class="hint" id="hint-number"></p>
+						      </div>
+						    </div>
+						    <!-- boite -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="boite">Boite</label>
+						      <div class="col-sm-8">
+						      	<input type="text" class="form-control" name="boite" id="boite" placeholder="Boite" value="{{ boite }}">
+						      	<p class="hint" id="hint-boite"></p>
+						      </div>
+						    </div>
+						    <!-- code postal -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="postalcode">Code Postal *</label>
+						      <div class="col-sm-8">
+						      	<input type="text" class="form-control" name="postalcode" id="postalcode" placeholder="Code postal" value="{{ postalcode }}">
+						      	<p class="hint" id="hint-postalcode"></p>
+						      </div>
+						    </div>
+						    <!-- localité -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="locality">Localité *</label>
+						      <div class="col-sm-8">
+						      	<input type="text" class="form-control" name="locality" id="locality" placeholder="Localité" value="{{ locality }}">
+						      	<p class="hint" id="hint-locality"></p>
+						      </div>
+						    </div>
+						    <!-- classement -->
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="classement">Classement</label>
+						      <div class="col-sm-8">
+						      	<input type="text" class="form-control" name="classement" id="classement" placeholder="Classement" value="{{ classement }}">
+						      	<p class="hint" id="hint-classement"></p>
+						      </div>
+						    </div>
+						    <!-- deja participe -->
+						    <div class="checkbox col-sm-offset-4">
+						      <label><input type="checkbox" name="participated"> Déjà participé</label>
+						    </div>
+						</div>
+					</div><!-- Row -->
+				</div><!-- Pannel-content -->
+			</div><!-- Pannel -->
+			<!-- Bottom button -->
+		    <button type="submit" class="btn btn-default b-center" style="margin-top:20px;">Sauver</button>
+		  </form>
+	</div>
 </div>
 
 {% endblock %}
