@@ -1,72 +1,18 @@
 {% extends "tennis/staff.html" %}
 
-{% block title %}Validation terrain{% endblock %}
+{% block title %}Editer terrain{% endblock %}
 
 {% block body %}
+
 <div class="container">
-	<div class="row">
-		<div class="col-lg-7">
-			<div class="content-box">
-				<h2 class="center">Terrain 24 (TODO set info)</h2>
-				<hr class="line">
-				<div class="row">
-					<div class="col-sm-6">
-						<h3>Propriétaire</h3>
-						<address>
-							Mr Smith Jean <br>
-							Rue du lalala, 21<br>
-							1332 Genval<br> 
-							Tél : 32 (0)2 / 742 03 01 <br> 
-							GSM : 0475 75 75 75 <br>
-							Fax : 32 (0)2 / 742 03 13<br>
-         				 </address>
-					</div>
-					<div class="col-sm-6">
-						<h3>Addresse du terrain</h3>
-						<address>
-					        Place des terrains, 5<br>
-							1030 Bruxelles<br>
-							<b>Accès : </b> Pandente itaque viam fatorum sorte tristissima, qua praestitutum erat eum vita et imperio spoliari, itineribus interiectis permutatione <br>
-         				 </address>
-					</div>
-				</div>
-				
-				<p>	<b>Disponibilité : </b> Samedi et Dimanche <br>
-					<b>Matière :</b> Terre battue <br>
-					<b>Type :</b> Ouvert <br>
-					<b>Etat : </b> Très bon </p>
-
-				<h3>Google Map (TODO)</h3>
-				<div id="map" style="height:250px;"></div>
-
-			</div>
-		</div>
-		<div class="col-lg-5">
-			<div class="content-box">
-				<h2 class="center">Commentaire</h2>
-				<hr class="line">
-				<form role="form">
-			      <div class="form-group">
-			      <label for="text">Commentaires du propriétaire : </label>
-			      <p>Quam ob rem cave Catoni anteponas ne istum quidem ipsum, quem Apollo, ut ais, sapientissimum iudicavit; huius enim facta, illius dicta laudantur. De me autem, ut iam cum utroque vestrum loquar, sic habetote.</p>
-			    </div>
-			    
-			    <div class="form-group">
-			      <label for="text">Votre Commentaire</label>
-			      <textarea class="form-control" rows="5" name="message" placeholder="Entrer votre commentaire"></textarea>
-			    </div>
-
-			    <!-- deja participe -->
-			    <div class="checkbox ">
-			      <label><input type="checkbox" name="participated"> Terrain validé</label>
-			    </div>
-
-			    <button type="submit" class="btn btn-default center-block">Sauver</button>
-			  </form>
-			</div>
-		</div>
+	<div class="content-box">
+		<h2 class="center">Editer Terrain</h2>
+		<hr class="line">
+		<p>Box1 User</p>
+		<p>Box2 addresse</p>
+		<p>Box3 info</p>
 	</div>
-	
 </div>
+
 
 {% endblock %}

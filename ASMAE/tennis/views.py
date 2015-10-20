@@ -52,6 +52,12 @@ def staff(request):
 		return render(request,'tennis/staff.html',locals())
 	return redirect(reverse(home))
 
+def validateTerrain(request):
+	if request.user.is_authenticated():
+		#TODO check si c'est bien un staff
+		return render(request,'tennis/validateTerrain.html',locals())
+	return redirect(reverse(home))
+
 def editTerrainStaff(request):
 	if request.user.is_authenticated():
 		#TODO check si c'est bien un staff
