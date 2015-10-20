@@ -164,7 +164,7 @@ def register(request):
 
 
 		#Account creation & redirect
-		user = User.ocjects.create_user(username,email,password)
+		user = User.objects.create_user(username,email,password)
 		user.save()
 		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement = classement).save()
 	if request.user.is_authenticated():
