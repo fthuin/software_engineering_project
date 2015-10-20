@@ -275,10 +275,8 @@
 						      <label class="control-label col-sm-4" for="tel">Téléphone *</label>
 						      <div class="col-sm-8">
 						      	<input type="tel" class="form-control" name="tel" id="tel" placeholder="" value="
-						      		{% if user.participant.oldparticipant %}
-						      		Oui
-						      		{% else %}
-						      		Non
+						      		{% if user.participant.telephone %}
+						      		{{ user.participant.telephone }}						      		
 						      		{% endif %}
 						      		">
 						      </div>
@@ -287,7 +285,11 @@
 						    <div class="form-group">
 						      <label class="control-label col-sm-4" for="gsm">GSM *</label>
 						      <div class="col-sm-8">
-						      	<input type="gsm" class="form-control" name="gsm" id="gsm" placeholder="" value="">
+						      	<input type="gsm" class="form-control" name="gsm" id="gsm" placeholder="" value="
+						      		{% if user.participant.gsm %}
+						      		{{ user.participant.gsm }}						      		
+						      		{% endif %}
+						      		">
 						      	<p class="hint" id="hint-tel"></p>
 						      </div>
 						    </div>
@@ -295,7 +297,11 @@
 						    <div class="form-group">
 						      <label class="control-label col-sm-4" for="fax">Fax</label>
 						      <div class="col-sm-8">
-						      	<input type="tel" class="form-control" name="fax" id="fax" placeholder="" value="{{ user.participant.fax }}">
+						      	<input type="tel" class="form-control" name="fax" id="fax" placeholder="" value="
+						      		{% if user.participant.fax %}
+						      		{{ user.participant.fax }}						      		
+						      		{% endif %}
+						      		">
 						      	<p class="hint" id="hint-fax"></p>
 						      </div>
 						    </div>
@@ -323,7 +329,11 @@
 						    <div class="form-group">
 						      <label class="control-label col-sm-4" for="boite">Boite</label>
 						      <div class="col-sm-8">
-						      	<input type="text" class="form-control" name="boite" id="boite" placeholder="Boite" value="{{ boite }}">
+						      	<input type="text" class="form-control" name="boite" id="boite" placeholder="Boite" value="
+						      		{% if user.participant.boite %}
+						      		{{ user.participant.boite }}						      		
+						      		{% endif %}
+						      		">
 						      	<p class="hint" id="hint-boite"></p>
 						      </div>
 						    </div>

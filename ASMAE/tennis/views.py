@@ -168,18 +168,21 @@ def register(request):
 
 		#check format date
 		if re.match(r"^[0-3][0-9]/[0-1][0-9]/[1-2][0-9]{3}$",birthdate) is None:
+			print(birthdate)
 			error = "La date de naissance n'a pas le bon format"
 			return render(request,'tennis/register.html',locals())
 
 		
-		birthdate = birthdate.split("/")
-		datenaissance = datetime.datetime(int(birthdate[2]),int(birthdate[1]),int(birthdate[0]))
+		birthdate2 = birthdate.split("/")
+		datenaissance = datetime.datetime(int(birthdate2[2]),int(birthdate2[1]),int(birthdate2[0]))
 
 		#Account creation & redirect
 		user = User.objects.create_user(username,email,password)
 		user.save()
 		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement = classement,oldparticipant = oldparticipant,datenaissance = datenaissance).save()
-
+		user2 = authenticate(username=username, password=password)
+		login(request, user2)
+		return redirect(reverse(tournoi))
 
 	if request.user.is_authenticated():
 		return redirect(reverse(tournoi))
