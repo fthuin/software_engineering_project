@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
 from tennis.models import Extra, Participant
+import re
+import datetime
 
 # Create your views here.
 def home(request):
@@ -114,8 +116,7 @@ def email_present(email):
 
 def register(request):
 	if request.method == "POST":
-		print("ici")
-
+		print(request.POST)
 		#Recuperation des donnees
 		username = request.POST['username']
 		password = request.POST['password']
@@ -133,9 +134,12 @@ def register(request):
 		postalcode = request.POST['postalcode']
 		birthdate = request.POST['birthdate']
 		classement = request.POST['classement']
-
-
-		#participated = request.POST['participated']
+		
+		if request.POST.__contains__("participated"):
+			oldparticipant = True
+		else:
+			oldparticipant = False
+		
 
 
 		#check champs
@@ -162,16 +166,21 @@ def register(request):
 		if(len(password) < 2):
 			error = "Votre mot de passe doit contenir au moins 3 caractères"
 			return render(request,'tennis/register.html',locals())
+		print(re.match(r"^[0-3][0-9]/[0-1][0-9]/[1-2][0-9]{3}$",birthdate))
+		if re.match(r"^[0-3][0-9]/[0-1][0-9]/[1-2][0-9]{3}$",birthdate) is None:
+			error = "La date de naissance n'a pas le bon format"
+			return render(request,'tennis/register.html',locals())
 
-		#Check numero de tel addresse et email valide TODO
 		
-
-
+		birthdate = birthdate.split("/")
+		datenaissance = datetime.datetime(int(birthdate[2]),int(birthdate[1]),int(birthdate[0]))
 
 		#Account creation & redirect
 		user = User.objects.create_user(username,email,password)
 		user.save()
-		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement = classement).save()
+		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement = classement,oldparticipant = oldparticipant,datenaissance = datenaissance).save()
+
+
 	if request.user.is_authenticated():
 		return redirect(reverse(tournoi))
 	return render(request,'tennis/register.html',locals())
