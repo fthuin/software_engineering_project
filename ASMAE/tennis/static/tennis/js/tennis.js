@@ -50,28 +50,36 @@ function extra(id, nom,prix,comment){
 	document.getElementById("editExtra").style.display = "inherit";
 	document.getElementById("newExtra").style.display = "none";
 
-	var c = document.getElementById("listExtra").children
+	var c = document.getElementById("listExtra").children;
 	for (i = 0; i < c.length; i++) {
-		if(c[i].innerHTML==nom){
-			c[i].className="list-group-item active"
+		if(c[i].id==id){
+			c[i].className="list-group-item active";
 		}else{
-			c[i].className="list-group-item"
+			c[i].className="list-group-item";
 		}
     }
 	document.getElementById("extraID").value = id;
+	document.getElementById("deleteID").value = id;
 	document.getElementById("extraName").value = nom;
+	document.getElementById("formTitle").innerHTML = "Editer " + nom;
 	document.getElementById("extraPrice").value = prix;
 	document.getElementById("extracommentaire").innerHTML = comment;
 }
 
 function activeExtra(){
-	var c = document.getElementById("listExtra").children
-	c[0].className="list-group-item active"
+	var c = document.getElementById("listExtra").children;
+	c[0].className="list-group-item active";
 }
 
 function addExtra(){
 	document.getElementById("editExtra").style.display = "none";
 	document.getElementById("newExtra").style.display = "inherit";
+
+	var c = document.getElementById("listExtra").children;
+	for (i = 0; i < c.length; i++) {
+		c[i].className="list-group-item";
+    }
+
 }
 
 function initialize() {

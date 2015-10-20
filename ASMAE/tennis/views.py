@@ -52,7 +52,8 @@ def staff(request):
 			prix = request.POST['price']
 			message = request.POST['message']
 			
-			extra = Extra(nom=nom,prix=prix,commentaires = message).save()
+			extra = Extra(nom=nom,prix=prix,commentaires = message)
+			extra.save()
 			successAdd = "Extra bien ajouté!"
 
 		if request.POST['action'] == "modifyExtra":
@@ -67,6 +68,12 @@ def staff(request):
 			extra.commentaires = message
 			extra.save()
 			successEdit = "Extra bien édité!"
+
+		if request.POST['action'] == "deleteExtra":
+			id = request.POST['id']
+			extra = Extra.objects.filter(id = id)[0]
+			extra.delete()
+			successDelete = "Extra bien supprimé!"
 		
 	if request.user.is_authenticated():
 		#TODO check si c'est bien un staff
