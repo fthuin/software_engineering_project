@@ -24,6 +24,11 @@ def tournoi(request):
 		return render(request,'tennis/tournoi.html',locals())
 	return redirect(reverse(home))
 
+def inscriptionTournoi(request):
+	if request.user.is_authenticated():
+		return render(request,'tennis/inscriptionTournoi.html',locals())
+	return redirect(reverse(home))
+
 def terrain(request):
 	if request.user.is_authenticated():
 		return render(request,'tennis/terrain.html',locals())
@@ -34,11 +39,24 @@ def registerTerrain(request):
 		return render(request,'tennis/registerTerrain.html',locals())
 	return redirect(reverse(home))
 
+def editTerrain(request):
+	if request.user.is_authenticated():
+		#TODO check si c'est bien le terrain de l'utilisateur
+		return render(request,'tennis/editTerrain.html',locals())
+	return redirect(reverse(home))
+
 def staff(request):
 	if request.user.is_authenticated():
+		#TODO check si c'est bien un staff
 		Ex = Extra.objects.all()
 		print(Ex[0])
 		return render(request,'tennis/staff.html',locals())
+	return redirect(reverse(home))
+
+def editTerrainStaff(request):
+	if request.user.is_authenticated():
+		#TODO check si c'est bien un staff
+		return render(request,'tennis/editTerrainStaff.html',locals())
 	return redirect(reverse(home))
 
 def profil(request):

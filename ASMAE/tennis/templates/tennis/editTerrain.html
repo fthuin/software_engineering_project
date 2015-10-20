@@ -1,14 +1,14 @@
 {% extends "tennis/terrain.html" %}
 
-{% block title %}Enregistrement terrain{% endblock %}
+{% block title %}Editer terrain{% endblock %}
 
 {% block body %}
 <div class="container">
 	<div class="content-box">
-		<h2 class="center">Editer terrain</h2>
+		<h2 class="center">Editer terrain (TODO set info)</h2>
 		<hr class="line">
 		<h4 class="center">Terrain 24</h4>
-		<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.register" %}" onsubmit="return validateRegister()" >
+		<form class="form-horizontal" name="registerForm" role="form" method="post" action="" onsubmit="return validateRegister()" >
 		{% csrf_token %}
 			<div class="row">
 				<div class="panel panel-default">
@@ -130,7 +130,7 @@
 					</div>
 				</div>
 			</div>
-			<button class="btn btn-default center-block">Ajouter</button>
+			<button class="btn btn-default center-block">Editer</button>
 		</form>
 	</div>
 </div>
