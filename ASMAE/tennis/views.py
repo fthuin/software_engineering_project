@@ -62,6 +62,7 @@ def editTerrainStaff(request):
 def profil(request):
 	if request.user.is_authenticated():
 		birthdate = request.user.participant.datenaissance
+		formatedBirthdate = birthdate.strftime('%d/%m/%Y')
 		return render(request,'tennis/profil.html',locals())
 	return redirect(reverse(home))
 
