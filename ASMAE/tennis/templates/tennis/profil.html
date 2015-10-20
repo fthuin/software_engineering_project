@@ -235,7 +235,7 @@
 						      <label class="control-label col-sm-4" for="title">Titre *</label>
 						      <div class="col-sm-8">
 						      	<select class="form-control" name="title">
-						      	{% if title == "Mme" %}
+						      	{% if user.participant.titre == "Mme" %}
 						      		<option>Mr</option>
 								    <option selected="selected">Mme</option>
 								{% else %}
@@ -250,7 +250,7 @@
 						    <div class="form-group">
 						      <label class="control-label col-sm-4" for="lastname">Nom *</label>
 						      <div class="col-sm-8">
-						      	<input type="text" class="form-control" name="lastname" id="lastname" placeholder="Nom" value="{{ lastname }}">
+						      	<input type="text" class="form-control" name="lastname" id="lastname" placeholder="Nom" value="{{ user.participant.nom }}">
 						      	<p class="hint" id="hint-lastname"></p>
 						      </div>
 						    </div>
@@ -258,7 +258,7 @@
 						    <div class="form-group">
 						      <label class="control-label col-sm-4" for="firstname">Prénom *</label>
 						      <div class="col-sm-8">
-						      	<input type="text" class="form-control" name="firstname" id="firstname" placeholder="Prénom" value="{{ firstname }}">
+						      	<input type="text" class="form-control" name="firstname" id="firstname" placeholder="Prénom" value="{{ user.participant.prenom }}">
 						      	<p class="hint" id="hint-firstname"></p>
 						      </div>
 						    </div>
@@ -266,7 +266,7 @@
 						    <div class="form-group">
 						      <label class="control-label col-sm-4" for="birthdate">Date de Naissance *</label>
 						      <div class="col-sm-8">
-						      	<input type="date" class="form-control" name="birthdate" id="birthdate" placeholder="date" value="{{ birthdate }}">
+						      	<input type="date" class="form-control" name="birthdate" id="birthdate" placeholder="date" value="{{ user.participant.datenaissance }}">
 						      	<p class="hint" id="hint-birthdate"></p>
 						      </div>
 						    </div>
@@ -274,14 +274,20 @@
 						    <div class="form-group">
 						      <label class="control-label col-sm-4" for="tel">Téléphone *</label>
 						      <div class="col-sm-8">
-						      	<input type="tel" class="form-control" name="tel" id="tel" placeholder="" value="{{ tel }}">
+						      	<input type="tel" class="form-control" name="tel" id="tel" placeholder="" value="
+						      		{% if user.participant.oldparticipant %}
+						      		Oui
+						      		{% else %}
+						      		Non
+						      		{% endif %}
+						      		">
 						      </div>
 						    </div>
 						    <!-- gsm -->
 						    <div class="form-group">
 						      <label class="control-label col-sm-4" for="gsm">GSM *</label>
 						      <div class="col-sm-8">
-						      	<input type="gsm" class="form-control" name="gsm" id="gsm" placeholder="" value="{{ gsm }}">
+						      	<input type="gsm" class="form-control" name="gsm" id="gsm" placeholder="" value="">
 						      	<p class="hint" id="hint-tel"></p>
 						      </div>
 						    </div>
@@ -289,7 +295,7 @@
 						    <div class="form-group">
 						      <label class="control-label col-sm-4" for="fax">Fax</label>
 						      <div class="col-sm-8">
-						      	<input type="tel" class="form-control" name="fax" id="fax" placeholder="" value="{{ fax }}">
+						      	<input type="tel" class="form-control" name="fax" id="fax" placeholder="" value="{{ user.participant.fax }}">
 						      	<p class="hint" id="hint-fax"></p>
 						      </div>
 						    </div>
