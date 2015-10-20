@@ -151,7 +151,7 @@
 				  </form>
 
 				<!-- Ajouter un extrat -->
-				  <form class="form-horizontal" name="newExtra" id="newExtra" role="form" method="post" action="{% url "tennis.views.register" %}" onsubmit="return validateRegister()" style="display:none" >
+				  <form class="form-horizontal" name="newExtra" id="newExtra" role="form" method="post" action="{% url "tennis.views.staff" %}" onsubmit="return validateRegister()" style="display:none" >
 					{% csrf_token %}
 					<!-- Nom -->
 					<div class="form-group">
@@ -180,7 +180,7 @@
 				      </div>
 				    </div>
 
-					<button class="btn-default btn center-block">Ajouter</button>
+					<button class="btn-default btn center-block" name="action" value="addExtra">Ajouter</button>
 					
 				  </form>
 			</div>

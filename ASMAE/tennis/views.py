@@ -46,6 +46,14 @@ def editTerrain(request):
 	return redirect(reverse(home))
 
 def staff(request):
+	if request.method == "POST":
+		if request.POST['action']== "addExtra":
+			nom = request.POST['name']
+			prix = request.POST['price']
+			message = request.POST['message']
+			
+			extra = Extra(nom=nom,prix=prix,commentaires = message).save()
+		
 	if request.user.is_authenticated():
 		#TODO check si c'est bien un staff
 		Ex = Extra.objects.all()
