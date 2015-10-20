@@ -5,18 +5,17 @@
 {% block body %}
 
 <div class="container">
-	{% if errorMDP %}
-	<div class="alert alert-danger">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	    <strong>Error!</strong> {{ errorMDP }}
-	  </div>
-	  <script>
-	  changeMDP();
-	  </script>
-	{% endif %}
 		<div class="content-box">
 		<h2 class="center">Mon profil</h2>
 		<hr class="line">
+		<!-- Si error lors du nouveau mdp -->
+		{% if errorMDP %}
+		<div class="alert alert-danger">
+		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		    <strong>Error!</strong> {{ errorMDP }}
+		</div>
+		<script>changeMDP();</script>
+		{% endif %}
 		<!-- Information du compte-->
 		<!-- TODO set real info-->
 		<div style="margin-bottom:20px;" id="compteInfo">
@@ -75,6 +74,15 @@
 			</div>
 			<button type="submit" class="btn btn-default b-center" style="margin-top:20px; margin-bottom:20px;">Sauver</button>
 		</form>
+
+		<!-- Si error lors des nouvelles infos perso -->
+		{% if errorEdit %}
+		<div class="alert alert-danger">
+		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		    <strong>Error!</strong> {{ errorEdit }}
+		</div>
+		<script>changeProfilPannel();</script>
+		{% endif %}
 
 		<!-- Information personnelle-->
 		<!-- TODO set real info-->
