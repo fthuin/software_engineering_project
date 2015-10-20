@@ -61,28 +61,90 @@ def editTerrainStaff(request):
 
 def profil(request):
 	if request.method == "POST":
-		birthdate = request.user.participant.datenaissance
-		formatedBirthdate = birthdate.strftime('%d/%m/%Y')
+		if request.POST['action'] == 'updatePassword':
+			birthdate = request.user.participant.datenaissance
+			formatedBirthdate = birthdate.strftime('%d/%m/%Y')
 
-		password1 = request.POST['password1']
-		password2 = request.POST['password2']
+			password1 = request.POST['password1']
+			password2 = request.POST['password2']
 
-		#On vérifie que les password sont les memes
-		if password1 != password2:
-			errorMDP = "Les mots de passes sont différents !"
-			return render(request,'tennis/profil.html',locals())
+			#On vérifie que les password sont les memes
+			if password1 != password2:
+				errorMDP = "Les mots de passes sont différents !"
+				return render(request,'tennis/profil.html',locals())
 	
-		#On vérifie la longeur du password
-		if(len(password1) < 2):
-			errorMDP = "Votre mot de passe doit contenir au moins 3 caractères"
-			return render(request,'tennis/profil.html',locals())
+			#On vérifie la longeur du password
+			if(len(password1) < 2):
+				errorMDP = "Votre mot de passe doit contenir au moins 3 caractères"
+				return render(request,'tennis/profil.html',locals())
 		
-		request.user.set_password(password1)
-		request.user.save()
-		successMDP = "Le mot de passe a bien été changé"
-		user2 = authenticate(username=request.user, password=password1)
-		login(request, user2)
-		return render(request,'tennis/profil.html',locals())
+			request.user.set_password(password1)
+			request.user.save()
+			successMDP = "Le mot de passe a bien été changé"
+			user2 = authenticate(username=request.user, password=password1)
+			login(request, user2)
+			return render(request,'tennis/profil.html',locals())
+
+		if request.POST['action'] == 'editProfil':
+
+			birthdate = request.user.participant.datenaissance
+			formatedBirthdate = birthdate.strftime('%d/%m/%Y')
+
+			firstname = request.POST['firstname']
+			lastname = request.POST['lastname']
+			gsm = request.POST['gsm']
+			tel = request.POST['tel']
+			fax = request.POST['fax']
+			title = request.POST['title']
+			boite = request.POST['boite']
+			street = request.POST['street']
+			number = request.POST['number']
+			locality = request.POST['locality']
+			postalcode = request.POST['postalcode']
+			birthdate = request.POST['birthdate']
+			classement = request.POST['classement']
+		
+			if request.POST.__contains__("participated"):
+				oldparticipant = True
+			else:
+				oldparticipant = False
+			
+			#check champs
+			if (firstname=="" or lastname=="" or (tel==""
+			and gsm=="") or street=="" or number=="" or locality=="" or postalcode=="" or birthdate==""):
+				error = "Veuillez remplir tous les champs obligatoires !"
+				return render(request,'tennis/profil.html',locals())
+
+			#check format date
+			if re.match(r"^[0-3][0-9]/[0-1][0-9]/[1-2][0-9]{3}$",birthdate) is None:
+				print(birthdate)
+				error = "La date de naissance n'a pas le bon format"
+				return render(request,'tennis/profil.html',locals())
+			
+			#On formate la date
+			birthdate2 = birthdate.split("/")
+			datenaissance = datetime.datetime(int(birthdate2[2]),int(birthdate2[1]),int(birthdate2[0]))
+
+			participant = request.user.participant
+			participant.titre = title
+			participant.nom = lastname
+			participant.prenom = firstname
+			participant.rue = street
+			participant.numero = number
+			participant.boite = boite
+			participant.codepostal = postalcode
+			participant.localite = locality
+			participant.telephone = tel
+			participant.fax = fax
+			participant.gsm = gsm
+			participant.datenaissance = datenaissance
+			participant.classement = classement
+			participant.oldparticipant = oldparticipant
+			participant.save()
+			
+			successMDP = "Le profil a bien été changé"
+
+			return render(request,'tennis/profil.html',locals())
 
 	
 	if request.user.is_authenticated():
