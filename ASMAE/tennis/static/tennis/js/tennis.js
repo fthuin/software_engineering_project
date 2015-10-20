@@ -91,7 +91,7 @@ function initialize() {
     map: map,
     title: 'Cogefis'
   });
-  }
+ }
 
 
 function changeProfilPannel(){

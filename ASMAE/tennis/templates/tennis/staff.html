@@ -59,8 +59,8 @@
 			    <li class="active"><a href="#">1</a></li>
 			</ul>
 		</div>
-		
 	</div>
+
 	<!-- Gestionnaire des paires -->
 	<div class="content-box" id="gestionPaire" style="display:none;">
 		<h2 class="center">Gestionnaire des paires</h2>
@@ -75,9 +75,7 @@
 			      </span>
 			    </div>
 			</div>
-		</div>
-		
-		    
+		</div>    
 
 		<!-- Liste des paires -->
 		<div class="panel panel-default center-block" style="max-width:600px;">
@@ -152,6 +150,7 @@
 					
 				  </form>
 
+				<!-- Ajouter un extrat -->
 				  <form class="form-horizontal" name="newExtra" id="newExtra" role="form" method="post" action="{% url "tennis.views.register" %}" onsubmit="return validateRegister()" style="display:none" >
 					{% csrf_token %}
 					<!-- Nom -->
@@ -181,7 +180,7 @@
 				      </div>
 				    </div>
 
-					<button class="btn-default btn center-block">Sauver</button>
+					<button class="btn-default btn center-block">Ajouter</button>
 					
 				  </form>
 			</div>
