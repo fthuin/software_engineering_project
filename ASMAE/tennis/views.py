@@ -92,9 +92,6 @@ def profil(request):
 
 		if request.POST['action'] == 'editProfil':
 
-			birthdate = request.user.participant.datenaissance
-			formatedBirthdate = birthdate.strftime('%d/%m/%Y')
-
 			firstname = request.POST['firstname']
 			lastname = request.POST['lastname']
 			gsm = request.POST['gsm']
@@ -117,13 +114,13 @@ def profil(request):
 			#check champs
 			if (firstname=="" or lastname=="" or (tel==""
 			and gsm=="") or street=="" or number=="" or locality=="" or postalcode=="" or birthdate==""):
-				error = "Veuillez remplir tous les champs obligatoires !"
+				errorEdit = "Veuillez remplir tous les champs obligatoires !"
 				return render(request,'tennis/profil.html',locals())
 
 			#check format date
 			if re.match(r"^[0-3][0-9]/[0-1][0-9]/[1-2][0-9]{3}$",birthdate) is None:
 				print(birthdate)
-				error = "La date de naissance n'a pas le bon format"
+				errorEdit = "La date de naissance n'a pas le bon format"
 				return render(request,'tennis/profil.html',locals())
 			
 			#On formate la date
@@ -146,11 +143,15 @@ def profil(request):
 			participant.classement = classement
 			participant.oldparticipant = oldparticipant
 			participant.save()
+
+			birthdate = request.user.participant.datenaissance
+			formatedBirthdate = birthdate.strftime('%d/%m/%Y')
 			
-			successMDP = "Le profil a bien été changé"
+			successEdit = "Le profil a bien été changé"
+
+
 
 			return render(request,'tennis/profil.html',locals())
-
 	
 	if request.user.is_authenticated():
 		birthdate = request.user.participant.datenaissance

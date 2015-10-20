@@ -86,11 +86,16 @@
 		    <strong>Error!</strong> {{ errorEdit }}
 		</div>
 		<script>changeProfilPannel();</script>
+		{% elif successEdit %}
+		<div class="alert alert-success">
+		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		    <strong>Succès!</strong> {{ successEdit }}
+		</div>
 		{% endif %}
 
 		<!-- Information personnelle-->
 		<!-- TODO set real info-->
-		<div id="Info">
+		<div id="Info" {% if errorEdit %}style="display:none"{% else %}{% endif %}>
 			<div class="panel panel-default" >
 				<div class="panel-heading">Information personnelle</div>
 				<div class="panel-body">
@@ -243,7 +248,7 @@
 
 		<!-- Information personnelle Edit-->
 		<!-- TODO set info du mec connecté -->
-		<form class="form-horizontal" name="registerForm" id="editInfo" role="form" method="post" action="" onsubmit="return validateEditInfo()" style="display:none" >
+		<form class="form-horizontal" name="registerForm" id="editInfo" role="form" method="post" action="" onsubmit="return validateEditInfo()" {% if errorEdit %}{% else %}style="display:none"{% endif %}>
 			{% csrf_token %}
 			<!-- Information personnelle-->
 			<div class="panel panel-default">
