@@ -22,10 +22,10 @@ class Participant(models.Model):
 		return self.prenom +" "+ self.nom
 
 class Extra(models.Model):
+	id = models.AutoField(primary_key=True)
 	nom = models.CharField(max_length=30)
 	prix = models.IntegerField()
 	commentaires = models.TextField(null=True)
-	user = models.ManyToManyField(User)
 	def __str__(self):
 		return self.nom
 

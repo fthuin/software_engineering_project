@@ -100,7 +100,29 @@
 	<!-- Gestionnaire des extras -->
 	<div class="content-box" id="gestionExtra" style="display:none;">
 		<h2 class="center">Gestionnaire des extras</h2>
-		<hr class="line">	
+		<hr class="line">
+		{% if errorAdd %}
+		<div class="alert alert-danger">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		<strong>Error!</strong> {{ errorAdd }}
+		</div>
+		{% elif successAdd %}
+		<div class="alert alert-success">
+		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		    <strong>Succès!</strong> {{ successAdd }}
+		</div>
+		{% endif %}
+		{% if errorEdit %}
+		<div class="alert alert-danger">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		<strong>Error!</strong> {{ errorEdit }}
+		</div>
+		{% elif successEdit %}
+		<div class="alert alert-success">
+		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		    <strong>Succès!</strong> {{ successEdit }}
+		</div>
+		{% endif %}	
 		<div class="row">
 			<!-- selection des extras -->
 			<div class="col-md-4">
@@ -108,7 +130,7 @@
 					<div class="panel-heading">Liste des extras</div>
 					<div class="list-group" id="listExtra">
 						{% for extra in Ex %}
-						<a onClick="extra('{{ extra.nom }}','{{ extra.prix }}','{{ extra.commentaires }}')" href="javascript:void(0);" class="list-group-item">{{ extra.nom }}</a>
+						<a onClick="extra('{{ extra.id }}', '{{ extra.nom }}','{{ extra.prix }}','{{ extra.commentaires }}')" href="javascript:void(0);" class="list-group-item">{{ extra.nom }}</a>
 						{% endfor %}
 					</div>
 				</div>
@@ -117,8 +139,14 @@
 
 			<!-- Modification des extras -->
 			<div class="col-md-8">
-				<form class="form-horizontal" name="editExtra" id="editExtra" role="form" method="post" action="{% url "tennis.views.register" %}" onsubmit="return validateRegister()" >
+				<form class="form-horizontal" name="editExtra" id="editExtra" role="form" method="post" action="{% url "tennis.views.staff" %}" onsubmit="return validateRegister()" >
 					{% csrf_token %}
+
+					<!-- ID -->
+					
+				     
+				      	<input type="text" class="form-control" maxlength="30" name="id" id="extraID" value="{{ Ex.0.id }}" style="display:none;">
+				      	
 					<!-- Nom -->
 					<div class="form-group">
 				      <label class="control-label col-sm-2" for="username">Nom</label>
@@ -146,12 +174,12 @@
 				      </div>
 				    </div>
 
-					<button class="btn-default btn center-block">Editer</button>
+					<button class="btn-default btn center-block" name="action" value="modifyExtra">Editer</button>
 					
 				  </form>
-
+				
 				<!-- Ajouter un extrat -->
-				  <form class="form-horizontal" name="newExtra" id="newExtra" role="form" method="post" action="{% url "tennis.views.register" %}" onsubmit="return validateRegister()" style="display:none" >
+				  <form class="form-horizontal" name="newExtra" id="newExtra" role="form" method="post" action="{% url "tennis.views.staff" %}" onsubmit="return validateRegister()" style="display:none" >
 					{% csrf_token %}
 					<!-- Nom -->
 					<div class="form-group">
@@ -180,7 +208,7 @@
 				      </div>
 				    </div>
 
-					<button class="btn-default btn center-block">Ajouter</button>
+					<button class="btn-default btn center-block" name="action" value="addExtra">Ajouter</button>
 					
 				  </form>
 			</div>
@@ -193,5 +221,8 @@
 {% endblock %}
 
 {% block commande %}
-<script></script>
+{% if successAdd %} 
+<script>ongletExtra();</script>
+{% endif %}
 {% endblock %}
+
