@@ -151,7 +151,7 @@ def register(request):
 
 		#Check username et email already taken
 		if(username_present(username)):
-			error = "Cet nom d'utilisateur n'est plus disponible !"
+			error = "Ce nom d'utilisateur n'est plus disponible !"
 			return render(request,'tennis/register.html',locals())
 
 		if(email_present(email)):

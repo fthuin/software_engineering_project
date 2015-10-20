@@ -5,6 +5,12 @@
 {% block body %}
 
 <div class="container">
+	{% if error %}
+	<div class="alert alert-danger">
+	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	    <strong>Error!</strong> {{ error }}
+	  </div>
+	{% endif %}
 		<div class="content-box">
 		<h2 class="center">Mon profil</h2>
 		<hr class="line">
@@ -263,25 +269,25 @@
 						      </div>
 						    </div>
 						    <!-- date de naissance -->
-								    <div class="form-group">
-								      <label class="control-label col-sm-4" for="birthdate">Date de Naissance *</label>
-								      <div class="col-sm-8">
-								      	<input type="text" class="form-control" name="birthdate" id="birthdate" value="{{ birthdate }}">
-								      	<p class="hint" id="hint-birthdate"></p>
-								      </div>
-								    </div>
+						    <div class="form-group">
+						      <label class="control-label col-sm-4" for="birthdate">Date de Naissance *</label>
+						      <div class="col-sm-8">
+						      	<input type="text" class="form-control" name="birthdate" id="birthdate" value="{{ formatedBirthdate }}">
+						      	<p class="hint" id="hint-birthdate"></p>
+						      </div>
+						    </div>
 						    <!-- telephone -->
 						    <div class="form-group">
 						      <label class="control-label col-sm-4" for="tel">Téléphone *</label>
 						      <div class="col-sm-8">
-						      	<input type="tel" class="form-control" name="tel" id="tel" placeholder="" value="{% if user.participant.telephone %}{{ user.participant.telephone }}{% endif %}">
+						      	<input type="tel" class="form-control" name="tel" id="tel" placeholder="ex:010/56/56/10" value="{% if user.participant.telephone %}{{ user.participant.telephone }}{% endif %}">
 						      </div>
 						    </div>
 						    <!-- gsm -->
 						    <div class="form-group">
 						      <label class="control-label col-sm-4" for="gsm">GSM *</label>
 						      <div class="col-sm-8">
-						      	<input type="gsm" class="form-control" name="gsm" id="gsm" placeholder="" value="{% if user.participant.gsm %}{{ user.participant.gsm }}{% endif %}">
+						      	<input type="gsm" class="form-control" name="gsm" id="gsm" placeholder="ex:0477/56/54/89" value="{% if user.participant.gsm %}{{ user.participant.gsm }}{% endif %}">
 						      	<p class="hint" id="hint-tel"></p>
 						      </div>
 						    </div>
@@ -289,7 +295,7 @@
 						    <div class="form-group">
 						      <label class="control-label col-sm-4" for="fax">Fax</label>
 						      <div class="col-sm-8">
-						      	<input type="tel" class="form-control" name="fax" id="fax" placeholder="" value="{% if user.participant.fax %}{{ user.participant.fax }}{% endif %}">
+						      	<input type="tel" class="form-control" name="fax" id="fax" placeholder="ex:010/56/54/89" value="{% if user.participant.fax %}{{ user.participant.fax }}{% endif %}">
 						      	<p class="hint" id="hint-fax"></p>
 						      </div>
 						    </div>
@@ -341,7 +347,7 @@
 						    <div class="form-group">
 						      <label class="control-label col-sm-4" for="classement">Classement</label>
 						      <div class="col-sm-8">
-						      	<input type="text" class="form-control" name="classement" id="classement" placeholder="Classement" value="{{ user.participant.classement }}">
+						      	<input type="text" class="form-control" name="classement" id="classement" placeholder="Classement" value="{% if user.participant.classement %}{{ user.participant.classement }}{% endif %}">
 						      	<p class="hint" id="hint-classement"></p>
 						      </div>
 						    </div>
