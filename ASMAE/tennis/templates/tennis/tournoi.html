@@ -8,43 +8,50 @@
 <div class="container">
 	
 	<!-- Affichage Normal : Inscription - Historique - Agenda -->
-	<div class="row">
-		<div class="col-lg-4">
-			<!-- Les différents tournoi -->
-			<!-- TODO set info -->
-			<div class="content-box">
-				<h2 class="center">Inscription</h2>
-				<hr class="line">
-
-				<!-- Selecteur -->
-				<div class="row" style="margin-bottom: 20px;">
-					<div class="col-xs-3 info">
-						Type
-					</div>
-					<div class="col-lg-8 col-sm-4 col-xs-8">
-					   	<select class="form-control" name="title">
-							<option>Toutes cette année</option>
-						    <option>???</option>
-						    <option>???</option>
-						    <option>???</option>
-						</select>
-		    		</div>
-				</div>
-
+	<!-- Les différents tournoi -->
+	<!-- TODO set info -->
+	<div class="content-box">
+		<h2 class="center">Inscription</h2>
+		<hr class="line">
+		<div class="row">
+			<div class="col-sm-6">
 				<!-- Panel infos -->
 				<div class="panel panel-default">
-					<div class="panel-heading">Mes Inscriptions</div>
+					<div class="panel-heading">Demande d'inscription</div>
 					<ul class="list-group">
-		  				<li class="list-group-item">8945 - Seniors (hommes)</li>
-						<li class="list-group-item">7991 - Familles</li>
+		  				<li class="list-group-item">8945 - Dupond P et Dupond E - Seniors (hommes)</li>
+						<li class="list-group-item">7991 - Dupond P et Fernande A - Familles</li>
 					</ul>
 				</div>
-
-				<!-- Inscription -->
-				<button onClick="location.href='{% url "tennis.views.inscriptionTournoi" %}';" class="btn btn-default b-center">S'inscrire à un tournoi</button>
+			</div>
+			<div class="col-sm-6">
+				<!-- Panel infos -->
+				<div class="panel panel-default">
+					<div class="panel-heading">Partenaire non confirmé</div>
+					<ul class="list-group">
+		  				<li class="list-group-item">8945 - Dupond P et Dupond E - Seniors (hommes)</li>
+						<li class="list-group-item">7991 - Dupond P et Fernande A - Familles</li>
+					</ul>
+				</div>
 			</div>
 		</div>
-		<div class="col-lg-4">
+
+		<!-- Panel infos -->
+		<div class="panel panel-default">
+			<div class="panel-heading">Mes Inscriptions</div>
+			<ul class="list-group">
+  				<li class="list-group-item">8945 - Dupond P et Dupond E - Seniors (hommes)</li>
+				<li class="list-group-item">7991 - Dupond P et Fernande A - Familles</li>
+			</ul>
+		</div>
+		
+
+		<!-- Inscription -->
+		<button onClick="location.href='{% url "tennis.views.inscriptionTournoi" %}';" class="btn btn-default b-center">S'inscrire à un tournoi</button>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-6">
 			<!-- Les historique de matchs -->
 			<!-- TODO set info -->
 			<div class="content-box">
@@ -79,7 +86,7 @@
 				<button class="btn btn-default b-center">Consulter tout l'historique</button>
 			</div>
 		</div>
-		<div class="col-lg-4">
+		<div class="col-sm-6">
 			<!-- Agenda -->
 			<!-- TODO set info -->
 			<div class="content-box">
