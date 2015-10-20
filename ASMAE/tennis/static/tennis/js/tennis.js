@@ -46,7 +46,7 @@ function ongletExtra(){
 	document.getElementById("gestionExtra").style.display = "inherit";
 }
 
-function extra(nom,prix,comment){
+function extra(id, nom,prix,comment){
 	document.getElementById("editExtra").style.display = "inherit";
 	document.getElementById("newExtra").style.display = "none";
 
@@ -58,7 +58,7 @@ function extra(nom,prix,comment){
 			c[i].className="list-group-item"
 		}
     }
-
+	document.getElementById("extraID").value = id;
 	document.getElementById("extraName").value = nom;
 	document.getElementById("extraPrice").value = prix;
 	document.getElementById("extracommentaire").innerHTML = comment;
