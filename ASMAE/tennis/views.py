@@ -60,30 +60,37 @@ def editTerrainStaff(request):
 	return redirect(reverse(home))
 
 def profil(request):
+	if request.method == "POST":
+		birthdate = request.user.participant.datenaissance
+		formatedBirthdate = birthdate.strftime('%d/%m/%Y')
+
+		password1 = request.POST['password1']
+		password2 = request.POST['password2']
+
+		#On vérifie que les password sont les memes
+		if password1 != password2:
+			errorMDP = "Les mots de passes sont différents !"
+			return render(request,'tennis/profil.html',locals())
+	
+		#On vérifie la longeur du password
+		if(len(password1) < 2):
+			errorMDP = "Votre mot de passe doit contenir au moins 3 caractères"
+			return render(request,'tennis/profil.html',locals())
+		
+		request.user.set_password(password1)
+		request.user.save()
+		successMDP = "Le mot de passe a bien été changé"
+		user2 = authenticate(username=request.user, password=password1)
+		login(request, user2)
+		return render(request,'tennis/profil.html',locals())
+
+	
 	if request.user.is_authenticated():
 		birthdate = request.user.participant.datenaissance
 		formatedBirthdate = birthdate.strftime('%d/%m/%Y')
 		return render(request,'tennis/profil.html',locals())
 	return redirect(reverse(home))
 
-def updatePassword(request):
-	print("dans update password")
-	password1 = request.POST['password1']
-	password2 = request.POST['password2']
-
-	#On vérifie que les password sont les memes
-	if password1 != password2:
-		errorMDP = "Les mots de passes sont différents !"
-		return render(request,'tennis/profil.html',locals())
-	
-	#On vérifie la longeur du password
-	if(len(password1) < 2):
-		errorMDP = "Votre mot de passe doit contenir au moins 3 caractères"
-		return render(request,'tennis/profil.html',locals())
-
-	request.user.set_password(password1)
-	successMDP = "Le mot de passe a bien été changé"
-	return render(request,'tennis/profil.html',locals())
 	
 		
 
