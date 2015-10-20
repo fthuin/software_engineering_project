@@ -116,7 +116,6 @@ def email_present(email):
 
 def register(request):
 	if request.method == "POST":
-		print(request.POST)
 		#Recuperation des donnees
 		username = request.POST['username']
 		password = request.POST['password']
@@ -166,7 +165,8 @@ def register(request):
 		if(len(password) < 2):
 			error = "Votre mot de passe doit contenir au moins 3 caractères"
 			return render(request,'tennis/register.html',locals())
-		print(re.match(r"^[0-3][0-9]/[0-1][0-9]/[1-2][0-9]{3}$",birthdate))
+
+		#check format date
 		if re.match(r"^[0-3][0-9]/[0-1][0-9]/[1-2][0-9]{3}$",birthdate) is None:
 			error = "La date de naissance n'a pas le bon format"
 			return render(request,'tennis/register.html',locals())
