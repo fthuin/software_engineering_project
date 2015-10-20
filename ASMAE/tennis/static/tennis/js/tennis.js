@@ -219,7 +219,7 @@ function validateRegister() {
 	}
 	
 
-	return false;
+	return valid;
 }
 
 document.getElementById("foot01").innerHTML =
