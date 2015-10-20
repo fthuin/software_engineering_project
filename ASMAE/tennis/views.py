@@ -67,6 +67,7 @@ def profil(request):
 	return redirect(reverse(home))
 
 def updatePassword(request):
+ 	print("dans update password")
 	password1 = request.POST['password1']
 	password2 = request.POST['password2']
 
@@ -76,9 +77,9 @@ def updatePassword(request):
 		return render(request,'tennis/profil.html',locals())
 	
 	#On vérifie la longeur du password
-	if(len(password) < 2):
+	if(len(password1) < 2):
 		errorMDP = "Votre mot de passe doit contenir au moins 3 caractères"
-		return render(request,'tennis/register.html',locals())
+		return render(request,'tennis/profil.html',locals())
 
 	request.user.set_password(password1)
 	successMDP = "Le mot de passe a bien été changé"

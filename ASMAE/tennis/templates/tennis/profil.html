@@ -54,7 +54,7 @@
 		</div>
 
 		<!-- Edit mot de passe -->
-		<form class="form-horizontal" name="registerForm" id="editMDP" role="form" method="post" action=""{% url "tennis.views.updatePassword" %}"" onsubmit="return validateRegister()" style="display:none" >
+		<form class="form-horizontal" name="registerForm" id="editMDP" role="form" method="post" action="{% url "tennis.views.updatePassword" %}" onsubmit="return validateRegister()" style="display:none" >
 			{% csrf_token %}
 			<div class="panel panel-default" >
 				<div class="panel-heading">Information du compte</div>
