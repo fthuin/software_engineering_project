@@ -66,6 +66,27 @@ def profil(request):
 		return render(request,'tennis/profil.html',locals())
 	return redirect(reverse(home))
 
+def updatePassword(request):
+ 	print("dans update password")
+	password1 = request.POST['password1']
+	password2 = request.POST['password2']
+
+	#On vérifie que les password sont les memes
+	if password1 != password2:
+		errorMDP = "Les mots de passes sont différents !"
+		return render(request,'tennis/profil.html',locals())
+	
+	#On vérifie la longeur du password
+	if(len(password1) < 2):
+		errorMDP = "Votre mot de passe doit contenir au moins 3 caractères"
+		return render(request,'tennis/profil.html',locals())
+
+	request.user.set_password(password1)
+	successMDP = "Le mot de passe a bien été changé"
+	return render(request,'tennis/profil.html',locals())
+	
+		
+
 def connect(request):
 	if request.method == "POST":
 		#Recuperation des donnees
@@ -153,7 +174,8 @@ def register(request):
 		if(username_present(username)):
 			error = "Ce nom d'utilisateur n'est plus disponible !"
 			return render(request,'tennis/register.html',locals())
-
+		
+		#On vérifie si l'email est deja dans la db
 		if(email_present(email)):
 			error = "Un compte avec cette addresse email existe déjà !"
 			return render(request,'tennis/register.html',locals())
@@ -174,7 +196,7 @@ def register(request):
 			error = "La date de naissance n'a pas le bon format"
 			return render(request,'tennis/register.html',locals())
 
-		
+		#On format la date
 		birthdate2 = birthdate.split("/")
 		datenaissance = datetime.datetime(int(birthdate2[2]),int(birthdate2[1]),int(birthdate2[0]))
 
@@ -182,6 +204,8 @@ def register(request):
 		user = User.objects.create_user(username,email,password)
 		user.save()
 		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement = classement,oldparticipant = oldparticipant,datenaissance = datenaissance).save()
+
+		#On connecte l'utilisateur
 		user2 = authenticate(username=username, password=password)
 		login(request, user2)
 		return redirect(reverse(tournoi))
