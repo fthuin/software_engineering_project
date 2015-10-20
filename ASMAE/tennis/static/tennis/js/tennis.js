@@ -227,6 +227,88 @@ function validateRegister() {
 	return valid;
 }
 
+function validateEditInfo() {
+	var valid = true;
+
+	//Verification nom présent
+	var lastname = document.getElementById("lastname").value;
+	if(lastname==null || lastname == ""){
+		document.getElementById("hint-lastname").innerHTML = " ! Entrer votre nom";
+		valid = false;
+	}else{
+		document.getElementById("hint-lastname").innerHTML = "";
+	}
+
+	//Verification prénom présent
+	var firstname = document.getElementById("firstname").value;
+	if(firstname==null || firstname == ""){
+		document.getElementById("hint-firstname").innerHTML = " ! Entrer votre prénom";
+		valid = false;
+	}else{
+		document.getElementById("hint-firstname").innerHTML = "";
+	}
+
+	//Verification telephone présent
+	var tel = document.getElementById("tel").value;
+	var gsm = document.getElementById("gsm").value;
+	if((tel==null || tel == "") && (gsm==null || gsm == "")){
+		document.getElementById("hint-tel").innerHTML = " ! Entrer votre numéro de téléphone ou de GSM";
+		valid = false;
+	}else{
+		//Verify number validity TODO
+		document.getElementById("hint-tel").innerHTML = "";
+	}
+	//Verification rue présent
+	var street = document.getElementById("street").value;
+	if(street==null || street == ""){
+		document.getElementById("hint-street").innerHTML = " ! Entrer votre rue";
+		valid = false;
+	}else{
+		document.getElementById("hint-street").innerHTML = "";
+	}
+
+	//Verification numero présent
+	var number = document.getElementById("number").value;
+	if(number==null || number == ""){
+		document.getElementById("hint-number").innerHTML = " ! Entrer votre numéro/boite";
+		valid = false;
+	}else{
+		document.getElementById("hint-number").innerHTML = "";
+	}
+
+	//Verification code postal présent
+	var postalcode = document.getElementById("postalcode").value;
+	if(postalcode==null || postalcode == ""){
+		document.getElementById("hint-postalcode").innerHTML = " ! Entrer votre code postal";
+		valid = false;
+	}else{
+		document.getElementById("hint-postalcode").innerHTML = "";
+	}
+
+	//Verification localité présent
+	var locality = document.getElementById("locality").value;
+	if(locality==null || locality == ""){
+		document.getElementById("hint-locality").innerHTML = " ! Entrer votre localité";
+		valid = false;
+	}else{
+		document.getElementById("hint-locality").innerHTML = "";
+	}
+
+	//TODO vérification addresse correcte
+
+	//Verification date de naissance présent
+	var birthdate = document.getElementById("birthdate").value;
+	if(birthdate==null || birthdate == ""){
+		document.getElementById("hint-birthdate").innerHTML = " ! Entrer votre date de naissance";
+		valid = false;
+	}else{
+		document.getElementById("hint-birthdate").innerHTML = "";
+	}
+	
+
+	return valid;
+}
+
 document.getElementById("foot01").innerHTML =
 "<p>&copy;  " + new Date().getFullYear() + " ASMAE. All rights reserved.</p>";
 

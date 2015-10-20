@@ -53,7 +53,7 @@
 		</div>
 
 		<!-- Edit mot de passe -->
-		<form class="form-horizontal" name="registerForm" id="editMDP" role="form" method="post" action="{% url "tennis.views.profil" %}" onsubmit="return validateRegister()" {% if errorMDP %}{% else %}style="display:none"{% endif %}>
+		<form class="form-horizontal" name="registerForm" id="editMDP" role="form" method="post" action="{% url "tennis.views.profil" %}" {% if errorMDP %}{% else %}style="display:none"{% endif %}>
 			{% csrf_token %}
 			<div class="panel panel-default" >
 				<div class="panel-heading">Information du compte</div>
@@ -243,7 +243,7 @@
 
 		<!-- Information personnelle Edit-->
 		<!-- TODO set info du mec connecté -->
-		<form class="form-horizontal" name="registerForm" id="editInfo" role="form" method="post" action="" onsubmit="return validateRegister()" style="display:none" >
+		<form class="form-horizontal" name="registerForm" id="editInfo" role="form" method="post" action="" onsubmit="return validateEditInfo()" style="display:none" >
 			{% csrf_token %}
 			<!-- Information personnelle-->
 			<div class="panel panel-default">

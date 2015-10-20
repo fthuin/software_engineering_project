@@ -49,7 +49,6 @@ def staff(request):
 	if request.user.is_authenticated():
 		#TODO check si c'est bien un staff
 		Ex = Extra.objects.all()
-		print(Ex[0])
 		return render(request,'tennis/staff.html',locals())
 	return redirect(reverse(home))
 
