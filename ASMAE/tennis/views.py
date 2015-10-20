@@ -67,7 +67,7 @@ def profil(request):
 	return redirect(reverse(home))
 
 def updatePassword(request):
- 	print("dans update password")
+	print("dans update password")
 	password1 = request.POST['password1']
 	password2 = request.POST['password2']
 
