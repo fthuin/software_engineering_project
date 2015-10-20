@@ -15,6 +15,11 @@
 		    <strong>Error!</strong> {{ errorMDP }}
 		</div>
 		<script>changeMDP();</script>
+		{% elif successMDP %}
+		<div class="alert alert-success">
+		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		    <strong>Succès!</strong> {{ successMDP }}
+		</div>
 		{% endif %}
 		<!-- Information du compte-->
 		<!-- TODO set real info-->
