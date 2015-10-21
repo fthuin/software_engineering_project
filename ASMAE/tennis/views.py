@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
 from tennis.models import Extra, Participant,Court
-import re
+import re, math
 import datetime
 
 # Create your views here.
@@ -52,8 +52,6 @@ def payPair(request):
 	return redirect(reverse(home))
 
 def terrain(request):
-
-	
 	if request.user.is_authenticated():
 		court = Court.objects.filter(user=request.user)
 		return render(request,'tennis/terrain.html',locals())
@@ -95,49 +93,57 @@ def registerTerrain(request):
 	return redirect(reverse(home))
 
 def editTerrain(request,id):
+	print("ici")
 	if request.method == "POST":
-		id = request.POST['id']
-		rue = request.POST['rue']
-		numero = request.POST['numero']
-		boite = request.POST['boite']
-		postalcode = request.POST['postalcode']	
-		locality = request.POST['loclity']
-		acces = request.POST['acces']
-		matiere = request.POST['matiere']
-		type = request.POST['type']
-		etat = request.POST['etat']
-		commentaire = request.POST['comment']
-		if request.POST.__contains__("dispoSamedi"):
-				dispoSamedi = True
-		else:
-			dispoSamedi = False
-		if request.POST.__contains__("dispoDimanche"):
-				dispoDimanche = True
-		else:
-			dispoDimanche = False
+		if request.POST['action'] == "modifyCourt":
+			rue = request.POST['rue']
+			numero = request.POST['numero']
+			boite = request.POST['boite']
+			postalcode = request.POST['postalcode']	
+			locality = request.POST['loclity']
+			acces = request.POST['acces']
+			matiere = request.POST['matiere']
+			type = request.POST['type']
+			etat = request.POST['etat']
+			commentaire = request.POST['comment']
+			if request.POST.__contains__("dispoSamedi"):
+					dispoSamedi = True
+			else:
+				dispoSamedi = False
+			if request.POST.__contains__("dispoDimanche"):
+					dispoDimanche = True
+			else:
+				dispoDimanche = False
 
-		court = Court.objects.filter(id=id)[0]
-
-		if (rue=="" or numero=="" or postalcode=="" or locality=="" or matiere=="" or type=="" or etat==""):
-			errorAdd = "Veuillez remplir tous les champs obligatoires !"
-			return render(request,'tennis/registerTerrain.html',locals())
+			court = Court.objects.filter(id=id)[0]
+		
+			if (rue=="" or numero=="" or postalcode=="" or locality=="" or matiere=="" or type=="" or etat==""):
+				errorAdd = "Veuillez remplir tous les champs obligatoires !"
+				return render(request,'tennis/registerTerrain.html',locals())
 
 		
-		court.rue = rue 		
-		court.numero=numero
-		court.boite=boite
-		court.codepostal=postalcode
-		court.localite=locality
-		court.acces=acces
-		court.matiere=matiere
-		court.type=type
-		court.dispoDimanche=dispoDimanche
-		court.dispoSamedi=dispoSamedi
-		court.etat= etat
-		court.commentaire=commentaire
-		court.user = request.user
-		court.save()
-		
+			court.rue = rue 		
+			court.numero=numero
+			court.boite=boite
+			court.codepostal=postalcode
+			court.localite=locality
+			court.acces=acces
+			court.matiere=matiere
+			court.type=type
+			court.dispoDimanche=dispoDimanche
+			court.dispoSamedi=dispoSamedi
+			court.etat= etat
+			court.commentaire=commentaire
+			court.user = request.user
+			court.save()
+			successEdit = "Extra bien édité!"
+	
+		if request.POST['action'] == "deleteCourt":
+			
+			court = Court.objects.filter(id=id)[0]
+			court.delete()
+			court = Court.objects.filter(user=request.user)
+			return render(request,'tennis/terrain.html',locals())
 
 	if request.user.is_authenticated():
 		court = Court.objects.filter(id=id)[0]
@@ -146,6 +152,21 @@ def editTerrain(request,id):
 	return redirect(reverse(home))
 
 def staff(request):
+	#Nombre d'element sur la page
+	pageLength = 10
+	#List of Extra
+	Ex = Extra.objects.all()
+	#List of Court
+	allCourt = Court.objects.all()
+	#Number of onglet if we show them pageLength by pageLength
+	onglet = list()
+	for x in range(1,int(math.ceil(len(allCourt)/pageLength))):
+		onglet.append(x+1)
+	onglet = onglet[0:6]
+	firstOnglet = 1
+	#The first pageLength to show
+	firstTerrain = allCourt[0:pageLength]
+
 	if request.method == "POST":
 		if request.POST['action'] == "addExtra":
 			nom = request.POST['name']
@@ -153,12 +174,10 @@ def staff(request):
 			message = request.POST['message']
 			
 			if nom=="":
-				Ex = Extra.objects.all()
 				error = "Veuillez rajouter un nom à l'extra!"
 				return render(request,'tennis/register.html',locals())			
 
 			if not is_number(prix):
-				Ex = Extra.objects.all()
 				errorAdd = "Le prix n'a pas le bon format"
 				return render(request,'tennis/staff.html',locals())
 			
@@ -176,12 +195,10 @@ def staff(request):
 			extra = Extra.objects.filter(id = id)[0]
 	
 			if nom=="":
-				Ex = Extra.objects.all()
 				errorEdit = "Veuillez rajouter un nom à l'extra!"
 				return render(request,'tennis/register.html',locals())			
 
 			if not is_number(prix):
-				Ex = Extra.objects.all()
 				errorEdit = "Le prix n'a pas le bon format"
 				return render(request,'tennis/staff.html',locals())	
 			
@@ -200,7 +217,6 @@ def staff(request):
 		
 	if request.user.is_authenticated():
 		if request.user.is_staff:
-			Ex = Extra.objects.all()
 			return render(request,'tennis/staff.html',locals())
 	return redirect(reverse(home))
 

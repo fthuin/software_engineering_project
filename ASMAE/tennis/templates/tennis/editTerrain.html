@@ -8,7 +8,7 @@
 		<h2 class="center">Editer terrain (TODO set info)</h2>
 		<hr class="line">
 		<h4 class="center">Terrain 24</h4>
-		<form class="form-horizontal" name="editForm" role="form" method="post" action="{% url "tennis.views.editTerrain" court.id %}"onsubmit="return false" >
+		<form class="form-horizontal" name="editForm" role="form" method="post" action="{% url "tennis.views.editTerrain" court.id %}" >
 		{% csrf_token %}
 			<div class="row">
 				<div class="panel panel-default">
@@ -82,7 +82,7 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="matiere">Type *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
-					      	<select class="form-control" name="matiere" id="type">
+					      	<select class="form-control" name="type" id="type">
 					      		<option>Ouvert</option>
 							    <option>Couvert</option>
 							</select>
@@ -129,7 +129,14 @@
 					</div>
 				</div>
 			</div>
-			<button class="btn btn-default center-block" >Editer</button>
+			<ul class="list-inline text-center">
+				<li>
+					<button class="btn-default btn" name="action" value="modifyCourt">Editer</button>
+				</li>
+				<li>
+					<button class="btn-default btn" name="action" value="deleteCourt">Supprimer</button>
+				</li>
+			</ul>
 		</form>
 	</div>
 </div>
