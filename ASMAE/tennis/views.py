@@ -93,49 +93,57 @@ def registerTerrain(request):
 	return redirect(reverse(home))
 
 def editTerrain(request,id):
+	print("ici")
 	if request.method == "POST":
-		id = request.POST['id']
-		rue = request.POST['rue']
-		numero = request.POST['numero']
-		boite = request.POST['boite']
-		postalcode = request.POST['postalcode']	
-		locality = request.POST['loclity']
-		acces = request.POST['acces']
-		matiere = request.POST['matiere']
-		type = request.POST['type']
-		etat = request.POST['etat']
-		commentaire = request.POST['comment']
-		if request.POST.__contains__("dispoSamedi"):
-				dispoSamedi = True
-		else:
-			dispoSamedi = False
-		if request.POST.__contains__("dispoDimanche"):
-				dispoDimanche = True
-		else:
-			dispoDimanche = False
+		if request.POST['action'] == "modifyCourt":
+			rue = request.POST['rue']
+			numero = request.POST['numero']
+			boite = request.POST['boite']
+			postalcode = request.POST['postalcode']	
+			locality = request.POST['loclity']
+			acces = request.POST['acces']
+			matiere = request.POST['matiere']
+			type = request.POST['type']
+			etat = request.POST['etat']
+			commentaire = request.POST['comment']
+			if request.POST.__contains__("dispoSamedi"):
+					dispoSamedi = True
+			else:
+				dispoSamedi = False
+			if request.POST.__contains__("dispoDimanche"):
+					dispoDimanche = True
+			else:
+				dispoDimanche = False
 
-		court = Court.objects.filter(id=id)[0]
-
-		if (rue=="" or numero=="" or postalcode=="" or locality=="" or matiere=="" or type=="" or etat==""):
-			errorAdd = "Veuillez remplir tous les champs obligatoires !"
-			return render(request,'tennis/registerTerrain.html',locals())
+			court = Court.objects.filter(id=id)[0]
+		
+			if (rue=="" or numero=="" or postalcode=="" or locality=="" or matiere=="" or type=="" or etat==""):
+				errorAdd = "Veuillez remplir tous les champs obligatoires !"
+				return render(request,'tennis/registerTerrain.html',locals())
 
 		
-		court.rue = rue 		
-		court.numero=numero
-		court.boite=boite
-		court.codepostal=postalcode
-		court.localite=locality
-		court.acces=acces
-		court.matiere=matiere
-		court.type=type
-		court.dispoDimanche=dispoDimanche
-		court.dispoSamedi=dispoSamedi
-		court.etat= etat
-		court.commentaire=commentaire
-		court.user = request.user
-		court.save()
-		
+			court.rue = rue 		
+			court.numero=numero
+			court.boite=boite
+			court.codepostal=postalcode
+			court.localite=locality
+			court.acces=acces
+			court.matiere=matiere
+			court.type=type
+			court.dispoDimanche=dispoDimanche
+			court.dispoSamedi=dispoSamedi
+			court.etat= etat
+			court.commentaire=commentaire
+			court.user = request.user
+			court.save()
+			successEdit = "Extra bien édité!"
+	
+		if request.POST['action'] == "deleteCourt":
+			
+			court = Court.objects.filter(id=id)[0]
+			court.delete()
+			court = Court.objects.filter(user=request.user)
+			return render(request,'tennis/terrain.html',locals())
 
 	if request.user.is_authenticated():
 		court = Court.objects.filter(id=id)[0]
@@ -152,7 +160,7 @@ def staff(request):
 	allCourt = Court.objects.all()
 	#Number of onglet if we show them pageLength by pageLength
 	onglet = list()
-	for x in range(1,math.ceil(len(allCourt)/pageLength)):
+	for x in range(1,int(math.ceil(len(allCourt)/pageLength))):
 		onglet.append(x+1)
 	onglet = onglet[0:6]
 	firstOnglet = 1
