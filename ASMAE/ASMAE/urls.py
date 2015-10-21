@@ -16,7 +16,10 @@ Including another URLconf
 from django.conf.urls import include, url, patterns
 from django.contrib import admin
 
+import tennis.views
+
 urlpatterns = patterns('',
+    url(r'^$', tennis.views.home, name='accueil'),
 	url(r'^admin/', include(admin.site.urls)),
 		url(r'^tennis/', include('tennis.urls')),
 	)
