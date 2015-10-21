@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant
+from tennis.models import Extra, Participant,Court
 import re
 import datetime
 
@@ -52,19 +52,97 @@ def payPair(request):
 	return redirect(reverse(home))
 
 def terrain(request):
+
+	
 	if request.user.is_authenticated():
+		court = Court.objects.filter(user=request.user)
 		return render(request,'tennis/terrain.html',locals())
 	return redirect(reverse(home))
 
 def registerTerrain(request):
+	if request.method == "POST":
+		rue = request.POST['rue']
+		numero = request.POST['numero']
+		boite = request.POST['boite']
+		postalcode = request.POST['postalcode']	
+		locality = request.POST['loclity']
+		acces = request.POST['acces']
+		matiere = request.POST['matiere']
+		type = request.POST['type']
+		etat = request.POST['etat']
+		commentaire = request.POST['comment']
+		if request.POST.__contains__("dispoSamedi"):
+				dispoSamedi = True
+		else:
+			dispoSamedi = False
+		if request.POST.__contains__("dispoDimanche"):
+				dispoDimanche = True
+		else:
+			dispoDimanche = False
+
+		if (rue=="" or numero=="" or postalcode=="" or locality=="" or matiere=="" or type=="" or etat==""):
+			errorAdd = "Veuillez remplir tous les champs obligatoires !"
+			return render(request,'tennis/registerTerrain.html',locals())
+
+		
+		
+		Court(rue = rue,numero=numero,boite=boite,codepostal=postalcode,localite=locality,acces=acces,matiere=matiere,type=type,dispoDimanche=dispoDimanche,dispoSamedi=dispoSamedi,etat= etat,commentaire=commentaire,user = request.user).save()
+	
+		return redirect(reverse(terrain))
+
 	if request.user.is_authenticated():
 		return render(request,'tennis/registerTerrain.html',locals())
 	return redirect(reverse(home))
 
-def editTerrain(request):
+def editTerrain(request,id):
+	if request.method == "POST":
+		id = request.POST['id']
+		rue = request.POST['rue']
+		numero = request.POST['numero']
+		boite = request.POST['boite']
+		postalcode = request.POST['postalcode']	
+		locality = request.POST['loclity']
+		acces = request.POST['acces']
+		matiere = request.POST['matiere']
+		type = request.POST['type']
+		etat = request.POST['etat']
+		commentaire = request.POST['comment']
+		if request.POST.__contains__("dispoSamedi"):
+				dispoSamedi = True
+		else:
+			dispoSamedi = False
+		if request.POST.__contains__("dispoDimanche"):
+				dispoDimanche = True
+		else:
+			dispoDimanche = False
+
+		court = Court.objects.filter(id=id)[0]
+
+		if (rue=="" or numero=="" or postalcode=="" or locality=="" or matiere=="" or type=="" or etat==""):
+			errorAdd = "Veuillez remplir tous les champs obligatoires !"
+			return render(request,'tennis/registerTerrain.html',locals())
+
+		
+		court.rue = rue 		
+		court.numero=numero
+		court.boite=boite
+		court.codepostal=postalcode
+		court.localite=locality
+		court.acces=acces
+		court.matiere=matiere
+		court.type=type
+		court.dispoDimanche=dispoDimanche
+		court.dispoSamedi=dispoSamedi
+		court.etat= etat
+		court.commentaire=commentaire
+		court.user = request.user
+		court.save()
+		
+
 	if request.user.is_authenticated():
-		#TODO check si c'est bien le terrain de l'utilisateur
-		return render(request,'tennis/editTerrain.html',locals())
+		court = Court.objects.filter(id=id)[0]
+		if request.user == court.user:
+			return render(request,'tennis/editTerrain.html',locals())
 	return redirect(reverse(home))
 
 def staff(request):
@@ -121,9 +199,9 @@ def staff(request):
 			successDelete = "Extra bien supprimé!"
 		
 	if request.user.is_authenticated():
-		#TODO check si c'est bien un staff
-		Ex = Extra.objects.all()
-		return render(request,'tennis/staff.html',locals())
+		if request.user.is_staff:
+			Ex = Extra.objects.all()
+			return render(request,'tennis/staff.html',locals())
 	return redirect(reverse(home))
 
 def validateTerrain(request):

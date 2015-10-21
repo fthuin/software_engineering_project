@@ -1,3 +1,24 @@
+function preselectSelectOption(matiere,type,etat){
+	function setSelectedIndex(s, valsearch)
+	{
+	// Loop through all the items in drop down list
+		for (i = 0; i< s.options.length; i++)
+		{
+			if (s.options[i].value == valsearch)
+			{
+			// Item is found. Set its property and exit
+			s.options[i].selected = true;
+			break;
+			}
+		}
+		return;
+	}
+
+	setSelectedIndex(document.getElementById("matiere"),matiere);
+	setSelectedIndex(document.getElementById("type"),type);
+	setSelectedIndex(document.getElementById("etat"),etat);
+}
+
 function ongletTournoi(){
 	document.getElementById("tournoi").className = "active";
 	document.getElementById("terrain").className = " ";

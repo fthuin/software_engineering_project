@@ -29,6 +29,31 @@ class Extra(models.Model):
 	def __str__(self):
 		return self.nom
 
+class Court(models.Model):
+	id = models.AutoField(primary_key=True)
+	rue = models.CharField(max_length=100)
+	numero = models.CharField(max_length=10)
+	boite = models.CharField(max_length=10,null=True)
+	codepostal = models.CharField(max_length=10)
+	localite = models.CharField(max_length=30)
+	acces = models.TextField(null=True)
+	matiere = models.CharField(max_length=30)
+	type = models.CharField(max_length=30)
+	dispoSamedi = models.BooleanField(default=False)
+	dispoDimanche = models.BooleanField(default=False)
+	etat = models.CharField(max_length=30)
+	commentaire = models.TextField(null=True)
+	user = models.ForeignKey(User)
+
+	def __str__(self):
+		return str(self.id) +" "+ self.rue
+
+
+
+
+
+
+
 # TODO : Cyril needs Pair
 # TODO : Cyril needs Courts
 # TODO : Cyril needs Payment
