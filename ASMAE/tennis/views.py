@@ -52,17 +52,40 @@ def staff(request):
 			prix = request.POST['price']
 			message = request.POST['message']
 			
+			if nom=="":
+				Ex = Extra.objects.all()
+				error = "Veuillez rajouter un nom à l'extra!"
+				return render(request,'tennis/register.html',locals())			
+
+			if not is_number(prix):
+				Ex = Extra.objects.all()
+				errorAdd = "Le prix n'a pas le bon format"
+				return render(request,'tennis/staff.html',locals())
+			
 			extra = Extra(nom=nom,prix=prix,commentaires = message)
 			extra.save()
+
 			successAdd = "Extra bien ajouté!"
 
 		if request.POST['action'] == "modifyExtra":
 			id = request.POST['id']
 			nom = request.POST['name']
 			prix = request.POST['price']
-			message = request.POST['message']	
+			message = request.POST['message']
 			
 			extra = Extra.objects.filter(id = id)[0]
+	
+			if nom=="":
+				Ex = Extra.objects.all()
+				errorEdit = "Veuillez rajouter un nom à l'extra!"
+				return render(request,'tennis/register.html',locals())			
+
+			if not is_number(prix):
+				Ex = Extra.objects.all()
+				errorEdit = "Le prix n'a pas le bon format"
+				return render(request,'tennis/staff.html',locals())	
+			
+			
 			extra.nom = nom
 			extra.prix = prix
 			extra.commentaires = message
@@ -148,7 +171,6 @@ def profil(request):
 
 			#check format date
 			if re.match(r"^[0-3][0-9]/[0-1][0-9]/[1-2][0-9]{3}$",birthdate) is None:
-				print(birthdate)
 				errorEdit = "La date de naissance n'a pas le bon format"
 				return render(request,'tennis/profil.html',locals())
 			
@@ -320,3 +342,10 @@ def register(request):
 
 def recover(request):
 	return render(request,'tennis/recover.html',locals())
+
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False

@@ -24,7 +24,7 @@ class Participant(models.Model):
 class Extra(models.Model):
 	id = models.AutoField(primary_key=True)
 	nom = models.CharField(max_length=30)
-	prix = models.IntegerField()
+	prix = models.DecimalField(max_digits=11,decimal_places=2)
 	commentaires = models.TextField(null=True)
 	def __str__(self):
 		return self.nom

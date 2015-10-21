@@ -252,7 +252,20 @@
 </script>
 {% endif %}
 
+{% if errorAdd %}
+<script>
+	ongletExtra();
+</script>
+{% endif %}
+
 {% if successEdit %} 
+<script>
+	ongletExtra();
+	extra('{{ extra.id }}', '{{ extra.nom }}','{{ extra.prix }}','{{ extra.commentaires }}');
+</script>
+{% endif %}
+
+{% if errorEdit %} 
 <script>
 	ongletExtra();
 	extra('{{ extra.id }}', '{{ extra.nom }}','{{ extra.prix }}','{{ extra.commentaires }}');
