@@ -29,4 +29,7 @@ class Extra(models.Model):
 	def __str__(self):
 		return self.nom
 
-	
+# TODO : Cyril needs Pair
+# TODO : Cyril needs Courts
+# TODO : Cyril needs Payment
+# TODO : Cyril needs Groups (with group leader)
