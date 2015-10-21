@@ -8,121 +8,116 @@
 	<div class="content-box">
 		<h2 class="center">Pair NUMERO (TODO set info)</h2>
 		<hr class="line">
+
+		<h4 class="center">Tournoi : Tournoi des familles</h4>
+		<p class="info center">Description du tournoi des familles</p>
+
+		<div class="row">
+			<div class="col-sm-6">
+				<!-- Valider -->
+				<p class="center">Pair validé ou non</p>
+			</div>
+
+			<div class="col-sm-6">
+				<!-- Payer -->
+				<p class="center">Pair payé ou non</p>
+			</div>
+		</div>
 		
-		<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.register" %}" onsubmit="" >
+		<div class="row">
 
-			<h4 class="center">Tournoi : Tournoi des familles</h4>
-			<p class="info center">Description du tournoi des familles</p>
-
-			<div class="row">
-				<div class="col-sm-6">
-					<!-- Valider -->
-					<p class="center">Pair validé ou non</p>
-				</div>
-
-				<div class="col-sm-6">
-					<!-- Payer -->
-					<p class="center">Pair payé ou non</p>
-				</div>
-			</div>
-			
-			<div class="row">
-
-				<div class="col-sm-6">
-					<div class="panel panel-default">
-						<div class="panel-heading">Joueur 1</div>
-						<div class="panel-body">
-							<!-- Username -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Utilisateur : </label>
-						      <div class="col-sm-8">
-						      	<p class="info">getInfoJoueur1</p>
-						      </div>
+			<div class="col-sm-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">Joueur 1</div>
+					<div class="panel-body">
+						<!-- Username -->
+						<div class="form-group">
+					      <label class="control-label col-sm-4" for="username">Utilisateur : </label>
+					      <div class="col-sm-8">
+					      	<p class="info">getInfoJoueur1</p>
+					      </div>
+					    </div>
+					    <!-- Nom -->
+						<div class="form-group">
+					      <label class="control-label col-sm-4" for="nom">Nom : </label>
+					      <div class="col-sm-8">
+					      	<p class="info">getInfoJoueur1</p>
+					      </div>
+					    </div>
+					    <!-- Prenom -->
+						<div class="form-group">
+					      <label class="control-label col-sm-4" for="username">Prénom : </label>
+					      <div class="col-sm-8">
+					      	<p class="info">getInfoJoueur1</p>
+					      </div>
+					    </div>
+					    <!-- Extra -->
+						<div class="form-group">
+					      <label class="control-label col-sm-4" for="username">Extras : </label>
+					      <div class="col-sm-8">
+					      	{% for extra in Ex %}
+					      	<div class="checkbox">
+						      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
 						    </div>
-						    <!-- Nom -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="nom">Nom : </label>
-						      <div class="col-sm-8">
-						      	<p class="info">getInfoJoueur1</p>
-						      </div>
-						    </div>
-						    <!-- Prenom -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Prénom : </label>
-						      <div class="col-sm-8">
-						      	<p class="info">getInfoJoueur1</p>
-						      </div>
-						    </div>
-						    <!-- Extra -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Extras : </label>
-						      <div class="col-sm-8">
-						      	{% for extra in Ex %}
-						      	<div class="checkbox">
-							      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
-							    </div>
-							    {% endfor %}
-						      </div>
-						    </div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-sm-6">
-					<div class="panel panel-default">
-						<div class="panel-heading">Joueur 2</div>
-						<div class="panel-body">
-							<!-- Username -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Utilisateur : </label>
-						      <div class="col-sm-8">
-						      	<p class="info">{{ user.username }}</p>
-						      </div>
-						    </div>
-						    <!-- Nom -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="nom">Nom : </label>
-						      <div class="col-sm-8">
-						      	<p class="info">{{ user.participant.nom }}</p>
-						      </div>
-						    </div>
-						    <!-- Prenom -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Prénom : </label>
-						      <div class="col-sm-8">
-						      	<p class="info">{{ user.participant.prenom }}</p>
-						      </div>
-						    </div>
-						    <!-- Extra -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Extras : </label>
-						      <div class="col-sm-8">
-						      	{% for extra in Ex %}
-						      	<div class="checkbox">
-							      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
-							    </div>
-							    {% endfor %}
-						      </div>
-						    </div>
-						</div>
+						    {% endfor %}
+					      </div>
+					    </div>
 					</div>
 				</div>
 			</div>
-			<!-- Info -->
-			<div class="row">
-				<div class="col-sm-10 col-sm-offset-1">
-					<label>Informations additionnelles (souhaits, remarques, ...) : </label>
-					<p class="info">Information du joueur 1</p>
-					<p class="info">Information du joueur 2</p>
+
+			<div class="col-sm-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">Joueur 2</div>
+					<div class="panel-body">
+						<!-- Username -->
+						<div class="form-group">
+					      <label class="control-label col-sm-4" for="username">Utilisateur : </label>
+					      <div class="col-sm-8">
+					      	<p class="info">{{ user.username }}</p>
+					      </div>
+					    </div>
+					    <!-- Nom -->
+						<div class="form-group">
+					      <label class="control-label col-sm-4" for="nom">Nom : </label>
+					      <div class="col-sm-8">
+					      	<p class="info">{{ user.participant.nom }}</p>
+					      </div>
+					    </div>
+					    <!-- Prenom -->
+						<div class="form-group">
+					      <label class="control-label col-sm-4" for="username">Prénom : </label>
+					      <div class="col-sm-8">
+					      	<p class="info">{{ user.participant.prenom }}</p>
+					      </div>
+					    </div>
+					    <!-- Extra -->
+						<div class="form-group">
+					      <label class="control-label col-sm-4" for="username">Extras : </label>
+					      <div class="col-sm-8">
+					      	{% for extra in Ex %}
+					      	<div class="checkbox">
+						      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
+						    </div>
+						    {% endfor %}
+					      </div>
+					    </div>
+					</div>
 				</div>
 			</div>
+		</div>
+		<!-- Info -->
+		<div class="row">
+			<div class="col-sm-10 col-sm-offset-1">
+				<label>Informations additionnelles (souhaits, remarques, ...) : </label>
+				<p class="info">Information du joueur 1</p>
+				<p class="info">Information du joueur 2</p>
+			</div>
+		</div>
 
-			<!-- Inscription button -->
-			<button class="btn btn-default center-block" name="action" value="validate" style="margin-top:20px;">Payer</button>
+		<!-- Inscription button -->
+		<button class="btn btn-default center-block" onClick="location.href='{% url "tennis.views.payPair" %}';" style="margin-top:20px;">Payer</button>
 			
-			
-			
-		</form>
 
 	</div>
 </div>

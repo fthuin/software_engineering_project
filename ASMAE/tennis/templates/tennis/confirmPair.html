@@ -9,7 +9,8 @@
 		<h2 class="center">Confirmer Pair NUMERO (TODO set info)</h2>
 		<hr class="line">
 		
-		<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.register" %}" onsubmit="" >
+		<form class="form-horizontal" name="registerForm" role="form" method="post" action="" onsubmit="" >
+		{% csrf_token %}
 
 			<h4 class="center">Tournoi : Tournoi des familles</h4>
 			<p class="info center">Description du tournoi des familles</p>

@@ -30,6 +30,13 @@ def inscriptionTournoi(request):
 		return render(request,'tennis/inscriptionTournoi.html',locals())
 	return redirect(reverse(home))
 
+def confirmPair(request):
+	if request.user.is_authenticated():
+		#TODO check si il peut confirmer cette pair
+		Ex = Extra.objects.all()
+		return render(request,'tennis/confirmPair.html',locals())
+	return redirect(reverse(home))
+
 def viewPair(request):
 	if request.user.is_authenticated():
 		#TODO check si il peut voir cette pair
@@ -37,11 +44,11 @@ def viewPair(request):
 		return render(request,'tennis/viewPair.html',locals())
 	return redirect(reverse(home))
 
-def confirmPair(request):
+def payPair(request):
 	if request.user.is_authenticated():
-		#TODO check si il peut confirmer cette pair
+		#TODO check si il peut payer cette pair
 		Ex = Extra.objects.all()
-		return render(request,'tennis/confirmPair.html',locals())
+		return render(request,'tennis/payPair.html',locals())
 	return redirect(reverse(home))
 
 def terrain(request):

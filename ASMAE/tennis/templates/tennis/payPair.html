@@ -1,0 +1,117 @@
+{% extends "tennis/tournoi.html" %}
+
+{% block title %}Paiement Pair NUMERO{% endblock %}
+
+{% block body %}
+
+<div class="container">
+	<div class="content-box">
+		<h2 class="center">Paiement Pair NUMERO</h2>
+		<hr class="line">
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">Factures</div>
+					<div class="panel-body">
+						<div class="table-responsive">          
+						  <table class="table">
+						    <thead>
+						      <tr>
+						        <th>Nom</th>
+						        <th>Prix</th>
+						        <th>Quantité</th>
+						      </tr>
+						    </thead>
+						    <tbody>
+						      <tr>
+						        <td>Inscription</td>
+						        <td>20.00 €</td>
+						        <td>2</td>
+						      </tr>
+						      {% for extra in Ex %}
+						      <tr>
+						        <td>{{ extra.nom }}</td>
+						        <td>{{ extra.prix }} €</td>
+						        <td>0(todo)</td>
+						      </tr>
+						      {% endfor %}
+						      <tr>
+						      	<td></td>
+						        <td></td>
+						        <td></td>
+						      </tr>
+						      <tr>
+						        <td><b>Total</b></td>
+						        <td>todo €</td>
+						        <td></td>
+						      </tr>
+						    </tbody>
+						   </table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">Type de paiement</div>
+					<div class="panel-body">
+						<ul class="list-inline text-center">
+							<li style="padding:5px;"><button class="btn btn-default">Paypal <br><i class="fa fa-4x fa-cc-paypal"></i></button></li>
+							<li style="padding:5px;"><button class="btn btn-default">Visa <br><i class="fa fa-4x fa-cc-visa"></i></button></li>
+							<li style="padding:5px;"><button class="btn btn-default">MasterCard <br><i class="fa fa-4x fa-cc-mastercard"></i></button></li>
+							<li style="padding:5px;"><button class="btn btn-default">Virement <br><i class="fa fa-4x fa-envelope-o"></i></button></li>
+
+						</ul>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">Information paiement</div>
+					<div class="panel-body">
+						<form class="form-horizontal" name="payForm" role="form" method="post" action="" onsubmit="" >
+						{% csrf_token %}
+
+						<!-- Numero de carte -->
+					    <div class="form-group">
+					      <label class="control-label col-sm-4" for="numero">Numéro carte</label>
+					      <div class="col-sm-8">
+					      	<input type="text" class="form-control" name="numero" id="numero" placeholder="ex : 5500 000 5555 5559">
+					      </div>
+					    </div>
+
+					    <!-- Propriétaire -->
+					    <div class="form-group">
+					      <label class="control-label col-sm-4" for="proprio">Propriétaire</label>
+					      <div class="col-sm-8">
+					      	<input type="text" class="form-control" name="proprio" id="proprio" placeholder="Nom Prénom">
+					      </div>
+					    </div>
+
+					    <!-- Date expi -->
+					    <div class="form-group">
+					      <label class="control-label col-sm-4" for="date">Date d'expiration</label>
+					      <div class="col-sm-8">
+					      	<input type="text" class="form-control" name="date" id="date" placeholder="jj/mm">
+					      </div>
+					    </div>
+
+					    <!-- code -->
+					    <div class="form-group">
+					      <label class="control-label col-sm-4" for="code">Code</label>
+					      <div class="col-sm-8">
+					      	<input type="text" class="form-control" name="code" id="code" placeholder="ex : 000">
+					      </div>
+					    </div>
+					  </form>
+					  TODO set en fonction de la méthode de paiement
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<button class="btn btn-default center-block">Confimer Payement</button>
+
+	</div>
+</div>
+
+
+{% endblock %}
