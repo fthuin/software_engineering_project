@@ -18,20 +18,20 @@
 				<!-- Panel infos -->
 				<div class="panel panel-default">
 					<div class="panel-heading">Demande d'inscription</div>
-					<ul class="list-group">
-		  				<li class="list-group-item">8945 - Dupond P et Dupond E - Seniors (hommes)</li>
-						<li class="list-group-item">7991 - Dupond P et Fernande A - Familles</li>
-					</ul>
+					<div class="list-group">
+						<a href="{% url "tennis.views.confirmPair" %}" class="list-group-item">8945 - Dupond P et Dupond E - Seniors (hommes)</a>
+						<a href="{% url "tennis.views.confirmPair" %}" class="list-group-item">7991 - Dupond P et Fernande A - Familles</a>
+					</div>
 				</div>
 			</div>
 			<div class="col-sm-6">
 				<!-- Panel infos -->
 				<div class="panel panel-default">
 					<div class="panel-heading">Partenaire non confirmé</div>
-					<ul class="list-group">
-		  				<li class="list-group-item">8945 - Dupond P et Dupond E - Seniors (hommes)</li>
-						<li class="list-group-item">7991 - Dupond P et Fernande A - Familles</li>
-					</ul>
+					<div class="list-group">
+						<a href="{% url "tennis.views.viewPair" %}" class="list-group-item">8945 - Dupond P et Dupond E - Seniors (hommes)</a>
+						<a href="{% url "tennis.views.viewPair" %}" class="list-group-item">7991 - Dupond P et Fernande A - Familles</a>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -39,10 +39,10 @@
 		<!-- Panel infos -->
 		<div class="panel panel-default">
 			<div class="panel-heading">Mes Inscriptions</div>
-			<ul class="list-group">
-  				<li class="list-group-item">8945 - Dupond P et Dupond E - Seniors (hommes)</li>
-				<li class="list-group-item">7991 - Dupond P et Fernande A - Familles</li>
-			</ul>
+			<div class="list-group">
+				<a href="{% url "tennis.views.viewPair" %}" class="list-group-item">8945 - Dupond P et Dupond E - Seniors (hommes)</a>
+				<a href="{% url "tennis.views.viewPair" %}" class="list-group-item">7991 - Dupond P et Fernande A - Familles</a>
+			</div>
 		</div>
 		
 
