@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
 from tennis.models import Extra, Participant,Court
-import re
+import re, math
 import datetime
 
 # Create your views here.
@@ -52,8 +52,6 @@ def payPair(request):
 	return redirect(reverse(home))
 
 def terrain(request):
-
-	
 	if request.user.is_authenticated():
 		court = Court.objects.filter(user=request.user)
 		return render(request,'tennis/terrain.html',locals())
@@ -146,6 +144,18 @@ def editTerrain(request,id):
 	return redirect(reverse(home))
 
 def staff(request):
+	pageLength = 10
+	#List of Extra
+	Ex = Extra.objects.all()
+	#List of Court
+	allCourt = Court.objects.all()
+	#Number of onglet if we show them pageLength by pageLength
+	onglet = list()
+	for x in range(1,math.ceil(len(allCourt)/pageLength)):
+		onglet.append(x+1)
+	#The first pageLength to show
+	firstTerrain = allCourt[0:pageLength]
+
 	if request.method == "POST":
 		if request.POST['action'] == "addExtra":
 			nom = request.POST['name']
@@ -153,12 +163,10 @@ def staff(request):
 			message = request.POST['message']
 			
 			if nom=="":
-				Ex = Extra.objects.all()
 				error = "Veuillez rajouter un nom à l'extra!"
 				return render(request,'tennis/register.html',locals())			
 
 			if not is_number(prix):
-				Ex = Extra.objects.all()
 				errorAdd = "Le prix n'a pas le bon format"
 				return render(request,'tennis/staff.html',locals())
 			
@@ -176,12 +184,10 @@ def staff(request):
 			extra = Extra.objects.filter(id = id)[0]
 	
 			if nom=="":
-				Ex = Extra.objects.all()
 				errorEdit = "Veuillez rajouter un nom à l'extra!"
 				return render(request,'tennis/register.html',locals())			
 
 			if not is_number(prix):
-				Ex = Extra.objects.all()
 				errorEdit = "Le prix n'a pas le bon format"
 				return render(request,'tennis/staff.html',locals())	
 			
@@ -200,7 +206,6 @@ def staff(request):
 		
 	if request.user.is_authenticated():
 		if request.user.is_staff:
-			Ex = Extra.objects.all()
 			return render(request,'tennis/staff.html',locals())
 	return redirect(reverse(home))
 
