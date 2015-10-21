@@ -144,6 +144,7 @@ def editTerrain(request,id):
 	return redirect(reverse(home))
 
 def staff(request):
+	#Nombre d'element sur la page
 	pageLength = 10
 	#List of Extra
 	Ex = Extra.objects.all()
@@ -153,6 +154,8 @@ def staff(request):
 	onglet = list()
 	for x in range(1,math.ceil(len(allCourt)/pageLength)):
 		onglet.append(x+1)
+	onglet = onglet[0:6]
+	firstOnglet = 1
 	#The first pageLength to show
 	firstTerrain = allCourt[0:pageLength]
 
