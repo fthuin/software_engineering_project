@@ -40,9 +40,10 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">Mes terrains</div>
 					<div class="list-group">
-					  <a href="{% url "tennis.views.editTerrain" %}" class="list-group-item">1 - Adresse - Terre battue</a>
-					  <a href="{% url "tennis.views.editTerrain" %}" class="list-group-item">2 - Adresse - Synthétique</a>
-					  <a href="{% url "tennis.views.editTerrain" %}" class="list-group-item">3 - Adresse - Synthétique</a>
+					{% for elem in court %}
+					<a href="{% url 'tennis.views.editTerrain' elem.id %}" class="list-group-item">{{ elem.id}} - {{elem.rue }} {{elem.numero}},{{elem.localite}} - {{ elem.matiere }}</a>
+				
+					  {% endfor %}
 					</div>
 				</div>
 

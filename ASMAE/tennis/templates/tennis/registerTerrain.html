@@ -8,7 +8,13 @@
 		<h2 class="center">Enregistrement terrain</h2>
 		<hr class="line">
 		<h4 class="center">Terrain 24</h4>
-		<form class="form-horizontal" name="registerForm" role="form" method="post" action="" onsubmit="return validateRegister()" >
+		{% if errorAdd %}
+		<div class="alert alert-danger">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		<strong>Error!</strong> {{ errorAdd }}
+		</div>
+		{% endif %}
+		<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.registerTerrain" %}" onsubmit="return validateRegister()" >
 		{% csrf_token %}
 			<div class="row">
 				<div class="panel panel-default">
@@ -56,7 +62,7 @@
 					    </div>
 					    <!-- Accès -->
 						<div class="form-group">
-					      <label class="control-label col-sm-4" for="acces">Accès *</label>
+					      <label class="control-label col-sm-4" for="acces">Accès</label>
 					      <div class="col-sm-8" style="max-width:600px;">
 					      	<textarea class="form-control" rows="3" name="acces" id="acces" placeholder="Acces au terrain"></textarea>
 					      	<p class="hint" id="hint-loclity"></p>
@@ -67,23 +73,21 @@
 					      <label class="control-label col-sm-4" for="matiere">Matière *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
 					      	<select class="form-control" name="matiere">
-							   	<option>Acrylique</option>
-							   	<option>Asphalte</option>
 							  	<option>Béton</option>
+								<option>Brique</option>
 							  	<option>Gazon</option>
-								<option>Gazon synthétique</option>
-							   	<option>Moquette</option>
+								<option>Synthétique</option>
 							   	<option>Terre battue</option>
-								<option>Terre battue synthétique</option>
+								<option>Quick</option>
 							   <option>Autre</option>
 							</select>
 					      </div>
 					    </div>
 					    <!-- Type -->
 						<div class="form-group">
-					      <label class="control-label col-sm-4" for="matiere">Type *</label>
+					      <label class="control-label col-sm-4" for="type">Type *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
-					      	<select class="form-control" name="matiere">
+					      	<select class="form-control" name="type">
 					      		<option>Ouvert</option>
 							    <option>Couvert</option>
 							</select>
@@ -101,8 +105,8 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="dispo">Disponibilité *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
-					      	<label style="margin-right:20px;padding-top:7px;"><input type="checkbox"> Samedi</label>
-					      	<label><input type="checkbox"> Dimanche</label>
+					      	<label style="margin-right:20px;padding-top:7px;"><input type="checkbox" name="dispoSamedi"> Samedi</label>
+					      	<label><input type="checkbox" name="dispoDimanche" > Dimanche</label>
 					      	<p class="hint" id="hint-dispo"></p>
 					      </div>
 					    </div>
