@@ -47,6 +47,12 @@
 		</div>
 		<div class="col-lg-5">
 			<div class="content-box">
+				{% if successEdit %}
+				<div class="alert alert-success">
+				    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				    <strong>Succès!</strong> {{ successEdit }}
+				</div>
+				{% endif %}
 				<h2 class="center">Commentaire</h2>
 				<hr class="line">
 				<form role="form" method="post" action="{% url "tennis.views.validateTerrain" court.id %}">
@@ -58,7 +64,7 @@
 			    
 			    <div class="form-group">
 			      <label for="text">Votre Commentaire</label>
-			      <textarea class="form-control" rows="5" name="message" placeholder="Entrer votre commentaire">{{ court.commentaireStaff }}</textarea>
+			      <textarea class="form-control" rows="5" name="message" placeholder="Entrer votre commentaire">{%if court.commentaireStaff %}{{ court.commentaireStaff }}{% endif %}</textarea>
 			    </div>
 
 			    <!-- Validé -->
