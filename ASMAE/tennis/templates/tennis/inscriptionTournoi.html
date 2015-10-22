@@ -50,9 +50,9 @@
 						<div class="panel-heading">Utilisateurs</div>
 						<div class="list-group">
 							<!-- TODO users -->
-						  <a href="#" class="list-group-item">JeanMi - Dupond Jean-Michel</a>
-						  <a href="#" class="list-group-item">JeanMi - Dupond Jean-Michel</a>
-						  <a href="#" class="list-group-item">JeanMi - Dupond Jean-Michel</a>
+							{% for user in Use %}
+						  	<a href="#" class="list-group-item">{{ user.username }} - {{ user.participant.prenom }} {{ user.participant.nom }}</a>
+						  	{% endfor %}
 						</div>
 					</div>
 
@@ -117,7 +117,7 @@
 							<div class="form-group">
 						      <label class="control-label col-sm-4" for="username">Utilisateur : </label>
 						      <div class="col-sm-8">
-						      	<p class="info"> - </p>
+						      	<p class="info"> {{ Use.2.username }} </p>
 						      </div>
 						    </div>
 						    <!-- Nom -->

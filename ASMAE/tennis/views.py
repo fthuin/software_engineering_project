@@ -28,6 +28,7 @@ def inscriptionTournoi(request):
 	if request.user.is_authenticated():
 		Ex = Extra.objects.all()
 		Tour = Tournoi.objects.all()
+		Use = User.objects.all()
 		return render(request,'tennis/inscriptionTournoi.html',locals())
 	return redirect(reverse(home))
 
