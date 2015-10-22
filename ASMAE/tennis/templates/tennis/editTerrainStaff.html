@@ -8,7 +8,7 @@
 	<div class="content-box">
 		<h2 class="center">Editer Terrain</h2>
 		<hr class="line">
-		<h4 class="center">Terrain 24</h4>
+		<h4 class="center">Terrain {{ court.id }}</h4>
 		<form class="form-horizontal" name="editForm" role="form" method="post" action="" onsubmit="return false" >
 		{% csrf_token %}
 			<div class="row">
@@ -19,12 +19,7 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="rue">Utilisateur</label>
 					      <div class="col-sm-8" style="max-width:600px;">
-					      	<select class="form-control" name="title">
-								<option>BeauGoss99(Jean Smith)</option>
-							    <option>???</option>
-							    <option>???</option>
-							    <option>???</option>
-							</select>
+					      	<p class="info">{{ court.user.participant.prenom }} {{ court.user.participant.nom }} ({{ court.user.username }})</p>
 					      </div>
 					    </div>
 					</div>
@@ -37,7 +32,7 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="rue">Rue *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
-					      	<input type="text" class="form-control" name="rue" id="rue" placeholder="Nom de rue" value="{{ rue }}">
+					      	<input type="text" class="form-control" name="rue" id="rue" placeholder="Nom de rue" value="{{ court.rue }}">
 					      	<p class="hint" id="hint-rue"></p>
 					      </div>
 					    </div>
@@ -45,7 +40,7 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="numero">Numero *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
-					      	<input type="text" class="form-control" name="numero" id="numero" placeholder="Numero" value="{{ numero }}">
+					      	<input type="text" class="form-control" name="numero" id="numero" placeholder="Numero" value="{{ court.numero }}">
 					      	<p class="hint" id="hint-numero"></p>
 					      </div>
 					    </div>
@@ -53,7 +48,7 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="boite">Boite</label>
 					      <div class="col-sm-8" style="max-width:600px;">
-					      	<input type="text" class="form-control" name="boite" id="boite" placeholder="Boite" value="{{ boite }}">
+					      	<input type="text" class="form-control" name="boite" id="boite" placeholder="Boite" value="{{ court.boite }}">
 					      	<p class="hint" id="hint-boite"></p>
 					      </div>
 					    </div>
@@ -61,7 +56,7 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="postalcode">Code postal *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
-					      	<input type="text" class="form-control" name="postalcode" id="postalcode" placeholder="Code postal" value="{{ postalcode }}">
+					      	<input type="text" class="form-control" name="postalcode" id="postalcode" placeholder="Code postal" value="{{ court.codepostal }}">
 					      	<p class="hint" id="hint-postalcode"></p>
 					      </div>
 					    </div>
@@ -69,7 +64,7 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="loclity">Localité *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
-					      	<input type="text" class="form-control" name="loclity" id="loclity" placeholder="Localité" value="{{ loclity }}">
+					      	<input type="text" class="form-control" name="loclity" id="loclity" placeholder="Localité" value="{{ court.localite }}">
 					      	<p class="hint" id="hint-loclity"></p>
 					      </div>
 					    </div>
@@ -77,7 +72,7 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="acces">Accès *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
-					      	<textarea class="form-control" rows="3" name="acces" id="acces" placeholder="Acces au terrain"></textarea>
+					      	<textarea class="form-control" rows="3" name="acces" id="acces" placeholder="Acces au terrain" value="{{ court.acces }}"></textarea>
 					      	<p class="hint" id="hint-loclity"></p>
 					      </div>
 					    </div>
@@ -85,16 +80,14 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="matiere">Matière *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
-					      	<select class="form-control" name="matiere">
-							   	<option>Acrylique</option>
-							   	<option>Asphalte</option>
-							  	<option>Béton</option>
-							  	<option>Gazon</option>
-								<option>Gazon synthétique</option>
-							   	<option>Moquette</option>
-							   	<option>Terre battue</option>
-								<option>Terre battue synthétique</option>
-							   <option>Autre</option>
+					      	<select class="form-control" name="matiere" id="matiere">
+							   	<option value="Béton">Béton</option>
+								<option value="Brique">Brique</option>
+							  	<option value="Gazon">Gazon</option>
+								<option value="Synthétique">Synthétique</option>
+							   	<option value="Terre">Terre battue</option>
+								<option value="Quick">Quick</option>
+							   <option value="Autre">Autre</option>
 							</select>
 					      </div>
 					    </div>
@@ -102,7 +95,7 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="matiere">Type *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
-					      	<select class="form-control" name="matiere">
+					      	<select class="form-control" name="type" id="type">
 					      		<option>Ouvert</option>
 							    <option>Couvert</option>
 							</select>
@@ -129,7 +122,7 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="etat">Etat du terrain *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
-					      	<select class="form-control" name="etat">
+					      	<select class="form-control" name="etat" id="etat">
 					      		<option>Très bon</option>
 							    <option>Bon</option>
 							    <option>Correcte</option>
@@ -142,7 +135,7 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="comment">Commentaire</label>
 					      <div class="col-sm-8" style="max-width:600px;">
-					      	<textarea class="form-control" rows="3" name="comment" id="comment" placeholder="Commentaire"></textarea>
+					      	<textarea class="form-control" rows="3" name="comment" id="comment" placeholder="Commentaire">{{ court.commentaire}}</textarea>
 					      	<p class="hint" id="hint-comment"></p>
 					      </div>
 					    </div>
@@ -163,3 +156,9 @@
 
 
 {% endblock %}
+
+{% block commande %}
+<script>
+preselectSelectOption('{{court.matiere}}','{{court.type}}','{{court.etat}}');
+</script>
+{% endblock%}

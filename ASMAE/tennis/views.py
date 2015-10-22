@@ -136,14 +136,14 @@ def editTerrain(request,id):
 			court.commentaire=commentaire
 			court.user = request.user
 			court.save()
-			successEdit = "Extra bien édité!"
+			successEdit = "Terrain "+id+" bien édité!"
+			return redirect(reverse(terrain))
 	
 		if request.POST['action'] == "deleteCourt":
-			
 			court = Court.objects.filter(id=id)[0]
 			court.delete()
 			court = Court.objects.filter(user=request.user)
-			return render(request,'tennis/terrain.html',locals())
+			return redirect(reverse(terrain))
 
 	if request.user.is_authenticated():
 		court = Court.objects.filter(id=id)[0]
@@ -220,15 +220,17 @@ def staff(request):
 			return render(request,'tennis/staff.html',locals())
 	return redirect(reverse(home))
 
-def validateTerrain(request):
+def validateTerrain(request, id):
 	if request.user.is_authenticated():
 		#TODO check si c'est bien un staff
+		court = Court.objects.filter(id=id)[0]
 		return render(request,'tennis/validateTerrain.html',locals())
 	return redirect(reverse(home))
 
-def editTerrainStaff(request):
+def editTerrainStaff(request, id):
 	if request.user.is_authenticated():
 		#TODO check si c'est bien un staff
+		court = Court.objects.filter(id=id)[0]
 		return render(request,'tennis/editTerrainStaff.html',locals())
 	return redirect(reverse(home))
 

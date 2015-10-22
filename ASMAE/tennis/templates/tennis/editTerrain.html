@@ -5,9 +5,9 @@
 {% block body %}
 <div class="container">
 	<div class="content-box">
-		<h2 class="center">Editer terrain (TODO set info)</h2>
+		<h2 class="center">Editer terrain</h2>
 		<hr class="line">
-		<h4 class="center">Terrain 24</h4>
+		<h4 class="center">Terrain {{ court.id }}</h4>
 		<form class="form-horizontal" name="editForm" role="form" method="post" action="{% url "tennis.views.editTerrain" court.id %}" >
 		{% csrf_token %}
 			<div class="row">
@@ -73,7 +73,7 @@
 								<option value="Synthétique">Synthétique</option>
 							   	<option value="Terre">Terre battue</option>
 								<option value="Quick">Quick</option>
-							   <option alue="Autre">Autre</option>
+							   <option value="Autre">Autre</option>
 
 							</select>
 					      </div>

@@ -6,14 +6,17 @@
 {% block body %}
 
 <div class="container">
-	<div class="content-box">
+	<div class="content-box" {% if court.0 %}style="display:none;"{% endif %}>
 		<h2>Informations</h2>
 		<hr class="line">
 		<p>Cette box s'affiche si l'utilisateur courant n'a pas enregistré de terrains</p>
 		<p>Texte expliquant que si tu as un terrains ca serait cool que tu l'enregistre ca aide l'asbl et t'es un chic type</p>
 		<p>Si t'as pas de terrains par contre osef va t'inscrire à un tournoi</p>
+
+		<button onClick="location.href='{% url "tennis.views.registerTerrain" %}';" class="btn btn-default b-center">Enregistrer un nouveau terrain</button>
+
 	</div>
-	<div class="row">
+	<div class="row" {% if not court.0 %}style="display:none;"{% endif %}>
 		<div class="col-lg-7">
 			<!-- Les différents terrains -->
 			<!-- TODO set info -->
@@ -67,8 +70,9 @@
 					</div>
 					<div class="col-lg-8 col-sm-4 col-xs-8">
 					   	<select class="form-control" name="title">
-							<option>345</option>
-						    <option>346</option>
+					   		{% for elem in court %}
+					   		<option>{{ elem.id }}</option>
+					   		{% endfor %}
 						</select>
 		    		</div>
 				</div>
@@ -77,8 +81,8 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">Prochains match sur mes terrains</div>
 					<ul class="list-group">
-		  				<li class="list-group-item">15h30 - Terrain 345 - Paires 8945 vs 12345</li>
-						<li class="list-group-item">16h30 - Terrain 345 - Paires 14846 vs 13674</li>
+		  				<li class="list-group-item">15h30 - Terrain 345 - Paires 8945 vs 12345 (TODO)</li>
+						<li class="list-group-item">16h30 - Terrain 345 - Paires 14846 vs 13674 (TODO)</li>
 					</ul>
 				</div>
 

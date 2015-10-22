@@ -19,6 +19,6 @@ urlpatterns = patterns('tennis.views',
 	url(r'^terrain/enregistrement$','registerTerrain'),
 	url(r'^terrain/edit/(\d+)$','editTerrain'),
 	url(r'^staff$','staff'),
-	url(r'^staff/terrainNumero$','validateTerrain'),
-	url(r'^staff/edit/terrainNumero$','editTerrainStaff'),
+	url(r'^staff/terrain/(\d+)$','validateTerrain'),
+	url(r'^staff/edit/terrain/(\d+)$','editTerrainStaff'),
 )

@@ -39,13 +39,12 @@
 		</div>
 		
 		    
-
 		<!-- Liste des terrains -->
 		<div class="panel panel-default center-block" style="max-width:600px;">
 			<div class="panel-heading">Terrains</div>
 			<div class="list-group">
 				{% for court in firstTerrain %}
-				<a href="{% url "tennis.views.validateTerrain" %}" class="list-group-item"><b>ID : </b>{{ court.id}} / <b>Matière : </b>{{ court.matiere }} / 
+				<a href="{% url "tennis.views.validateTerrain" court.id %}" class="list-group-item"><b>ID : </b>{{ court.id}} / <b>Matière : </b>{{ court.matiere }} / 
 					<b>Propriétaire : </b>{{ court.user.participant.prenom }} {{ court.user.participant.nom }} ({{ court.user.username }}) <br> 
 					<b>Adresse : </b>{{court.rue }} {{court.numero}}, {{court.codepostal}} {{court.localite}}					
 				</a>
