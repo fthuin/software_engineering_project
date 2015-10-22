@@ -5,13 +5,15 @@
 {% block body %}
 <div class="container">
 	<div class="content-box">
+
 		{% if errorAdd %}
 		<div class="alert alert-danger">
 		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 		<strong>Error!</strong> {{ errorAdd }}
 		</div>
 		{% endif %}
-		<h2 class="center">Inscription au tournoi (TODO set info)</h2>
+		<h2 class="center">Inscription au tournoi</h2>
+
 		<hr class="line">
 		<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.inscriptionTournoi" %}">
 			{% csrf_token %}
@@ -21,18 +23,20 @@
 					<div class="form-group">
 				      <label class="control-label col-sm-4" for="tournoi">Tournoi : </label>
 				      <div class="col-sm-8">
-				      	<select class="form-control" name="tournoi">
+				      	<select class="form-control" name="tournoi" id="selector" onChange="setDescription('{{user.participant.titre}}','{{ user.participant.datenaissance }}');">
+				      		<option value="lol" selected disabled></option>
 				      		{% for elem in Tour %}
-				      		<option>{{ elem.nom }}</option>
+				      		<option id="{{ elem.description }}" value="{{ elem.nom }}">{{ elem.nom }}</option>
 				      		{% endfor %}
 						</select>
+						<p class="hint" id="hint-tournoi"></p>
 				      </div>
 				    </div>
 				    <!-- Description -->
 					<div class="form-group">
 				      <label class="control-label col-sm-4" for="tournoi">Description : </label>
 				      <div class="col-sm-8">
-				      	<p class="info">{{ Tour.0.description }}</p>
+				      	<p class="info" id="Description"></p>
 				      </div>
 				    </div>
 				</div>
@@ -42,7 +46,7 @@
 					<div class="row" style="margin-bottom:15px;">
 						<div class="col-sm-8 col-sm-offset-2">
 							<div class="input-group">
-						      <input type="text" class="form-control" placeholder="Rechercher un utilisateur">
+						      <input type="text" class="form-control" placeholder="Rechercher un utilisateur (todo)">
 						      <span class="input-group-btn">
 						        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
 						      </span>
@@ -160,7 +164,7 @@
 			</div>
 
 			<!-- Inscription button -->
-			<button class="btn btn-default center-block" style="margin-top:20px;">Inscription</button>
+			<button class="btn btn-default center-block" id="InscriptionButton" style="margin-top:20px;">Inscription</button>
 			
 		</form>
 		
@@ -173,8 +177,10 @@
 {% block commande %}
 <script>
 var userList = [];
-{% for user in Use %}
-userList.push(['{{ user.username }}','{{ user.participant.prenom }}','{{ user.participant.nom }}']);
+{% for use in Use %}
+{% if  use.username != user.username %}
+userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.participant.datenaissance }}']);
+{% endif %}
 {% endfor %}
 setUser(userList);
 </script>
