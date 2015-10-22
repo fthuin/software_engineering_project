@@ -114,23 +114,34 @@ def inscriptionTournoi(request):
 		return render(request,'tennis/inscriptionTournoi.html',locals())
 	return redirect(reverse(home))
 
-def confirmPair(request):
+def confirmPair(request,id):
 	if request.user.is_authenticated():
 		#TODO check si il peut confirmer cette pair
+		pair = Pair.objects.filter(id=id)[0]
 		Ex = Extra.objects.all()
 		return render(request,'tennis/confirmPair.html',locals())
 	return redirect(reverse(home))
 
-def viewPair(request):
+def cancelPair(request,id):
+	if request.user.is_authenticated():
+		#TODO check si il peut annuler cette pair
+		pair = Pair.objects.filter(id=id)[0]
+		Ex = Extra.objects.all()
+		return render(request,'tennis/cancelPair.html',locals())
+	return redirect(reverse(home))
+
+def viewPair(request,id):
 	if request.user.is_authenticated():
 		#TODO check si il peut voir cette pair
+		pair = Pair.objects.filter(id=id)[0]
 		Ex = Extra.objects.all()
 		return render(request,'tennis/viewPair.html',locals())
 	return redirect(reverse(home))
 
-def payPair(request):
+def payPair(request,id):
 	if request.user.is_authenticated():
 		#TODO check si il peut payer cette pair
+		pair = Pair.objects.filter(id=id)[0]
 		Ex = Extra.objects.all()
 		return render(request,'tennis/payPair.html',locals())
 	return redirect(reverse(home))

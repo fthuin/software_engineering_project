@@ -21,7 +21,7 @@ function preselectSelectOption(matiere,type,etat){
 
 var UserList;
 
-function setUser(User){
+function setUser(User,page){
 	UserList = User;
 	var panneau = document.getElementById("UserList");
 	panneau.innerHTML = "";
@@ -38,8 +38,6 @@ function setUser(User){
 	var info = document.getElementById("UserInfo");
 	info.innerHTML = '1-'+i+' sur '+pageLength+' résultats ('+User.length+' au total)';
 
-	var pagination = document.getElementById("UserPagination");
-	pagination.innerHTML = '<li class="active"><a href="#">1</a></li>';
 }
 
 function selectUser(username,nom,prenom){
@@ -527,3 +525,4 @@ document.getElementById("foot01").innerHTML =
 
 google.maps.event.addDomListener(window, 'load', initialize);
 activeExtra();
+alert("lol");

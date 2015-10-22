@@ -69,6 +69,7 @@
 						<ul class="pagination" id="UserPagination">
 						</ul>
 					</div>
+
 				</div>				
 			</div>
 			<div class="row">
@@ -183,6 +184,13 @@ userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.parti
 {% endif %}
 {% endfor %}
 setUser(userList);
+$('#UserPagination').twbsPagination({
+  totalPages: 35,
+  visiblePages: 5,
+  onPageClick: function (event, page) {
+    $('#page-content').text('Page ' + page);
+  }
+});
 </script>
 {% endblock %}
 

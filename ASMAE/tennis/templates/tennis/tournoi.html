@@ -20,7 +20,7 @@
 					<div class="panel-heading">Demande d'inscription</div>
 					<div class="list-group">
 						{% for item in demande %}
-						<li class="list-group-item">{{ item.id}} - {{item.user1.participant.nom}} {{item.user1.participant.prenom}} et {{item.user2.participant.nom}} {{item.user2.participant.prenom}} - {{item.tournoi.nom}} - {{item.tournoi.jour}}</li>
+						<a href="{% url "tennis.views.confirmPair" item.id %}" class="list-group-item">{{ item.id}} - {{item.user1.participant.nom}} {{item.user1.participant.prenom}} et {{item.user2.participant.nom}} {{item.user2.participant.prenom}} - {{item.tournoi.nom}} - {{item.tournoi.jour}}</a>
 						{% endfor %}
 					</div>
 				</div>
@@ -31,7 +31,7 @@
 					<div class="panel-heading">Partenaire non confirmé</div>
 					<div class="list-group">
 						{% for item in nonComfirme %}
-						<li class="list-group-item">{{ item.id}} - {{item.user1.participant.nom}} {{item.user1.participant.prenom}} et {{item.user2.participant.nom}} {{item.user2.participant.prenom}} - {{item.tournoi.nom}} - {{item.tournoi.jour}}</li>
+						<a href="{% url "tennis.views.cancelPair" item.id %}" class="list-group-item">{{ item.id}} - {{item.user1.participant.nom}} {{item.user1.participant.prenom}} et {{item.user2.participant.nom}} {{item.user2.participant.prenom}} - {{item.tournoi.nom}} - {{item.tournoi.jour}}</a>
 						{% endfor %}
 						
 					</div>
@@ -44,7 +44,7 @@
 			<div class="panel-heading">Mes Inscriptions</div>
 			<div class="list-group">
 				{% for item in inscrit %}
-						<a href="{% url "tennis.views.viewPair" %}" class="list-group-item">{{ item.id}} - {{item.user1.participant.nom}} {{item.user1.participant.prenom}} et {{item.user2.participant.nom}} {{item.user2.participant.prenom}} - {{item.tournoi.nom}} - {{item.tournoi.jour}}</a>
+						<a href="{% url "tennis.views.viewPair" item.id %}" class="list-group-item">{{ item.id}} - {{item.user1.participant.nom}} {{item.user1.participant.prenom}} et {{item.user2.participant.nom}} {{item.user2.participant.prenom}} - {{item.tournoi.nom}} - {{item.tournoi.jour}}</a>
 						{% endfor %}
 				
 			</div>

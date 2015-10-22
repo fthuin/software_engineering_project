@@ -1,16 +1,18 @@
 {% extends "tennis/tournoi.html" %}
 
-{% block title %}Pair NUMERO{% endblock %}
+{% block title %}Pair {{ pair.id }}{% endblock %}
 
 {% block body %}
 
 <div class="container">
 	<div class="content-box">
-		<h2 class="center">Pair NUMERO (TODO set info)</h2>
+		<h2 class="center">Pair {{ pair.id }}</h2>
 		<hr class="line">
 
-		<h4 class="center">Tournoi : Tournoi des familles</h4>
-		<p class="info center">Description du tournoi des familles</p>
+		<h4 class="center">Tournoi : {{ pair.tournoi.nom }}</h4>
+		<div class="row">
+			<p class="info center col-sm-offset-4 col-sm-4">{{ pair.tournoi.description }}</p>
+		</div>
 
 		<div class="row">
 			<div class="col-sm-6">
@@ -32,28 +34,28 @@
 					<div class="panel-body">
 						<!-- Username -->
 						<div class="form-group">
-					      <label class="control-label col-sm-4" for="username">Utilisateur : </label>
+					      <label class="info control-label col-sm-4" for="username">Utilisateur : </label>
 					      <div class="col-sm-8">
-					      	<p class="info">getInfoJoueur1</p>
+					      	<p class="info">{{ pair.user1.username }}</p>
 					      </div>
 					    </div>
 					    <!-- Nom -->
 						<div class="form-group">
-					      <label class="control-label col-sm-4" for="nom">Nom : </label>
+					      <label class="info control-label col-sm-4" for="nom">Nom : </label>
 					      <div class="col-sm-8">
-					      	<p class="info">getInfoJoueur1</p>
+					      	<p class="info">{{ pair.user1.participant.nom }}</p>
 					      </div>
 					    </div>
 					    <!-- Prenom -->
 						<div class="form-group">
-					      <label class="control-label col-sm-4" for="username">Prénom : </label>
+					      <label class="info control-label col-sm-4" for="username">Prénom : </label>
 					      <div class="col-sm-8">
-					      	<p class="info">getInfoJoueur1</p>
+					      	<p class="info">{{ pair.user1.participant.prenom }}</p>
 					      </div>
 					    </div>
 					    <!-- Extra -->
 						<div class="form-group">
-					      <label class="control-label col-sm-4" for="username">Extras : </label>
+					      <label class="info control-label col-sm-4" for="username">Extras : </label>
 					      <div class="col-sm-8">
 					      	{% for extra in Ex %}
 					      	<div class="checkbox">
@@ -72,28 +74,28 @@
 					<div class="panel-body">
 						<!-- Username -->
 						<div class="form-group">
-					      <label class="control-label col-sm-4" for="username">Utilisateur : </label>
+					      <label class="info control-label col-sm-4" for="username">Utilisateur : </label>
 					      <div class="col-sm-8">
-					      	<p class="info">{{ user.username }}</p>
+					      	<p class="info">{{ pair.user2.username }}</p>
 					      </div>
 					    </div>
 					    <!-- Nom -->
 						<div class="form-group">
-					      <label class="control-label col-sm-4" for="nom">Nom : </label>
+					      <label class="info control-label col-sm-4" for="nom">Nom : </label>
 					      <div class="col-sm-8">
-					      	<p class="info">{{ user.participant.nom }}</p>
+					      	<p class="info">{{ pair.user1.participant.nom }}</p>
 					      </div>
 					    </div>
 					    <!-- Prenom -->
 						<div class="form-group">
-					      <label class="control-label col-sm-4" for="username">Prénom : </label>
+					      <label class="info control-label col-sm-4" for="username">Prénom : </label>
 					      <div class="col-sm-8">
-					      	<p class="info">{{ user.participant.prenom }}</p>
+					      	<p class="info">{{ pair.user1.participant.prenom }}</p>
 					      </div>
 					    </div>
 					    <!-- Extra -->
 						<div class="form-group">
-					      <label class="control-label col-sm-4" for="username">Extras : </label>
+					      <label class="info control-label col-sm-4" for="username">Extras : </label>
 					      <div class="col-sm-8">
 					      	{% for extra in Ex %}
 					      	<div class="checkbox">
@@ -110,13 +112,13 @@
 		<div class="row">
 			<div class="col-sm-10 col-sm-offset-1">
 				<label>Informations additionnelles (souhaits, remarques, ...) : </label>
-				<p class="info">Information du joueur 1</p>
-				<p class="info">Information du joueur 2</p>
+				<p class="info">{% if pair.comment1 %}{{ pair.comment1 }}{% else %} - {% endif %}</p>
+				<p class="info">{% if pair.comment2 %}{{ pair.comment2 }}{% else %} - {% endif %}</p>
 			</div>
 		</div>
 
 		<!-- Inscription button -->
-		<button class="btn btn-default center-block" onClick="location.href='{% url "tennis.views.payPair" %}';" style="margin-top:20px;">Payer</button>
+		<button class="btn btn-default center-block" onClick="location.href='{% url "tennis.views.payPair" pair.id %}';" style="margin-top:20px;">Payer</button>
 			
 
 	</div>
