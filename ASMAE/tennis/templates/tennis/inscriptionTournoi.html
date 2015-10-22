@@ -15,8 +15,9 @@
 				      <label class="control-label col-sm-4" for="tournoi">Tournoi : </label>
 				      <div class="col-sm-8">
 				      	<select class="form-control" name="tournoi">
-				      		<option>Tournoi des familles</option>
-						    <option>Autres?</option>
+				      		{% for elem in Tour %}
+				      		<option>{{ elem.nom }}</option>
+				      		{% endfor %}
 						</select>
 				      </div>
 				    </div>
@@ -24,7 +25,7 @@
 					<div class="form-group">
 				      <label class="control-label col-sm-4" for="tournoi">Description : </label>
 				      <div class="col-sm-8">
-				      	<p class="info">Info du premier tournoi (TODO change when clicked)</p>
+				      	<p class="info">{{ Tour.0.description }}</p>
 				      </div>
 				    </div>
 				</div>

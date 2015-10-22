@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court
+from tennis.models import Extra, Participant,Court, Tournoi, Pair
 import re, math
 import datetime
 
@@ -27,6 +27,7 @@ def tournoi(request):
 def inscriptionTournoi(request):
 	if request.user.is_authenticated():
 		Ex = Extra.objects.all()
+		Tour = Tournoi.objects.all()
 		return render(request,'tennis/inscriptionTournoi.html',locals())
 	return redirect(reverse(home))
 

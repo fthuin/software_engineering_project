@@ -63,6 +63,8 @@ class Pair(models.Model):
 	user2 = models.ForeignKey(User, related_name='user2')
 	extra1 = models.ManyToManyField(Extra, related_name='extra1')
 	extra2 = models.ManyToManyField(Extra, related_name='extra2')
+	comment1 = models.TextField(null=True)
+	comment2 = models.TextField(null=True)
 	confirm = models.BooleanField(default=False)
 	valid = models.BooleanField(default=False)
 	pay = models.BooleanField(default=False)
