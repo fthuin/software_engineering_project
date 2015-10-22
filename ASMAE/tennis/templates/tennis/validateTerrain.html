@@ -49,7 +49,8 @@
 			<div class="content-box">
 				<h2 class="center">Commentaire</h2>
 				<hr class="line">
-				<form role="form">
+				<form role="form" method="post" action="{% url "tennis.views.validateTerrain" court.id %}">
+{% csrf_token %}
 			      <div class="form-group">
 			      <label for="text">Commentaires du propriétaire : </label>
 			      <p>{% if court.commentaire %}{{ court.commentaire }}{% else %} - {% endif %}</p>
@@ -57,12 +58,12 @@
 			    
 			    <div class="form-group">
 			      <label for="text">Votre Commentaire</label>
-			      <textarea class="form-control" rows="5" name="message" placeholder="Entrer votre commentaire"></textarea>
+			      <textarea class="form-control" rows="5" name="message" placeholder="Entrer votre commentaire">{{ court.commentaireStaff }}</textarea>
 			    </div>
 
-			    <!-- deja participe -->
+			    <!-- Validé -->
 			    <div class="checkbox ">
-			      <label><input type="checkbox" name="participated"> Terrain validé (TODO)</label>
+			      <label><input type="checkbox" name="valide" {% if court.valide %} checked {% endif %} > Terrain validé</label>
 			    </div>
 
 			    <button type="submit" class="btn btn-default center-block">Sauver</button>

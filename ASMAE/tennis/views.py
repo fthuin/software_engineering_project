@@ -136,7 +136,7 @@ def editTerrain(request,id):
 			court.commentaire=commentaire
 			court.user = request.user
 			court.save()
-			successEdit = "Terrain "+id+" bien édité!"
+			successEdit = "Terrain "+str(id)+" bien édité!"
 			return redirect(reverse(terrain))
 	
 		if request.POST['action'] == "deleteCourt":
@@ -221,17 +221,76 @@ def staff(request):
 	return redirect(reverse(home))
 
 def validateTerrain(request, id):
+	court = Court.objects.filter(id=id)[0]
+	if request.method == "POST":
+		message = request.POST['message']
+		if request.POST.__contains__("valide"):
+			valide = True
+		else:
+			valide = False
+		
+		court.commentaireStaff = message
+		court.valide = valide
+		court.save()
+		
 	if request.user.is_authenticated():
-		#TODO check si c'est bien un staff
-		court = Court.objects.filter(id=id)[0]
-		return render(request,'tennis/validateTerrain.html',locals())
+		if request.user.is_staff:
+		
+			return render(request,'tennis/validateTerrain.html',locals())
 	return redirect(reverse(home))
 
 def editTerrainStaff(request, id):
+	court = Court.objects.filter(id=id)[0]
+	if request.method == "POST":
+		if request.POST['action'] == "modifyCourt":
+			rue = request.POST['rue']
+			numero = request.POST['numero']
+			boite = request.POST['boite']
+			postalcode = request.POST['postalcode']	
+			locality = request.POST['loclity']
+			acces = request.POST['acces']
+			matiere = request.POST['matiere']
+			type = request.POST['type']
+			etat = request.POST['etat']
+			commentaire = request.POST['comment']
+			if request.POST.__contains__("dispoSamedi"):
+					dispoSamedi = True
+			else:
+				dispoSamedi = False
+			if request.POST.__contains__("dispoDimanche"):
+					dispoDimanche = True
+			else:
+				dispoDimanche = False
+
+
+			if (rue=="" or numero=="" or postalcode=="" or locality=="" or matiere=="" or type=="" or etat==""):
+				errorAdd = "Veuillez remplir tous les champs obligatoires !"
+				return render(request,'tennis/registerTerrain.html',locals())
+
+		
+			court.rue = rue 		
+			court.numero=numero
+			court.boite=boite
+			court.codepostal=postalcode
+			court.localite=locality
+			court.acces=acces
+			court.matiere=matiere
+			court.type=type
+			court.dispoDimanche=dispoDimanche
+			court.dispoSamedi=dispoSamedi
+			court.etat= etat
+			court.commentaire=commentaire
+			court.user = request.user
+			court.save()
+			#successEdit = "Terrain "+str(id)+" bien édité!"
+			return redirect(reverse(validateTerrain,args={id}))
+
+		if request.POST['action'] == "deleteCourt":
+			print("lol")
 	if request.user.is_authenticated():
-		#TODO check si c'est bien un staff
-		court = Court.objects.filter(id=id)[0]
-		return render(request,'tennis/editTerrainStaff.html',locals())
+		if request.user.is_staff:
+		
+			return render(request,'tennis/editTerrainStaff.html',locals())
 	return redirect(reverse(home))
 
 def profil(request):
