@@ -19,6 +19,34 @@ function preselectSelectOption(matiere,type,etat){
 	setSelectedIndex(document.getElementById("etat"),etat);
 }
 
+function selectMasterCard(){
+	document.getElementById("mastercard").style.display = "inherit";
+	document.getElementById("visa").style.display = "none";
+	document.getElementById("paypal").style.display = "none";
+	document.getElementById("virement").style.display = "none";
+}
+
+function selectVisa(){
+	document.getElementById("mastercard").style.display = "none";
+	document.getElementById("visa").style.display = "inherit";
+	document.getElementById("paypal").style.display = "none";
+	document.getElementById("virement").style.display = "none";
+}
+
+function selectPaypal(){
+	document.getElementById("mastercard").style.display = "none";
+	document.getElementById("visa").style.display = "none";
+	document.getElementById("paypal").style.display = "inherit";
+	document.getElementById("virement").style.display = "none";
+}
+
+function selectVirement(){
+	document.getElementById("mastercard").style.display = "none";
+	document.getElementById("visa").style.display = "none";
+	document.getElementById("paypal").style.display = "none";
+	document.getElementById("virement").style.display = "inherit";
+}
+
 function ongletTournoi(){
 	document.getElementById("tournoi").className = "active";
 	document.getElementById("terrain").className = " ";
