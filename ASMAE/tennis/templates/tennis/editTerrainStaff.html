@@ -9,7 +9,7 @@
 		<h2 class="center">Editer Terrain</h2>
 		<hr class="line">
 		<h4 class="center">Terrain {{ court.id }}</h4>
-		<form class="form-horizontal" name="editForm" role="form" method="post" action="" onsubmit="return false" >
+		<form class="form-horizontal" name="editForm" role="form" method="post" action="{% url "tennis.views.editTerrainStaff" court.id %}">
 		{% csrf_token %}
 			<div class="row">
 				<div class="panel panel-default">
@@ -72,7 +72,7 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="acces">Accès *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
-					      	<textarea class="form-control" rows="3" name="acces" id="acces" placeholder="Acces au terrain" value="{{ court.acces }}"></textarea>
+					      	<textarea class="form-control" rows="3" name="acces" id="acces" placeholder="Acces au terrain">{{ court.acces }}</textarea>
 					      	<p class="hint" id="hint-loclity"></p>
 					      </div>
 					    </div>
@@ -113,8 +113,8 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="dispo">Disponibilité *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
-					      	<label style="margin-right:20px;padding-top:7px;"><input type="checkbox"> Samedi</label>
-					      	<label><input type="checkbox"> Dimanche</label>
+					      	<label style="margin-right:20px;padding-top:7px;"><input name ="dispoSamedi" type="checkbox" {% if court.dispoSamedi %} checked {% endif %}> Samedi</label>
+					      	<label><input name ="dispoDimanche" type="checkbox" {% if court.dispoDimanche %} checked {% endif %}> Dimanche</label>
 					      	<p class="hint" id="hint-dispo"></p>
 					      </div>
 					    </div>

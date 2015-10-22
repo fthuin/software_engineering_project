@@ -43,6 +43,8 @@ class Court(models.Model):
 	dispoDimanche = models.BooleanField(default=False)
 	etat = models.CharField(max_length=30)
 	commentaire = models.TextField(null=True)
+	commentaireStaff = models.TextField(null=True)
+	valide = models.BooleanField(default=False)
 	user = models.ForeignKey(User)
 
 	def __str__(self):

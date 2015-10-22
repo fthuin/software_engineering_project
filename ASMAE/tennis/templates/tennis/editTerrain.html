@@ -100,8 +100,8 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="dispo">Disponibilité *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
-					      	<label style="margin-right:20px;padding-top:7px;"><input type="checkbox" {% if court.dispoSamedi %} checked {% endif %}> Samedi</label>
-					      	<label><input type="checkbox" {% if court.dispoDimanche %} checked {% endif %}> Dimanche</label>
+					      	<label style="margin-right:20px;padding-top:7px;"><input type="checkbox" name="dispoSamedi" {% if court.dispoSamedi %} checked {% endif %}> Samedi</label>
+					      	<label><input type="checkbox" name="dispoDimanche" {% if court.dispoDimanche %} checked {% endif %}> Dimanche</label>
 					      	<p class="hint" id="hint-dispo"></p>
 					      </div>
 					    </div>
