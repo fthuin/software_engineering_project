@@ -51,8 +51,10 @@ class Court(models.Model):
 		return str(self.id) +" "+ self.rue
 
 class Tournoi(models.Model):
-	nom = models.CharField(max_length=30)
+	nom = models.CharField(max_length=50)
 	description = models.TextField(null=True)
+	def __str__(self):
+		return self.nom
 
 class Pair(models.Model):
 	id = models.AutoField(primary_key=True)
