@@ -8,6 +8,7 @@ from tennis.forms import LoginForm
 from tennis.models import Extra, Participant,Court, Tournoi, Pair
 import re, math
 import datetime
+from itertools import chain
 
 # Create your views here.
 def home(request):
@@ -21,24 +22,89 @@ def contact(request):
 
 def tournoi(request):
 	if request.user.is_authenticated():
+		nonComfirme = request.user.user1.filter(confirm=False)
+		demande = request.user.user2.filter(confirm=False)
+		inscrit1 = request.user.user1.filter(confirm=True)
+		inscrit2 = request.user.user2.filter(confirm=True)
+		inscrit =  list(chain(inscrit1,inscrit2))
 		return render(request,'tennis/tournoi.html',locals())
 	return redirect(reverse(home))
 
 def inscriptionTournoi(request):
 	if request.method == "POST":
 		nomTournoi = request.POST['tournoi']
-		tournoi = Tournoi.objects.filter(nom=nomTournoi)[0]
-		#nomTournoi = request.POST['username2']
+		tournois = Tournoi.objects.filter(nom=nomTournoi)[0]
+		username2 = request.POST['username2']
 		comment1 = request.POST['remarque']
 		extra = request.POST.getlist('extra')
 		
 		
-		#dire fuck you si le suername2 est null
+
+		if (username2==""):
+			errorAdd = "Veuillez rajouter un deuxieme joueur pour votre pair"
+			Ex = Extra.objects.all()
+			Tour = Tournoi.objects.all()
+			Use = User.objects.all()
+			return render(request,'tennis/inscriptionTournoi.html',locals())
 		
-		pair = Pair(tournoi = tournoi,user1=request.user,user2=user2,comment1 = comment1,confirm = False,valid = False,pay = False).save()
-	
+		
+		user = User.objects.filter(username=request.user.username)[0]
+		user2 = User.objects.filter(username=username2)[0]
+
+		if (user==user2):
+			errorAdd = "Vous ne pouvez pas faire une pair avec vous meme"
+			Ex = Extra.objects.all()
+			Tour = Tournoi.objects.all()
+			Use = User.objects.all()
+			return render(request,'tennis/inscriptionTournoi.html',locals())
+
+		user1Tournoi1 = user.user1.all()
+		user1Tournoi2 = user.user2.all()
+
+		user2Tournoi1 = user2.user1.all()
+		user2Tournoi2 = user2.user2.all()
+
+		for elem in user1Tournoi1:
+			if(elem.tournoi.jour == tournois.jour):
+				errorAdd = "Vous etes deja inscrit a un tournoi ce jour!"
+				Ex = Extra.objects.all()
+				Tour = Tournoi.objects.all()
+				Use = User.objects.all()
+				return render(request,'tennis/inscriptionTournoi.html',locals())
+
+		for elem in user1Tournoi2:
+			if(elem.tournoi.jour == tournois.jour):
+				errorAdd = "Vous etes deja inscrit a un tournoi ce jour!"
+				Ex = Extra.objects.all()
+				Tour = Tournoi.objects.all()
+				Use = User.objects.all()
+				return render(request,'tennis/inscriptionTournoi.html',locals())
+		
+		for elem in user2Tournoi1:
+			if(elem.tournoi.jour == tournois.jour and elem.confirm):
+				errorAdd = "Le joueur 2 est deja inscrit dans un tournoi ce jour!"
+				Ex = Extra.objects.all()
+				Tour = Tournoi.objects.all()
+				Use = User.objects.all()
+				return render(request,'tennis/inscriptionTournoi.html',locals())
+
+		for elem in user2Tournoi2:
+			if(elem.tournoi.jour == tournois.jour and elem.confirm):
+				errorAdd = "Le joueur 2 est deja inscrit dans un tournoi ce jour!"
+				Ex = Extra.objects.all()
+				Tour = Tournoi.objects.all()
+				Use = User.objects.all()
+				return render(request,'tennis/inscriptionTournoi.html',locals())
+
+		pair = Pair(tournoi = tournois,user1=user,user2=user2,comment1 = comment1,confirm = False,valid = False,pay = False)
+		pair.save()
+		
 		for elem in extra:
-			pair.extra1.add(Extra.objects.filter(id=id))
+			ext = Extra.objects.filter(id=elem)[0]
+			pair.extra1.add(ext)
+
+		pair.save()
+		return redirect(reverse(tournoi))
 		
 	#rajouter les extras
 	if request.user.is_authenticated():

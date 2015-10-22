@@ -53,6 +53,7 @@ class Court(models.Model):
 class Tournoi(models.Model):
 	nom = models.CharField(max_length=50,primary_key=True)
 	description = models.TextField(null=True)
+	jour = models.CharField(max_length=50)
 	def __str__(self):
 		return self.nom
 
@@ -69,7 +70,7 @@ class Pair(models.Model):
 	valid = models.BooleanField(default=False)
 	pay = models.BooleanField(default=False)
 	def __str__(self):
-		return str(self.id) +" "+ tournoi+" : "+user1.username+" et "+user2.username
+		return str(self.id) +" "+ self.tournoi.nom+" : "+self.user1.username+" et "+self.user2.username
 
 # TODO : Cyril needs Pair
 # TODO : Cyril needs Courts

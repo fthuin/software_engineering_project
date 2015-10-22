@@ -5,6 +5,12 @@
 {% block body %}
 <div class="container">
 	<div class="content-box">
+		{% if errorAdd %}
+		<div class="alert alert-danger">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		<strong>Error!</strong> {{ errorAdd }}
+		</div>
+		{% endif %}
 		<h2 class="center">Inscription au tournoi (TODO set info)</h2>
 		<hr class="line">
 		<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.inscriptionTournoi" %}">
@@ -149,7 +155,7 @@
 			<div class="row">
 				<div class="col-sm-10 col-sm-offset-1">
 					<label>Informations additionnelles (souhaits, remarques, ...) : </label>
-					<textarea class="form-control" rows="3" name="remarque" id="remarque" placeholder="Remarque et/ou souhaits ..."></textarea>
+					<textarea class="form-control" rows="3" name="remarque" id="remarque" placeholder="Remarque et/ou souhaits ...">{{ comment1}}</textarea>
 				</div>
 			</div>
 

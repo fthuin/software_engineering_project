@@ -19,8 +19,9 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">Demande d'inscription</div>
 					<div class="list-group">
-						<a href="{% url "tennis.views.confirmPair" %}" class="list-group-item">8945 - Dupond P et Dupond E - Seniors (hommes)</a>
-						<a href="{% url "tennis.views.confirmPair" %}" class="list-group-item">7991 - Dupond P et Fernande A - Familles</a>
+						{% for item in demande %}
+						<li class="list-group-item">{{ item.id}} - {{item.user1.participant.nom}} {{item.user1.participant.prenom}} et {{item.user2.participant.nom}} {{item.user2.participant.prenom}} - {{item.tournoi.nom}} - {{item.tournoi.jour}}</li>
+						{% endfor %}
 					</div>
 				</div>
 			</div>
@@ -29,8 +30,10 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">Partenaire non confirmé</div>
 					<div class="list-group">
-						<li class="list-group-item">8945 - Dupond P et Dupond E - Seniors (hommes)</li>
-						<li class="list-group-item">7991 - Dupond P et Fernande A - Familles</li>
+						{% for item in nonComfirme %}
+						<li class="list-group-item">{{ item.id}} - {{item.user1.participant.nom}} {{item.user1.participant.prenom}} et {{item.user2.participant.nom}} {{item.user2.participant.prenom}} - {{item.tournoi.nom}} - {{item.tournoi.jour}}</li>
+						{% endfor %}
+						
 					</div>
 				</div>
 			</div>
@@ -40,8 +43,10 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">Mes Inscriptions</div>
 			<div class="list-group">
-				<a href="{% url "tennis.views.viewPair" %}" class="list-group-item">8945 - Dupond P et Dupond E - Seniors (hommes)</a>
-				<a href="{% url "tennis.views.viewPair" %}" class="list-group-item">7991 - Dupond P et Fernande A - Familles</a>
+				{% for item in inscrit %}
+						<a href="{% url "tennis.views.viewPair" %}" class="list-group-item">{{ item.id}} - {{item.user1.participant.nom}} {{item.user1.participant.prenom}} et {{item.user2.participant.nom}} {{item.user2.participant.prenom}} - {{item.tournoi.nom}} - {{item.tournoi.jour}}</a>
+						{% endfor %}
+				
 			</div>
 		</div>
 		
