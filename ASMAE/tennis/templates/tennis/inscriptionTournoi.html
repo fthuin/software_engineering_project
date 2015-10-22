@@ -41,28 +41,21 @@
 						      </span>
 						    </div>
 						</div>
-					</div>
-					
-					    
+					</div>  
 
-					<!-- Liste des terrains -->
+					<!-- Liste des users -->
 					<div class="panel panel-default center-block" style="max-width:600px;">
 						<div class="panel-heading">Utilisateurs</div>
-						<div class="list-group">
-							<!-- TODO users -->
-							{% for user in Use %}
-						  	<a href="#" class="list-group-item">{{ user.username }} - {{ user.participant.prenom }} {{ user.participant.nom }}</a>
-						  	{% endfor %}
+						<div class="list-group" id="UserList">
 						</div>
 					</div>
 
 					<!-- Info -->
-					<p class="center">1-3 sur 20 résultats (3 au total)</p>
+					<p class="center" id="UserInfo"></p>
 
 					<!-- Bottom pagination -->
 					<div class="text-center">
-						<ul class="pagination">
-						    <li class="active"><a href="#">1</a></li>
+						<ul class="pagination" id="UserPagination">
 						</ul>
 					</div>
 				</div>				
@@ -113,25 +106,26 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">Joueur 2</div>
 						<div class="panel-body">
+							<input type="text" name="username2" id="username2Value" value="" style="display:none">
 							<!-- Username -->
 							<div class="form-group">
 						      <label class="control-label col-sm-4" for="username">Utilisateur : </label>
 						      <div class="col-sm-8">
-						      	<p class="info"> {{ Use.2.username }} </p>
+						      	<p class="info" id="username2"> - </p>
 						      </div>
 						    </div>
 						    <!-- Nom -->
 							<div class="form-group">
 						      <label class="control-label col-sm-4" for="nom">Nom : </label>
 						      <div class="col-sm-8">
-						      	<p class="info"> - </p>
+						      	<p class="info" id="nom2"> - </p>
 						      </div>
 						    </div>
 						    <!-- Prenom -->
 							<div class="form-group">
 						      <label class="control-label col-sm-4" for="username">Prénom : </label>
 						      <div class="col-sm-8">
-						      	<p class="info"> - </p>
+						      	<p class="info" id="prenom2"> - </p>
 						      </div>
 						    </div>
 						    <!-- Extra -->
@@ -165,4 +159,14 @@
 	</div>
 </div>
 
+{% endblock %}
+
+{% block commande %}
+<script>
+var userList = [];
+{% for user in Use %}
+userList.push(['{{ user.username }}','{{ user.participant.prenom }}','{{ user.participant.nom }}']);
+{% endfor %}
+setUser(userList);
+</script>
 {% endblock %}
