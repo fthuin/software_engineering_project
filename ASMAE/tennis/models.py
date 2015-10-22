@@ -50,11 +50,22 @@ class Court(models.Model):
 	def __str__(self):
 		return str(self.id) +" "+ self.rue
 
+class Tournoi(models.Model):
+	nom = models.CharField(max_length=30)
+	description = models.TextField(null=True)
 
-
-
-
-
+class Pair(models.Model):
+	id = models.AutoField(primary_key=True)
+	tournoi = models.ForeignKey(Tournoi)
+	user1 = models.ForeignKey(User, related_name='user1')
+	user2 = models.ForeignKey(User, related_name='user2')
+	extra1 = models.ManyToManyField(Extra, related_name='extra1')
+	extra2 = models.ManyToManyField(Extra, related_name='extra2')
+	confirm = models.BooleanField(default=False)
+	valid = models.BooleanField(default=False)
+	pay = models.BooleanField(default=False)
+	def __str__(self):
+		return str(self.id) +" "+ tournoi+" : "+user1.username+" et "+user2.username
 
 # TODO : Cyril needs Pair
 # TODO : Cyril needs Courts
