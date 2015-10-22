@@ -7,7 +7,8 @@
 	<div class="content-box">
 		<h2 class="center">Inscription au tournoi</h2>
 		<hr class="line">
-		<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.register" %}" onsubmit="" >
+		<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.inscriptionTournoi" %}">
+			{% csrf_token %}
 			<div class="row">
 				<div class="col-sm-6">
 					<!-- Tournoi -->
@@ -95,7 +96,8 @@
 						      <div class="col-sm-8">
 						      	{% for extra in Ex %}
 						      	<div class="checkbox">
-							      <label><input type="checkbox" value="{{ extra.id }}">{{ extra.nom }} ({{ extra.prix }} €)</label>
+
+							      <label><input type="checkbox" name = "extra" value="{{ extra.id }}">{{ extra.nom }} ({{ extra.prix }} €)</label>
 							    </div>
 							    {% endfor %}
 						      </div>
@@ -163,6 +165,7 @@
 
 {% endblock %}
 
+
 {% block commande %}
 <script>
 var userList = [];
@@ -174,3 +177,4 @@ userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.parti
 setUser(userList);
 </script>
 {% endblock %}
+

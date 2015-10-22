@@ -25,6 +25,22 @@ def tournoi(request):
 	return redirect(reverse(home))
 
 def inscriptionTournoi(request):
+	if request.method == "POST":
+		nomTournoi = request.POST['tournoi']
+		tournoi = Tournoi.objects.filter(nom=nomTournoi)[0]
+		#nomTournoi = request.POST['username2']
+		comment1 = request.POST['remarque']
+		extra = request.POST.getlist('extra')
+		
+		
+		#dire fuck you si le suername2 est null
+		
+		pair = Pair(tournoi = tournoi,user1=request.user,user2=user2,comment1 = comment1,confirm = False,valid = False,pay = False).save()
+	
+		for elem in extra:
+			pair.extra1.add(Extra.objects.filter(id=id))
+		
+	#rajouter les extras
 	if request.user.is_authenticated():
 		Ex = Extra.objects.all()
 		Tour = Tournoi.objects.all()
@@ -234,6 +250,7 @@ def validateTerrain(request, id):
 		court.commentaireStaff = message
 		court.valide = valide
 		court.save()
+		successEdit = "Terrain bien édité!"
 		
 	if request.user.is_authenticated():
 		if request.user.is_staff:
