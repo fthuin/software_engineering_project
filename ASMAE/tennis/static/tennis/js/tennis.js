@@ -19,6 +19,24 @@ function preselectSelectOption(matiere,type,etat){
 	setSelectedIndex(document.getElementById("etat"),etat);
 }
 
+function setUser(User){
+	var panneau = document.getElementById("UserList");
+
+	var pageLength = 10;
+	for (var i = 0; i < User.length && i<pageLength; i++) {
+		//var p = '<a onClick="selectUser('+User[i][0]+','+User[i][2]+','+User[i][1]+');" href="javascript:void(0)" class="list-group-item">'+User[i][0]+' - '+User[i][1]+' '+User[i][2]+'</a>';
+		var p = '<a onClick="selectUser('+"'"+User[i][0]+"',"+"'"+User[i][2]+"',"+"'"+User[i][1]+"'"+');" href="javascript:void(0)" class="list-group-item">'+User[i][0]+' - '+User[i][1]+' '+User[i][2]+'</a>';
+		panneau.innerHTML += p;
+	};
+}
+
+function selectUser(username,nom,prenom){
+	document.getElementById("username2Value").value = username;
+	document.getElementById("username2").innerHTML = username;
+	document.getElementById("nom2").innerHTML = nom;
+	document.getElementById("prenom2").innerHTML = prenom;
+}
+
 function selectMasterCard(){
 	document.getElementById("mastercard").style.display = "inherit";
 	document.getElementById("visa").style.display = "none";
