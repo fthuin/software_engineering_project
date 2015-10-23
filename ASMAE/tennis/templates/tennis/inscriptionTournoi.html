@@ -79,27 +79,7 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">Joueur 1</div>
 						<div class="panel-body">
-							<!-- Username -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Utilisateur : </label>
-						      <div class="col-sm-8">
-						      	<p class="info">{{ user.username }}</p>
-						      </div>
-						    </div>
-						    <!-- Nom -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="nom">Nom : </label>
-						      <div class="col-sm-8">
-						      	<p class="info">{{ user.participant.nom }}</p>
-						      </div>
-						    </div>
-						    <!-- Prenom -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Prénom : </label>
-						      <div class="col-sm-8">
-						      	<p class="info">{{ user.participant.prenom }}</p>
-						      </div>
-						    </div>
+							<h4 class="center">{{ user.participant.prenom }} {{ user.participant.nom }} ({{ user.username }})</h4>
 						    <!-- Extra -->
 							<div class="form-group">
 						      <label class="control-label col-sm-4" for="username">Extras : </label>
@@ -127,27 +107,7 @@
 						<div class="panel-heading">Joueur 2</div>
 						<div class="panel-body">
 							<input type="text" name="username2" id="username2Value" value="" style="display:none">
-							<!-- Username -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Utilisateur : </label>
-						      <div class="col-sm-8">
-						      	<p class="info" id="username2"> - </p>
-						      </div>
-						    </div>
-						    <!-- Nom -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="nom">Nom : </label>
-						      <div class="col-sm-8">
-						      	<p class="info" id="nom2"> - </p>
-						      </div>
-						    </div>
-						    <!-- Prenom -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Prénom : </label>
-						      <div class="col-sm-8">
-						      	<p class="info" id="prenom2"> - </p>
-						      </div>
-						    </div>
+							<h4 class="center" id="user2"> Coéquipier </h4>
 						    <!-- Extra -->
 							<div class="form-group">
 						      <label class="control-label col-sm-4" for="username">Extras : </label>
