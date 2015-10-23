@@ -210,6 +210,27 @@ def viewPair(request,id):
 		#TODO check si il peut voir cette pair
 		pair = Pair.objects.filter(id=id)[0]
 		Ex = Extra.objects.all()
+		extra1 = pair.extra1.all()
+		extranot1 = list()
+		for elem in Ex:
+			contained = False
+			for el in extra1:
+				if elem.id == el.id:
+					contained = True
+			if contained == False:	
+				extranot1.append(Extra.objects.filter(id=elem.id)[0])
+
+		extra2 = pair.extra1.all()
+		extranot2 = list()
+		for elem in Ex:
+			contained = False
+			for el in extra2:
+				if elem.id == el.id:
+					contained = True
+			if contained == False:	
+				extranot2.append(Extra.objects.filter(id=elem.id)[0])
+
+
 		return render(request,'tennis/viewPair.html',locals())
 	return redirect(reverse(home))
 
