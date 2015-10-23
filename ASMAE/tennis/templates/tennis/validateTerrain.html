@@ -31,15 +31,25 @@
          				 </address>
 					</div>
 				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<p>
+							<b>Disponibilité : </b> {% if court.dispoSamedi and court.dispoDimanche %}Samedi et Dimanche{% elif court.dispoSamedi %}Samedi{% elif court.dispoDimanche %}Dimanche{% endif %} <br>
+							<b>Etat : </b> {{ court.etat }} 
+						</p>
+					</div>
+					<div class="col-sm-6">
+						<p>
+							<b>Matière :</b> {{ court.matiere }} <br>
+							<b>Type :</b> {{ court.type }}
+						</p>
+					</div>
+				</div>
 				
-				<p>	<b>Disponibilité : </b> {% if court.dispoSamedi and court.dispoDimanche %}Samedi et Dimanche{% elif court.dispoSamedi %}Samedi{% elif court.dispoDimanche %}Dimanche{% endif %} <br>
-					<b>Matière :</b> {{ court.matiere }} <br>
-					<b>Type :</b> {{ court.type }} <br>
-					<b>Etat : </b> {{ court.etat }} 
-				</p>
-
-				<button onClick="location.href='{% url "tennis.views.editTerrainStaff" court.id %}';" class="btn btn-default center-block">Editer info</button>
-
+				<div class="row" style="margin-top:20px;">
+					<button onClick="location.href='{% url "tennis.views.editTerrainStaff" court.id %}';" class="btn btn-default center-block">Editer info</button>
+				</div>
+				
 				<h3>Google Map (TODO)</h3>
 				<div id="map" style="height:250px;"></div>
 
