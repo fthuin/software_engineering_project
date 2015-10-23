@@ -1,0 +1,103 @@
+{% extends "tennis/staff.html" %}
+
+{% block title %}Validation pair {{ pair.id }}{% endblock %}
+
+{% block body %}
+
+<div class="container">
+	<div class="content-box">
+		<h2 class="center">Pair {{ pair.id }}</h2>
+		<hr class="line">
+
+		<div class="row">
+			<div class="col-sm-4 col-sm-offset-0">
+				<h4 class="center">Tournoi : {{ pair.tournoi.nom }}</h4>
+			</div>
+			<div class="col-sm-7">
+				<p class="info">{{ pair.tournoi.description }}</p>
+			</div>
+		</div>
+	
+		<div class="row">
+
+			<div class="col-lg-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">Joueur 1</div>
+					<div class="panel-body">
+						<h4 class="center">{{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} ({{ pair.user1.username }})</h4>
+					    <!-- Extra -->
+						<div class="form-group">
+					      <label class="info control-label col-sm-4" for="username">Extras : </label>
+					      <div class="col-sm-8">
+					      	{% for extra in Ex %}
+					      	<div class="checkbox">
+						      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
+						    </div>
+						    {% endfor %}
+					      </div>
+					    </div>
+					    <!-- Info -->
+						<div class="form-group">
+					      <label class="info control-label col-sm-4" for="username">Informations : </label>
+					      <div class="col-sm-8">
+					      	<p class="info">{% if pair.comment1 %}{{ pair.comment1 }}{% else %} - {% endif %}</p>
+					      </div>
+					    </div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">Joueur 2</div>
+					<div class="panel-body">
+						<h4 class="center">{{ pair.user2.participant.prenom }} {{ pair.user2.participant.nom }} ({{ pair.user2.username }})</h4>
+					    <!-- Extra -->
+						<div class="form-group">
+					      <label class="info control-label col-sm-4" for="username">Extras : </label>
+					      <div class="col-sm-8">
+					      	{% for extra in Ex %}
+					      	<div class="checkbox">
+						      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
+						    </div>
+						    {% endfor %}
+					      </div>
+					    </div>
+					    <!-- Info -->
+						<div class="form-group">
+					      <label class="info control-label col-sm-4" for="username">Informations : </label>
+					      <div class="col-sm-8">
+					      	<p class="info">{% if pair.comment2 %}{{ pair.comment2 }}{% else %} - {% endif %}</p>
+					      </div>
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<h4 class="center">Pair validée : {% if pair.valid %}oui{% else %}non{% endif %}</h4>
+		<h4 class="center">Pair payée : {% if pair.pay %}oui{% else %}non{% endif %}</h4>
+
+		<div style="margin-top:20px;">
+			<form role="form" method="post" action="">
+			{% csrf_token %}
+		    <ul class="list-inline text-center">
+				<li>
+					<button class="btn-default btn" name="action" value="validPair">Valider</button>
+				</li>
+				<li>
+					<button class="btn-default btn" name="action" value="payPair">Payer</button>
+				</li>
+				<li>
+					<button class="btn-default btn" name="action" value="deletePair">Supprimer</button>
+				</li>
+			</ul>
+			</form>
+		</div>
+		
+			
+
+	</div>
+</div>
+
+{% endblock %}

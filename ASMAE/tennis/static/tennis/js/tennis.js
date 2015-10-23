@@ -345,6 +345,42 @@ function setCourt(page){
 
 
 //PAIR
+//Lite des terrains
+var PairList;
+
+//On met à jours les infos
+function setPairListInfo(pairList){
+	PairList = pairList;
+}
+
+//Permet de changer le contenu de la page en fonction de la page ou on se trouve
+function setPair(page){
+	//Conteneur de notre liste
+	var panneau = document.getElementById("PairList");
+	panneau.innerHTML = "";
+
+	var debut = (page-1)*pageLength;
+	var fin = page*pageLength;
+
+	//Ajout des pair
+	for (var i = debut; i < PairList.length && i<fin; i++) {
+		//Set info pair
+		var user1 = '<b>Joueur 1 : </b>'+PairList[i][7] +' '+ PairList[i][5] + ' ('+PairList[i][3]+')';
+		var user2 = '<b>Joueur 2 : </b>'+PairList[i][8] +' '+ PairList[i][6] + ' ('+PairList[i][4]+')';
+		var valid = PairList[i][1];
+		var pay = PairList[i][2];
+		var info = '<b>ID : </b>'+PairList[i][0]+' / <b> Tournoi : </b>'+PairList[i][9]+' / <b>Valide : </b>'+valid+' / <b>Payé : </b>'+pay;
+		
+		var p = '<a href="staff/pair/'+PairList[i][0]+'" class="list-group-item">'+info+'<br>'+user1+' - '+user2+'</a>';
+		panneau.innerHTML += p;
+	};
+
+	//Info maj
+	var info = document.getElementById("PairInfo");
+	info.innerHTML = (debut+1)+'-'+i+' sur '+pageLength+' résultats ('+PairList.length+' au total)';
+
+}
+
 //EXTRA
 //permet de selectionner un extra
 function extra(id, nom,prix,comment){
