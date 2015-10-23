@@ -39,31 +39,22 @@
 		</div>
 		
 		    
-		<!-- Liste des terrains -->
+		<!-- Liste des users -->
 		<div class="panel panel-default center-block" style="max-width:600px;">
 			<div class="panel-heading">Terrains</div>
-			<div class="list-group">
-				{% for court in firstTerrain %}
-				<a href="{% url "tennis.views.validateTerrain" court.id %}" class="list-group-item"><b>ID : </b>{{ court.id}} / <b>Matière : </b>{{ court.matiere }} / 
-					<b>Propriétaire : </b>{{ court.user.participant.prenom }} {{ court.user.participant.nom }} ({{ court.user.username }}) <br> 
-					<b>Adresse : </b>{{court.rue }} {{court.numero}}, {{court.codepostal}} {{court.localite}}					
-				</a>
-				{% endfor %}
+			<div class="list-group" id="CourtList">
 			</div>
 		</div>
 
 		<!-- Info -->
-		<p class="center">1-{{ firstTerrain|length }} sur {{ pageLength }} résultats ({{ allCourt|length }} au total)</p>
+		<p class="center" id="CourtInfo"></p>
 
 		<!-- Bottom pagination -->
 		<div class="text-center">
-			<ul class="pagination">
-				<li class="active"><a href="#">{{ firstOnglet }}</a></li>
-				{% for i in onglet %}
-			    <li><a href="#">{{ i }}</a></li>
-			    {% endfor %}
+			<ul class="pagination" id="CourtPagination">
 			</ul>
 		</div>
+
 	</div>
 
 	<!-- Gestionnaire des paires -->
@@ -244,11 +235,40 @@
 	</div>
 </div>
 
-
-
 {% endblock %}
 
 {% block commande %}
+<script>
+//On met le premier extra de la liste en "active"
+activeExtra();
+
+//Recuperation des court et stockage dans un tableau
+var courtList = [];
+{% for court in allCourt %}
+courtList.push(['{{ court.user.username }}','{{ court.user.participant.prenom }}','{{ court.user.participant.nom }}','{{ court.id }}','{{ court.matiere }}','{{ court.rue }}','{{ court.numero }}','{{ court.codepostal }}','{{ court.localite }}','{{ court.boite }}']);
+{% endfor %}
+
+//Nombre d'entrée par page
+var pageLength = 10;
+//Nombre de page
+var total = Math.ceil(courtList.length/pageLength);
+//Notre pagination
+$('#CourtPagination').twbsPagination({
+  totalPages: total,
+  visiblePages: 5,
+  onPageClick: function (event, page) {
+  	//Lorsqu'on click sur une page, on met à jours le contenu
+	setCourt(page);
+  }
+});
+
+//On met jours les info (liste des users et longueur de chaque page)
+setCourtListInfo(courtList,pageLength);
+
+//On met à jours la première page
+setCourt(1);
+
+</script>
 
 {% if successAdd %} 
 <script>

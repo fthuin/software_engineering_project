@@ -196,7 +196,6 @@ def registerTerrain(request):
 	return redirect(reverse(home))
 
 def editTerrain(request,id):
-	print("ici")
 	if request.method == "POST":
 		if request.POST['action'] == "modifyCourt":
 			rue = request.POST['rue']
@@ -255,20 +254,10 @@ def editTerrain(request,id):
 	return redirect(reverse(home))
 
 def staff(request):
-	#Nombre d'element sur la page
-	pageLength = 10
 	#List of Extra
 	Ex = Extra.objects.all()
 	#List of Court
 	allCourt = Court.objects.all()
-	#Number of onglet if we show them pageLength by pageLength
-	onglet = list()
-	for x in range(1,int(math.ceil(len(allCourt)/pageLength))):
-		onglet.append(x+1)
-	onglet = onglet[0:6]
-	firstOnglet = 1
-	#The first pageLength to show
-	firstTerrain = allCourt[0:pageLength]
 
 	if request.method == "POST":
 		if request.POST['action'] == "addExtra":
@@ -390,7 +379,11 @@ def editTerrainStaff(request, id):
 			return redirect(reverse(validateTerrain,args={id}))
 
 		if request.POST['action'] == "deleteCourt":
-			print("lol")
+			#TODO delete terrain staff
+			court = Court.objects.filter(id=id)[0]
+			court.delete()
+			court = Court.objects.filter(user=request.user)
+			return redirect(reverse(staff))
 	if request.user.is_authenticated():
 		if request.user.is_staff:
 		
@@ -599,7 +592,6 @@ def register(request):
 
 		#check format date
 		if re.match(r"^[0-3][0-9]/[0-1][0-9]/[1-2][0-9]{3}$",birthdate) is None:
-			print(birthdate)
 			error = "La date de naissance n'a pas le bon format"
 			return render(request,'tennis/register.html',locals())
 
