@@ -12,9 +12,13 @@
 		<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.confirmPair" pair.id %}"onsubmit="" >
 		{% csrf_token %}
 
-			<h4 class="center">Tournoi : {{ pair.tournoi.nom }}</h4>
 			<div class="row">
-				<p class="info center col-sm-offset-4 col-sm-4">{{ pair.tournoi.description }}</p>
+				<div class="col-sm-4 col-sm-offset-0">
+					<h4 class="center">Tournoi : {{ pair.tournoi.nom }}</h4>
+				</div>
+				<div class="col-sm-7">
+					<p class="info">{{ pair.tournoi.description }}</p>
+				</div>
 			</div>
 			
 			<div class="row">
@@ -23,30 +27,10 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">Joueur 1</div>
 						<div class="panel-body">
-							<!-- Username -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Utilisateur : </label>
-						      <div class="col-sm-8">
-						      	<p class="infoForm">{{ pair.user1.username }}</p>
-						      </div>
-						    </div>
-						    <!-- Nom -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="nom">Nom : </label>
-						      <div class="col-sm-8">
-						      	<p class="infoForm">{{ pair.user1.participant.nom }}</p>
-						      </div>
-						    </div>
-						    <!-- Prenom -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Prénom : </label>
-						      <div class="col-sm-8">
-						      	<p class="infoForm">{{ pair.user1.participant.prenom }}</p>
-						      </div>
-						    </div>
+							<h4 class="center">{{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} ({{ pair.user1.username }})</h4>
 						    <!-- Extra -->
 							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Extras (todo set): </label>
+						      <label class="control-label col-sm-4" for="username">Extras : </label>
 						      <div class="col-sm-8">
 						      	{% for extra in extra1 %}
 						      	<div class="checkbox">
@@ -60,6 +44,13 @@
 							    {% endfor %}
 						      </div>
 						    </div>
+						    <!-- Info -->
+							<div class="form-group">
+						      <label class="info control-label col-sm-4" for="username">Informations : </label>
+						      <div class="col-sm-8">
+						      	<p class="info">{% if pair.comment1 %}{{ pair.comment1 }}{% else %} - {% endif %}</p>
+						      </div>
+						    </div>
 						</div>
 					</div>
 				</div>
@@ -68,27 +59,7 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">Joueur 2</div>
 						<div class="panel-body">
-							<!-- Username -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Utilisateur : </label>
-						      <div class="col-sm-8">
-						      	<p class="infoForm">{{ pair.user2.username }}</p>
-						      </div>
-						    </div>
-						    <!-- Nom -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="nom">Nom : </label>
-						      <div class="col-sm-8">
-						      	<p class="infoForm">{{ pair.user2.participant.nom }}</p>
-						      </div>
-						    </div>
-						    <!-- Prenom -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Prénom : </label>
-						      <div class="col-sm-8">
-						      	<p class="infoForm">{{ pair.user2.participant.prenom }}</p>
-						      </div>
-						    </div>
+							<h4 class="center">{{ pair.user2.participant.prenom }} {{ pair.user2.participant.nom }} ({{ pair.user2.username }})</h4>
 						    <!-- Extra -->
 							<div class="form-group">
 						      <label class="control-label col-sm-4" for="username">Extras : </label>
@@ -105,16 +76,15 @@
 							    {% endfor %}
 						      </div>
 						    </div>
+						    <!-- Info -->
+							<div class="form-group">
+						      <label class="info control-label col-sm-4" for="username">Informations : </label>
+						      <div class="col-sm-8">
+						      	<textarea class="form-control" rows="3" name="remarque" id="remarque" placeholder="Ajouter une remarque et/ou souhaits ..."></textarea>
+						      </div>
+						    </div>
 						</div>
 					</div>
-				</div>
-			</div>
-			<!-- Info -->
-			<div class="row">
-				<div class="col-sm-10 col-sm-offset-1">
-					<label>Informations additionnelles (souhaits, remarques, ...) : </label>
-					<p class="info">{% if pair.comment1 %}{{ pair.comment1 }}{% else %} - {% endif %}</p>
-					<textarea class="form-control" rows="3" name="remarque" id="remarque" placeholder="Ajouter une remarque et/ou souhaits ..."></textarea>
 				</div>
 			</div>
 

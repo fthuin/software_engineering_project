@@ -8,113 +8,81 @@
 	<div class="content-box">
 		<h2 class="center">Demande Pair {{ pair.id }}</h2>
 		<hr class="line">
+
+		<div class="row">
+			<div class="col-sm-4 col-sm-offset-0">
+				<h4 class="center">Tournoi : {{ pair.tournoi.nom }}</h4>
+			</div>
+			<div class="col-sm-7">
+				<p class="info">{{ pair.tournoi.description }}</p>
+			</div>
+		</div>
+	
+		<div class="row">
+
+			<div class="col-lg-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">Joueur 1</div>
+					<div class="panel-body">
+						<h4 class="center">{{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} ({{ pair.user1.username }})</h4>
+					    <!-- Extra -->
+						<div class="form-group">
+					      <label class="info control-label col-sm-4" for="username">Extras : </label>
+					      <div class="col-sm-8">
+					      	{% for extra in Ex %}
+					      	<div class="checkbox">
+						      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
+						    </div>
+						    {% endfor %}
+					      </div>
+					    </div>
+					    <!-- Info -->
+						<div class="form-group">
+					      <label class="info control-label col-sm-4" for="username">Informations : </label>
+					      <div class="col-sm-8">
+					      	<p class="info">{% if pair.comment1 %}{{ pair.comment1 }}{% else %} - {% endif %}</p>
+					      </div>
+					    </div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">Joueur 2</div>
+					<div class="panel-body">
+						<h4 class="center">{{ pair.user2.participant.prenom }} {{ pair.user2.participant.nom }} ({{ pair.user2.username }})</h4>
+					    <!-- Extra -->
+						<div class="form-group">
+					      <label class="info control-label col-sm-4" for="username">Extras : </label>
+					      <div class="col-sm-8">
+					      	{% for extra in Ex %}
+					      	<div class="checkbox">
+						      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
+						    </div>
+						    {% endfor %}
+					      </div>
+					    </div>
+					    <!-- Info -->
+						<div class="form-group">
+					      <label class="info control-label col-sm-4" for="username">Informations : </label>
+					      <div class="col-sm-8">
+					      	<p class="info">{% if pair.comment2 %}{{ pair.comment2 }}{% else %} - {% endif %}</p>
+					      </div>
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div style="margin-top:20px;">
+			<form role="form" method="post" action="">
+			{% csrf_token %}
+				<button class="btn-default btn center-block" name="action" value="refuses">Annuler</button>
+			</form>
+		</div>
 		
-		<form class="form-horizontal" name="registerForm" role="form" method="post" action="" onsubmit="" >
-		{% csrf_token %}
-
-			<h4 class="center">Tournoi : {{ pair.tournoi.nom }}</h4>
-			<div class="row">
-				<p class="info center col-sm-offset-4 col-sm-4">{{ pair.tournoi.description }}</p>
-			</div>
 			
-			
-			<div class="row">
-
-				<div class="col-sm-6">
-					<div class="panel panel-default">
-						<div class="panel-heading">Joueur 1</div>
-						<div class="panel-body">
-							<!-- Username -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Utilisateur : </label>
-						      <div class="col-sm-8">
-						      	<p class="infoForm">{{ pair.user1.username }}</p>
-						      </div>
-						    </div>
-						    <!-- Nom -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="nom">Nom : </label>
-						      <div class="col-sm-8">
-						      	<p class="infoForm">{{ pair.user1.participant.nom }}</p>
-						      </div>
-						    </div>
-						    <!-- Prenom -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Prénom : </label>
-						      <div class="col-sm-8">
-						      	<p class="infoForm">{{ pair.user1.participant.prenom }}</p>
-						      </div>
-						    </div>
-						    <!-- Extra -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Extras (todo set): </label>
-						      <div class="col-sm-8">
-						      	{% for extra in Ex %}
-						      	<div class="checkbox">
-							      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
-							    </div>
-							    {% endfor %}
-						      </div>
-						    </div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-sm-6">
-					<div class="panel panel-default">
-						<div class="panel-heading">Joueur 2</div>
-						<div class="panel-body">
-							<!-- Username -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Utilisateur : </label>
-						      <div class="col-sm-8">
-						      	<p class="infoForm">{{ pair.user2.username }}</p>
-						      </div>
-						    </div>
-						    <!-- Nom -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="nom">Nom : </label>
-						      <div class="col-sm-8">
-						      	<p class="infoForm">{{ pair.user2.participant.nom }}</p>
-						      </div>
-						    </div>
-						    <!-- Prenom -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Prénom : </label>
-						      <div class="col-sm-8">
-						      	<p class="infoForm">{{ pair.user2.participant.prenom }}</p>
-						      </div>
-						    </div>
-						    <!-- Extra -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Extras : </label>
-						      <div class="col-sm-8">
-						      	{% for extra in Ex %}
-						      	<div class="checkbox">
-							      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
-							    </div>
-							    {% endfor %}
-						      </div>
-						    </div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Info -->
-			<div class="row">
-				<div class="col-sm-10 col-sm-offset-1">
-					<label>Informations additionnelles (souhaits, remarques, ...) : </label>
-					<p class="info">{% if pair.comment1 %}{{ pair.comment1 }}{% else %} - {% endif %}</p>
-				</div>
-			</div>
-
-			<!-- cancel button -->
-			<button class="btn btn-default center-block" name="action" value="annuler" style="margin-top:20px;">Annuler (todo)</button>
-
-			
-			
-			
-		</form>
 
 	</div>
 </div>
