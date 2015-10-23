@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
 from tennis.models import Extra, Participant,Court, Tournoi, Pair
+from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered
 import re, math
 import datetime
 from itertools import chain
@@ -102,6 +103,9 @@ def inscriptionTournoi(request):
 		for elem in extra:
 			ext = Extra.objects.filter(id=elem)[0]
 			pair.extra1.add(ext)
+		
+		# Send mail
+		send_confirmation_email_pair_registered(Participant.objects.get(user=pair.user1), Participant.objects.get(user=pair.user2))
 
 		pair.save()
 		return redirect(reverse(tournoi))
@@ -176,11 +180,15 @@ def registerTerrain(request):
 		if (rue=="" or numero=="" or postalcode=="" or locality=="" or matiere=="" or type=="" or etat==""):
 			errorAdd = "Veuillez remplir tous les champs obligatoires !"
 			return render(request,'tennis/registerTerrain.html',locals())
-
 		
-		
-		Court(rue = rue,numero=numero,boite=boite,codepostal=postalcode,localite=locality,acces=acces,matiere=matiere,type=type,dispoDimanche=dispoDimanche,dispoSamedi=dispoSamedi,etat= etat,commentaire=commentaire,user = request.user).save()
+		# Create court object
+		court = Court(rue = rue,numero=numero,boite=boite,codepostal=postalcode,localite=locality,acces=acces,matiere=matiere,type=type,dispoDimanche=dispoDimanche,dispoSamedi=dispoSamedi,etat= etat,commentaire=commentaire,user = request.user)
 	
+		# Send confirmation mail
+		send_confirmation_email_court_registered(Participant.objects.get(user=request.user), court)
+		
+		court.save()
+		
 		return redirect(reverse(terrain))
 
 	if request.user.is_authenticated():
@@ -598,12 +606,14 @@ def register(request):
 		#On format la date
 		birthdate2 = birthdate.split("/")
 		datenaissance = datetime.datetime(int(birthdate2[2]),int(birthdate2[1]),int(birthdate2[0]))
+		
+		#TODO : send email with code to finish registration and validate account
 
 		#Account creation & redirect
 		user = User.objects.create_user(username,email,password)
 		user.save()
 		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement = classement,oldparticipant = oldparticipant,datenaissance = datenaissance).save()
-
+		
 		#On connecte l'utilisateur
 		user2 = authenticate(username=username, password=password)
 		login(request, user2)

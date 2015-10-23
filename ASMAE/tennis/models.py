@@ -71,8 +71,3 @@ class Pair(models.Model):
 	pay = models.BooleanField(default=False)
 	def __str__(self):
 		return str(self.id) +" "+ self.tournoi.nom+" : "+self.user1.username+" et "+self.user2.username
-
-# TODO : Cyril needs Pair
-# TODO : Cyril needs Courts
-# TODO : Cyril needs Payment
-# TODO : Cyril needs Groups (with group leader)
