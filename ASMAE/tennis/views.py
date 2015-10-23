@@ -258,6 +258,8 @@ def staff(request):
 	Ex = Extra.objects.all()
 	#List of Court
 	allCourt = Court.objects.all()
+	#List of Pair
+	allPair = Pair.objects.all()
 
 	if request.method == "POST":
 		if request.POST['action'] == "addExtra":
@@ -388,6 +390,14 @@ def editTerrainStaff(request, id):
 		if request.user.is_staff:
 		
 			return render(request,'tennis/editTerrainStaff.html',locals())
+	return redirect(reverse(home))
+
+def validatePair(request, id):
+	pair = Pair.objects.filter(id=id)[0]
+	Ex = Extra.objects.all()
+	if request.user.is_authenticated():
+		if request.user.is_staff:
+			return render(request,'tennis/validatePair.html',locals())
 	return redirect(reverse(home))
 
 def profil(request):
