@@ -184,10 +184,24 @@ def confirmPair(request,id):
 	return redirect(reverse(home))
 
 def cancelPair(request,id):
+	if request.method == "POST":
+		pair = Pair.objects.filter(id=id)[0]
+		pair.delete()
+		return redirect(reverse(tournoi))
 	if request.user.is_authenticated():
 		#TODO check si il peut annuler cette pair
 		pair = Pair.objects.filter(id=id)[0]
+		extra1 = pair.extra1.all()
 		Ex = Extra.objects.all()
+		extranot1 = list()
+		for elem in Ex:
+			contained = False
+			for el in extra1:
+				if elem.id == el.id:
+					contained = True
+			if contained == False:	
+				extranot1.append(Extra.objects.filter(id=elem.id)[0])
+		
 		return render(request,'tennis/cancelPair.html',locals())
 	return redirect(reverse(home))
 
