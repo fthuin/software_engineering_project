@@ -188,7 +188,6 @@ def registerTerrain(request):
 	return redirect(reverse(home))
 
 def editTerrain(request,id):
-	print("ici")
 	if request.method == "POST":
 		if request.POST['action'] == "modifyCourt":
 			rue = request.POST['rue']
@@ -382,7 +381,11 @@ def editTerrainStaff(request, id):
 			return redirect(reverse(validateTerrain,args={id}))
 
 		if request.POST['action'] == "deleteCourt":
-			print("lol")
+			#TODO delete terrain staff
+			court = Court.objects.filter(id=id)[0]
+			court.delete()
+			court = Court.objects.filter(user=request.user)
+			return redirect(reverse(staff))
 	if request.user.is_authenticated():
 		if request.user.is_staff:
 		
@@ -591,7 +594,6 @@ def register(request):
 
 		#check format date
 		if re.match(r"^[0-3][0-9]/[0-1][0-9]/[1-2][0-9]{3}$",birthdate) is None:
-			print(birthdate)
 			error = "La date de naissance n'a pas le bon format"
 			return render(request,'tennis/register.html',locals())
 
