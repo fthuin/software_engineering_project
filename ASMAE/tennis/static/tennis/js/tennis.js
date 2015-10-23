@@ -20,23 +20,33 @@ function preselectSelectOption(matiere,type,etat){
 }
 
 var UserList;
+var pageLength;
 
-function setUser(User,page){
-	UserList = User;
+function setUserListInfo(userList,longueur){
+	UserList = userList;
+	pageLength = longueur;
+}
+
+function setUser(page){
+	//Conteneur de notre liste
 	var panneau = document.getElementById("UserList");
 	panneau.innerHTML = "";
 
-	var pageLength = 10;
-	for (var i = 0; i < User.length && i<pageLength; i++) {
-		var year = User[i][4].split(',')[1];
+	var debut = (page-1)*pageLength;
+	var fin = page*pageLength;
+
+	//Ajout des users
+	for (var i = debut; i < UserList.length && i<fin; i++) {
+		var year = UserList[i][4].split(',')[1];
 		var now = new Date().getFullYear();
 		var age = now-year;
-		var p = '<a onClick="selectUser('+"'"+User[i][0]+"',"+"'"+User[i][2]+"',"+"'"+User[i][1]+"'"+');" href="javascript:void(0)" class="list-group-item">'+User[i][0]+' - '+User[i][3]+' '+User[i][1]+' '+User[i][2]+' - '+age+' ans</a>';
+		var p = '<a onClick="selectUser('+"'"+UserList[i][0]+"',"+"'"+UserList[i][2]+"',"+"'"+UserList[i][1]+"'"+');" href="javascript:void(0)" class="list-group-item">'+UserList[i][0]+' - '+UserList[i][3]+' '+UserList[i][1]+' '+UserList[i][2]+' - '+age+' ans</a>';
 		panneau.innerHTML += p;
 	};
 
+	//Info maj
 	var info = document.getElementById("UserInfo");
-	info.innerHTML = '1-'+i+' sur '+pageLength+' résultats ('+User.length+' au total)';
+	info.innerHTML = (debut+1)+'-'+i+' sur '+pageLength+' résultats ('+UserList.length+' au total)';
 
 }
 
@@ -56,9 +66,6 @@ function setDescription(sexe,birth){
 
 	var panneau = document.getElementById("UserList");
 
-	//CLean tableau
-	setUser(UserList);
-
 	var selector = document.getElementById("selector");
 	var value = selector.options[selector.selectedIndex].id;
 	var tournoi = selector.options[selector.selectedIndex].innerHTML;
@@ -74,14 +81,52 @@ function setDescription(sexe,birth){
 		if(age>15 && age<25){
 			error = "Vous ne pouvez pas participer au tournoi des familles car vous n'avez pas moins de 15 ans ou plus de 25 ans !";
 			valid = false;
-			for (var i = 0; i < panneau.children.length; i++) {
-				panneau.children[i].style.color ="red";
-				panneau.children[i].style.fontWeight ="bold";
-				panneau.children[i].onclick = function() {return false;};
-			}
-
 		}
+	}
+	if(tournoi=="Double hommes"){
+		//Check s'il peut participer à ce tournoi
+		if(sexe=="Mme"){
+			error = "Vous ne pouvez pas participer au double hommes car vous n'êtes pas un homme !";
+			valid = false;
+		}
+	}
+	if(tournoi=="Double femmes"){
+		//Check s'il peut participer à ce tournoi
+		if(sexe=="Mr"){
+			error = "Vous ne pouvez pas participer au double femmes car vous n'êtes pas un femme !";
+			valid = false;
+		}
+	}
 
+	document.getElementById("Description").innerHTML=value;
+	document.getElementById("hint-tournoi").innerHTML = error;
+	if(!valid){
+		document.getElementById("InscriptionButton").disabled = true;
+	}else{
+		document.getElementById("InscriptionButton").disabled = false;
+	}	
+
+	var pagination = document.getElementById("UserPagination");
+	//On se remet sur le premier element du tableau
+	pagination.children[1].click();
+	//On set les uers restrictions
+	setUserRestriction(sexe,birth,1);
+}
+
+function setUserRestriction(sexe,birth,page){
+	//CLean tableau
+	setUser(page);
+
+	var panneau = document.getElementById("UserList");
+
+	var selector = document.getElementById("selector");
+	var value = selector.options[selector.selectedIndex].id;
+	var tournoi = selector.options[selector.selectedIndex].innerHTML;
+
+	if(tournoi=="Tournoi des familles"){
+		var year = birth.split(',')[1];
+		var now = new Date().getFullYear();
+		var age = now-year;
 		//Set les participant s'il peut les prendre ou non
 		for (var i = 0; i < panneau.children.length; i++) {
 			//Age du joueur du panneau
@@ -94,6 +139,12 @@ function setDescription(sexe,birth){
 			}
 			//SI on a plus de 25ans, il faut que le joueur ai 15 ans ou moins
 			if(age>=25 && otherAge>15){
+				panneau.children[i].style.color ="red";
+				panneau.children[i].style.fontWeight ="bold";
+				panneau.children[i].onclick = function() {return false;};
+			}
+			//Les joueurs entre 15 et 25 ans ne peuvent pas participer
+			if(otherAge<25 && otherAge>15){
 				panneau.children[i].style.color ="red";
 				panneau.children[i].style.fontWeight ="bold";
 				panneau.children[i].onclick = function() {return false;};
@@ -115,17 +166,6 @@ function setDescription(sexe,birth){
 		}
 	}
 	if(tournoi=="Double hommes"){
-		//Check s'il peut participer à ce tournoi
-		if(sexe=="Mme"){
-			error = "Vous ne pouvez pas participer au double hommes car vous n'êtes pas un homme !";
-			valid = false;
-			for (var i = 0; i < panneau.children.length; i++) {
-				panneau.children[i].style.color ="red";
-				panneau.children[i].style.fontWeight ="bold";
-				panneau.children[i].onclick = function() {return false;};
-			}
-		}
-
 		//Set les participant s'il peut les prendre ou non
 		for (var i = 0; i < panneau.children.length; i++) {
 			//Sexe du joueur du panneau
@@ -138,17 +178,6 @@ function setDescription(sexe,birth){
 		}
 	}
 	if(tournoi=="Double femmes"){
-		//Check s'il peut participer à ce tournoi
-		if(sexe=="Mr"){
-			error = "Vous ne pouvez pas participer au double femmes car vous n'êtes pas un femme !";
-			valid = false;
-			for (var i = 0; i < panneau.children.length; i++) {
-				panneau.children[i].style.color ="red";
-				panneau.children[i].style.fontWeight ="bold";
-				panneau.children[i].onclick = function() {return false;};
-			}
-		}
-
 		//Set les participant s'il peut les prendre ou non
 		for (var i = 0; i < panneau.children.length; i++) {
 			//Sexe du joueur du panneau
@@ -161,16 +190,6 @@ function setDescription(sexe,birth){
 		}
 	}
 
-	document.getElementById("Description").innerHTML=value;
-	document.getElementById("hint-tournoi").innerHTML = error;
-	if(!valid){
-		document.getElementById("InscriptionButton").disabled = true;
-	}else{
-		document.getElementById("InscriptionButton").disabled = false;
-	}
-
-	
-	
 }
 
 function selectMasterCard(){
@@ -524,5 +543,3 @@ document.getElementById("foot01").innerHTML =
 "<p>&copy;  " + new Date().getFullYear() + " ASMAE. All rights reserved.</p>";
 
 google.maps.event.addDomListener(window, 'load', initialize);
-activeExtra();
-alert("lol");
