@@ -34,6 +34,14 @@ def tournoi(request):
 def inscriptionTournoi(request):
 	if request.method == "POST":
 		nomTournoi = request.POST['tournoi']
+
+		if (nomTournoi==""):
+			errorAdd = "Veuillez selectionner un tournoi!"
+			Ex = Extra.objects.all()
+			Tour = Tournoi.objects.all()
+			Use = User.objects.all()
+			return render(request,'tennis/inscriptionTournoi.html',locals())
+
 		tournois = Tournoi.objects.filter(nom=nomTournoi)[0]
 		username2 = request.POST['username2']
 		comment1 = request.POST['remarque']
@@ -105,7 +113,7 @@ def inscriptionTournoi(request):
 			pair.extra1.add(ext)
 		
 		# Send mail
-		send_confirmation_email_pair_registered(Participant.objects.get(user=pair.user1), Participant.objects.get(user=pair.user2))
+		#send_confirmation_email_pair_registered(Participant.objects.get(user=pair.user1), Participant.objects.get(user=pair.user2))
 
 		pair.save()
 		return redirect(reverse(tournoi))
@@ -119,10 +127,46 @@ def inscriptionTournoi(request):
 	return redirect(reverse(home))
 
 def confirmPair(request,id):
+	
+	if request.method == "POST":
+		if request.POST['action'] == "validate":
+			remarque = request.POST['remarque']
+			extra = request.POST.getlist('extra')
+			
+
+			pair = Pair.objects.filter(id=id)[0]
+			pair.confirm = True
+			pair.comment2 = remarque
+			pair.save()
+
+			for elem in extra:
+				ext = Extra.objects.filter(id=elem)[0]
+				pair.extra2.add(ext)
+
+
+			return redirect(reverse(tournoi))
+		if request.POST['action'] == "refuse":
+			pair = Pair.objects.filter(id=id)[0]
+			pair.delete()
+			return redirect(reverse(tournoi))
+			#TODO Envoyer mail a l'user 1 pour lui dire que son pote veut pas de lui
 	if request.user.is_authenticated():
 		#TODO check si il peut confirmer cette pair
 		pair = Pair.objects.filter(id=id)[0]
-		Ex = Extra.objects.all()
+		extra1 = pair.extra1.all()
+		extranot1 = list()
+		Ex = Extra.objects.all()	
+		for elem in Ex:
+			contained = False
+			for el in extra1:
+				if elem.id == el.id:
+					contained = True
+			if contained == False:	
+				extranot1.append(Extra.objects.filter(id=elem.id)[0])
+
+				
+		
+		
 		return render(request,'tennis/confirmPair.html',locals())
 	return redirect(reverse(home))
 

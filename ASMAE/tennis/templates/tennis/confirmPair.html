@@ -9,7 +9,7 @@
 		<h2 class="center">Confirmer Pair {{ pair.id }}</h2>
 		<hr class="line">
 		
-		<form class="form-horizontal" name="registerForm" role="form" method="post" action="" onsubmit="" >
+		<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.confirmPair" pair.id %}"onsubmit="" >
 		{% csrf_token %}
 
 			<h4 class="center">Tournoi : {{ pair.tournoi.nom }}</h4>
@@ -48,7 +48,12 @@
 							<div class="form-group">
 						      <label class="control-label col-sm-4" for="username">Extras (todo set): </label>
 						      <div class="col-sm-8">
-						      	{% for extra in Ex %}
+						      	{% for extra in extra1 %}
+						      	<div class="checkbox">
+							      <label><input type="checkbox" value="{{ extra.id }}" disabled checked>{{ extra.nom }} ({{ extra.prix }} €)</label>
+							    </div>
+							    {% endfor %}
+							{% for extra in extranot1 %}
 						      	<div class="checkbox">
 							      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
 							    </div>
@@ -88,9 +93,14 @@
 							<div class="form-group">
 						      <label class="control-label col-sm-4" for="username">Extras : </label>
 						      <div class="col-sm-8">
-						      	{% for extra in Ex %}
+						      	{% for extra in extra1 %}
 						      	<div class="checkbox">
-							      <label><input type="checkbox" value="{{ extra.id }}">{{ extra.nom }} ({{ extra.prix }} €)</label>
+							      <label><input type="checkbox" value="{{ extra.id }}" >{{ extra.nom }} ({{ extra.prix }} €)</label>
+							    </div>
+							    {% endfor %}
+							{% for extra in extranot1 %}
+						      	<div class="checkbox">
+							      <label><input type="checkbox" value="{{ extra.id }}" >{{ extra.nom }} ({{ extra.prix }} €)</label>
 							    </div>
 							    {% endfor %}
 						      </div>
