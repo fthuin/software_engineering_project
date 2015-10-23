@@ -266,8 +266,8 @@ def staff(request):
 			message = request.POST['message']
 			
 			if nom=="":
-				error = "Veuillez rajouter un nom à l'extra!"
-				return render(request,'tennis/register.html',locals())			
+				errorAdd = "Veuillez rajouter un nom à l'extra!"
+				return render(request,'tennis/staff.html',locals())			
 
 			if not is_number(prix):
 				errorAdd = "Le prix n'a pas le bon format"
@@ -288,7 +288,7 @@ def staff(request):
 	
 			if nom=="":
 				errorEdit = "Veuillez rajouter un nom à l'extra!"
-				return render(request,'tennis/register.html',locals())			
+				return render(request,'tennis/staff.html',locals())			
 
 			if not is_number(prix):
 				errorEdit = "Le prix n'a pas le bon format"
