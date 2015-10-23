@@ -1,3 +1,6 @@
+/*
+ * Fonction used to select option in the terrain edit section
+ */
 function preselectSelectOption(matiere,type,etat){
 	function setSelectedIndex(s, valsearch)
 	{
@@ -18,15 +21,24 @@ function preselectSelectOption(matiere,type,etat){
 	setSelectedIndex(document.getElementById("type"),type);
 	setSelectedIndex(document.getElementById("etat"),etat);
 }
-
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ * Section for the users pagination in the tournement registration
+ */
+//Lite des users
 var UserList;
+//longueur de la page
 var pageLength;
 
+//On met à jours les infos
 function setUserListInfo(userList,longueur){
 	UserList = userList;
 	pageLength = longueur;
 }
 
+//Permet de changer le contenu de la page en fonction de la page ou on se trouve
 function setUser(page){
 	//Conteneur de notre liste
 	var panneau = document.getElementById("UserList");
@@ -50,6 +62,7 @@ function setUser(page){
 
 }
 
+//Lorsqu'on selectionne un utilistaeur on met ses valeurs dans le tableaux du dessous
 function selectUser(username,nom,prenom){
 	document.getElementById("username2Value").value = username;
 	document.getElementById("username2").innerHTML = username;
@@ -57,6 +70,7 @@ function selectUser(username,nom,prenom){
 	document.getElementById("prenom2").innerHTML = prenom;
 }
 
+//Lorsqu'on click sur un tournoi, on met à jours la description ainsi que les différentes restriction par rapport au tournoi
 function setDescription(sexe,birth){
 	//Reset valeur du joueur 2
 	document.getElementById("username2Value").value = "";
@@ -64,8 +78,10 @@ function setDescription(sexe,birth){
 	document.getElementById("nom2").innerHTML = " - ";
 	document.getElementById("prenom2").innerHTML = " - ";
 
+	//Paneau d'utilisateur
 	var panneau = document.getElementById("UserList");
 
+	//Tournoi selectionner
 	var selector = document.getElementById("selector");
 	var value = selector.options[selector.selectedIndex].id;
 	var tournoi = selector.options[selector.selectedIndex].innerHTML;
@@ -107,12 +123,13 @@ function setDescription(sexe,birth){
 	}	
 
 	var pagination = document.getElementById("UserPagination");
-	//On se remet sur le premier element du tableau
+	//On se remet sur la première page du tableau
 	pagination.children[1].click();
 	//On set les uers restrictions
 	setUserRestriction(sexe,birth,1);
 }
 
+//permet de mette  des restrictions sur les utilistaurs. S'ils peuvent pas etre avec sois en tournoi il sont mis en rouge et non clickable
 function setUserRestriction(sexe,birth,page){
 	//CLean tableau
 	setUser(page);
@@ -191,7 +208,13 @@ function setUserRestriction(sexe,birth,page){
 	}
 
 }
-
+//Fin de la section des users dans l'inscription à un tournoi
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ * Sections utilisé lors du paiement pour choisir une méthode de paiement
+ */
 function selectMasterCard(){
 	document.getElementById("mastercard").style.display = "inherit";
 	document.getElementById("visa").style.display = "none";
@@ -219,7 +242,16 @@ function selectVirement(){
 	document.getElementById("paypal").style.display = "none";
 	document.getElementById("virement").style.display = "inherit";
 }
+//Fin de la section sur les paiements
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ * Section staff
+ */
 
+//NAVIGATION
+//permet de changer les différents onglets
 function ongletTournoi(){
 	document.getElementById("tournoi").className = "active";
 	document.getElementById("terrain").className = " ";
@@ -268,6 +300,53 @@ function ongletExtra(){
 	document.getElementById("gestionExtra").style.display = "inherit";
 }
 
+//TOURNOI
+
+//TERRAIN
+//Lite des terrains
+var CourtList;
+//longueur de la page
+var pageLength;
+
+//On met à jours les infos
+function setCourtListInfo(courtList,longueur){
+	CourtList = courtList;
+	pageLength = longueur;
+}
+
+//Permet de changer le contenu de la page en fonction de la page ou on se trouve
+function setCourt(page){
+	//Conteneur de notre liste
+	var panneau = document.getElementById("CourtList");
+	panneau.innerHTML = "";
+
+	var debut = (page-1)*pageLength;
+	var fin = page*pageLength;
+
+	//Ajout des courts
+	for (var i = debut; i < CourtList.length && i<fin; i++) {
+		//Set info court
+		var adress;
+		if(CourtList[i][9]!=""){
+			adress = CourtList[i][5]+' '+CourtList[i][6]+' bte '+CourtList[i][9]+', '+CourtList[i][7]+' '+CourtList[i][8];
+		}else{
+			adress = CourtList[i][5]+' '+CourtList[i][6]+', '+CourtList[i][7]+' '+CourtList[i][8];
+		}
+		
+		var p = '<a href="staff/terrain/'+CourtList[i][3]+'" class="list-group-item"><b>ID : </b>'+CourtList[i][3]+' / <b>Matière : </b>'+CourtList[i][4]+' / <b>Propriétaire : </b>'+CourtList[i][1]+' '+CourtList[i][2]+' ('+CourtList[i][0]+') <br> <b>Adresse : </b>'+adress+'</a>';
+		panneau.innerHTML += p;
+	};
+
+	//Info maj
+	var info = document.getElementById("CourtInfo");
+	info.innerHTML = (debut+1)+'-'+i+' sur '+pageLength+' résultats ('+CourtList.length+' au total)';
+
+}
+
+
+//PAIR
+//EXTRA
+//permet de selectionner un extra
 function extra(id, nom,prix,comment){
 	document.getElementById("editExtra").style.display = "inherit";
 	document.getElementById("newExtra").style.display = "none";
@@ -288,11 +367,13 @@ function extra(id, nom,prix,comment){
 	document.getElementById("extracommentaire").innerHTML = comment;
 }
 
+//Active le premier extra
 function activeExtra(){
 	var c = document.getElementById("listExtra").children;
 	c[0].className="list-group-item active";
 }
 
+//Permet d'ajouter un nouvel extra
 function addExtra(){
 	document.getElementById("editExtra").style.display = "none";
 	document.getElementById("newExtra").style.display = "inherit";
@@ -304,35 +385,116 @@ function addExtra(){
 
 }
 
-function initialize() {
-    var mapCanvas = document.getElementById('map');
-    var mapOptions = {
-      scrollwheel: false,
-      navigationControl: false,
-      center: new google.maps.LatLng(50.8539717, 4.4002427),
-      zoom: 16,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
+//Fin de la section staff
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ * Section profil
+ */
 
-    var map = new google.maps.Map(mapCanvas, mapOptions);
-    var marker = new google.maps.Marker({
-    position: {lat: 50.8539717, lng: 4.4002427},
-    animation: google.maps.Animation.DROP,
-    map: map,
-    title: 'Cogefis'
-  });
- }
-
-
+ //permet d'avoir le formulaire d'edition du profil
 function changeProfilPannel(){
 	document.getElementById("Info").style.display="none";
 	document.getElementById("editInfo").style.display="inherit";
 }
 
+//permet d'avoir le formulaire d'edition du mot de passe
 function changeMDP(){
 	document.getElementById("compteInfo").style.display="none";
 	document.getElementById("editMDP").style.display="inherit";
 }
+
+//Fonction utilisé pour validé le formulaire d'édition du profil
+function validateEditInfo() {
+	var valid = true;
+
+	//Verification nom présent
+	var lastname = document.getElementById("lastname").value;
+	if(lastname==null || lastname == ""){
+		document.getElementById("hint-lastname").innerHTML = " ! Entrer votre nom";
+		valid = false;
+	}else{
+		document.getElementById("hint-lastname").innerHTML = "";
+	}
+
+	//Verification prénom présent
+	var firstname = document.getElementById("firstname").value;
+	if(firstname==null || firstname == ""){
+		document.getElementById("hint-firstname").innerHTML = " ! Entrer votre prénom";
+		valid = false;
+	}else{
+		document.getElementById("hint-firstname").innerHTML = "";
+	}
+
+	//Verification telephone présent
+	var tel = document.getElementById("tel").value;
+	var gsm = document.getElementById("gsm").value;
+	if((tel==null || tel == "") && (gsm==null || gsm == "")){
+		document.getElementById("hint-tel").innerHTML = " ! Entrer votre numéro de téléphone ou de GSM";
+		valid = false;
+	}else{
+		//Verify number validity TODO
+		document.getElementById("hint-tel").innerHTML = "";
+	}
+	//Verification rue présent
+	var street = document.getElementById("street").value;
+	if(street==null || street == ""){
+		document.getElementById("hint-street").innerHTML = " ! Entrer votre rue";
+		valid = false;
+	}else{
+		document.getElementById("hint-street").innerHTML = "";
+	}
+
+	//Verification numero présent
+	var number = document.getElementById("number").value;
+	if(number==null || number == ""){
+		document.getElementById("hint-number").innerHTML = " ! Entrer votre numéro/boite";
+		valid = false;
+	}else{
+		document.getElementById("hint-number").innerHTML = "";
+	}
+
+	//Verification code postal présent
+	var postalcode = document.getElementById("postalcode").value;
+	if(postalcode==null || postalcode == ""){
+		document.getElementById("hint-postalcode").innerHTML = " ! Entrer votre code postal";
+		valid = false;
+	}else{
+		document.getElementById("hint-postalcode").innerHTML = "";
+	}
+
+	//Verification localité présent
+	var locality = document.getElementById("locality").value;
+	if(locality==null || locality == ""){
+		document.getElementById("hint-locality").innerHTML = " ! Entrer votre localité";
+		valid = false;
+	}else{
+		document.getElementById("hint-locality").innerHTML = "";
+	}
+
+	//TODO vérification addresse correcte
+
+	//Verification date de naissance présent
+	var birthdate = document.getElementById("birthdate").value;
+	if(birthdate==null || birthdate == ""){
+		document.getElementById("hint-birthdate").innerHTML = " ! Entrer votre date de naissance";
+		valid = false;
+	}else{
+		document.getElementById("hint-birthdate").innerHTML = "";
+	}
+	
+
+	return valid;
+}
+//fin de la section profil
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ * Section inscription
+ */
+
 /*
 * Validation du formulaire d'inscription
 * Vérification des champs et de la validité du numero de tel email et addresse
@@ -456,90 +618,44 @@ function validateRegister() {
 
 	return valid;
 }
+//Fin de la section inscription
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ * Section contact
+ */
 
-function validateEditInfo() {
-	var valid = true;
+//Initialisation de la google map
+function initialize() {
+    var mapCanvas = document.getElementById('map');
+    var mapOptions = {
+      scrollwheel: false,
+      navigationControl: false,
+      center: new google.maps.LatLng(50.8539717, 4.4002427),
+      zoom: 16,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
 
-	//Verification nom présent
-	var lastname = document.getElementById("lastname").value;
-	if(lastname==null || lastname == ""){
-		document.getElementById("hint-lastname").innerHTML = " ! Entrer votre nom";
-		valid = false;
-	}else{
-		document.getElementById("hint-lastname").innerHTML = "";
-	}
-
-	//Verification prénom présent
-	var firstname = document.getElementById("firstname").value;
-	if(firstname==null || firstname == ""){
-		document.getElementById("hint-firstname").innerHTML = " ! Entrer votre prénom";
-		valid = false;
-	}else{
-		document.getElementById("hint-firstname").innerHTML = "";
-	}
-
-	//Verification telephone présent
-	var tel = document.getElementById("tel").value;
-	var gsm = document.getElementById("gsm").value;
-	if((tel==null || tel == "") && (gsm==null || gsm == "")){
-		document.getElementById("hint-tel").innerHTML = " ! Entrer votre numéro de téléphone ou de GSM";
-		valid = false;
-	}else{
-		//Verify number validity TODO
-		document.getElementById("hint-tel").innerHTML = "";
-	}
-	//Verification rue présent
-	var street = document.getElementById("street").value;
-	if(street==null || street == ""){
-		document.getElementById("hint-street").innerHTML = " ! Entrer votre rue";
-		valid = false;
-	}else{
-		document.getElementById("hint-street").innerHTML = "";
-	}
-
-	//Verification numero présent
-	var number = document.getElementById("number").value;
-	if(number==null || number == ""){
-		document.getElementById("hint-number").innerHTML = " ! Entrer votre numéro/boite";
-		valid = false;
-	}else{
-		document.getElementById("hint-number").innerHTML = "";
-	}
-
-	//Verification code postal présent
-	var postalcode = document.getElementById("postalcode").value;
-	if(postalcode==null || postalcode == ""){
-		document.getElementById("hint-postalcode").innerHTML = " ! Entrer votre code postal";
-		valid = false;
-	}else{
-		document.getElementById("hint-postalcode").innerHTML = "";
-	}
-
-	//Verification localité présent
-	var locality = document.getElementById("locality").value;
-	if(locality==null || locality == ""){
-		document.getElementById("hint-locality").innerHTML = " ! Entrer votre localité";
-		valid = false;
-	}else{
-		document.getElementById("hint-locality").innerHTML = "";
-	}
-
-	//TODO vérification addresse correcte
-
-	//Verification date de naissance présent
-	var birthdate = document.getElementById("birthdate").value;
-	if(birthdate==null || birthdate == ""){
-		document.getElementById("hint-birthdate").innerHTML = " ! Entrer votre date de naissance";
-		valid = false;
-	}else{
-		document.getElementById("hint-birthdate").innerHTML = "";
-	}
-	
-
-	return valid;
-}
-
+    var map = new google.maps.Map(mapCanvas, mapOptions);
+    var marker = new google.maps.Marker({
+    position: {lat: 50.8539717, lng: 4.4002427},
+    animation: google.maps.Animation.DROP,
+    map: map,
+    title: 'Cogefis'
+  });
+ }
+//fin de la section contact
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ * Footer
+ */
+ //permet de mettre les droit et l'année dans le footer
 document.getElementById("foot01").innerHTML =
 "<p>&copy;  " + new Date().getFullYear() + " ASMAE. All rights reserved.</p>";
-
-google.maps.event.addDomListener(window, 'load', initialize);
+//Fin de la section footer
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
