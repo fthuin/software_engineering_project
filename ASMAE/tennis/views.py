@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
 from tennis.models import Extra, Participant,Court, Tournoi, Pair
+from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered
 import re, math
 import datetime
 from itertools import chain
@@ -102,6 +103,9 @@ def inscriptionTournoi(request):
 		for elem in extra:
 			ext = Extra.objects.filter(id=elem)[0]
 			pair.extra1.add(ext)
+		
+		# Send mail
+		send_confirmation_email_pair_registered(Participant.objects.get(user=pair.user1), Participant.objects.get(user=pair.user2))
 
 		pair.save()
 		return redirect(reverse(tournoi))
@@ -114,23 +118,34 @@ def inscriptionTournoi(request):
 		return render(request,'tennis/inscriptionTournoi.html',locals())
 	return redirect(reverse(home))
 
-def confirmPair(request):
+def confirmPair(request,id):
 	if request.user.is_authenticated():
 		#TODO check si il peut confirmer cette pair
+		pair = Pair.objects.filter(id=id)[0]
 		Ex = Extra.objects.all()
 		return render(request,'tennis/confirmPair.html',locals())
 	return redirect(reverse(home))
 
-def viewPair(request):
+def cancelPair(request,id):
+	if request.user.is_authenticated():
+		#TODO check si il peut annuler cette pair
+		pair = Pair.objects.filter(id=id)[0]
+		Ex = Extra.objects.all()
+		return render(request,'tennis/cancelPair.html',locals())
+	return redirect(reverse(home))
+
+def viewPair(request,id):
 	if request.user.is_authenticated():
 		#TODO check si il peut voir cette pair
+		pair = Pair.objects.filter(id=id)[0]
 		Ex = Extra.objects.all()
 		return render(request,'tennis/viewPair.html',locals())
 	return redirect(reverse(home))
 
-def payPair(request):
+def payPair(request,id):
 	if request.user.is_authenticated():
 		#TODO check si il peut payer cette pair
+		pair = Pair.objects.filter(id=id)[0]
 		Ex = Extra.objects.all()
 		return render(request,'tennis/payPair.html',locals())
 	return redirect(reverse(home))
@@ -165,11 +180,15 @@ def registerTerrain(request):
 		if (rue=="" or numero=="" or postalcode=="" or locality=="" or matiere=="" or type=="" or etat==""):
 			errorAdd = "Veuillez remplir tous les champs obligatoires !"
 			return render(request,'tennis/registerTerrain.html',locals())
-
 		
-		
-		Court(rue = rue,numero=numero,boite=boite,codepostal=postalcode,localite=locality,acces=acces,matiere=matiere,type=type,dispoDimanche=dispoDimanche,dispoSamedi=dispoSamedi,etat= etat,commentaire=commentaire,user = request.user).save()
+		# Create court object
+		court = Court(rue = rue,numero=numero,boite=boite,codepostal=postalcode,localite=locality,acces=acces,matiere=matiere,type=type,dispoDimanche=dispoDimanche,dispoSamedi=dispoSamedi,etat= etat,commentaire=commentaire,user = request.user)
 	
+		# Send confirmation mail
+		send_confirmation_email_court_registered(Participant.objects.get(user=request.user), court)
+		
+		court.save()
+		
 		return redirect(reverse(terrain))
 
 	if request.user.is_authenticated():
@@ -177,7 +196,6 @@ def registerTerrain(request):
 	return redirect(reverse(home))
 
 def editTerrain(request,id):
-	print("ici")
 	if request.method == "POST":
 		if request.POST['action'] == "modifyCourt":
 			rue = request.POST['rue']
@@ -236,20 +254,10 @@ def editTerrain(request,id):
 	return redirect(reverse(home))
 
 def staff(request):
-	#Nombre d'element sur la page
-	pageLength = 10
 	#List of Extra
 	Ex = Extra.objects.all()
 	#List of Court
 	allCourt = Court.objects.all()
-	#Number of onglet if we show them pageLength by pageLength
-	onglet = list()
-	for x in range(1,int(math.ceil(len(allCourt)/pageLength))):
-		onglet.append(x+1)
-	onglet = onglet[0:6]
-	firstOnglet = 1
-	#The first pageLength to show
-	firstTerrain = allCourt[0:pageLength]
 
 	if request.method == "POST":
 		if request.POST['action'] == "addExtra":
@@ -258,8 +266,8 @@ def staff(request):
 			message = request.POST['message']
 			
 			if nom=="":
-				error = "Veuillez rajouter un nom à l'extra!"
-				return render(request,'tennis/register.html',locals())			
+				errorAdd = "Veuillez rajouter un nom à l'extra!"
+				return render(request,'tennis/staff.html',locals())			
 
 			if not is_number(prix):
 				errorAdd = "Le prix n'a pas le bon format"
@@ -280,7 +288,7 @@ def staff(request):
 	
 			if nom=="":
 				errorEdit = "Veuillez rajouter un nom à l'extra!"
-				return render(request,'tennis/register.html',locals())			
+				return render(request,'tennis/staff.html',locals())			
 
 			if not is_number(prix):
 				errorEdit = "Le prix n'a pas le bon format"
@@ -371,7 +379,11 @@ def editTerrainStaff(request, id):
 			return redirect(reverse(validateTerrain,args={id}))
 
 		if request.POST['action'] == "deleteCourt":
-			print("lol")
+			#TODO delete terrain staff
+			court = Court.objects.filter(id=id)[0]
+			court.delete()
+			court = Court.objects.filter(user=request.user)
+			return redirect(reverse(staff))
 	if request.user.is_authenticated():
 		if request.user.is_staff:
 		
@@ -580,19 +592,20 @@ def register(request):
 
 		#check format date
 		if re.match(r"^[0-3][0-9]/[0-1][0-9]/[1-2][0-9]{3}$",birthdate) is None:
-			print(birthdate)
 			error = "La date de naissance n'a pas le bon format"
 			return render(request,'tennis/register.html',locals())
 
 		#On format la date
 		birthdate2 = birthdate.split("/")
 		datenaissance = datetime.datetime(int(birthdate2[2]),int(birthdate2[1]),int(birthdate2[0]))
+		
+		#TODO : send email with code to finish registration and validate account
 
 		#Account creation & redirect
 		user = User.objects.create_user(username,email,password)
 		user.save()
 		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement = classement,oldparticipant = oldparticipant,datenaissance = datenaissance).save()
-
+		
 		#On connecte l'utilisateur
 		user2 = authenticate(username=username, password=password)
 		login(request, user2)

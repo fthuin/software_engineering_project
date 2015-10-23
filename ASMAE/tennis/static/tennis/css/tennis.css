@@ -272,6 +272,15 @@ p.info{
     padding-top: 7px;
     font-weight: bold;
     color: #D4542D;
+   /* margin-bottom: 1px;*/
+}
+
+/* Used in pair section */
+p.infoForm{
+    padding-top: 7px;
+    font-weight: bold;
+    color: #D4542D;
+    margin-bottom: 0;
 }
 
 label.info{

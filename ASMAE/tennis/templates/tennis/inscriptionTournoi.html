@@ -69,6 +69,7 @@
 						<ul class="pagination" id="UserPagination">
 						</ul>
 					</div>
+
 				</div>				
 			</div>
 			<div class="row">
@@ -176,13 +177,34 @@
 
 {% block commande %}
 <script>
+//Recuperation des users et stockage dans un tableau
 var userList = [];
 {% for use in Use %}
+//on ne stock pas sois meme dans la liste des joueurs
 {% if  use.username != user.username %}
 userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.participant.datenaissance }}']);
 {% endif %}
 {% endfor %}
-setUser(userList);
+
+//Nombre d'entrée par page
+var pageLength = 10;
+//Nombre de page
+var total = Math.ceil(userList.length/pageLength);
+//Notre pagination
+$('#UserPagination').twbsPagination({
+  totalPages: total,
+  visiblePages: 5,
+  onPageClick: function (event, page) {
+  	//Lorsqu'on click sur une page, on met à jours le contenu
+	//On met à jours la page en fonction du tournoi selectionner
+	setUserRestriction('{{user.participant.titre}}','{{ user.participant.datenaissance }}',page);
+  }
+});
+//On met jours les info (liste des users et longueur de chaque page)
+setUserListInfo(userList,pageLength);
+
+//On met à jours la première page
+setUser(1);
 </script>
 {% endblock %}
 
