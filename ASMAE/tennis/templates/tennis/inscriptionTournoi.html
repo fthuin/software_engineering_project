@@ -84,10 +84,16 @@
 							<div class="form-group">
 						      <label class="control-label col-sm-4" for="username">Extras : </label>
 						      <div class="col-sm-8">
-						      	{% for extra in Ex %}
+						      	{% for extra in extra1 %}
 						      	<div class="checkbox">
 
-							      <label><input type="checkbox" name = "extra" value="{{ extra.id }}">{{ extra.nom }} ({{ extra.prix }} €)</label>
+							      <label><input type="checkbox" name = "extra" value="{{ extra.id }}" checked>{{ extra.nom }} ({{ extra.prix }} €)</label>
+							    </div>
+							    {% endfor %}
+							{% for extra in extranot1 %}
+						      	<div class="checkbox">
+
+							      <label><input type="checkbox" name = "extra" value="{{ extra.id }}" >{{ extra.nom }} ({{ extra.prix }} €)</label>
 							    </div>
 							    {% endfor %}
 						      </div>

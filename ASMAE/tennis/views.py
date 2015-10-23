@@ -33,6 +33,24 @@ def tournoi(request):
 
 def inscriptionTournoi(request):
 	if request.method == "POST":
+
+		
+		username2 = request.POST['username2']
+		comment1 = request.POST['remarque']
+		extra = request.POST.getlist('extra')
+		extra1 = list()
+		for elem in extra:
+			extra1.append(Extra.objects.filter(id=elem)[0])
+		extranot1 = list()
+		Ex = Extra.objects.all()	
+		for elem in Ex:
+			contained = False
+			for el in extra1:
+				if elem.id == el.id:
+					contained = True
+			if contained == False:	
+				extranot1.append(Extra.objects.filter(id=elem.id)[0])
+		
 		nomTournoi = request.POST['tournoi']
 
 		if (nomTournoi==""):
@@ -43,11 +61,6 @@ def inscriptionTournoi(request):
 			return render(request,'tennis/inscriptionTournoi.html',locals())
 
 		tournois = Tournoi.objects.filter(nom=nomTournoi)[0]
-		username2 = request.POST['username2']
-		comment1 = request.POST['remarque']
-		extra = request.POST.getlist('extra')
-		
-		
 
 		if (username2==""):
 			errorAdd = "Veuillez rajouter un deuxieme joueur pour votre pair"
@@ -120,7 +133,7 @@ def inscriptionTournoi(request):
 		
 	#rajouter les extras
 	if request.user.is_authenticated():
-		Ex = Extra.objects.all()
+		extranot1 = Extra.objects.all()
 		Tour = Tournoi.objects.all()
 		Use = User.objects.all()
 		return render(request,'tennis/inscriptionTournoi.html',locals())
