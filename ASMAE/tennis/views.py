@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
 from tennis.models import Extra, Participant,Court, Tournoi, Pair
-from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered
+from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament
 import re, math
 import datetime
 from itertools import chain
@@ -126,7 +126,7 @@ def inscriptionTournoi(request):
 			pair.extra1.add(ext)
 		
 		# Send mail
-		#send_confirmation_email_pair_registered(Participant.objects.get(user=pair.user1), Participant.objects.get(user=pair.user2))
+		send_confirmation_email_pair_registered(Participant.objects.get(user=pair.user1), Participant.objects.get(user=pair.user2))
 
 		pair.save()
 		return redirect(reverse(tournoi))
@@ -400,10 +400,14 @@ def staff(request,p=0):
 			extra = Extra.objects.filter(id = id)[0]
 			extra.delete()
 			successDelete = "Extra bien supprimé!"
+			
+		if request.POST['action'] == "sendTournamentDataByMail":
+			send_email_start_tournament() #TODO to change and link to a tournament
+			successSend = "Les mails ont bien été envoyé"
 		
 	if request.user.is_authenticated():
-		if request.user.is_staff:
-			return render(request,'tennis/staff.html',locals())
+		if request.user.is_staff: TODO
+		    return render(request,'tennis/staff.html',locals())
 	return redirect(reverse(home))
 
 def validateTerrain(request, id):
