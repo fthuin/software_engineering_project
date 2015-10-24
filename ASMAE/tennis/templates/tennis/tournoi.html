@@ -25,6 +25,8 @@
 							<b>ID : </b> {{ item.id}} / <b>Tournoi : </b> {{item.tournoi.nom}} / <b>Jour : </b>{{ item.tournoi.jour }} <br> 
 							<b>Joueur 1 : </b>{{item.user1.participant.prenom}} {{item.user1.participant.nom}} - <b>Joueur 2 : </b>{{item.user2.participant.prenom}} {{item.user2.participant.nom}}
 						</a>
+						{% empty %}
+						<li class="list-group-item center">Vous n'avez pas de demande d'inscription</li>
 						{% endfor %}
 					</div>
 				</div>
@@ -40,6 +42,8 @@
 							<b>ID : </b> {{ item.id}} / <b>Tournoi : </b> {{item.tournoi.nom}} / <b>Jour : </b>{{ item.tournoi.jour }} <br> 
 							<b>Joueur 1 : </b>{{item.user1.participant.prenom}} {{item.user1.participant.nom}} - <b>Joueur 2 : </b>{{item.user2.participant.prenom}} {{item.user2.participant.nom}}
 						</a>
+						{% empty %}
+						<li class="list-group-item center">Vous n'avez pas de demande en attente de confirmation</li>
 						{% endfor %}
 						
 					</div>
@@ -57,6 +61,8 @@
 							<b>Valide : </b>{% if item.valid %}oui{% else %}non{% endif %} / <b>Payé : </b>{% if item.pay %}oui{% else %}non{% endif %} <br>
 							<b>Joueur 1 : </b>{{item.user1.participant.prenom}} {{item.user1.participant.nom}} - <b>Joueur 2 : </b>{{item.user2.participant.prenom}} {{item.user2.participant.nom}}
 						</a>
+						{% empty %}
+						<li class="list-group-item center">Vous n'etes pas encore inscrit à un tournoi</li>
 						{% endfor %}
 				
 			</div>
@@ -72,7 +78,7 @@
 			<!-- Les historique de matchs -->
 			<!-- TODO set info -->
 			<div class="content-box">
-				<h2 class="center">Historique</h2>
+				<h2 class="center">Historique (TODO)</h2>
 				<hr class="line">
 
 				<!-- Selecteur -->
@@ -107,7 +113,7 @@
 			<!-- Agenda -->
 			<!-- TODO set info -->
 			<div class="content-box">
-				<h2 class="center">Agenda</h2>
+				<h2 class="center">Agenda (TODO)</h2>
 				<hr class="line">
 
 				<!-- Selecteur -->
