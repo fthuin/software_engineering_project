@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 import re
 import os
 from selenium import webdriver
@@ -11,8 +11,8 @@ This utility was made to create fake accounts to populate the database.
 # Constante
 TMP_FILE = "src.tmp"
 RES_FILE = "res.csv"
-URL_RANDOM = "http://en.fakenamegenerator.com/advanced.php?t=country&n[]=fr&c[]=bg&gen=50&age-min=8&age-max=65"
-NBR_PEOPLE = 100
+URL_RANDOM = "http://en.fakenamegenerator.com/advanced.php?t=country&n[]=fr&c[]=bg&gen=100&age-min=8&age-max=65"
+NBR_PEOPLE = 50
 
 ''' Only need to add :
     - a constant with a number which is the position in the .csv file
@@ -108,7 +108,7 @@ class People :
             elif val[0] == "December":
                 month = 12
             self.att['Date'] = val[1] + "/" + repr(month) + "/" + val[2]
-                
+
         else:
             self.att[list_info[key]] = val.encode('UTF-8', 'ignore')
 
@@ -119,7 +119,7 @@ class People :
     def write(self, f) :
         f.write(', '.join(self.atts()))
         f.write('\n')
-        
+
     def __str__(self):
         res = ""
         for item in list_info:

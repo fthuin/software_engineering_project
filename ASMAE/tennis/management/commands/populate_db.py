@@ -31,7 +31,7 @@ class Command(BaseCommand):
                 mdp = items[9]
                 user = User.objects.create_user(username, email, mdp)
                 user.save()
-                participant = Participant(user=user, titre = "Mr", nom=nom, prenom=prenom, rue=rue, numero=numero, boite="", codepostal=code, localite=ville, telephone="", fax="", gsm=telephone, classement="", oldparticipant=False, datenaissance=datenaissance).save() 
+                participant = Participant(user=user, titre = "Mr", nom=nom, prenom=prenom, rue=rue, numero=numero, boite="", codepostal=code, localite=ville, telephone="", fax="", gsm=telephone, classement="", oldparticipant=False, datenaissance=datenaissance).save()
 
     def handle(self, *args, **options):
         self._create_participants()
