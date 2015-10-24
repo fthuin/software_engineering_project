@@ -487,6 +487,10 @@ def editTerrainStaff(request, id):
 def validatePair(request, id):
 	pair = Pair.objects.filter(id=id)[0]
 	Ex = Extra.objects.all()
+	birthdate1 = pair.user1.participant.datenaissance
+	formatedBirthdate1 = birthdate1.strftime('%d/%m/%Y')
+	birthdate2 = pair.user2.participant.datenaissance
+	formatedBirthdate2 = birthdate2.strftime('%d/%m/%Y')
 	if request.user.is_authenticated():
 		if request.user.is_staff:
 			return render(request,'tennis/validatePair.html',locals())
