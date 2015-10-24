@@ -220,7 +220,7 @@ def viewPair(request,id):
 			if contained == False:	
 				extranot1.append(Extra.objects.filter(id=elem.id)[0])
 
-		extra2 = pair.extra1.all()
+		extra2 = pair.extra2.all()
 		extranot2 = list()
 		for elem in Ex:
 			contained = False
@@ -486,7 +486,47 @@ def editTerrainStaff(request, id):
 
 def validatePair(request, id):
 	pair = Pair.objects.filter(id=id)[0]
+	if request.method == "POST":
+		if request.POST['action'] == "editPair":
+			valid = request.POST['valid']
+			paid = request.POST['pay']
+			if valid == "Oui":
+				valider = True
+			else:
+				valider = False
+			if paid == "Oui":
+				payer = True
+			else:
+				payer = False
+			pair.valid = valider
+			pair.pay = payer
+			pair.save()
+			return redirect(reverse(staff))
+		if request.POST['action'] == "deletePair":
+			pair.delete()
+			return redirect(reverse(staff))
+			
+	
 	Ex = Extra.objects.all()
+	extra1 = pair.extra1.all()
+	extranot1 = list()
+	for elem in Ex:
+		contained = False
+		for el in extra1:
+			if elem.id == el.id:
+				contained = True
+		if contained == False:	
+			extranot1.append(Extra.objects.filter(id=elem.id)[0])
+
+	extra2 = pair.extra2.all()
+	extranot2 = list()
+	for elem in Ex:
+		contained = False
+		for el in extra2:
+			if elem.id == el.id:
+				contained = True
+		if contained == False:	
+			extranot2.append(Extra.objects.filter(id=elem.id)[0])
 	birthdate1 = pair.user1.participant.datenaissance
 	formatedBirthdate1 = birthdate1.strftime('%d/%m/%Y')
 	birthdate2 = pair.user2.participant.datenaissance

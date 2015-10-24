@@ -49,9 +49,14 @@
 						<div class="form-group">
 					      <label class="info control-label col-sm-4" for="username">Extras : </label>
 					      <div class="col-sm-8">
-					      	{% for extra in Ex %}
+					      	{% for extra in extra1 %}
 					      	<div class="checkbox">
-						      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
+						      <label><input type="checkbox" value="{{ extra.id }}" disabled checked>{{ extra.nom }} ({{ extra.prix }} €)</label>
+						    </div>
+						    {% endfor %}
+						{% for extra in extranot1 %}
+					      	<div class="checkbox">
+						      <label><input type="checkbox" value="{{ extra.id }}" disabled >{{ extra.nom }} ({{ extra.prix }} €)</label>
 						    </div>
 						    {% endfor %}
 					      </div>
@@ -93,9 +98,14 @@
 						<div class="form-group">
 					      <label class="info control-label col-sm-4" for="username">Extras : </label>
 					      <div class="col-sm-8">
-					      	{% for extra in Ex %}
+					      	{% for extra in extra2 %}
 					      	<div class="checkbox">
-						      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
+						      <label><input type="checkbox" value="{{ extra.id }}" disabled checked>{{ extra.nom }} ({{ extra.prix }} €)</label>
+						    </div>
+						    {% endfor %}
+						{% for extra in extranot2 %}
+					      	<div class="checkbox">
+						      <label><input type="checkbox" value="{{ extra.id }}" disabled >{{ extra.nom }} ({{ extra.prix }} €)</label>
 						    </div>
 						    {% endfor %}
 					      </div>
