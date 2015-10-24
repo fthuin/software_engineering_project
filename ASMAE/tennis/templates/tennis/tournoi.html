@@ -21,8 +21,8 @@
 					<div class="list-group">
 						{% for item in demande %}
 						<a href="{% url "tennis.views.confirmPair" item.id %}" class="list-group-item">
+							<b>En attente de votre confirmation</b> <br>
 							<b>ID : </b> {{ item.id}} / <b>Tournoi : </b> {{item.tournoi.nom}} / <b>Jour : </b>{{ item.tournoi.jour }} <br> 
-							<b>Valide : </b>{% if item.valid %}oui{% else %}non{% endif %} / <b>Payé : </b>{% if item.pay %}oui{% else %}non{% endif %} <br>
 							<b>Joueur 1 : </b>{{item.user1.participant.prenom}} {{item.user1.participant.nom}} - <b>Joueur 2 : </b>{{item.user2.participant.prenom}} {{item.user2.participant.nom}}
 						</a>
 						{% endfor %}
@@ -36,8 +36,8 @@
 					<div class="list-group">
 						{% for item in nonComfirme %}
 						<a href="{% url "tennis.views.cancelPair" item.id %}" class="list-group-item">
+							<b>En attente de confirmation par le joueur 2</b> <br>
 							<b>ID : </b> {{ item.id}} / <b>Tournoi : </b> {{item.tournoi.nom}} / <b>Jour : </b>{{ item.tournoi.jour }} <br> 
-							<b>Valide : </b>{% if item.valid %}oui{% else %}non{% endif %} / <b>Payé : </b>{% if item.pay %}oui{% else %}non{% endif %} <br>
 							<b>Joueur 1 : </b>{{item.user1.participant.prenom}} {{item.user1.participant.nom}} - <b>Joueur 2 : </b>{{item.user2.participant.prenom}} {{item.user2.participant.nom}}
 						</a>
 						{% endfor %}
