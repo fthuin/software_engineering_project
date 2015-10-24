@@ -133,7 +133,7 @@ def inscriptionTournoi(request):
 	if request.user.is_authenticated():
 		extranot1 = Extra.objects.all()
 		Tour = Tournoi.objects.all()
-		Use = User.objects.all()
+		Use = User.objects.all().order_by('username')
 		return render(request,'tennis/inscriptionTournoi.html',locals())
 	return redirect(reverse(home))
 
