@@ -328,8 +328,10 @@ function setCourt(page){
 		}else{
 			adress = CourtList[i][5]+' '+CourtList[i][6]+', '+CourtList[i][7]+' '+CourtList[i][8];
 		}
+		var valid = CourtList[i][10];
+		var dispo = CourtList[i][11];
 		
-		var p = '<a href="staff/terrain/'+CourtList[i][3]+'" class="list-group-item"><b>ID : </b>'+CourtList[i][3]+' / <b>Matière : </b>'+CourtList[i][4]+' / <b>Valide : </b>'+'todo'+' / <b>Dispo : </b>'+'todo'+'<br><b>Propriétaire : </b>'+CourtList[i][1]+' '+CourtList[i][2]+' ('+CourtList[i][0]+') <br> <b>Adresse : </b>'+adress+'</a>';
+		var p = '<a href="staff/terrain/'+CourtList[i][3]+'" class="list-group-item"><b>ID : </b>'+CourtList[i][3]+' / <b>Matière : </b>'+CourtList[i][4]+' / <b>Valide : </b>'+valid+' / <b>Dispo : </b>'+dispo+'<br><b>Propriétaire : </b>'+CourtList[i][1]+' '+CourtList[i][2]+' ('+CourtList[i][0]+') <br> <b>Adresse : </b>'+adress+'</a>';
 		panneau.innerHTML += p;
 	};
 

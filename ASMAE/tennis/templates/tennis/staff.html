@@ -258,7 +258,7 @@ activeExtra();
 //Recuperation des court et stockage dans un tableau
 var courtList = [];
 {% for court in allCourt %}
-courtList.push(['{{ court.user.username }}','{{ court.user.participant.prenom }}','{{ court.user.participant.nom }}','{{ court.id }}','{{ court.matiere }}','{{ court.rue }}','{{ court.numero }}','{{ court.codepostal }}','{{ court.localite }}','{{ court.boite }}']);
+courtList.push(['{{ court.user.username }}','{{ court.user.participant.prenom }}','{{ court.user.participant.nom }}','{{ court.id }}','{{ court.matiere }}','{{ court.rue }}','{{ court.numero }}','{{ court.codepostal }}','{{ court.localite }}','{{ court.boite }}',{% if court.valide %}'oui'{% else %}'non'{% endif %},{% if court.dispoSamedi and court.dispoDimanche %}'Samedi et dimanche'{% elif court.dispoSamedi %}'Samedi'{% elif court.dispoDimanche %}'Dimanche'{% else %}' - '{% endif %}]);
 {% endfor %}
 
 //Nombre d'entrée par page
@@ -285,7 +285,7 @@ setCourt(1);
 var pairList = [];
 {% for pair in allPair %}
 {% if pair.confirm %}
-pairList.push(['{{ pair.id }}',{% if pair.confim %}'oui'{% else %}'non'{% endif %},{% if pair.pay %}'oui'{% else %}'non'{% endif %},'{{ pair.user1.username }}','{{ pair.user2.username }}','{{ pair.user1.participant.nom }}','{{ pair.user2.participant.nom }}','{{ pair.user1.participant.prenom }}','{{ pair.user2.participant.prenom }}','{{ pair.tournoi.nom }}']);
+pairList.push(['{{ pair.id }}',{% if pair.valid %}'oui'{% else %}'non'{% endif %},{% if pair.pay %}'oui'{% else %}'non'{% endif %},'{{ pair.user1.username }}','{{ pair.user2.username }}','{{ pair.user1.participant.nom }}','{{ pair.user2.participant.nom }}','{{ pair.user1.participant.prenom }}','{{ pair.user2.participant.prenom }}','{{ pair.tournoi.nom }}']);
 {% endif %}
 {% endfor %}
 
