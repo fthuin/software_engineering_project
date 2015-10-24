@@ -1,0 +1,175 @@
+{% extends "tennis/base.html" %}
+{% load staticfiles%}
+
+
+{% block body %}
+
+<div class="container">
+
+    Paires:
+    <span id="pairs">
+        TO DO
+    </span>
+    <br>
+    Courts:
+    <span id="courts">
+        TO DO
+    </span>
+    <br>
+    <button id="create">
+        create
+    </button>
+     <button id="fill">
+        fill
+    </button>
+     <button id="leader">
+        leader
+    </button>
+     <button id="swap">
+        swap
+    </button>
+    <br>
+    groupe number:<input id="group_num" type="number" name="group num">
+    groupe size:<input id="group_size" type="number" name="group size">
+    <br>
+    groupe 1 ID:<input id="group1_id" type="number" name="group 1">
+    groupe 2 ID: <input id="group2_id" type="number" name="group 2">
+    groupe 1 index:<input id="group1_index" type="number" name="index 1">
+    groupe 2 index:<input id="group2_index" type="number" name="index 2">
+    <br>
+
+    <div id="liste_groupes">
+
+    </div>
+    <br>
+
+    <div id="tournament">TODO</div>
+    <script>
+        var pairs = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'];
+        var courts = ['01', '02', '03', '04'];
+        document.getElementById("pairs").textContent=pairs.toString();
+        document.getElementById("courts").textContent=courts.toString();
+        this.tournament = new Tournament(pairs, courts);
+        document.getElementById("tournament").textContent=tournament.str_groups();
+        document.getElementById("create").addEventListener('click', function() {
+			
+                var group_num = document.getElementById("group_num").value; // Nombre de "vrais" groupes
+                var real_group_num = group_num++; // On crée un groupe en plus pour les paires excédentaires
+                var group_size = document.getElementById("group_size").value;
+                if (group_num != undefined && group_size != undefined) {
+                    tournament.create_empty_groups(real_group_num, group_size);
+                    document.getElementById("tournament").textContent=tournament.str_groups();
+                }
+                
+                 var list = tournament.groups;
+                 var currentpair = 0;
+                 var container = document.getElementById("liste_groupes");
+                 while (container.childNodes.length > 1){
+                    container.removeChild(container.firstElementChild);
+                 }
+                var flag = false;
+                if (group_num < list.length){
+                    flag = true;
+                }
+                 for (var index = 0; index < list.length; index++) {
+                     var group = document.createElement("div");
+                     var gn = document.createElement("span");
+                     var joueurs = document.createElement("ol");
+                     var court = document.createElement("span");
+                     gn.innerHTML = "Groupe n° " + (index+1);
+
+                     if (list[index].court != undefined) {
+                         court.innerHTML = list[index].court;
+                     }
+                     else {
+                         court.innerHTML = "Pas encore de terrain attribué";
+                     }
+
+					 if (index != list.length) {
+                         for (var j = 0; j < group_size; j++) {
+                             currentpair++;
+                             var pair = document.createElement("li");
+                             pair.innerHTML = "Paire encore non attribuée";
+                             joueurs.appendChild(pair);
+                         }
+                     } else {
+                         // Crée un groupe en plus pour les paires non attribuées
+                         gn.innerHTML = "Groupe des paires non attribuées";
+                         for (var k = currentpair; k < pairs.length; k++) {
+                             var pair = document.createElement("li");
+                             pair.innerHTML = list[index].pairs[k];
+                             joueurs.appendChild(pair);
+                         }
+                     }
+					 group.appendChild(gn);
+                     group.appendChild(joueurs);
+                     group.appendChild(court);
+                     container.appendChild(group);
+                 }
+            }, false);
+            
+            
+        document.getElementById("fill").addEventListener('click', function() {
+                tournament.try_naively_fill_groups();
+                document.getElementById("tournament").textContent=tournament.str_groups();
+
+                 var list = tournament.groups;
+                 var container = document.getElementById("liste_groupes");
+                 //Benja
+                 while (container.childNodes.length > 1){
+                    container.removeChild(container.firstElementChild);
+                 }
+                 //Benja
+                 var currentpair = 0;
+                var group_num = document.getElementById("group_num").value;
+                var flag = false;
+                if (group_num < list.length){
+                    flag = true;
+                }
+                 for (var index = 0; index < list.length; index++){
+                     var group = document.createElement("div");
+                     var joueurs = document.createElement("ol");
+                     var gn = document.createElement("span");
+                     var court = document.createElement("span");
+                     gn.innerHTML = "Groupe n° " + (index+1);
+                     court.innerHTML = "Terrain n° " + list[index].court;
+                     if(index != list.length-1){
+						 for (var j = 0 ; j < list[index].pairs.length ; j++){
+							 currentpair++;
+							 var pair = document.createElement("li");
+							 pair.innerHTML = list[index].pairs[j];
+							 joueurs.appendChild(pair);
+						 }
+				     }
+				     else if (flag){
+						 gn.innerHTML = "Groupe des paires non attribuées";
+						 for (var k=0; k < list[index].pairs.length; k++){
+						   var pair = document.createElement("li");
+                           pair.innerHTML = list[index].pairs[k];
+                           joueurs.appendChild(pair);
+						 }
+					 }
+                     group.appendChild(gn);
+                     group.appendChild(joueurs);
+                     group.appendChild(court);
+                    container.appendChild(group);
+                 }
+
+            }, false);
+        document.getElementById("leader").addEventListener('click', function() {
+                tournament.try_naively_select_group_leaders()
+                document.getElementById("tournament").textContent=tournament.str_groups();
+            }, false);
+        document.getElementById("swap").addEventListener('click', function(){
+                var g1_id = document.getElementById("group1_id").value;
+                var g2_id = document.getElementById("group2_id").value;
+                var g1_index = document.getElementById("group1_index").value;
+                var g2_index = document.getElementById("group2_index").value;
+                if (g1_id != undefined && g2_id != undefined && g1_index!= undefined && g2_index != undefined) {
+                    tournament.try_swap_pairs_in_groups(g1_id, g2_id, g1_index, g2_index);
+                    document.getElementById("tournament").textContent=tournament.str_groups();
+                }
+            }, false);
+    </script>
+</div>
+{% endblock %}

@@ -16,8 +16,8 @@ def home(request):
 	return render(request,'tennis/home.html',locals())
 
 def sponsors(request):
-	return render(request,'tennis/sponsors.html',locals())
-
+    return render(request,'tennis/sponsors.html',locals())
+	
 def contact(request):
 	return render(request,'tennis/contact.html',locals())
 
@@ -33,8 +33,6 @@ def tournoi(request):
 
 def inscriptionTournoi(request):
 	if request.method == "POST":
-
-		
 		username2 = request.POST['username2']
 		comment1 = request.POST['remarque']
 		extra = request.POST.getlist('extra')
@@ -406,7 +404,7 @@ def staff(request,p=0):
 			successSend = "Les mails ont bien été envoyé"
 		
 	if request.user.is_authenticated():
-		if request.user.is_staff: TODO
+		if request.user.is_staff: #TODO
 		    return render(request,'tennis/staff.html',locals())
 	return redirect(reverse(home))
 
@@ -764,6 +762,10 @@ def register(request):
 		return redirect(reverse(tournoi))
 	return render(request,'tennis/register.html',locals())
 
+
+def group(request):
+	return render(request,'tennis/group.html',locals())
+	
 def recover(request):
 	return render(request,'tennis/recover.html',locals())
 
@@ -773,3 +775,4 @@ def is_number(s):
         return True
     except ValueError:
         return False
+
