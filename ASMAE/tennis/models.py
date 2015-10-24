@@ -17,6 +17,7 @@ class Participant(models.Model):
 	datenaissance = models.DateTimeField(null=True)
 	classement = models.CharField(max_length=10,null=True)
 	oldparticipant = models.BooleanField(default=False)
+	isGroupLeader = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.prenom +" "+ self.nom
