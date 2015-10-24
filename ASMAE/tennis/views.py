@@ -345,7 +345,7 @@ def editTerrain(request,id):
 			return render(request,'tennis/editTerrain.html',locals())
 	return redirect(reverse(home))
 
-def staff(request):
+def staff(request,p=0):
 	#List of Extra
 	Ex = Extra.objects.all()
 	#List of Court
@@ -500,7 +500,6 @@ def validatePair(request, id):
 				payer = False
 			pair.valid = valider
 			pair.pay = payer
-			pair.save()
 			return redirect(reverse(staff))
 		if request.POST['action'] == "deletePair":
 			pair.delete()
