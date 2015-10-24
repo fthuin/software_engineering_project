@@ -74,14 +74,11 @@
 						<h4 class="center">{{ pair.user2.participant.titre }} {{ pair.user2.participant.prenom }} {{ pair.user2.participant.nom }} ({{ pair.user2.username }})</h4>
 						<div class="row">
 							<div class="col-sm-6">
-								<address>
-									
+								<address>		
 									{{ pair.user2.participant.rue }}, {{ pair.user2.participant.numero }} {% if pair.user2.participant.boite %}
 									bte {{ pair.user2.participant.boite }} {% endif %}<br>
 									{{ pair.user2.participant.codepostal }} {{ pair.user2.participant.localite }}<br>
 									{{ formatedBirthdate2 }} <br>
-							
-							
          				 </address>
 							</div>
 							<div class="col-sm-6">
@@ -115,18 +112,47 @@
 			</div>
 		</div>
 
-		<h4 class="center">Pair validée : {% if pair.valid %}oui{% else %}non{% endif %}</h4>
-		<h4 class="center">Pair payée : {% if pair.pay %}oui{% else %}non{% endif %}</h4>
-
 		<div style="margin-top:20px;">
-			<form role="form" method="post" action="">
+			<form role="form" class="form-horizontal" method="post" action="">
 			{% csrf_token %}
-		    <ul class="list-inline text-center">
+			<div class="row">
+				<div class="col-sm-4 col-sm-offset-4">
+					<!-- Valid -->
+					<div class="form-group">
+				      <label class="control-label col-sm-6" for="title">Pair validée : </label>
+				      <div class="col-sm-6">
+				      	<select class="form-control" name="valid">
+				      	{% if not pair.valid %}
+				      		<option>Oui</option>
+						    <option selected="selected">Non</option>
+						{% else %}
+							<option>Oui</option>
+						    <option>Non</option>
+				      	{% endif %}
+						</select>
+				      </div>
+				    </div>
+				      <!-- Pay -->
+					<div class="form-group">
+				      <label class="control-label col-sm-6" for="title">Pair payée : </label>
+				      <div class="col-sm-6">
+				      	<select class="form-control" name="pay">
+				      	{% if not pair.pay %}
+				      		<option>Oui</option>
+						    <option selected="selected">Non</option>
+						{% else %}
+							<option>Oui</option>
+						    <option>Non</option>
+				      	{% endif %}
+						</select>
+				      </div>
+				    </div>
+				</div>
+			</div>
+
+		    <ul class="list-inline text-center" style="margin-top:20px;">
 				<li>
-					<button class="btn-default btn" name="action" value="validPair">Valider</button>
-				</li>
-				<li>
-					<button class="btn-default btn" name="action" value="payPair">Payer</button>
+					<button class="btn-default btn" name="action" value="editPair">Editer</button>
 				</li>
 				<li>
 					<button class="btn-default btn" name="action" value="deletePair">Supprimer</button>
