@@ -33,13 +33,34 @@ def tournoi(request):
 
 def inscriptionTournoi(request):
 	if request.method == "POST":
-		nomTournoi = request.POST['tournoi']
-		tournois = Tournoi.objects.filter(nom=nomTournoi)[0]
+
+		
 		username2 = request.POST['username2']
 		comment1 = request.POST['remarque']
 		extra = request.POST.getlist('extra')
+		extra1 = list()
+		for elem in extra:
+			extra1.append(Extra.objects.filter(id=elem)[0])
+		extranot1 = list()
+		Ex = Extra.objects.all()	
+		for elem in Ex:
+			contained = False
+			for el in extra1:
+				if elem.id == el.id:
+					contained = True
+			if contained == False:	
+				extranot1.append(Extra.objects.filter(id=elem.id)[0])
 		
-		
+		nomTournoi = request.POST['tournoi']
+
+		if (nomTournoi==""):
+			errorAdd = "Veuillez selectionner un tournoi!"
+			Ex = Extra.objects.all()
+			Tour = Tournoi.objects.all()
+			Use = User.objects.all()
+			return render(request,'tennis/inscriptionTournoi.html',locals())
+
+		tournois = Tournoi.objects.filter(nom=nomTournoi)[0]
 
 		if (username2==""):
 			errorAdd = "Veuillez rajouter un deuxieme joueur pour votre pair"
@@ -105,32 +126,82 @@ def inscriptionTournoi(request):
 			pair.extra1.add(ext)
 		
 		# Send mail
-		send_confirmation_email_pair_registered(Participant.objects.get(user=pair.user1), Participant.objects.get(user=pair.user2))
+		#send_confirmation_email_pair_registered(Participant.objects.get(user=pair.user1), Participant.objects.get(user=pair.user2))
 
 		pair.save()
 		return redirect(reverse(tournoi))
 		
 	#rajouter les extras
 	if request.user.is_authenticated():
-		Ex = Extra.objects.all()
+		extranot1 = Extra.objects.all()
 		Tour = Tournoi.objects.all()
 		Use = User.objects.all()
 		return render(request,'tennis/inscriptionTournoi.html',locals())
 	return redirect(reverse(home))
 
 def confirmPair(request,id):
+	
+	if request.method == "POST":
+		if request.POST['action'] == "validate":
+			remarque = request.POST['remarque']
+			extra = request.POST.getlist('extra')
+			
+
+			pair = Pair.objects.filter(id=id)[0]
+			pair.confirm = True
+			pair.comment2 = remarque
+			pair.save()
+
+			for elem in extra:
+				ext = Extra.objects.filter(id=elem)[0]
+				pair.extra2.add(ext)
+
+
+			return redirect(reverse(tournoi))
+		if request.POST['action'] == "refuse":
+			pair = Pair.objects.filter(id=id)[0]
+			pair.delete()
+			return redirect(reverse(tournoi))
+			#TODO Envoyer mail a l'user 1 pour lui dire que son pote veut pas de lui
 	if request.user.is_authenticated():
 		#TODO check si il peut confirmer cette pair
 		pair = Pair.objects.filter(id=id)[0]
-		Ex = Extra.objects.all()
+		extra1 = pair.extra1.all()
+		extranot1 = list()
+		Ex = Extra.objects.all()	
+		for elem in Ex:
+			contained = False
+			for el in extra1:
+				if elem.id == el.id:
+					contained = True
+			if contained == False:	
+				extranot1.append(Extra.objects.filter(id=elem.id)[0])
+
+				
+		
+		
 		return render(request,'tennis/confirmPair.html',locals())
 	return redirect(reverse(home))
 
 def cancelPair(request,id):
+	if request.method == "POST":
+		pair = Pair.objects.filter(id=id)[0]
+		pair.delete()
+		return redirect(reverse(tournoi))
 	if request.user.is_authenticated():
 		#TODO check si il peut annuler cette pair
 		pair = Pair.objects.filter(id=id)[0]
+		extra1 = pair.extra1.all()
 		Ex = Extra.objects.all()
+		extranot1 = list()
+		for elem in Ex:
+			contained = False
+			for el in extra1:
+				if elem.id == el.id:
+					contained = True
+			if contained == False:	
+				extranot1.append(Extra.objects.filter(id=elem.id)[0])
+		
 		return render(request,'tennis/cancelPair.html',locals())
 	return redirect(reverse(home))
 
@@ -139,6 +210,27 @@ def viewPair(request,id):
 		#TODO check si il peut voir cette pair
 		pair = Pair.objects.filter(id=id)[0]
 		Ex = Extra.objects.all()
+		extra1 = pair.extra1.all()
+		extranot1 = list()
+		for elem in Ex:
+			contained = False
+			for el in extra1:
+				if elem.id == el.id:
+					contained = True
+			if contained == False:	
+				extranot1.append(Extra.objects.filter(id=elem.id)[0])
+
+		extra2 = pair.extra1.all()
+		extranot2 = list()
+		for elem in Ex:
+			contained = False
+			for el in extra2:
+				if elem.id == el.id:
+					contained = True
+			if contained == False:	
+				extranot2.append(Extra.objects.filter(id=elem.id)[0])
+
+
 		return render(request,'tennis/viewPair.html',locals())
 	return redirect(reverse(home))
 
@@ -258,6 +350,8 @@ def staff(request):
 	Ex = Extra.objects.all()
 	#List of Court
 	allCourt = Court.objects.all()
+	#List of Pair
+	allPair = Pair.objects.all()
 
 	if request.method == "POST":
 		if request.POST['action'] == "addExtra":
@@ -388,6 +482,14 @@ def editTerrainStaff(request, id):
 		if request.user.is_staff:
 		
 			return render(request,'tennis/editTerrainStaff.html',locals())
+	return redirect(reverse(home))
+
+def validatePair(request, id):
+	pair = Pair.objects.filter(id=id)[0]
+	Ex = Extra.objects.all()
+	if request.user.is_authenticated():
+		if request.user.is_staff:
+			return render(request,'tennis/validatePair.html',locals())
 	return redirect(reverse(home))
 
 def profil(request):

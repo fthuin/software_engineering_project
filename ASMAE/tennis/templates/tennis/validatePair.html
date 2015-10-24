@@ -1,6 +1,6 @@
-{% extends "tennis/tournoi.html" %}
+{% extends "tennis/staff.html" %}
 
-{% block title %}Pair {{ pair.id }}{% endblock %}
+{% block title %}Validation pair {{ pair.id }}{% endblock %}
 
 {% block body %}
 
@@ -29,12 +29,7 @@
 						<div class="form-group">
 					      <label class="info control-label col-sm-4" for="username">Extras : </label>
 					      <div class="col-sm-8">
-					      	{% for extra in extra1 %}
-					      	<div class="checkbox">
-						      <label><input type="checkbox" value="{{ extra.id }}" disabled checked>{{ extra.nom }} ({{ extra.prix }} €)</label>
-						    </div>
-						    {% endfor %}
-						{% for extra in extranot1 %}
+					      	{% for extra in Ex %}
 					      	<div class="checkbox">
 						      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
 						    </div>
@@ -61,12 +56,7 @@
 						<div class="form-group">
 					      <label class="info control-label col-sm-4" for="username">Extras : </label>
 					      <div class="col-sm-8">
-					      		{% for extra in extra2 %}
-					      	<div class="checkbox">
-						      <label><input type="checkbox" value="{{ extra.id }}" disabled checked>{{ extra.nom }} ({{ extra.prix }} €)</label>
-						    </div>
-						    {% endfor %}
-						{% for extra in extranot2 %}
+					      	{% for extra in Ex %}
 					      	<div class="checkbox">
 						      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
 						    </div>
@@ -88,12 +78,26 @@
 		<h4 class="center">Pair validée : {% if pair.valid %}oui{% else %}non{% endif %}</h4>
 		<h4 class="center">Pair payée : {% if pair.pay %}oui{% else %}non{% endif %}</h4>
 
-		<!-- Inscription button -->
-		<button class="btn btn-default center-block" onClick="location.href='{% url "tennis.views.payPair" pair.id %}';" style="margin-top:20px;">Payer</button>
+		<div style="margin-top:20px;">
+			<form role="form" method="post" action="">
+			{% csrf_token %}
+		    <ul class="list-inline text-center">
+				<li>
+					<button class="btn-default btn" name="action" value="validPair">Valider</button>
+				</li>
+				<li>
+					<button class="btn-default btn" name="action" value="payPair">Payer</button>
+				</li>
+				<li>
+					<button class="btn-default btn" name="action" value="deletePair">Supprimer</button>
+				</li>
+			</ul>
+			</form>
+		</div>
+		
 			
 
 	</div>
 </div>
-
 
 {% endblock %}

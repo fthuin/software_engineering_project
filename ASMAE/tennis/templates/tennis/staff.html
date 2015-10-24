@@ -37,9 +37,8 @@
 			    </div>
 			</div>
 		</div>
-		
-		    
-		<!-- Liste des users -->
+
+		<!-- Liste des terrains -->
 		<div class="panel panel-default center-block" style="max-width:600px;">
 			<div class="panel-heading">Terrains</div>
 			<div class="list-group" id="CourtList">
@@ -73,25 +72,22 @@
 			</div>
 		</div>    
 
-		<!-- Liste des paires -->
+		<!-- Liste des terrains -->
 		<div class="panel panel-default center-block" style="max-width:600px;">
 			<div class="panel-heading">Paires</div>
-			<div class="list-group">
-			  <a href="#" class="list-group-item">1 - Dupont P et Lavoisier C. - Validé - Payé</a>
-			  <a href="#" class="list-group-item">2 - Dupont P et Lavoisier C. - Non validé - Non payé</a>
-			  <a href="#" class="list-group-item">3 - Dupont P et Lavoisier C. - Non validé - Payé</a>
+			<div class="list-group" id="PairList">
 			</div>
 		</div>
 
 		<!-- Info -->
-		<p class="center">1-3 sur 20 résultats (3 au total)</p>
+		<p class="center" id="PairInfo"></p>
 
 		<!-- Bottom pagination -->
 		<div class="text-center">
-			<ul class="pagination">
-			    <li class="active"><a href="#">1</a></li>
+			<ul class="pagination" id="PairPagination">
 			</ul>
 		</div>
+
 	</div>
 	<!-- Gestionnaire des extras -->
 	<div class="content-box" id="gestionExtra" style="display:none;">
@@ -270,8 +266,30 @@ setCourtListInfo(courtList,pageLength);
 setCourt(1);
 
 //PAIR
+var pairList = [];
+{% for pair in allPair %}
+{% if pair.confirm %}
+pairList.push(['{{ pair.id }}',{% if pair.confim %}'oui'{% else %}'non'{% endif %},{% if pair.pay %}'oui'{% else %}'non'{% endif %},'{{ pair.user1.username }}','{{ pair.user2.username }}','{{ pair.user1.participant.nom }}','{{ pair.user2.participant.nom }}','{{ pair.user1.participant.prenom }}','{{ pair.user2.participant.prenom }}','{{ pair.tournoi.nom }}']);
+{% endif %}
+{% endfor %}
 
+//Nombre de page
+var total = Math.ceil(pairList.length/pageLength);
+//Notre pagination
+$('#PairPagination').twbsPagination({
+  totalPages: total,
+  visiblePages: 5,
+  onPageClick: function (event, page) {
+  	//Lorsqu'on click sur une page, on met à jours le contenu
+	setPair(page);
+  }
+});
 
+//On met jours les info (liste des users et longueur de chaque page)
+setPairListInfo(pairList);
+
+//On met à jours la première page
+setPair(1);
 
 </script>
 
