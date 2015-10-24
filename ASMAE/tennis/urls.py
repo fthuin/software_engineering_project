@@ -23,4 +23,5 @@ urlpatterns = patterns('tennis.views',
 	url(r'^staff/terrain/(\d+)$','validateTerrain'),
 	url(r'^staff/editer/terrain/(\d+)$','editTerrainStaff'),
 	url(r'^staff/pair/(\d+)$','validatePair'),
+	url(r'^group$', 'group'),
 )

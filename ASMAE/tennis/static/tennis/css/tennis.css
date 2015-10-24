@@ -213,6 +213,10 @@ nav {
     display: block !important;
 }
 
+p.textHome{
+    font-size: 16px;
+}
+
 /*Button*/
 .btn-default{
     background-color: #D4542D !important;

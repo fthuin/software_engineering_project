@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
 from tennis.models import Extra, Participant,Court, Tournoi, Pair
-from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered
+from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament
 import re, math
 import datetime
 from itertools import chain
@@ -16,8 +16,8 @@ def home(request):
 	return render(request,'tennis/home.html',locals())
 
 def sponsors(request):
-	return render(request,'tennis/sponsors.html',locals())
-
+    return render(request,'tennis/sponsors.html',locals())
+	
 def contact(request):
 	return render(request,'tennis/contact.html',locals())
 
@@ -33,8 +33,6 @@ def tournoi(request):
 
 def inscriptionTournoi(request):
 	if request.method == "POST":
-
-		
 		username2 = request.POST['username2']
 		comment1 = request.POST['remarque']
 		extra = request.POST.getlist('extra')
@@ -126,7 +124,7 @@ def inscriptionTournoi(request):
 			pair.extra1.add(ext)
 		
 		# Send mail
-		#send_confirmation_email_pair_registered(Participant.objects.get(user=pair.user1), Participant.objects.get(user=pair.user2))
+		send_confirmation_email_pair_registered(Participant.objects.get(user=pair.user1), Participant.objects.get(user=pair.user2))
 
 		pair.save()
 		return redirect(reverse(tournoi))
@@ -220,7 +218,7 @@ def viewPair(request,id):
 			if contained == False:	
 				extranot1.append(Extra.objects.filter(id=elem.id)[0])
 
-		extra2 = pair.extra1.all()
+		extra2 = pair.extra2.all()
 		extranot2 = list()
 		for elem in Ex:
 			contained = False
@@ -345,7 +343,7 @@ def editTerrain(request,id):
 			return render(request,'tennis/editTerrain.html',locals())
 	return redirect(reverse(home))
 
-def staff(request):
+def staff(request,p=0):
 	#List of Extra
 	Ex = Extra.objects.all()
 	#List of Court
@@ -400,10 +398,14 @@ def staff(request):
 			extra = Extra.objects.filter(id = id)[0]
 			extra.delete()
 			successDelete = "Extra bien supprimé!"
+			
+		if request.POST['action'] == "sendTournamentDataByMail":
+			send_email_start_tournament() #TODO to change and link to a tournament
+			successSend = "Les mails ont bien été envoyé"
 		
 	if request.user.is_authenticated():
-		if request.user.is_staff:
-			return render(request,'tennis/staff.html',locals())
+		if request.user.is_staff: #TODO
+		    return render(request,'tennis/staff.html',locals())
 	return redirect(reverse(home))
 
 def validateTerrain(request, id):
@@ -486,7 +488,50 @@ def editTerrainStaff(request, id):
 
 def validatePair(request, id):
 	pair = Pair.objects.filter(id=id)[0]
+	if request.method == "POST":
+		if request.POST['action'] == "editPair":
+			valid = request.POST['valid']
+			paid = request.POST['pay']
+			if valid == "Oui":
+				valider = True
+			else:
+				valider = False
+			if paid == "Oui":
+				payer = True
+			else:
+				payer = False
+			pair.valid = valider
+			pair.pay = payer
+			return redirect(reverse(staff))
+		if request.POST['action'] == "deletePair":
+			pair.delete()
+			return redirect(reverse(staff))
+			
+	
 	Ex = Extra.objects.all()
+	extra1 = pair.extra1.all()
+	extranot1 = list()
+	for elem in Ex:
+		contained = False
+		for el in extra1:
+			if elem.id == el.id:
+				contained = True
+		if contained == False:	
+			extranot1.append(Extra.objects.filter(id=elem.id)[0])
+
+	extra2 = pair.extra2.all()
+	extranot2 = list()
+	for elem in Ex:
+		contained = False
+		for el in extra2:
+			if elem.id == el.id:
+				contained = True
+		if contained == False:	
+			extranot2.append(Extra.objects.filter(id=elem.id)[0])
+	birthdate1 = pair.user1.participant.datenaissance
+	formatedBirthdate1 = birthdate1.strftime('%d/%m/%Y')
+	birthdate2 = pair.user2.participant.datenaissance
+	formatedBirthdate2 = birthdate2.strftime('%d/%m/%Y')
 	if request.user.is_authenticated():
 		if request.user.is_staff:
 			return render(request,'tennis/validatePair.html',locals())
@@ -717,6 +762,10 @@ def register(request):
 		return redirect(reverse(tournoi))
 	return render(request,'tennis/register.html',locals())
 
+
+def group(request):
+	return render(request,'tennis/group.html',locals())
+	
 def recover(request):
 	return render(request,'tennis/recover.html',locals())
 
@@ -726,3 +775,4 @@ def is_number(s):
         return True
     except ValueError:
         return False
+

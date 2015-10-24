@@ -1,6 +1,7 @@
-# coding=utf-8
+# -*- coding: utf-8 -*- 
 
 from django.core.mail import send_mail
+from tennis.models import Extra, Participant,Court, Tournoi, Pair
 
 #send_mail('Subject here', 'Here is the message.', 'from@example.com', ['to@example.com'], fail_silently=False)
 # From : noreply@leCharleDeLorraine.com
@@ -46,8 +47,8 @@ def send_confirmation_email_pair_registered(participantOne, participantTwo):
     """
 
     #Send
-    send_mail(subject, messagePlayerOne, "", [playerOneAdresseMail], fail_silently=False)
-    send_mail(subject, messagePlayerTwo, "", [playerTwoAdresseMail], fail_silently=False)
+    send_mail(subject, messagePlayerOne, "", [playerOneAdresseMail], fail_silently=True)
+    send_mail(subject, messagePlayerTwo, "", [playerTwoAdresseMail], fail_silently=True)
 
 
 # Send a confirmation email for court registration
@@ -93,16 +94,17 @@ def send_confirmation_email_court_registered(participant, court):
     """
 
     #Send
-    send_mail(subject, message, "", [mail], fail_silently=False)
+    send_mail(subject, message, "", [mail], fail_silently=True)
 
 # TODO methode qui envoie les message des court adresse ou les payment issue selon la situation du client
 # A tout les joueurs (excepte les iregularité de payment et les groups leader), envoyé le court sur lequels ils va jouer
-def send_email_court_adress():	
-    prenom = ""
-    mail = "pokcyril@hotmail.com"
-    courtAdresse = ""
-    subject = "Confirmation d'enregistrement du terrain"
-    messagePlayerOne =  "Bonjour " + prenom + """,
+def send_email_court_adress(participant):
+    prenom = participant.prenom
+    mail = participant.user.email
+    #mail = "pokcyril@hotmail.com" # For tests
+    courtAdresse = "'TODO link court adress to pair or player in database'"
+    subject = "Le charle de lorraine : emplacement de votre premier match"
+    message =  "Bonjour " + prenom + """,
 
     Le tournoi approche a grand pas et l'endroit ou se deroulera
     votre premier match a été décidé. Veuillez donc vous rendre a
@@ -116,18 +118,19 @@ def send_email_court_adress():
     L'équipe 'Le charle de Lorraine'
     """
 
-    send_mail(subject, message, "", [mail], fail_silently=False)
+    send_mail(subject, message, "", [mail], fail_silently=True)
 
 
 # Envoye a tout les player en irregularite de payment
-def send_email_payment_issue():
-    prenom = ""
-    montant = ""
-    adresseHQ = ""
-    mail = "pokcyril@hotmail.com"
-    subject = "Confirmation d'enregistrement du terrain"
+def send_email_payment_issue(participant):
+    prenom = participant.prenom
+    montant = "'TODO Calculate price'"
+    adresseHQ = "PutAdresseHQ Here"
+    mail = participant.user.email
+    #mail = "pokcyril@hotmail.com" # For tests
+    subject = "Le charle de lorraine : Problème de payment"
 
-    messagePlayerOne =  "Bonjour " + prenom + """,
+    message =  "Bonjour " + prenom + """,
 
     Il semblerais que vous soyez toujours en irregularité de payment pour le tournoi.
     Veuillez donc vous présenter samedi matin afin de régulariser votre situation et
@@ -144,19 +147,20 @@ def send_email_payment_issue():
     L'équipe 'Le charle de Lorraine'
     """
 
-    send_mail(subject, message, "", [mail], fail_silently=False)
+    send_mail(subject, message, "", [mail], fail_silently=True)    
 
 # Envoye a tout les groupes leader TODO
-def send_email_score_board():
-    prenom = ""
-    adresseHQ = ""
-    mail = "pokcyril@hotmail.com"
-    subject = "Confirmation d'enregistrement du terrain"
+def send_email_score_board(participant):
+    prenom = participant.prenom
+    adresseHQ = "PutAdresseHQ Here"
+    mail = participant.user.email
+    #mail = "pokcyril@hotmail.com" # For tests
+    subject = "Le charle de lorraine : récuperation de la feuille de cotation"
 
-    messagePlayerOne =  "Bonjour " + prenom + """,
+    message =  "Bonjour " + prenom + """,
 
     Pour le prochain tournois vous avez été designer en temps que group leader.
-    Nous vous demandons donc de vous présenter le samedi matin a l'adresse ci - dessousa
+    Nous vous demandons donc de vous présenter le samedi matin a l'adresse ci - dessous
     afin de recuperer la feuille de cotation. Vous serez également informer de
     l'adresse a laquelle se tiendra votre premier match sur place.
 
@@ -168,4 +172,21 @@ def send_email_score_board():
     L'équipe 'Le charle de Lorraine'
     """
 
-    send_mail(subject, message, "", [mail], fail_silently=False)
+    send_mail(subject, message, "", [mail], fail_silently=True)
+
+def choose_mail_start_tournament(pair, participant):
+    if(not pair.pay):
+        # Payment issue
+        send_email_payment_issue(participant)
+    elif(participant.isGroupLeader):
+        # Group leader (people with payement issue are not chosen as group leader as their participation is not guaranteed)
+        send_email_score_board(participant)
+    else:
+        #Default
+        send_email_court_adress(participant)
+
+def send_email_start_tournament():
+    #Work on all user in tournament
+    for pair in Pair.objects.all():
+        choose_mail_start_tournament(pair, Participant.objects.get(user=pair.user1))
+        choose_mail_start_tournament(pair, Participant.objects.get(user=pair.user2))

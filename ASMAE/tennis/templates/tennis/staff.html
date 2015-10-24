@@ -20,7 +20,23 @@
 	<!-- Gestionnaire des tournois -->
 	<div class="content-box" id="gestionTournoi">
 		<h2 class="center">Gestionnaire des tournois</h2>
-		<hr class="line">	
+		<hr class="line">
+		{% if errorAdd %}
+		<div class="alert alert-danger">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		<strong>Error!</strong> {{ errorAdd }}
+		</div>
+		{% elif successSend %}
+		<div class="alert alert-success">
+		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		    <strong>Succès!</strong> {{ successSend }}
+		</div>
+		{% endif %}
+		<form name="sendTournamentDataByMail" id="sendTournamentDataByMail" role="form" method="post" action="{% url "tennis.views.staff" %}">
+			{% csrf_token %}
+			<input type="text" class="form-control" name="id" id="sendTournamentDataByMailID" value="{{ Ex.0.id }}" style="display:none;">
+			<button class="btn-default btn center-block" name="action" value="sendTournamentDataByMail">Envoyer les informations du tournois par mail</button>
+		</form>
 	</div>
 	<!-- Gestionnaire des terrains -->
 	<div class="content-box" id="gestionTerrain" style="display:none;">
@@ -242,7 +258,7 @@ activeExtra();
 //Recuperation des court et stockage dans un tableau
 var courtList = [];
 {% for court in allCourt %}
-courtList.push(['{{ court.user.username }}','{{ court.user.participant.prenom }}','{{ court.user.participant.nom }}','{{ court.id }}','{{ court.matiere }}','{{ court.rue }}','{{ court.numero }}','{{ court.codepostal }}','{{ court.localite }}','{{ court.boite }}']);
+courtList.push(['{{ court.user.username }}','{{ court.user.participant.prenom }}','{{ court.user.participant.nom }}','{{ court.id }}','{{ court.matiere }}','{{ court.rue }}','{{ court.numero }}','{{ court.codepostal }}','{{ court.localite }}','{{ court.boite }}',{% if court.valide %}'oui'{% else %}'non'{% endif %},{% if court.dispoSamedi and court.dispoDimanche %}'Samedi et dimanche'{% elif court.dispoSamedi %}'Samedi'{% elif court.dispoDimanche %}'Dimanche'{% else %}' - '{% endif %}]);
 {% endfor %}
 
 //Nombre d'entrée par page
@@ -269,7 +285,7 @@ setCourt(1);
 var pairList = [];
 {% for pair in allPair %}
 {% if pair.confirm %}
-pairList.push(['{{ pair.id }}',{% if pair.confim %}'oui'{% else %}'non'{% endif %},{% if pair.pay %}'oui'{% else %}'non'{% endif %},'{{ pair.user1.username }}','{{ pair.user2.username }}','{{ pair.user1.participant.nom }}','{{ pair.user2.participant.nom }}','{{ pair.user1.participant.prenom }}','{{ pair.user2.participant.prenom }}','{{ pair.tournoi.nom }}']);
+pairList.push(['{{ pair.id }}',{% if pair.valid %}'oui'{% else %}'non'{% endif %},{% if pair.pay %}'oui'{% else %}'non'{% endif %},'{{ pair.user1.username }}','{{ pair.user2.username }}','{{ pair.user1.participant.nom }}','{{ pair.user2.participant.nom }}','{{ pair.user1.participant.prenom }}','{{ pair.user2.participant.prenom }}','{{ pair.tournoi.nom }}']);
 {% endif %}
 {% endfor %}
 
@@ -332,7 +348,11 @@ setPair(1);
 </script>
 {% endif %}
 
-
+{% if successSend %}
+<script>
+	ongletTournoi()
+</script>
+{% endif %}
 
 {% endblock %}
 
