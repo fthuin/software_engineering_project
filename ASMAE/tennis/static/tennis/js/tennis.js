@@ -119,10 +119,15 @@ function setDescription(sexe,birth){
 	}	
 
 	var pagination = document.getElementById("UserPagination");
-	//On se remet sur la première page du tableau
-	pagination.children[1].click();
+	var pageNow = 1;
+	for (var i = 0; i < pagination.children.length; i++) {
+
+		if(pagination.children[i].className=="page active"){
+			pageNow = pagination.children[i].children[0].innerHTML
+		}
+	};
 	//On set les uers restrictions
-	setUserRestriction(sexe,birth,1);
+	setUserRestriction(sexe,birth,pageNow);
 }
 
 //permet de mette  des restrictions sur les utilistaurs. S'ils peuvent pas etre avec sois en tournoi il sont mis en rouge et non clickable
