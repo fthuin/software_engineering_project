@@ -43,10 +43,7 @@ text-align:left;
 	   <div class="form-horizontal">
             <div class="form-group">
             <label for="tournoi" class="control-label col-sm-3">Sélectionner un tournoi:</label>
-            <div class="col-sm-3"><select class="form-control" name="type_tournoi">
-	        <option>Tournoi 1</option>
-	        <option>Tournoi 2</option>
-	        </select></div>
+            <div class="col-sm-3"><select class="form-control" id="tournois" name="type_tournoi"></select></div>
 	        </div>
             
             <div class="form-group">
@@ -89,16 +86,37 @@ text-align:left;
 </div>
 	
 	<script>
-		var pairs = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'];
-		var courts = ['01', '02', '03', '04'];
-		//document.getElementById("pairs").textContent=pairs.toString();
-		//document.getElementById("courts").textContent=courts.toString();
-		this.tournament = new Tournament(pairs, courts);
+	    //Recuperation des tournois et stockage dans un tableau
+	    var select = document.getElementById("tournois");
+        {% for tournoi in allTournois %}
+            var option = document.createElement("option");
+            option.text = '{{tournoi.nom}}'
+            select.add(option)
+        {% endfor %}
+
 		
 		document.getElementById("create").addEventListener('click', function() {
+		         var sel_tournoi = document.getElementById("tournois").value;
 				 var group_num = document.getElementById("group_num").value;
 				 var group_size = document.getElementById("group_size").value;
-			
+				 
+				 var pairList = [];
+				 {% for pair in allPairs %}
+				    {% if pair.confirm %}
+				    if('{{ pair.tournoi.nom }}'==sel_tournoi) {
+pairList.push(['{{ pair.id }}','{{ pair.user1.participant.nom }}','{{ pair.user1.participant.prenom }}','{{ pair.user2.participant.nom }}','{{ pair.user2.participant.prenom }}']);
+                    }
+                    {% endif %}
+                 {% endfor %}
+                 
+                 //Recuperation des court et stockage dans un tableau
+                 var courtList = [];
+                 {% for court in allCourts %}
+                 courtList.push('{{ court.id }}');
+                 {% endfor %}
+                 
+		         var tournament = new Tournament(pairList, courtList);
+		         
 				 if (group_num != undefined && group_size != undefined) {
 					tournament.create_empty_groups(group_num, group_size);
 					tournament.try_naively_fill_groups();
@@ -132,8 +150,10 @@ text-align:left;
 					var numRows = group_display.rows.length;
 					for (var j = 0; j < list[index].pairs.length; j++) {
 					   var pair_row = group_display.insertRow(numRows);
-					   pair_row.insertCell(0).innerHTML = "<b>ID</b>";
-					   pair_row.insertCell(1).innerHTML = list[index].pairs[j];
+					   pair_row.insertCell(0).innerHTML = list[index].pairs[j][0];
+					   pair_row.insertCell(1).innerHTML = 
+					       list[index].pairs[j][1] + " " + list[index].pairs[j][2] + "</br>" 
+					       + list[index].pairs[j][3] + " " + list[index].pairs[j][4];
 					   pair_row.cells[0].style.width="50%";
 					   pair_row.draggable="true";
 					   if(list[index].pairs[j] == list[index].leader)

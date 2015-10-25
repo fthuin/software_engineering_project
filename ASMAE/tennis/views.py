@@ -404,6 +404,9 @@ def staffTerrain(request):
 def staffGroupes(request):
 	if request.user.is_authenticated():
 		if request.user.is_staff: #TODO
+		    allTournois = Tournoi.objects.all()
+		    allPairs = Pair.objects.all()
+		    allCourts = Court.objects.all()
 		    return render(request,'tennis/staffGroupes.html',locals())
 	return redirect(reverse(home))
 
