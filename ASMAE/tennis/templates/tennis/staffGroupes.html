@@ -1,8 +1,10 @@
-{% extends "tennis/base.html" %}
-{% load staticfiles%}
+{% extends "tennis/staff.html" %}
 
+{% block title %}Gestion des groupes{% endblock %}
+{% block ongGroup %}class="active"{% endblock %}
 
-{% block body %}
+{% block bodyStaff %}
+<!-- Gestionnaire des groupes -->
 <head>
 <style>tr td {
   background-color: #FFFFFF;
@@ -35,9 +37,7 @@ text-align:left;
 </style>
 </head>
 
-<div class="container">
-	<br>
-	<div class="content-box">
+<div class="content-box" id="gestionGroup">
 	   <h4>Configuration des groupes</h4>
 	   <hr class="line">
 	   <div class="form-horizontal">
@@ -58,12 +58,13 @@ text-align:left;
             <label for="tournoi" class="control-label col-sm-3">Nombre de paires par poule:</label>
             <div class="col-sm-3"><input class="form-control" type="number" id="group_size" min="1" value="1" ></div>
 	        </div>  
-       </div>
 	   <br>
 	   <button id="create" style="float:right" class="btn btn-default">Générer les groupes</button>
 	</div>
-	
-	<div class="content-box" id="group-box" style="visibility:hidden">
+</div>
+
+<div class="content-box" id="geneGroup" style="visibility:hidden">
+	<div id="group-box">
 	<h4>Groupes du tournoi</h4>
 	<hr class="line">
 	<div class="group-box" id="liste_groupes"></div>
@@ -85,8 +86,7 @@ text-align:left;
         <div class="col-sm-3"><button id="register" style="float:right" class="btn btn-default">Enregistrer les groupes</button></div>
         </div>
     </div>
-    
-	</div>
+</div>
 	
 	<script>
 		var pairs = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'];
@@ -150,7 +150,7 @@ text-align:left;
 					
 					container.appendChild(group_display);
 				 }
-				 document.getElementById("group-box").style.visibility = "visible";
+				 document.getElementById("geneGroup").style.visibility = "visible";
 			}, false);
 			
 		document.getElementById("swap").addEventListener('click', function(){
@@ -165,4 +165,5 @@ text-align:left;
 			}, false);
 	</script>
 </div>
+
 {% endblock %}
