@@ -226,15 +226,24 @@ def payPair(request,id):
 		Ex = Extra.objects.all()
 		extra1 = pair.extra1.all()
 		extra2 = pair.extra2.all()
-		extra1checked = list()
-		extra2checked = list()
-		for ext in extra1:
-			extra1checked.append((ext,False))
-		for ext in extra2:
-			extra2checked.append((ext,False))
-		print(extra1checked)
-					
-			
+		extraa = extra1 | extra2
+		extraa.order_by('nom')
+		totalprice = 20.00
+		extraList = list()
+		currentItem = extraa[0]
+		count = 0
+		for extra in extraa:
+			if currentItem.id == extra.id:
+				count = count+1
+			else:
+				extraList.append((currentItem.nom,currentItem.prix,count))
+				totalprice = totalprice + float((count*currentItem.prix))
+				currentItem = extra
+				count = 1
+		extraList.append((currentItem.nom,currentItem.prix,count))
+		totalprice = totalprice + float((count*currentItem.prix))
+	
+
 		return render(request,'tennis/payPair.html',locals())
 	return redirect(reverse(home))
 

@@ -28,11 +28,11 @@
 						        <td>20.00 €</td>
 						        <td>2</td>
 						      </tr>
-						      {% for extra in Ex %}
+						      {% for extra in extraList %}
 						      <tr>
-						        <td>{{ extra.nom }}</td>
-						        <td>{{ extra.prix }} €</td>
-						        <td>0(todo)</td>
+						        <td>{{ extra.0 }}</td>
+						        <td>{{ extra.1 }} €</td>
+						        <td>{{ extra.2 }}</td>
 						      </tr>
 						      {% endfor %}
 						      <tr>
@@ -42,7 +42,7 @@
 						      </tr>
 						      <tr>
 						        <td><b>Total</b></td>
-						        <td>todo €</td>
+						        <td>{{ totalprice }} €</td>
 						        <td></td>
 						      </tr>
 						    </tbody>
