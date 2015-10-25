@@ -418,9 +418,24 @@ def staffExtra(request):
 	return redirect(reverse(home))
 
 def staffUser(request):
+	Use = User.objects.all().order_by('username')
 	if request.user.is_authenticated():
 		if request.user.is_staff: #TODO
 		    return render(request,'tennis/staffUser.html',locals())
+	return redirect(reverse(home))
+
+def viewUser(request,name):
+	#TODO check si l'user use exist sinon retourner une page 404
+	use = User.objects.filter(username=name)[0]
+	birthdate = use.participant.datenaissance
+	formatedBirthdate = birthdate.strftime('%d/%m/%Y')
+	terrain = Court.objects.filter(user=use)
+	tournoi1 = Pair.objects.filter(user1=use,confirm=True)
+	tournoi2 = Pair.objects.filter(user2=use,confirm=True)
+	tournoi = list(chain(tournoi1, tournoi2))
+	if request.user.is_authenticated():
+		if request.user.is_staff: #TODO
+		    return render(request,'tennis/viewUser.html',locals())
 	return redirect(reverse(home))
 
 def validateTerrain(request, id):

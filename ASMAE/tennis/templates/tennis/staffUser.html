@@ -4,10 +4,68 @@
 {% block ongUser %}class="active"{% endblock %}
 
 {% block bodyStaff %}
-<!-- Gestionnaire des tournois -->
-<div class="content-box" id="gestionTournoi">
+<!-- Gestionnaire des utilisateurs -->
+<div class="content-box" id="gestionTerrain">
 	<h2 class="center">Gestionnaire des utilisateurs</h2>
-	<hr class="line">
-	<p>TODO</p>
+	<hr class="line">	
+	<!-- Rechercher -->
+	<div class="row" style="margin-bottom:15px;">
+		<div class="col-sm-4 col-sm-offset-4">
+			<div class="input-group">
+		      <input type="text" class="form-control" placeholder="Rechercher">
+		      <span class="input-group-btn">
+		        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+		      </span>
+		    </div>
+		</div>
+	</div>
+
+	<!-- Liste des users -->
+	<div class="panel panel-default center-block" style="max-width:600px;">
+		<div class="panel-heading">Users</div>
+		<div class="list-group" id="UserList">
+		</div>
+	</div>
+
+	<!-- Info -->
+	<p class="center" id="UserInfo"></p>
+
+	<!-- Bottom pagination -->
+	<div class="text-center">
+		<ul class="pagination" id="UserPagination">
+		</ul>
+	</div>
+
 </div>
+{% endblock %}
+
+{% block commande %}
+<script>
+//Recuperation des users et stockage dans un tableau
+var userList = [];
+{% for use in Use %}
+//on ne stock pas sois meme dans la liste des joueurs
+userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.participant.datenaissance }}']);
+{% endfor %}
+
+//Nombre d'entrée par page
+var pageLength = 10;
+//Nombre de page
+var total = Math.ceil(userList.length/pageLength);
+//Notre pagination
+$('#UserPagination').twbsPagination({
+  totalPages: total,
+  visiblePages: 5,
+  onPageClick: function (event, page) {
+  	//Lorsqu'on click sur une page, on met à jours le contenu
+	//On met à jours la page en fonction du tournoi selectionner
+	setUserStaff(page);
+  }
+});
+//On met jours les info (liste des users et longueur de chaque page)
+setUserListInfo(userList,pageLength);
+
+//On met à jours la première page
+setUserStaff(1);
+</script>
 {% endblock %}
