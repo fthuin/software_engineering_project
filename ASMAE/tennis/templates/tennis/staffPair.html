@@ -1,0 +1,72 @@
+{% extends "tennis/staff.html" %}
+
+{% block title %}Gestion des paires{% endblock %}
+{% block ongPaires %}class="active"{% endblock %}
+
+{% block bodyStaff %}
+<!-- Gestionnaire des paires -->
+<div class="content-box" id="gestionPaire">
+	<h2 class="center">Gestionnaire des paires</h2>
+	<hr class="line">	
+	<!-- Rechercher -->
+	<div class="row" style="margin-bottom:15px;">
+		<div class="col-sm-4 col-sm-offset-4">
+			<div class="input-group">
+		      <input type="text" class="form-control" placeholder="Rechercher">
+		      <span class="input-group-btn">
+		        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+		      </span>
+		    </div>
+		</div>
+	</div>    
+
+	<!-- Liste des terrains -->
+	<div class="panel panel-default center-block" style="max-width:600px;">
+		<div class="panel-heading">Paires</div>
+		<div class="list-group" id="PairList">
+		</div>
+	</div>
+
+	<!-- Info -->
+	<p class="center" id="PairInfo"></p>
+
+	<!-- Bottom pagination -->
+	<div class="text-center">
+		<ul class="pagination" id="PairPagination">
+		</ul>
+	</div>
+
+</div>
+{% endblock %}
+
+{% block commande %}
+<script>
+//PAIR
+var pairList = [];
+{% for pair in allPair %}
+{% if pair.confirm %}
+pairList.push(['{{ pair.id }}',{% if pair.valid %}'oui'{% else %}'non'{% endif %},{% if pair.pay %}'oui'{% else %}'non'{% endif %},'{{ pair.user1.username }}','{{ pair.user2.username }}','{{ pair.user1.participant.nom }}','{{ pair.user2.participant.nom }}','{{ pair.user1.participant.prenom }}','{{ pair.user2.participant.prenom }}','{{ pair.tournoi.nom }}']);
+{% endif %}
+{% endfor %}
+
+//Nombre d'entrée par page
+var pageLength = 10;
+//Nombre de page
+var total = Math.ceil(pairList.length/pageLength);
+//Notre pagination
+$('#PairPagination').twbsPagination({
+  totalPages: total,
+  visiblePages: 5,
+  onPageClick: function (event, page) {
+  	//Lorsqu'on click sur une page, on met à jours le contenu
+	setPair(page);
+  }
+});
+
+//On met jours les info (liste des users et longueur de chaque page)
+setPairListInfo(pairList,pageLength);
+
+//On met à jours la première page
+setPair(1);
+</script>
+{% endblock %}

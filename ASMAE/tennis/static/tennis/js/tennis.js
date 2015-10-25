@@ -336,7 +336,7 @@ function setCourt(page){
 		var valid = CourtList[i][10];
 		var dispo = CourtList[i][11];
 		
-		var p = '<a href="staff/terrain/'+CourtList[i][3]+'" class="list-group-item"><b>ID : </b>'+CourtList[i][3]+' / <b>Matière : </b>'+CourtList[i][4]+' / <b>Valide : </b>'+valid+' / <b>Dispo : </b>'+dispo+'<br><b>Propriétaire : </b>'+CourtList[i][1]+' '+CourtList[i][2]+' ('+CourtList[i][0]+') <br> <b>Adresse : </b>'+adress+'</a>';
+		var p = '<a href="terrains/'+CourtList[i][3]+'" class="list-group-item"><b>ID : </b>'+CourtList[i][3]+' / <b>Matière : </b>'+CourtList[i][4]+' / <b>Valide : </b>'+valid+' / <b>Dispo : </b>'+dispo+'<br><b>Propriétaire : </b>'+CourtList[i][1]+' '+CourtList[i][2]+' ('+CourtList[i][0]+') <br> <b>Adresse : </b>'+adress+'</a>';
 		panneau.innerHTML += p;
 	};
 
@@ -352,8 +352,9 @@ function setCourt(page){
 var PairList;
 
 //On met à jours les infos
-function setPairListInfo(pairList){
+function setPairListInfo(pairList,longueur){
 	PairList = pairList;
+	pageLength = longueur;
 }
 
 //Permet de changer le contenu de la page en fonction de la page ou on se trouve
@@ -374,7 +375,7 @@ function setPair(page){
 		var pay = PairList[i][2];
 		var info = '<b>ID : </b>'+PairList[i][0]+' / <b> Tournoi : </b>'+PairList[i][9]+' / <b>Valide : </b>'+valid+' / <b>Payé : </b>'+pay;
 		
-		var p = '<a href="staff/pair/'+PairList[i][0]+'" class="list-group-item">'+info+'<br>'+user1+' - '+user2+'</a>';
+		var p = '<a href="paires/'+PairList[i][0]+'" class="list-group-item">'+info+'<br>'+user1+' - '+user2+'</a>';
 		panneau.innerHTML += p;
 	};
 

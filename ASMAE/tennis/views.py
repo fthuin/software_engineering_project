@@ -333,14 +333,41 @@ def editTerrain(request,id):
 			return render(request,'tennis/editTerrain.html',locals())
 	return redirect(reverse(home))
 
-def staff(request,p=0):
-	#List of Extra
-	Ex = Extra.objects.all()
+def staff(request):	
+	if request.user.is_authenticated():
+		if request.user.is_staff: #TODO
+		    return render(request,'tennis/staff.html',locals())
+	return redirect(reverse(home))
+
+def staffTournoi(request):
+	if request.method == "POST":
+		if request.POST['action'] == "sendTournamentDataByMail":
+				send_email_start_tournament() #TODO to change and link to a tournament
+				successSend = "Les mails ont bien été envoyé"
+	if request.user.is_authenticated():
+		if request.user.is_staff: #TODO
+		    return render(request,'tennis/staffTournoi.html',locals())
+	return redirect(reverse(home))
+
+def staffTerrain(request):
 	#List of Court
 	allCourt = Court.objects.all()
+	if request.user.is_authenticated():
+		if request.user.is_staff: #TODO
+		    return render(request,'tennis/staffTerrain.html',locals())
+	return redirect(reverse(home))
+
+def staffPaire(request):
 	#List of Pair
 	allPair = Pair.objects.all()
+	if request.user.is_authenticated():
+		if request.user.is_staff: #TODO
+		    return render(request,'tennis/staffPair.html',locals())
+	return redirect(reverse(home))
 
+def staffExtra(request):
+	#List of Extra
+	Ex = Extra.objects.all()
 	if request.method == "POST":
 		if request.POST['action'] == "addExtra":
 			nom = request.POST['name']
@@ -349,11 +376,11 @@ def staff(request,p=0):
 			
 			if nom=="":
 				errorAdd = "Veuillez rajouter un nom à l'extra!"
-				return render(request,'tennis/staff.html',locals())			
+				return render(request,'tennis/staffExtra.html',locals())			
 
 			if not is_number(prix):
 				errorAdd = "Le prix n'a pas le bon format"
-				return render(request,'tennis/staff.html',locals())
+				return render(request,'tennis/staffExtra.html',locals())
 			
 			extra = Extra(nom=nom,prix=prix,commentaires = message)
 			extra.save()
@@ -370,11 +397,11 @@ def staff(request,p=0):
 	
 			if nom=="":
 				errorEdit = "Veuillez rajouter un nom à l'extra!"
-				return render(request,'tennis/staff.html',locals())			
+				return render(request,'tennis/staffExtra.html',locals())			
 
 			if not is_number(prix):
 				errorEdit = "Le prix n'a pas le bon format"
-				return render(request,'tennis/staff.html',locals())	
+				return render(request,'tennis/staffExtra.html',locals())	
 			
 			
 			extra.nom = nom
@@ -388,14 +415,16 @@ def staff(request,p=0):
 			extra = Extra.objects.filter(id = id)[0]
 			extra.delete()
 			successDelete = "Extra bien supprimé!"
-			
-		if request.POST['action'] == "sendTournamentDataByMail":
-			send_email_start_tournament() #TODO to change and link to a tournament
-			successSend = "Les mails ont bien été envoyé"
-		
+
 	if request.user.is_authenticated():
 		if request.user.is_staff: #TODO
-		    return render(request,'tennis/staff.html',locals())
+		    return render(request,'tennis/staffExtra.html',locals())
+	return redirect(reverse(home))
+
+def staffUser(request):
+	if request.user.is_authenticated():
+		if request.user.is_staff: #TODO
+		    return render(request,'tennis/staffUser.html',locals())
 	return redirect(reverse(home))
 
 def validateTerrain(request, id):
@@ -469,10 +498,9 @@ def editTerrainStaff(request, id):
 			court = Court.objects.filter(id=id)[0]
 			court.delete()
 			court = Court.objects.filter(user=request.user)
-			return redirect(reverse(staff))
+			return redirect(reverse(staffTerrain))
 	if request.user.is_authenticated():
 		if request.user.is_staff:
-		
 			return render(request,'tennis/editTerrainStaff.html',locals())
 	return redirect(reverse(home))
 
@@ -493,10 +521,12 @@ def validatePair(request, id):
 			pair.valid = valider
 			pair.pay = payer
 			pair.save()
-			return redirect(reverse(staff))
+
+			return redirect(reverse(staffPaire))
+
 		if request.POST['action'] == "deletePair":
 			pair.delete()
-			return redirect(reverse(staff))
+			return redirect(reverse(staffPaire))
 			
 	
 	Ex = Extra.objects.all()

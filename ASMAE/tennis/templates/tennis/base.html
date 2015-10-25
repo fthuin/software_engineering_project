@@ -75,7 +75,7 @@
               <!-- TODO if staff only -->
               {% if user.is_staff %}
 		
-              <li {% block nav-staff %}{% endblock %}><a href="{% url "tennis.views.staff" %}"><i class="fa fa-lock fa-lg"></i> Staff</a></li>
+              <li {% block nav-staff %}{% endblock %}><a href="{% url "tennis.views.staffTournoi" %}"><i class="fa fa-lock fa-lg"></i> Staff</a></li>
               {% endif %}
               </ul>
               <!-- utilisateur -->
