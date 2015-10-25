@@ -224,6 +224,17 @@ def payPair(request,id):
 		#TODO check si il peut payer cette pair
 		pair = Pair.objects.filter(id=id)[0]
 		Ex = Extra.objects.all()
+		extra1 = pair.extra1.all()
+		extra2 = pair.extra2.all()
+		extra1checked = list()
+		extra2checked = list()
+		for ext in extra1:
+			extra1checked.append((ext,False))
+		for ext in extra2:
+			extra2checked.append((ext,False))
+		print(extra1checked)
+					
+			
 		return render(request,'tennis/payPair.html',locals())
 	return redirect(reverse(home))
 
