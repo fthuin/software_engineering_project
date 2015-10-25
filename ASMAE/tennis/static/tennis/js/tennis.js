@@ -66,7 +66,9 @@ function setUser(page){
 function selectUser(username,nom,prenom){
 	document.getElementById("username2Value").value = username;
 	document.getElementById("user2").innerHTML = prenom +' '+nom+' ('+username+')';
-	document.getElementById("InscriptionButton").disabled = false;
+	if(document.getElementById("hint-tournoi").innerHTML==""){
+		document.getElementById("InscriptionButton").disabled = false;
+	}
 }
 
 //Lorsqu'on click sur un tournoi, on met à jours la description ainsi que les différentes restriction par rapport au tournoi
