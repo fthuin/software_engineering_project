@@ -390,6 +390,9 @@ def staffTournoi(request):
 				successSend = "Les mails ont bien été envoyé"
 	if request.user.is_authenticated():
 		if request.user.is_staff: #TODO
+		    allTournois = Tournoi.objects.all()
+		    allPairs = Pair.objects.all()
+		    allCourts = Court.objects.all()
 		    return render(request,'tennis/staffTournoi.html',locals())
 	return redirect(reverse(home))
 
@@ -399,15 +402,6 @@ def staffTerrain(request):
 	if request.user.is_authenticated():
 		if request.user.is_staff: #TODO
 		    return render(request,'tennis/staffTerrain.html',locals())
-	return redirect(reverse(home))
-	
-def staffGroupes(request):
-	if request.user.is_authenticated():
-		if request.user.is_staff: #TODO
-		    allTournois = Tournoi.objects.all()
-		    allPairs = Pair.objects.all()
-		    allCourts = Court.objects.all()
-		    return render(request,'tennis/staffGroupes.html',locals())
 	return redirect(reverse(home))
 
 def staffPaire(request):

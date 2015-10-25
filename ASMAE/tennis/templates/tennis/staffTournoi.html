@@ -4,10 +4,47 @@
 {% block ongTournoi %}class="active"{% endblock %}
 
 {% block bodyStaff %}
-<!-- Gestionnaire des tournois -->
+<!-- Gestionnaire des groupes -->
+<head>
+<style>tr td {
+  background-color: #FFFFFF;
+  text-align: center;
+}
+
+tr:hover td {
+    background-color: #cecece;
+}
+
+th {
+  padding:5px;
+  text-align: center;
+}
+
+.table {
+  float:left;
+  margin: 0 0 10px 10px;
+  width:32%;
+  <!-- display: inline-block; -->
+}	
+
+.group-box {
+  overflow:auto;
+}
+
+.form-horizontal .control-label{
+text-align:left;
+}
+</style>
+</head>
 <div class="content-box" id="gestionTournoi">
 	<h2 class="center">Gestionnaire des tournois</h2>
 	<hr class="line">
+	
+	<div class="panel panel-default center-block" style="max-width:90%;">
+		<div class="panel-heading">Tournois</div>
+		<div class="list-group" id="ListTournoi"></div>
+	</div>
+	
 	{% if errorAdd %}
 	<div class="alert alert-danger">
 	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -25,4 +62,158 @@
 		<button class="btn-default btn center-block" name="action" value="sendTournamentDataByMail">Envoyer les informations du tournois par mail</button>
 	</form>
 </div>
+
+<div class="content-box" id="gestionGroup">
+	   <h4>Configuration des groupes</h4>
+	   <hr class="line">
+	   <div class="form-horizontal">
+            <div class="form-group">
+            <label for="tournoi" class="control-label col-sm-3">Sélectionner un tournoi:</label>
+            <div class="col-sm-3"><select class="form-control" id="tournois" name="type_tournoi"></select></div>
+	        </div>
+            
+            <div class="form-group">
+            <label for="tournoi" class="control-label col-sm-3">Nombre de poule(s):</label>
+            <div class="col-sm-3"><input class="form-control" type="number" id="group_num" min="1" value="1" name="group num"></div>
+	        </div>
+	        
+	        <div class="form-group">
+            <label for="tournoi" class="control-label col-sm-3">Nombre de paires par poule:</label>
+            <div class="col-sm-3"><input class="form-control" type="number" id="group_size" min="1" value="1" ></div>
+	        </div>  
+	   <br>
+	   <button id="create" style="float:right" class="btn btn-default">Générer les groupes</button>
+	</div>
+</div>
+
+<div class="content-box" id="geneGroup" style="visibility:hidden">
+	<div id="group-box">
+	<h4>Groupes du tournoi</h4>
+	<hr class="line">
+	<div class="group-box" id="liste_groupes"></div>
+	<button id="register" style="float:right" class="btn btn-default">Enregistrer les groupes (TO DO)</button>
+	<!--<br><hr class="line"><br>
+	<div class="form-horizontal">
+        <div class="form-group">
+        <label for="groupe_id1" class="control-label col-sm-2">Groupe 1 ID:</label>
+        <div class="col-sm-2"><input id="group1_id" class="form-control" type="number" name="group 1"></div>      
+        <label for="groupe_index1" class="control-label col-sm-2">Groupe 1 Index:</label>
+        <div class="col-sm-2"><input id="group1_index" class="form-control" type="number" name="index 1"></div>
+        <div class="col-sm-3"><button id="swap" style="float:right" class="btn btn-default">Swap</button></div>
+        </div>
+        
+        <div class="form-group">
+        <label for="groupe_id2" class="control-label col-sm-2">Groupe 2 ID:</label>
+        <div class="col-sm-2"><input id="group2_id" class="form-control" type="number" name="group 2"></div>
+        <label for="groupe_index2" class="control-label col-sm-2">Groupe 2 Index:</label>
+        <div class="col-sm-2"><input id="group2_index" class="form-control" type="number" name="index 2"></div>
+        <div class="col-sm-3"><button id="register" style="float:right" class="btn btn-default">Enregistrer les groupes</button></div>
+        </div>
+    </div> -->
+</div>
 {% endblock %}
+
+	{% block commande %}
+	<script>
+	    //Recuperation des tournois et stockage dans un tableau
+	    var tournoiList = [];
+	    var select = document.getElementById("tournois");
+        {% for tournoi in allTournois %}
+            var option = document.createElement("option");
+            option.text = '{{tournoi.nom}}'
+            select.add(option)
+            tournoiList.push(['{{ tournoi.nom }}','{{ tournoi.description }}','{{ tournoi.jour }}']);
+        {% endfor %}
+        setTournoi(tournoiList);
+		
+		document.getElementById("create").addEventListener('click', function() {
+		         var sel_tournoi = document.getElementById("tournois").value;
+				 var group_num = document.getElementById("group_num").value;
+				 var group_size = document.getElementById("group_size").value;
+				 
+				 var pairList = [];
+				 {% for pair in allPairs %}
+				    {% if pair.confirm %}
+				    if('{{ pair.tournoi.nom }}'==sel_tournoi) {
+pairList.push(['{{ pair.id }}','{{ pair.user1.participant.nom }}','{{ pair.user1.participant.prenom }}','{{ pair.user2.participant.nom }}','{{ pair.user2.participant.prenom }}']);
+                    }
+                    {% endif %}
+                 {% endfor %}
+                 
+                 //Recuperation des court et stockage dans un tableau
+                 var courtList = [];
+                 {% for court in allCourts %}
+                 courtList.push('{{ court.id }}');
+                 {% endfor %}
+                 
+		         var tournament = new Tournament(pairList, courtList);
+		         
+				 if (group_num != undefined && group_size != undefined) {
+					tournament.create_empty_groups(group_num, group_size);
+					tournament.try_naively_fill_groups();
+					tournament.try_naively_select_group_leaders()
+				 }
+			
+				 var list = tournament.groups;
+				 var container = document.getElementById("liste_groupes");
+			
+				 while (container.firstChild){
+					container.removeChild(container.firstChild);
+				 }
+			
+				 var flag = false; 
+				 if (group_num < list.length)
+					flag = true; 
+					
+				 for (var index = 0; index < list.length; index++) {
+					var group_display = document.createElement("table");
+					group_display.className="table table-hover table-responsive panel panel-default";
+					var group_name = document.createElement("th");
+					group_name.colSpan = 2;
+					group_name.className="panel panel-heading";
+				
+					if(index == list.length-1 && flag)
+					   group_name.innerHTML = "Groupe des paires non attribuées"; 
+					else 
+					   group_name.innerHTML = "Groupe n° " + (index+1);
+					
+					group_display.appendChild(group_name);
+					var numRows = group_display.rows.length;
+					for (var j = 0; j < list[index].pairs.length; j++) {
+					   var pair_row = group_display.insertRow(numRows);
+					   pair_row.insertCell(0).innerHTML = list[index].pairs[j][0];
+					   pair_row.insertCell(1).innerHTML = 
+					       list[index].pairs[j][1] + " " + list[index].pairs[j][2] + "</br>" 
+					       + list[index].pairs[j][3] + " " + list[index].pairs[j][4];
+					   pair_row.cells[0].style.width="50%";
+					   pair_row.draggable="true";
+					   if(list[index].pairs[j] == list[index].leader)
+						   pair_row.className="danger";
+					   numRows++;
+					}
+					
+					var court_row = group_display.insertRow(numRows);
+					court_row.insertCell(0).innerHTML = "<b>Terrain n°</b>";
+					if (list[index].court != undefined) 
+					   court_row.insertCell(1).innerHTML = list[index].court;
+					else 
+					   court_row.insertCell(1).innerHTML = "Pas de terrain";
+					
+					container.appendChild(group_display);
+				 }
+				 document.getElementById("geneGroup").style.visibility = "visible";
+			}, false);
+			
+		document.getElementById("swap").addEventListener('click', function(){
+				var g1_id = document.getElementById("group1_id").value;
+				var g2_id = document.getElementById("group2_id").value;
+				var g1_index = document.getElementById("group1_index").value;
+				var g2_index = document.getElementById("group2_index").value;
+				if (g1_id != undefined && g2_id != undefined && g1_index!= undefined && g2_index != undefined) {
+					tournament.try_swap_pairs_in_groups(g1_id, g2_id, g1_index, g2_index);
+					//TO DO : Swap graphique
+				}
+			}, false);
+	</script>
+	{% endblock %}
+</div>
