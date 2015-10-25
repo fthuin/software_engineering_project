@@ -66,6 +66,7 @@ function setUser(page){
 function selectUser(username,nom,prenom){
 	document.getElementById("username2Value").value = username;
 	document.getElementById("user2").innerHTML = prenom +' '+nom+' ('+username+')';
+	document.getElementById("InscriptionButton").disabled = false;
 }
 
 //Lorsqu'on click sur un tournoi, on met à jours la description ainsi que les différentes restriction par rapport au tournoi
@@ -73,6 +74,7 @@ function setDescription(sexe,birth){
 	//Reset valeur du joueur 2
 	document.getElementById("username2Value").value = "";
 	document.getElementById("user2").innerHTML = 'Coéquipier';
+	document.getElementById("InscriptionButton").disabled = true;
 
 	//Paneau d'utilisateur
 	var panneau = document.getElementById("UserList");
