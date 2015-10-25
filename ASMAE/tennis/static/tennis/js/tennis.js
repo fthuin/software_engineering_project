@@ -249,8 +249,19 @@ function selectVirement(){
 /*
  * Section staff
  */
-
 //TOURNOI
+function setTournoi(TournoiList){
+	var panneau = document.getElementById("ListTournoi");
+	panneau.innerHTML = "";
+	for (var i = 0; i < TournoiList.length; i++) {
+		var nom = TournoiList[i][0];
+		var description = TournoiList[i][1];
+		var jour = TournoiList[i][2];
+		var p = '<a class="list-group-item"><b>Nom : </b>'+nom+'<br><b>Description : </b>'+description+'<br><b>Jour : </b>'+jour+'</a>';
+		panneau.innerHTML += p;
+	};
+}
+
 
 //TERRAIN
 //Lite des terrains
