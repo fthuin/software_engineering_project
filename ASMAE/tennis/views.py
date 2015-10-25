@@ -32,13 +32,20 @@ def tournoi(request):
 	return redirect(reverse(home))
 
 def inscriptionTournoi(request):
+	Ex = Extra.objects.all()
+	Tour = Tournoi.objects.all()
+	Use = User.objects.all()
+
 	if request.method == "POST":
+		#On recupère les donnée du formualaire
 		username2 = request.POST['username2']
 		comment1 = request.POST['remarque']
 		extra = request.POST.getlist('extra')
+		#On recupere les extras pris par l'utilisateur
 		extra1 = list()
 		for elem in extra:
 			extra1.append(Extra.objects.filter(id=elem)[0])
+		#On en déduit les extras non pris par l'utilisateur
 		extranot1 = list()
 		Ex = Extra.objects.all()	
 		for elem in Ex:
@@ -48,36 +55,29 @@ def inscriptionTournoi(request):
 					contained = True
 			if contained == False:	
 				extranot1.append(Extra.objects.filter(id=elem.id)[0])
-		
+
+		#On recupere le tournoi(et on vérifie que l'utilisateur a bien entré un tournoi)		
 		nomTournoi = request.POST['tournoi']
 
 		if (nomTournoi==""):
 			errorAdd = "Veuillez selectionner un tournoi!"
-			Ex = Extra.objects.all()
-			Tour = Tournoi.objects.all()
-			Use = User.objects.all()
 			return render(request,'tennis/inscriptionTournoi.html',locals())
 
 		tournois = Tournoi.objects.filter(nom=nomTournoi)[0]
-
+		#On vérifie que l'utilisateur a bien rentré un deuxieme joueur
 		if (username2==""):
 			errorAdd = "Veuillez rajouter un deuxieme joueur pour votre pair"
-			Ex = Extra.objects.all()
-			Tour = Tournoi.objects.all()
-			Use = User.objects.all()
 			return render(request,'tennis/inscriptionTournoi.html',locals())
 		
-		
+		#On véririe qu'il ne s'est pas entré lui meme
 		user = User.objects.filter(username=request.user.username)[0]
 		user2 = User.objects.filter(username=username2)[0]
 
 		if (user==user2):
 			errorAdd = "Vous ne pouvez pas faire une pair avec vous meme"
-			Ex = Extra.objects.all()
-			Tour = Tournoi.objects.all()
-			Use = User.objects.all()
 			return render(request,'tennis/inscriptionTournoi.html',locals())
-
+		
+		#Série de vérification pour que l'utilisateur ou son partenaire ne soit pas inscrit dans un tournoi du meme jour
 		user1Tournoi1 = user.user1.all()
 		user1Tournoi2 = user.user2.all()
 
@@ -87,38 +87,27 @@ def inscriptionTournoi(request):
 		for elem in user1Tournoi1:
 			if(elem.tournoi.jour == tournois.jour):
 				errorAdd = "Vous etes deja inscrit a un tournoi ce jour!"
-				Ex = Extra.objects.all()
-				Tour = Tournoi.objects.all()
-				Use = User.objects.all()
 				return render(request,'tennis/inscriptionTournoi.html',locals())
 
 		for elem in user1Tournoi2:
 			if(elem.tournoi.jour == tournois.jour):
 				errorAdd = "Vous etes deja inscrit a un tournoi ce jour!"
-				Ex = Extra.objects.all()
-				Tour = Tournoi.objects.all()
-				Use = User.objects.all()
 				return render(request,'tennis/inscriptionTournoi.html',locals())
 		
 		for elem in user2Tournoi1:
 			if(elem.tournoi.jour == tournois.jour and elem.confirm):
 				errorAdd = "Le joueur 2 est deja inscrit dans un tournoi ce jour!"
-				Ex = Extra.objects.all()
-				Tour = Tournoi.objects.all()
-				Use = User.objects.all()
 				return render(request,'tennis/inscriptionTournoi.html',locals())
 
 		for elem in user2Tournoi2:
 			if(elem.tournoi.jour == tournois.jour and elem.confirm):
 				errorAdd = "Le joueur 2 est deja inscrit dans un tournoi ce jour!"
-				Ex = Extra.objects.all()
-				Tour = Tournoi.objects.all()
-				Use = User.objects.all()
 				return render(request,'tennis/inscriptionTournoi.html',locals())
-
+		
+		#On cré la pair
 		pair = Pair(tournoi = tournois,user1=user,user2=user2,comment1 = comment1,confirm = False,valid = False,pay = False)
 		pair.save()
-		
+		#On rajoute les extras
 		for elem in extra:
 			ext = Extra.objects.filter(id=elem)[0]
 			pair.extra1.add(ext)
@@ -129,9 +118,9 @@ def inscriptionTournoi(request):
 		pair.save()
 		return redirect(reverse(tournoi))
 		
-	#rajouter les extras
 	if request.user.is_authenticated():
 		extranot1 = Extra.objects.all()
+		Ex = Extra.objects.all()
 		Tour = Tournoi.objects.all()
 		Use = User.objects.all().order_by('username')
 		return render(request,'tennis/inscriptionTournoi.html',locals())
@@ -183,11 +172,12 @@ def confirmPair(request,id):
 
 def cancelPair(request,id):
 	if request.method == "POST":
+		#TODO check si il peut annuler cette pair
 		pair = Pair.objects.filter(id=id)[0]
 		pair.delete()
 		return redirect(reverse(tournoi))
 	if request.user.is_authenticated():
-		#TODO check si il peut annuler cette pair
+		
 		pair = Pair.objects.filter(id=id)[0]
 		extra1 = pair.extra1.all()
 		Ex = Extra.objects.all()
@@ -286,6 +276,7 @@ def registerTerrain(request):
 	return redirect(reverse(home))
 
 def editTerrain(request,id):
+	court = Court.objects.filter(id=id)[0]
 	if request.method == "POST":
 		if request.POST['action'] == "modifyCourt":
 			rue = request.POST['rue']
@@ -307,7 +298,6 @@ def editTerrain(request,id):
 			else:
 				dispoDimanche = False
 
-			court = Court.objects.filter(id=id)[0]
 		
 			if (rue=="" or numero=="" or postalcode=="" or locality=="" or matiere=="" or type=="" or etat==""):
 				errorAdd = "Veuillez remplir tous les champs obligatoires !"
@@ -332,13 +322,13 @@ def editTerrain(request,id):
 			return redirect(reverse(terrain))
 	
 		if request.POST['action'] == "deleteCourt":
-			court = Court.objects.filter(id=id)[0]
+
 			court.delete()
 			court = Court.objects.filter(user=request.user)
 			return redirect(reverse(terrain))
 
 	if request.user.is_authenticated():
-		court = Court.objects.filter(id=id)[0]
+
 		if request.user == court.user:
 			return render(request,'tennis/editTerrain.html',locals())
 	return redirect(reverse(home))
@@ -502,6 +492,7 @@ def validatePair(request, id):
 				payer = False
 			pair.valid = valider
 			pair.pay = payer
+			pair.save()
 			return redirect(reverse(staff))
 		if request.POST['action'] == "deletePair":
 			pair.delete()
@@ -528,6 +519,7 @@ def validatePair(request, id):
 				contained = True
 		if contained == False:	
 			extranot2.append(Extra.objects.filter(id=elem.id)[0])
+
 	birthdate1 = pair.user1.participant.datenaissance
 	formatedBirthdate1 = birthdate1.strftime('%d/%m/%Y')
 	birthdate2 = pair.user2.participant.datenaissance
@@ -538,10 +530,11 @@ def validatePair(request, id):
 	return redirect(reverse(home))
 
 def profil(request):
+	birthdate = request.user.participant.datenaissance
+	formatedBirthdate = birthdate.strftime('%d/%m/%Y')
 	if request.method == "POST":
 		if request.POST['action'] == 'updatePassword':
-			birthdate = request.user.participant.datenaissance
-			formatedBirthdate = birthdate.strftime('%d/%m/%Y')
+			
 
 			password1 = request.POST['password1']
 			password2 = request.POST['password2']
@@ -616,8 +609,7 @@ def profil(request):
 			participant.oldparticipant = oldparticipant
 			participant.save()
 
-			birthdate = request.user.participant.datenaissance
-			formatedBirthdate = birthdate.strftime('%d/%m/%Y')
+			
 			
 			successEdit = "Le profil a bien été changé"
 
@@ -626,8 +618,7 @@ def profil(request):
 			return render(request,'tennis/profil.html',locals())
 	
 	if request.user.is_authenticated():
-		birthdate = request.user.participant.datenaissance
-		formatedBirthdate = birthdate.strftime('%d/%m/%Y')
+		
 		return render(request,'tennis/profil.html',locals())
 	return redirect(reverse(home))
 
