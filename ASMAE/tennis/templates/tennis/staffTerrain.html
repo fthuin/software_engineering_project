@@ -1,0 +1,71 @@
+{% extends "tennis/staff.html" %}
+
+{% block title %}Gestion des terrains{% endblock %}
+{% block ongTerrain %}class="active"{% endblock %}
+
+{% block bodyStaff %}
+<!-- Gestionnaire des terrains -->
+<div class="content-box" id="gestionTerrain">
+	<h2 class="center">Gestionnaire des terrains</h2>
+	<hr class="line">	
+	<!-- Rechercher -->
+	<div class="row" style="margin-bottom:15px;">
+		<div class="col-sm-4 col-sm-offset-4">
+			<div class="input-group">
+		      <input type="text" class="form-control" placeholder="Rechercher">
+		      <span class="input-group-btn">
+		        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+		      </span>
+		    </div>
+		</div>
+	</div>
+
+	<!-- Liste des terrains -->
+	<div class="panel panel-default center-block" style="max-width:600px;">
+		<div class="panel-heading">Terrains</div>
+		<div class="list-group" id="CourtList">
+		</div>
+	</div>
+
+	<!-- Info -->
+	<p class="center" id="CourtInfo"></p>
+
+	<!-- Bottom pagination -->
+	<div class="text-center">
+		<ul class="pagination" id="CourtPagination">
+		</ul>
+	</div>
+
+</div>
+{% endblock %}
+
+{% block commande %}
+<script>
+	//TERRAIN
+//Recuperation des court et stockage dans un tableau
+var courtList = [];
+{% for court in allCourt %}
+courtList.push(['{{ court.user.username }}','{{ court.user.participant.prenom }}','{{ court.user.participant.nom }}','{{ court.id }}','{{ court.matiere }}','{{ court.rue }}','{{ court.numero }}','{{ court.codepostal }}','{{ court.localite }}','{{ court.boite }}',{% if court.valide %}'oui'{% else %}'non'{% endif %},{% if court.dispoSamedi and court.dispoDimanche %}'Samedi et dimanche'{% elif court.dispoSamedi %}'Samedi'{% elif court.dispoDimanche %}'Dimanche'{% else %}' - '{% endif %}]);
+{% endfor %}
+
+//Nombre d'entrée par page
+var pageLength = 10;
+//Nombre de page
+var total = Math.ceil(courtList.length/pageLength);
+//Notre pagination
+$('#CourtPagination').twbsPagination({
+  totalPages: total,
+  visiblePages: 5,
+  onPageClick: function (event, page) {
+  	//Lorsqu'on click sur une page, on met à jours le contenu
+	setCourt(page);
+  }
+});
+
+//On met jours les info (liste des users et longueur de chaque page)
+setCourtListInfo(courtList,pageLength);
+
+//On met à jours la première page
+setCourt(1);
+</script>
+{% endblock %}
