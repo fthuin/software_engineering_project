@@ -34,7 +34,7 @@ def tournoi(request):
 def inscriptionTournoi(request):
 	Ex = Extra.objects.all()
 	Tour = Tournoi.objects.all()
-	Use = User.objects.all()
+	Use = User.objects.all().order_by('username')
 
 	if request.method == "POST":
 		#On recupère les donnée du formualaire
@@ -120,21 +120,19 @@ def inscriptionTournoi(request):
 		
 	if request.user.is_authenticated():
 		extranot1 = Extra.objects.all()
-		Ex = Extra.objects.all()
-		Tour = Tournoi.objects.all()
-		Use = User.objects.all().order_by('username')
+		
 		return render(request,'tennis/inscriptionTournoi.html',locals())
 	return redirect(reverse(home))
 
 def confirmPair(request,id):
-	
+	pair = Pair.objects.filter(id=id)[0]
 	if request.method == "POST":
 		if request.POST['action'] == "validate":
 			remarque = request.POST['remarque']
 			extra = request.POST.getlist('extra')
 			
 
-			pair = Pair.objects.filter(id=id)[0]
+			
 			pair.confirm = True
 			pair.comment2 = remarque
 			pair.save()
@@ -146,13 +144,13 @@ def confirmPair(request,id):
 
 			return redirect(reverse(tournoi))
 		if request.POST['action'] == "refuse":
-			pair = Pair.objects.filter(id=id)[0]
+			
 			pair.delete()
 			return redirect(reverse(tournoi))
 			#TODO Envoyer mail a l'user 1 pour lui dire que son pote veut pas de lui
 	if request.user.is_authenticated():
 		#TODO check si il peut confirmer cette pair
-		pair = Pair.objects.filter(id=id)[0]
+		
 		extra1 = pair.extra1.all()
 		extranot1 = list()
 		Ex = Extra.objects.all()	
@@ -171,14 +169,13 @@ def confirmPair(request,id):
 	return redirect(reverse(home))
 
 def cancelPair(request,id):
+	pair = Pair.objects.filter(id=id)[0]
 	if request.method == "POST":
 		#TODO check si il peut annuler cette pair
-		pair = Pair.objects.filter(id=id)[0]
 		pair.delete()
 		return redirect(reverse(tournoi))
 	if request.user.is_authenticated():
 		
-		pair = Pair.objects.filter(id=id)[0]
 		extra1 = pair.extra1.all()
 		Ex = Extra.objects.all()
 		extranot1 = list()
@@ -324,7 +321,6 @@ def editTerrain(request,id):
 		if request.POST['action'] == "deleteCourt":
 
 			court.delete()
-			court = Court.objects.filter(user=request.user)
 			return redirect(reverse(terrain))
 
 	if request.user.is_authenticated():
@@ -495,9 +491,7 @@ def editTerrainStaff(request, id):
 
 		if request.POST['action'] == "deleteCourt":
 			#TODO delete terrain staff
-			court = Court.objects.filter(id=id)[0]
 			court.delete()
-			court = Court.objects.filter(user=request.user)
 			return redirect(reverse(staffTerrain))
 	if request.user.is_authenticated():
 		if request.user.is_staff:
