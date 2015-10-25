@@ -1,0 +1,28 @@
+{% extends "tennis/staff.html" %}
+
+{% block title %}Gestion des tournois{% endblock %}
+{% block ongTournoi %}class="active"{% endblock %}
+
+{% block bodyStaff %}
+<!-- Gestionnaire des tournois -->
+<div class="content-box" id="gestionTournoi">
+	<h2 class="center">Gestionnaire des tournois</h2>
+	<hr class="line">
+	{% if errorAdd %}
+	<div class="alert alert-danger">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	<strong>Error!</strong> {{ errorAdd }}
+	</div>
+	{% elif successSend %}
+	<div class="alert alert-success">
+	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	    <strong>Succès!</strong> {{ successSend }}
+	</div>
+	{% endif %}
+	<form name="sendTournamentDataByMail" id="sendTournamentDataByMail" role="form" method="post" action="{% url "tennis.views.staff" %}">
+		{% csrf_token %}
+		<input type="text" class="form-control" name="id" id="sendTournamentDataByMailID" value="{{ Ex.0.id }}" style="display:none;">
+		<button class="btn-default btn center-block" name="action" value="sendTournamentDataByMail">Envoyer les informations du tournois par mail</button>
+	</form>
+</div>
+{% endblock %}
