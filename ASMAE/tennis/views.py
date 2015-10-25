@@ -372,6 +372,12 @@ def staffTerrain(request):
 		if request.user.is_staff: #TODO
 		    return render(request,'tennis/staffTerrain.html',locals())
 	return redirect(reverse(home))
+	
+def staffGroupes(request):
+	if request.user.is_authenticated():
+		if request.user.is_staff: #TODO
+		    return render(request,'tennis/staffGroupes.html',locals())
+	return redirect(reverse(home))
 
 def staffPaire(request):
 	#List of Pair
