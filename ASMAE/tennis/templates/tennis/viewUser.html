@@ -1,0 +1,87 @@
+{% extends "tennis/base.html" %}
+
+{% block title %}Utilisateur {{ use.username }}{% endblock %}
+{% block nav-staff %}class="active"{% endblock %}
+
+{% block body %}
+<div class="container">
+	<div class="content-box">
+		<h2 class="center">{{ use.username }}</h2>
+		<hr class="line">
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="panel panel-default center-block" style="max-width:600px;">
+					<div class="panel-heading">Utilisateur</div>
+					<div class="panel-body">
+						<address>
+							{{ use.participant.titre }} {{ use.participant.prenom }} {{ use.participant.nom }} ({{ use.username }})<br>
+							{{ formatedBirthdate }} <br>
+							<b>Classement : </b>{% if use.participant.classement %}{{ use.participant.classement }}{% else %} - {% endif %} <br>
+						</address>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="panel panel-default center-block" style="max-width:600px;">
+					<div class="panel-heading">Adresse</div>
+					<div class="panel-body">
+						<address>
+							{{ use.participant.rue }} {{ use.participant.numero }} {% if use.participant.boite %}bte {{ use.participant.boite }} {% endif %}<br>
+							{{ use.participant.codepostal }} <br>
+							{{ use.participant.localite }} <br>
+						</address>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="panel panel-default center-block" style="max-width:600px;">
+					<div class="panel-heading">Contact</div>
+					<div class="panel-body">
+						<address>
+							<b>Tel : </b>{% if use.participant.telephone %}{{ use.participant.telephone }}{% else %} - {% endif %} <br>
+							<b>GSM : </b>{% if use.participant.gsm %}{{ use.participant.gsm }}{% else %} - {% endif %} <br>
+							<b>Fax : </b>{% if use.participant.fax %}{{ use.participant.fax }}{% else %} - {% endif %} <br>
+						</address>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="panel panel-default center-block" style="max-width:600px;">
+					<div class="panel-heading">Tournois</div>
+					<div class="list-group">
+						{% for item in tournoi %}
+						<a href="{% url "tennis.views.validatePair" item.id %}" class="list-group-item">
+							<b>ID : </b> {{ item.id}} / <b>Tournoi : </b> {{item.tournoi.nom}} / <b>Jour : </b>{{ item.tournoi.jour }} <br> 
+							<b>Valide : </b>{% if item.valid %}oui{% else %}non{% endif %} / <b>Payé : </b>{% if item.pay %}oui{% else %}non{% endif %} <br>
+							<b>Joueur 1 : </b>{{item.user1.participant.prenom}} {{item.user1.participant.nom}} - <b>Joueur 2 : </b>{{item.user2.participant.prenom}} {{item.user2.participant.nom}}
+						</a>
+						{% empty %}
+						<li class="list-group-item center">Cet utilisateur ne participe pas encore à un tournoi</li>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="panel panel-default center-block" style="max-width:600px;">
+					<div class="panel-heading">Terrains</div>
+					<div class="list-group">
+						{% for elem in terrain %}
+						<a href="{% url 'tennis.views.validateTerrain' elem.id %}" class="list-group-item"><b>ID : </b>{{ elem.id}} / <b>Matière : </b>{{ elem.matiere }}<br> 
+						<b>Adresse : </b>{{elem.rue }} {{elem.numero}}, {{elem.codepostal}} {{elem.localite}}					
+						</a>
+						{% empty %}
+						<li class="list-group-item center">Cet utilisateur n'a pas enregistré de terrain</li>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+		<h3>Google Map (TODO)</h3>
+		<div id="map" style="height:250px;"></div>
+	</div>
+</div>
+
+{% endblock %}

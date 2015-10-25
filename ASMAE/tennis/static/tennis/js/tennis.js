@@ -385,6 +385,31 @@ function setPair(page){
 
 }
 
+//USER
+//Permet de changer le contenu de la page en fonction de la page ou on se trouve
+function setUserStaff(page){
+	//Conteneur de notre liste
+	var panneau = document.getElementById("UserList");
+	panneau.innerHTML = "";
+
+	var debut = (page-1)*pageLength;
+	var fin = page*pageLength;
+
+	//Ajout des users
+	for (var i = debut; i < UserList.length && i<fin; i++) {
+		var year = UserList[i][4].split(',')[1];
+		var now = new Date().getFullYear();
+		var age = now-year;
+		var p = '<a href="utilisateurs/'+UserList[i][0]+'" class="list-group-item">'+UserList[i][0]+' - '+UserList[i][3]+' '+UserList[i][1]+' '+UserList[i][2]+' - '+age+' ans</a>';
+		panneau.innerHTML += p;
+	};
+
+	//Info maj
+	var info = document.getElementById("UserInfo");
+	info.innerHTML = (debut+1)+'-'+i+' sur '+pageLength+' résultats ('+UserList.length+' au total)';
+
+}
+
 //EXTRA
 //permet de selectionner un extra
 function extra(id, nom,prix,comment){
