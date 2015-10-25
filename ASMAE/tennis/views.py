@@ -483,13 +483,11 @@ def staffUser(request):
 def viewUser(request,name):
 
 	use = User.objects.filter(username=name)
-	
 
 	if len(use) <1:
 		return redirect(reverse(staffUser))
-	use = Court.objects.filter(id=id)[0]
-	if use != request.user:
-		return redirect(reverse(staffUser))
+
+	use = use[0]
 
 	birthdate = use.participant.datenaissance
 	formatedBirthdate = birthdate.strftime('%d/%m/%Y')
