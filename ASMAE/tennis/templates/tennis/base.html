@@ -74,8 +74,16 @@
               <li {% block nav-contact %}{% endblock %}><a href="{% url "tennis.views.contact" %}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Contact</a></li>
               <!-- TODO if staff only -->
               {% if user.is_staff %}
-		
-              <li {% block nav-staff %}{% endblock %}><a href="{% url "tennis.views.staffTournoi" %}"><i class="fa fa-lock fa-lg"></i> Staff</a></li>
+              <li {% block nav-staff %}class="dropdown"{% endblock %}><a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-lock fa-lg"></i> Staff <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="{% url "tennis.views.staffTournoi" %}">Tournois</a></li>
+                  <li><a href="{% url "tennis.views.staffTerrain" %}">Terrains</a></li>
+                  <li><a href="{% url "tennis.views.staffPaire" %}">Paires</a></li>
+                  <li><a href="{% url "tennis.views.staffExtra" %}">Extras</a></li>
+                  <li><a href="{% url "tennis.views.staffUser" %}">Utilisateurs</a></li>
+                </ul>
+              </li>
+
               {% endif %}
               </ul>
               <!-- utilisateur -->
