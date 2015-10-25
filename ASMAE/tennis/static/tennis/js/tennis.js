@@ -116,11 +116,6 @@ function setDescription(sexe,birth){
 
 	document.getElementById("Description").innerHTML=value;
 	document.getElementById("hint-tournoi").innerHTML = error;
-	if(!valid){
-		document.getElementById("InscriptionButton").disabled = true;
-	}else{
-		document.getElementById("InscriptionButton").disabled = false;
-	}	
 
 	var pagination = document.getElementById("UserPagination");
 	var pageNow = 1;
