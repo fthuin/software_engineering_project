@@ -256,7 +256,7 @@ def payPair(request,id):
 		extra2 = pair.extra2.all()
 		extraa = extra1 | extra2
 		extraa.order_by('nom')
-		totalprice = 20.00
+		totalprice = 40.00
 		extraList = list()
 		currentItem = extraa[0]
 		count = 0
