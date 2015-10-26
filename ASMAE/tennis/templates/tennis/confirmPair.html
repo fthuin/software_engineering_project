@@ -66,12 +66,12 @@
 						      <div class="col-sm-8">
 						      	{% for extra in extra1 %}
 						      	<div class="checkbox">
-							      <label><input type="checkbox" value="{{ extra.id }}" >{{ extra.nom }} ({{ extra.prix }} €)</label>
+							      <label><input type="checkbox" name="extra" value="{{ extra.id }}" >{{ extra.nom }} ({{ extra.prix }} €)</label>
 							    </div>
 							    {% endfor %}
 							{% for extra in extranot1 %}
 						      	<div class="checkbox">
-							      <label><input type="checkbox" value="{{ extra.id }}" >{{ extra.nom }} ({{ extra.prix }} €)</label>
+							      <label><input type="checkbox" name="extra" value="{{ extra.id }}" >{{ extra.nom }} ({{ extra.prix }} €)</label>
 							    </div>
 							    {% endfor %}
 						      </div>

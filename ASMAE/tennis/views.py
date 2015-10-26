@@ -135,7 +135,7 @@ def confirmPair(request,id):
 		if request.POST['action'] == "validate":
 			remarque = request.POST['remarque']
 			extra = request.POST.getlist('extra')
-			
+			print(extra)
 
 			
 			pair.confirm = True
@@ -145,6 +145,8 @@ def confirmPair(request,id):
 			for elem in extra:
 				ext = Extra.objects.filter(id=elem)[0]
 				pair.extra2.add(ext)
+
+			pair.save()
 
 
 			return redirect(reverse(tournoi))
