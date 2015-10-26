@@ -45,7 +45,7 @@
 var userList = [];
 {% for use in Use %}
 //on ne stock pas sois meme dans la liste des joueurs
-userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.participant.datenaissance }}']);
+userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.fb }}']);
 {% endfor %}
 
 //Nombre d'entrée par page
