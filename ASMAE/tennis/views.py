@@ -36,6 +36,11 @@ def inscriptionTournoi(request):
 	Tour = Tournoi.objects.all()
 	Use = User.objects.all().order_by('username')
 
+	for u in Use:
+		bd = u.participant.datenaissance
+		fb = bd.strftime('%d/%m/%Y')
+		u.fb = fb
+
 	if request.method == "POST":
 		#On recupère les donnée du formualaire
 		username2 = request.POST['username2']
@@ -471,6 +476,10 @@ def staffExtra(request):
 
 def staffUser(request):
 	Use = User.objects.all().order_by('username')
+	for u in Use:
+		bd = u.participant.datenaissance
+		fb = bd.strftime('%d/%m/%Y')
+		u.fb = fb
 	if request.user.is_authenticated():
 		if request.user.is_staff: #TODO
 		    return render(request,'tennis/staffUser.html',locals())
