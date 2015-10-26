@@ -149,7 +149,7 @@ var userList = [];
 {% for use in Use %}
 //on ne stock pas sois meme dans la liste des joueurs
 {% if  use.username != user.username %}
-userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.participant.datenaissance }}']);
+userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.fb }}']);
 {% endif %}
 {% endfor %}
 

@@ -36,6 +36,13 @@ def inscriptionTournoi(request):
 	Tour = Tournoi.objects.all()
 	Use = User.objects.all().order_by('username')
 
+	birthdateList = list()
+	for u in Use:
+		bd = u.participant.datenaissance
+		fb = bd.strftime('%d/%m/%Y')
+		birthdateList.append(fb)
+		u.fb = fb
+
 	if request.method == "POST":
 		#On recupère les donnée du formualaire
 		username2 = request.POST['username2']
