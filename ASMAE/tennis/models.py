@@ -22,6 +22,9 @@ class Participant(models.Model):
 	def __str__(self):
 		return self.prenom +" "+ self.nom
 
+	def __unicode__(self):
+		return u'' + self.prenom + self.nom
+
 class Extra(models.Model):
 	id = models.AutoField(primary_key=True)
 	nom = models.CharField(max_length=30)
