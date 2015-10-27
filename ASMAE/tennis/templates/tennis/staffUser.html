@@ -4,6 +4,7 @@
 {% block ongUser %}class="active"{% endblock %}
 
 {% block bodyStaff %}
+{% load static from staticfiles %}
 <!-- Gestionnaire des utilisateurs -->
 <div class="content-box" id="gestionTerrain">
 	<h2 class="center">Gestionnaire des utilisateurs</h2>
@@ -12,9 +13,9 @@
 	<div class="row" style="margin-bottom:15px;">
 		<div class="col-sm-4 col-sm-offset-4">
 			<div class="input-group">
-		      <input type="text" class="form-control" placeholder="Rechercher">
+		      <input type="text" class="form-control" placeholder="Rechercher" id="search_value">
 		      <span class="input-group-btn">
-		        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+		        <button class="btn btn-default" type="button" id="search_user_button" onclick="search_user()"><span class="glyphicon glyphicon-search"></span></button>
 		      </span>
 		    </div>
 		</div>
@@ -67,5 +68,38 @@ setUserListInfo(userList,pageLength);
 
 //On met à jours la première page
 setUserStaff(1);
+function search_user() {
+    var retour = document.getElementById("search_value").value;
+    alert("" + userList.length);
+    var nbr = userList.length;
+    for (var i = nbr-1; i > 0 ; i--) {
+        myUser = userList[i];
+        username = myUser[0];
+        prenom = myUser[1];
+        nom = myUser[2];
+        if (! (username.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1)) {
+            userList.splice(i, 1);
+        }
+    }
+    //Nombre d'entrée par page
+    var pageLength = 10;
+    //Nombre de page
+    var total = Math.ceil(userList.length/pageLength);
+    //Notre pagination
+    $('#UserPagination').twbsPagination({
+      totalPages: total,
+      visiblePages: 5,
+      onPageClick: function (event, page) {
+      	//Lorsqu'on click sur une page, on met à jours le contenu
+	    //On met à jours la page en fonction du tournoi selectionner
+	    setUserStaff(page);
+      }
+    });
+    //On met jours les info (liste des users et longueur de chaque page)
+    setUserListInfo(userList,pageLength);
+
+    //On met à jours la première page
+    setUserStaff(1);
+}
 </script>
 {% endblock %}
