@@ -60,10 +60,20 @@ class Tournoi(models.Model):
 	jour = models.CharField(max_length=50)
 	def __str__(self):
 		return self.nom
+		
+class Group(models.Model):
+	id = models.AutoField(primary_key=True)
+	tournoi = models.ForeignKey(Tournoi)
+	leader = models.ForeignKey(User)
+	court = models.OneToOneField(Court)
+	def _str_(self):
+		return "Groupe n " + str(self.id)
+	
 
 class Pair(models.Model):
 	id = models.AutoField(primary_key=True)
 	tournoi = models.ForeignKey(Tournoi)
+	group = models.ForeignKey(Group, null=True, default=None)
 	user1 = models.ForeignKey(User, related_name='user1')
 	user2 = models.ForeignKey(User, related_name='user2')
 	extra1 = models.ManyToManyField(Extra, related_name='extra1')
