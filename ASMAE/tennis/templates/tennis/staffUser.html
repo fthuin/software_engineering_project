@@ -42,64 +42,51 @@
 
 {% block commande %}
 <script>
-//Recuperation des users et stockage dans un tableau
-var userList = [];
-{% for use in Use %}
-//on ne stock pas sois meme dans la liste des joueurs
-userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.fb }}']);
-{% endfor %}
-
-//Nombre d'entrée par page
-var pageLength = 10;
-//Nombre de page
-var total = Math.ceil(userList.length/pageLength);
-//Notre pagination
-$('#UserPagination').twbsPagination({
-  totalPages: total,
-  visiblePages: 5,
-  onPageClick: function (event, page) {
-  	//Lorsqu'on click sur une page, on met à jours le contenu
-	//On met à jours la page en fonction du tournoi selectionner
-	setUserStaff(page);
-  }
-});
-//On met jours les info (liste des users et longueur de chaque page)
-setUserListInfo(userList,pageLength);
-
-//On met à jours la première page
-setUserStaff(1);
-function search_user() {
-    var retour = document.getElementById("search_value").value;
-    alert("" + userList.length);
-    var nbr = userList.length;
-    for (var i = nbr-1; i > 0 ; i--) {
-        myUser = userList[i];
-        username = myUser[0];
-        prenom = myUser[1];
-        nom = myUser[2];
-        if (! (username.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1)) {
-            userList.splice(i, 1);
-        }
-    }
+function pagination(list) {
     //Nombre d'entrée par page
     var pageLength = 10;
     //Nombre de page
-    var total = Math.ceil(userList.length/pageLength);
+    var total = Math.ceil(list.length/pageLength);
     //Notre pagination
     $('#UserPagination').twbsPagination({
       totalPages: total,
       visiblePages: 5,
       onPageClick: function (event, page) {
-      	//Lorsqu'on click sur une page, on met à jours le contenu
-	    //On met à jours la page en fonction du tournoi selectionner
+      	//Lorsqu'on clique sur une page, on met à jour le contenu
+	    //On met à jour la page en fonction du tournoi selectionné
 	    setUserStaff(page);
       }
     });
-    //On met jours les info (liste des users et longueur de chaque page)
-    setUserListInfo(userList,pageLength);
+    //On met à jour les info (liste des users et longueur de chaque page)
+    setUserListInfo(list,pageLength);
 
-    //On met à jours la première page
+    //On met à jour la première page
     setUserStaff(1);
+}
+
+//Recuperation des users et stockage dans un tableau
+var userList = [];
+{% for use in Use %}
+userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.fb }}']);
+{% endfor %}
+
+pagination(userList);
+
+function search_user() {
+    var retour = document.getElementById("search_value").value.toLocaleUpperCase();
+    // Copie du tableau pour garder l'original
+    var resultList = userList.slice();
+    var nbr = resultList.length;
+    for (var i = nbr-1; i >= 0 ; i--) {
+        myUser = resultList[i];
+        username = myUser[0];
+        prenom = myUser[1];
+        nom = myUser[2];
+        if (! (username.toLocaleUpperCase().indexOf(retour) != -1 || prenom.toLocaleUpperCase().indexOf(retour) != -1 || nom.toLocaleUpperCase().indexOf(retour) != -1)) {
+            resultList.splice(i, 1);
+        }
+    }
+    pagination(resultList);
 }
 </script>
 {% endblock %}
