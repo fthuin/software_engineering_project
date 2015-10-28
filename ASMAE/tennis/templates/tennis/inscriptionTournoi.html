@@ -66,9 +66,7 @@
 					<p class="center" id="UserInfo"></p>
 
 					<!-- Bottom pagination -->
-					<div class="text-center">
-						<ul class="pagination" id="UserPagination">
-						</ul>
+					<div class="text-center" id="paginationholder">
 					</div>
 
 				</div>				
@@ -150,6 +148,8 @@ function pagination(list) {
     //Nombre de page
     var total = Math.ceil(list.length/pageLength);
     //Notre pagination
+    $('#paginationholder').html('');
+    $('#paginationholder').html('<ul class="pagination" id="UserPagination"></ul>');
     $('#UserPagination').twbsPagination({
       totalPages: total,
       visiblePages: 5,

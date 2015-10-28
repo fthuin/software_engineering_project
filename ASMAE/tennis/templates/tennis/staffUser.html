@@ -33,8 +33,8 @@
 
 	<!-- Bottom pagination -->
 	<div class="text-center">
-		<ul class="pagination" id="UserPagination">
-		</ul>
+	    <div id="paginationholder">
+		</div>
 	</div>
 
 </div>
@@ -48,9 +48,11 @@ function pagination(list) {
     //Nombre de page
     var total = Math.ceil(list.length/pageLength);
     //Notre pagination
+    $('#paginationholder').html('');
+    $('#paginationholder').html('<ul class="pagination" id="UserPagination"></ul>');
     $('#UserPagination').twbsPagination({
       totalPages: total,
-      visiblePages: 5,
+      visiblePages: Math.min(total, 5),
       onPageClick: function (event, page) {
       	//Lorsqu'on clique sur une page, on met à jour le contenu
 	    //On met à jour la page en fonction du tournoi selectionné
