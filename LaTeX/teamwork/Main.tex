@@ -1,0 +1,97 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[french,english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{csquotes}
+\usepackage{verbatim}
+\usepackage{todonotes}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{framed}
+\usepackage{longtable}
+\usepackage{placeins}
+\usepackage[left=2.2cm, right=2.2cm, top=1.5cm, bottom=2.5cm]{geometry} % Mise en page
+\usepackage[final]{pdfpages}
+\usepackage{chngpage}
+\usepackage{float}
+
+\graphicspath{{res/}}
+
+\def\blurb{\textsc{Université catholique de Louvain\\
+  École polytechnique de Louvain}}
+\def\clap#1{\hbox to 0pt{\hss #1\hss}}%
+\def\ligne#1{%
+  \hbox to \hsize{%
+    \vbox{\centering #1}}}%
+\def\haut#1#2#3{%
+  \hbox to \hsize{%
+    \rlap{\vtop{\raggedright #1}}%
+    \hss
+    \clap{\vbox{\vfill\centering #2\vfill}}%
+    \hss
+    \llap{\vtop{\raggedleft #3}}}}%
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}\vbox to 1\vsize{%
+  \vss
+  \vbox to 1\vsize{%
+    \haut{\includegraphics[scale=0.15]{logo_ucl.png}}{\blurb}{\includegraphics[scale=0.4]{logo_epl.png}}
+    %\vfill
+    \vspace{75mm}
+    \ligne{\huge \textbf{LINGI2255 - Software engineering project}}
+    \vspace{7mm}
+    \ligne{\large \textbf{First sprint of website implementation}}
+    \vspace{35mm}
+    \ligne{\Large{\today}}
+    \vspace{20mm}
+    %\vfill
+    \ligne{%
+      \begin{tabular}{c}
+      	  \textit{Teacher} : Sébastien Combéfis \\
+          \textit{Project leader} : Christophe Limbrée \\
+          \textit{Project leader} : Emery Kouassi Assogba \\
+          \textit{Project manager} : Florian Thuin \\
+          \\
+          \textsc{Group G :}
+      \end{tabular}}
+    \vspace{5mm}
+    \ligne{%
+      \begin{tabular}{l|l|l|l}
+         Last name & First name & NOMA & Email Address \\
+         \hline
+         \textsc{Dizier} & Romain & 42471000 &
+         romain.dizier@student.uclouvain.be \\
+         \textsc{Georges} & Benjamin & 15221200 &
+         benjamin.georges@student.uclouvain.be \\
+         \textsc{Gusbin} & Quentin & 53801200 &
+         quentin.gusbin@student.uclouvain.be \\
+         \textsc{Kerger} & Zacharie & 41861200 &
+         zacharie.kerger@student.uclouvain.be \\
+         \textsc{Kühn} & Alexandre & 70261200 &
+         alexandre.kuhn@student.uclouvain.be \\
+         \textsc{Thuin}& Florian & 06561100 &
+         florian.thuin@student.uclouvain.be \\
+         \textsc{de Vogelaere} & Cyril & 28141100 &
+         cyril.devogelaere@student.uclouvain.be  \\
+         \textsc{Vrielynck} & Nicolas & 80991000 &
+         nicolas.vrielynck@student.uclouvain.be \\
+      \end{tabular}}
+  }%
+  \vss
+  }
+\end{titlepage}
+
+\thispagestyle{empty}
+\tableofcontents
+\newpage
+\setcounter{page}{1}
+
+%Introduction
+\input{teamwork.tex}
+
+\end{document}
