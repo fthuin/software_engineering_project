@@ -16,7 +16,7 @@ def home(request):
 	return render(request,'tennis/home.html',locals())
 
 def sponsors(request):
-    return render(request,'tennis/sponsors.html',locals())
+	return render(request,'tennis/sponsors.html',locals())
 	
 def contact(request):
 	return render(request,'tennis/contact.html',locals())
@@ -387,7 +387,7 @@ def editTerrain(request,id):
 def staff(request):	
 	if request.user.is_authenticated():
 		if request.user.is_staff: #TODO
-		    return render(request,'tennis/staff.html',locals())
+			return render(request,'tennis/staff.html',locals())
 	return redirect(reverse(home))
 
 def staffTournoi(request):
@@ -397,10 +397,10 @@ def staffTournoi(request):
 				successSend = "Les mails ont bien été envoyé"
 	if request.user.is_authenticated():
 		if request.user.is_staff: #TODO
-		    allTournois = Tournoi.objects.all()
-		    allPairs = Pair.objects.all()
-		    allCourts = Court.objects.all()
-		    return render(request,'tennis/staffTournoi.html',locals())
+			allTournois = Tournoi.objects.all()
+			allPairs = Pair.objects.all()
+			allCourts = Court.objects.all()
+			return render(request,'tennis/staffTournoi.html',locals())
 	return redirect(reverse(home))
 
 def staffTerrain(request):
@@ -408,7 +408,7 @@ def staffTerrain(request):
 	allCourt = Court.objects.all()
 	if request.user.is_authenticated():
 		if request.user.is_staff: #TODO
-		    return render(request,'tennis/staffTerrain.html',locals())
+			return render(request,'tennis/staffTerrain.html',locals())
 	return redirect(reverse(home))
 
 def staffPaire(request):
@@ -416,7 +416,7 @@ def staffPaire(request):
 	allPair = Pair.objects.all()
 	if request.user.is_authenticated():
 		if request.user.is_staff: #TODO
-		    return render(request,'tennis/staffPair.html',locals())
+			return render(request,'tennis/staffPair.html',locals())
 	return redirect(reverse(home))
 
 def staffExtra(request):
@@ -482,7 +482,7 @@ def staffUser(request):
 		u.fb = fb
 	if request.user.is_authenticated():
 		if request.user.is_staff: #TODO
-		    return render(request,'tennis/staffUser.html',locals())
+			return render(request,'tennis/staffUser.html',locals())
 	return redirect(reverse(home))
 
 def viewUser(request,name):
@@ -502,7 +502,7 @@ def viewUser(request,name):
 	tournoi = list(chain(tournoi1, tournoi2))
 	if request.user.is_authenticated():
 		if request.user.is_staff: #TODO
-		    return render(request,'tennis/viewUser.html',locals())
+			return render(request,'tennis/viewUser.html',locals())
 	return redirect(reverse(home))
 
 def validateTerrain(request, id):
@@ -775,10 +775,10 @@ def username_present(username):
 	return False
 
 def email_present(email):
-    if User.objects.filter(email=email).exists():
-        return True
+	if User.objects.filter(email=email).exists():
+		return True
 
-    return False
+	return False
 
 def register(request):
 	if request.method == "POST":
@@ -866,9 +866,9 @@ def recover(request):
 	return render(request,'tennis/recover.html',locals())
 
 def is_number(s):
-    try:
-        float(s)
-        return True
-    except ValueError:
-        return False
+	try:
+		float(s)
+		return True
+	except ValueError:
+		return False
 
