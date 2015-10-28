@@ -113,7 +113,7 @@
 						      <label class="control-label col-sm-4" for="username">Extras : </label>
 						      <div class="col-sm-8">
 						      	{% for extra in Ex %}
-				avent		      	<div class="checkbox">
+						      	<div class="checkbox">
 							      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
 							    </div>
 							    {% endfor %}
@@ -156,14 +156,14 @@ function pagination(list) {
       onPageClick: function (event, page) {
       	//Lorsqu'on clique sur une page, on met à jour le contenu
 	    //On met à jour la page en fonction du tournoi selectionné
-	    setUserStaff(page);
+	    setUserRestriction('{{user.participant.titre}}','{{ user.participant.datenaissance }}',page);;
       }
     });
     //On met à jour les info (liste des users et longueur de chaque page)
     setUserListInfo(list,pageLength);
 
     //On met à jour la première page
-    setUserStaff(1);
+    setUser(1);
 }
 
 //Recuperation des users et stockage dans un tableau
