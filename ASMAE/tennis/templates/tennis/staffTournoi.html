@@ -92,6 +92,7 @@ text-align:left;
 	<hr class="line">
 	<div class="group-box" id="liste_groupes"></div>
 	<button id="register" style="float:right" class="btn btn-default">Enregistrer les groupes (TO DO)</button>
+    <button id="swap_btn" class="btn btn-default"  style="float:right" disabled="disabled">swap</button>
 	<!--<br><hr class="line"><br>
 	<div class="form-horizontal">
         <div class="form-group">
@@ -115,6 +116,28 @@ text-align:left;
 
 	{% block commande %}
 	<script>
+
+        /**********************************************************************
+         * Ensemble de variables et fonction pour le swap. Attention, les     *
+         * listeners sont mis plus bas                                        *
+         **********************************************************************/
+        var tournament;
+
+        var selected_item = 0;
+        function is_god_for_swap(){
+            if (selected_item == 2){
+                return true;
+            }
+            else if(selected_item > 2){
+                alert("trop d'élements sélectionnés pour effectuer l'échange. Veuillez réduire le nombre d'élements sélectionnés à 2");
+                return false;
+            }
+            else{
+                alert("trop peu d'élements sélectionnés pour effectuer l'échange. Veuillez augmenter le nombre d'élements sélectionnés à 2");
+                return false;
+            }
+        }
+
 	    //Recuperation des tournois et stockage dans un tableau
 	    var tournoiList = [];
 	    var select = document.getElementById("tournois");
@@ -146,7 +169,7 @@ pairList.push(['{{ pair.id }}','{{ pair.user1.participant.nom }}','{{ pair.user1
                  courtList.push('{{ court.id }}');
                  {% endfor %}
                  
-		         var tournament = new Tournament(pairList, courtList);
+		         tournament = new Tournament(pairList, courtList);
 		         
 				 if (group_num != undefined && group_size != undefined) {
 					tournament.create_empty_groups(group_num, group_size);
@@ -164,7 +187,8 @@ pairList.push(['{{ pair.id }}','{{ pair.user1.participant.nom }}','{{ pair.user1
 				 var flag = false; 
 				 if (group_num < list.length)
 					flag = true; 
-					
+
+
 				 for (var index = 0; index < list.length; index++) {
 					var group_display = document.createElement("table");
 					group_display.className="table table-hover table-responsive panel panel-default";
@@ -181,12 +205,42 @@ pairList.push(['{{ pair.id }}','{{ pair.user1.participant.nom }}','{{ pair.user1
 					var numRows = group_display.rows.length;
 					for (var j = 0; j < list[index].pairs.length; j++) {
 					   var pair_row = group_display.insertRow(numRows);
+                       pair_row.setAttribute("id_group", index.toString());
+                       pair_row.setAttribute("index_group", j.toString());
+                       pair_row.setAttribute("id_pair", list[index].pairs[j][0].toString());
+                       pair_row.setAttribute("selected", "false");
 					   pair_row.insertCell(0).innerHTML = list[index].pairs[j][0];
 					   pair_row.insertCell(1).innerHTML = 
 					       list[index].pairs[j][1] + " " + list[index].pairs[j][2] + "</br>" 
 					       + list[index].pairs[j][3] + " " + list[index].pairs[j][4];
 					   pair_row.cells[0].style.width="50%";
 					   pair_row.draggable="true";
+                       pair_row.addEventListener("click", function() {
+                           if (this.getAttribute("selected") == "false"){
+                               this.setAttribute("selected", "true");
+                               this.setAttribute("oldcolor", this.getAttribute("class"));
+                               this.className ='success';
+                               selected_item++;
+							   if (selected_item == 2){
+								   document.getElementById("swap_btn").removeAttribute("disabled");
+							   }
+                               else{
+                                   document.getElementById("swap_btn").setAttribute("disabled", "disabled");
+                               }
+                           }
+                           else{
+                               this.setAttribute('selected', "false");
+                               this.className = this.getAttribute("oldcolor");
+                               this.removeAttribute("oldcolor");
+                               selected_item--;
+							   if (selected_item == 2){
+								   document.getElementById("swap_btn").removeAttribute("disabled");
+							   }
+                               else{
+                                   document.getElementById("swap_btn").setAttribute("disabled", "disabled");
+                               }
+                           }
+                       },false);
 					   if(list[index].pairs[j] == list[index].leader)
 						   pair_row.className="danger";
 					   numRows++;
@@ -203,6 +257,44 @@ pairList.push(['{{ pair.id }}','{{ pair.user1.participant.nom }}','{{ pair.user1
 				 }
 				 document.getElementById("geneGroup").style.visibility = "visible";
 			}, false);
+
+        /*****************************************
+         * Listener pour le bouton swap          *
+         *****************************************/
+        document.getElementById("swap_btn").addEventListener("click",function(){
+            if (is_god_for_swap()){
+                var liste_group = document.querySelectorAll("[selected=true]");
+                var group1 = liste_group[0];
+                var group2 = liste_group[1];
+
+                //Swap logique
+                tournament.try_swap_pairs_in_groups(
+                        parseInt(group1.getAttribute("id_group")),
+                        parseInt(group2.getAttribute("id_group")),
+                        parseInt(group1.getAttribute("index_group")),
+                        parseInt(group2.getAttribute("index_group"))
+                );
+
+
+                //Swap id pair
+                var tmp =[new String (group1.getAttribute("id_pair")), new String (group2.getAttribute("id_pair"))];
+                group1.setAttribute("id_pair", tmp[1]);
+                group2.setAttribute("id_pair", tmp[0]);
+
+                //Swap graphique
+                group1.innerHTML = [group2.innerHTML, group2.innerHTML=group1.innerHTML][0];
+
+                //déselectionner les sélections
+                group1.className = group1.getAttribute("oldcolor");
+                group1.removeAttribute("oldcolor");
+                group1.setAttribute("selected", "false");
+                group2.className = group2.getAttribute("oldcolor");
+                group2.removeAttribute("oldcolor");
+                group2.setAttribute("selected", "false");
+                selected_item = 0;
+
+            }
+        },false);
 			
 		document.getElementById("swap").addEventListener('click', function(){
 				var g1_id = document.getElementById("group1_id").value;
