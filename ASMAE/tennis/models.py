@@ -30,8 +30,10 @@ class Extra(models.Model):
 	nom = models.CharField(max_length=30)
 	prix = models.DecimalField(max_digits=11,decimal_places=2)
 	commentaires = models.TextField(null=True)
+
 	def __str__(self):
 		return self.nom
+    
 
 class Court(models.Model):
 	id = models.AutoField(primary_key=True)
@@ -68,6 +70,7 @@ class Group(models.Model):
 	court = models.OneToOneField(Court)
 	def _str_(self):
 		return "Groupe n " + str(self.id)
+
 	
 
 class Pair(models.Model):
