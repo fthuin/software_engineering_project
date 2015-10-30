@@ -35,6 +35,7 @@ Tournament.prototype.create_empty_groups = function(group_num, group_size) {
 
     // create groups
     this.groups = [];
+    var pairs = this.pairs;
     var groups = this.groups;
     for (var group_i = 0; group_i < group_num; group_i++) {
         var group = new Group(group_size);
@@ -54,9 +55,8 @@ Tournament.prototype.create_empty_groups = function(group_num, group_size) {
 Tournament.prototype.adapt_groups = function(group_num, group_size) {
     // groups is considered as non-empty (create_empty_groups called otherwise)
     var groups = this.groups;
-    if(groups.length == 0) {
+    if(groups.length == 0)
         this.create_empty_groups(group_num, group_size);
-    }
     else {
         // group_size
         var first_group = groups[0];
@@ -65,11 +65,12 @@ Tournament.prototype.adapt_groups = function(group_num, group_size) {
             for (var group_i in groups) {
                 var group = groups[group_i];
                 group.gsize = group_size;
-                if (group.length > group_size) {
-                    var to_remove_num = group.length - group_size;
+                if (group.pairs.length > group_size) {
+                    var to_remove_num = group.pairs.length - group_size;
                     // make these pairs as uninserted
                     for (var i = 0; i < to_remove_num; i++) {
-                        var pair = group.pairs[group_size + i];
+                        var group_pair_index = parseInt(group_size) + parseInt(i);
+                        var pair = group.pairs[group_pair_index];
                         this.uninserted_pairs.push(pair);
                     }
                     // remove these pairs from the group (group shrinks)
@@ -117,6 +118,14 @@ Tournament.prototype.try_naively_fill_groups = function() {
     var groups = this.groups;
     // reset uninserted pairs
     this.uninserted_pairs = [];
+    // reset groups
+    for (var group_i in groups) {
+        var group = groups[group_i];
+        group.pairs = [];
+        group.court = undefined;
+        group.leader = undefined;
+    }
+
     for (var group_i in groups) {
         var group = groups[group_i];
         var group_size = group.gsize;
@@ -173,41 +182,46 @@ Tournament.prototype.try_swap_pairs_in_groups = function(group1_id, group2_id, g
     if (group1_id < group_num && group2_id < group_num) {
         // group swap
         var group1_pairs = undefined;
-        var group1_pairs_num = undefined
+        var group1_pairs_num = undefined;
+        var group1_size = undefined;
         if (group1_id == -1) {
             group1_pairs = this.uninserted_pairs;
             group1_pairs_num = this.uninserted_pairs.length;
+            group1_size = group1_pairs_num;
         }
         else {
             group1_pairs = groups[group1_id].pairs;
-            group1_pairs_num = groups[group1_id].pairs.length;            
+            group1_pairs_num = groups[group1_id].pairs.length;
+            group1_size = groups[group1_id].gsize;            
         }
         var group2_pairs = undefined;
         var group2_pairs_num = undefined;
+        var group2_size = undefined;
         if (group2_id == -1) {
             group2_pairs = this.uninserted_pairs;
             group2_pairs_num = this.uninserted_pairs.length;
+            group2_size = group2_pairs_num;
         }
         else {
             group2_pairs = groups[group2_id].pairs;
             group2_pairs_num = groups[group2_id].pairs.length;
+            group2_size = groups[group2_id].gsize;
         }
-        // check if group_indexes are valid
+        // check if group_indexes both have pairs
         if (group1_index < group1_pairs_num && group2_index < group2_pairs_num) {
-            // swap pairs
-            //console.log(this.str_groups());
+            // swap the two pairs
             var temp = group1_pairs[group1_index];
             group1_pairs[group1_index] = group2_pairs[group2_index];
             group2_pairs[group2_index] = temp;
         }
-        else if (group1_index < group1_pairs_num && ((group2_id == -1) || (group2_id != -1 && group2_pairs_num < group2.gsize))) {
+        else if (group1_index < group1_pairs_num && ((group2_id === -1) || (group2_id != -1 && group2_pairs_num < group2_size))) {
             // group2_index does not exist and group2 is not full
             // move the pair from group1 to group2
             var pair1 = group1_pairs[group1_index];
             group2_pairs.push(pair1);
             group1_pairs.splice(group1_index, 1);
         }
-        else if (group2_index < group2_pairs_num && ((group1_id == -1) || (group1_id != -1 && group1_pairs_num < group1.gsize))) {
+        else if (group2_index < group2_pairs_num && ((group1_id === -1) || (group1_id != -1 && group1_pairs_num < group1_size))) {
             // group1_index does not exist and group1 is not full
             // move the pair from group2 to group1
             var pair2 = group2_pairs[group2_index];
@@ -267,13 +281,3 @@ function Group(gsize, pairs, court, leader) {
     // leader
     this.leader = leader;
 }
-
-// TESTS
-var pairs = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"];
-var courts = ["01", "02", "03", "04", "05"];
-var tournament = new Tournament(pairs, courts);
-tournament.create_empty_groups(2, 5);
-tournament.try_naively_fill_groups();
-tournament.adapt_groups(1, 5);
-tournament.try_swap_pairs_in_groups(-1, 0, 0, 0);
-console.log(tournament.str_groups());
