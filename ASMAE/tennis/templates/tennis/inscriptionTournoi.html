@@ -146,7 +146,7 @@ function pagination(list) {
     //Nombre d'entrée par page
     var pageLength = 10;
     //Nombre de page
-    var total = Math.ceil(list.length/pageLength);
+    var total = Math.max(Math.ceil(list.length/pageLength), 1);
     //Notre pagination
     $('#paginationholder').html('');
     $('#paginationholder').html('<ul class="pagination" id="UserPagination"></ul>');
@@ -183,10 +183,10 @@ function search_user() {
     var resultList = userList.slice();
     var nbr = resultList.length;
     for (var i = nbr-1; i >= 0 ; i--) {
-        myUser = resultList[i];
-        username = myUser[0];
-        prenom = myUser[1];
-        nom = myUser[2];
+        var myUser = resultList[i];
+        var username = myUser[0];
+        var prenom = myUser[1];
+        var nom = myUser[2];
         if (! (username.toLocaleUpperCase().indexOf(retour) != -1 || prenom.toLocaleUpperCase().indexOf(retour) != -1 || nom.toLocaleUpperCase().indexOf(retour) != -1)) {
             resultList.splice(i, 1);
         }
