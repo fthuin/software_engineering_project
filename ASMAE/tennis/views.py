@@ -10,6 +10,7 @@ from tennis.mail import send_confirmation_email_court_registered, send_confirmat
 import re, math
 import datetime
 from itertools import chain
+from django.contrib.auth.decorators import permission_required
 
 # Create your views here.
 def home(request):
@@ -215,7 +216,7 @@ def viewPair(request,id):
 	if pair.user1 != request.user and pair.user2 != request.user:
 		return redirect(reverse(tournoi))
 	if request.user.is_authenticated():
-		#TODO check si il peut voir cette pair
+
 
 		Ex = Extra.objects.all()
 		extra1 = pair.extra1.all()
@@ -403,6 +404,7 @@ def staffTournoi(request):
 			return render(request,'tennis/staffTournoi.html',locals())
 	return redirect(reverse(home))
 
+@permission_required('tennis.Court')
 def staffTerrain(request):
 	#List of Court
 	allCourt = Court.objects.all()
@@ -411,6 +413,7 @@ def staffTerrain(request):
 			return render(request,'tennis/staffTerrain.html',locals())
 	return redirect(reverse(home))
 
+@permission_required('tennis.Pair')
 def staffPaire(request):
 	#List of Pair
 	allPair = Pair.objects.all()
@@ -419,7 +422,7 @@ def staffPaire(request):
 		if request.user.is_staff: #TODO
 			return render(request,'tennis/staffPair.html',locals())
 	return redirect(reverse(home))
-
+@permission_required('tennis.Extra')
 def staffExtra(request):
 	if request.user.is_staff: #TODO
 		Ex = Extra.objects.all()
@@ -475,6 +478,7 @@ def staffExtra(request):
 			return render(request,'tennis/staffExtra.html',locals())
 	return redirect(reverse(home))
 
+@permission_required('auth.User')
 def staffUser(request):
 	Use = User.objects.all().order_by('username')
 	for u in Use:
@@ -486,6 +490,7 @@ def staffUser(request):
 			return render(request,'tennis/staffUser.html',locals())
 	return redirect(reverse(home))
 
+@permission_required('auth.User')
 def viewUser(request,name):
 
 	use = User.objects.filter(username=name)
@@ -506,6 +511,7 @@ def viewUser(request,name):
 			return render(request,'tennis/viewUser.html',locals())
 	return redirect(reverse(home))
 
+@permission_required('tennis.Court')
 def validateTerrain(request, id):
 	if request.user.is_staff:
 		court = Court.objects.filter(id=id)[0]
@@ -525,6 +531,7 @@ def validateTerrain(request, id):
 			return render(request,'tennis/validateTerrain.html',locals())
 	return redirect(reverse(home))
 
+@permission_required('tennis.Court')
 def editTerrainStaff(request, id):
 	if request.user.is_staff:
 		court = Court.objects.filter(id=id)[0]
@@ -580,6 +587,7 @@ def editTerrainStaff(request, id):
 			return render(request,'tennis/editTerrainStaff.html',locals())
 	return redirect(reverse(home))
 
+@permission_required('tennis.Pair')
 def validatePair(request, id):
 	if request.user.is_staff:
 		pair = Pair.objects.filter(id=id)[0]
