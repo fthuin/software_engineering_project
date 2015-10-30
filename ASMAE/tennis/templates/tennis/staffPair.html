@@ -12,9 +12,9 @@
 	<div class="row" style="margin-bottom:15px;">
 		<div class="col-sm-4 col-sm-offset-4">
 			<div class="input-group">
-		      <input type="text" class="form-control" placeholder="Rechercher" id="search_value">
+		      <input type="text" class="form-control" placeholder="Rechercher">
 		      <span class="input-group-btn">
-		        <button class="btn btn-default" type="button" onclick="search_pair()"><span class="glyphicon glyphicon-search"></span></button>
+		        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
 		      </span>
 		    </div>
 		</div>
@@ -61,8 +61,8 @@
 
 	<!-- Bottom pagination -->
 	<div class="text-center">
-        <div id="paginationholder">
-        </div>
+		<ul class="pagination" id="PairPagination">
+		</ul>
 	</div>
 
 </div>
@@ -70,31 +70,7 @@
 
 {% block commande %}
 <script>
-function pagination(list) {
-    //Nombre d'entrées par page
-    var pageLength = 10;
-    //Nombre de pages
-    var total = Math.max(Math.ceil(list.length/pageLength), 1);
-    //Notre pagination
-    $('#paginationholder').html('');
-    $('#paginationholder').html('<ul class="pagination" id="PairPagination"></ul>');
-    $('#PairPagination').twbsPagination({
-            totalPages: total,
-            visiblePages: Math.min(total, 5),
-            onPageClick: function (event, page) {
-            //Lorsqu'on clique sur une page, on met à jour le contenu
-            setPair(page);
-
-            }
-    });
-    //On met à jour les infos (liste des paires et longueur de chaque page)
-    setPairListInfo(list,pageLength);
-    
-    //On met à jour la première page
-    setPair(1);
-}
-
-//Initialisation de la liste des paires
+//PAIR
 var pairList = [];
 {% for pair in allPair %}
 {% if pair.confirm %}
@@ -102,8 +78,27 @@ pairList.push(['{{ pair.id }}',{% if pair.valid %}'oui'{% else %}'non'{% endif %
 {% endif %}
 {% endfor %}
 
-pagination(pairList);
+//Nombre d'entrée par page
+var pageLength = 10;
+//Nombre de page
+var total = Math.ceil(pairList.length/pageLength);
+//Notre pagination
+$('#PairPagination').twbsPagination({
+  totalPages: total,
+  visiblePages: 5,
+  onPageClick: function (event, page) {
+  	//Lorsqu'on click sur une page, on met à jours le contenu
+	setPair(page);
+  }
+});
 
+<<<<<<< HEAD
+//On met jours les info (liste des users et longueur de chaque page)
+setPairListInfo(pairList,pageLength);
+
+//On met à jours la première page
+setPair(1);
+=======
 function search_pair() {
      var retour = document.getElementById("search_value").value.toLocaleUpperCase();
      var validation_selector = document.getElementById("validation_selector");
@@ -133,5 +128,6 @@ function search_pair() {
      }
      pagination(resultList);
 }
+>>>>>>> master
 </script>
 {% endblock %}

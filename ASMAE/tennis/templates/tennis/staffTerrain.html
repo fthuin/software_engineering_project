@@ -12,9 +12,9 @@
 	<div class="row" style="margin-bottom:15px;">
 		<div class="col-sm-4 col-sm-offset-4">
 			<div class="input-group">
-		      <input type="text" class="form-control" placeholder="Rechercher" id="search_value" >
+		      <input type="text" class="form-control" placeholder="Rechercher">
 		      <span class="input-group-btn">
-		        <button class="btn btn-default" type="button" onclick="search_court()"><span class="glyphicon glyphicon-search"></span></button>
+		        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
 		      </span>
 		    </div>
 		</div>
@@ -32,8 +32,8 @@
 
 	<!-- Bottom pagination -->
 	<div class="text-center">
-		<div id="paginationholder">
-		</div>
+		<ul class="pagination" id="CourtPagination">
+		</ul>
 	</div>
 
 </div>
@@ -41,29 +41,6 @@
 
 {% block commande %}
 <script>
-function pagination(list) {
-    //Nombre d'entrée par page
-    var pageLength = 10;
-    //Nombre de page
-    var total = Math.max(Math.ceil(list.length/pageLength), 1);
-    //Notre pagination
-    $('#paginationholder').html('');
-    $('#paginationholder').html('<ul class="pagination" id="CourtPagination"></ul>');
-    $('#CourtPagination').twbsPagination({
-            totalPages: total,
-            visiblePages: Math.min(total, 5),
-            onPageClick: function (event, page) {
-                //Lorsqu'on click sur une page, on met à jours le contenu
-                setCourt(page);
-                }
-            });
-
-    //On met jours les info (liste des users et longueur de chaque page)
-    setCourtListInfo(list,pageLength);
-
-    //On met à jours la première page
-    setCourt(1);
-}
 	//TERRAIN
 //Recuperation des court et stockage dans un tableau
 var courtList = [];
@@ -71,28 +48,24 @@ var courtList = [];
 courtList.push(['{{ court.user.username }}','{{ court.user.participant.prenom }}','{{ court.user.participant.nom }}','{{ court.id }}','{{ court.matiere }}','{{ court.rue }}','{{ court.numero }}','{{ court.codepostal }}','{{ court.localite }}','{{ court.boite }}',{% if court.valide %}'oui'{% else %}'non'{% endif %},{% if court.dispoSamedi and court.dispoDimanche %}'Samedi et dimanche'{% elif court.dispoSamedi %}'Samedi'{% elif court.dispoDimanche %}'Dimanche'{% else %}' - '{% endif %}]);
 {% endfor %}
 
-pagination(courtList);
+//Nombre d'entrée par page
+var pageLength = 10;
+//Nombre de page
+var total = Math.ceil(courtList.length/pageLength);
+//Notre pagination
+$('#CourtPagination').twbsPagination({
+  totalPages: total,
+  visiblePages: 5,
+  onPageClick: function (event, page) {
+  	//Lorsqu'on click sur une page, on met à jours le contenu
+	setCourt(page);
+  }
+});
 
-function search_court() {
-    var retour = document.getElementById("search_value").value.toLocaleUpperCase();
-    // Copie du tableau pour garder l'original
-    var resultList = courtList.slice();
-    var nbr = resultList.length;
-    for (var i = nbr-1 ; i >= 0 ; i--) {
-         var myCourt = resultList[i];
-         var username = myCourt[0];
-         var prenom = myCourt[1];
-         var nom = myCourt[2];
-         var id = myCourt[3];
-         var matiere = myCourt[4];
-         var rue = myCourt[5];
-         var codepostal = myCourt[7];
-         var localite = myCourt[8];
-         if (! (username.toLocaleUpperCase().indexOf(retour) != -1 || prenom.toLocaleUpperCase().indexOf(retour) != -1 || nom.toLocaleUpperCase().indexOf(retour) != -1 || id.toLocaleUpperCase().indexOf(retour) != -1 || matiere.toLocaleUpperCase().indexOf(retour) != -1 || rue.toLocaleUpperCase().indexOf(retour) != -1 || codepostal.toLocaleUpperCase().indexOf(retour) != -1 || localite.toLocaleUpperCase().indexOf(retour) != -1 )) {
-            resultList.splice(i, 1);
-         }
-    }
-    pagination(resultList);
-}
+//On met jours les info (liste des users et longueur de chaque page)
+setCourtListInfo(courtList,pageLength);
+
+//On met à jours la première page
+setCourt(1);
 </script>
 {% endblock %}

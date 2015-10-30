@@ -76,7 +76,7 @@ class Group(models.Model):
 class Pair(models.Model):
 	id = models.AutoField(primary_key=True)
 	tournoi = models.ForeignKey(Tournoi)
-	group = models.ForeignKey(Group, null=True, default=None)
+	group = models.ForeignKey(Group,blank=True, null=True, default=None)
 	user1 = models.ForeignKey(User, related_name='user1')
 	user2 = models.ForeignKey(User, related_name='user2')
 	extra1 = models.ManyToManyField(Extra, related_name='extra1')
