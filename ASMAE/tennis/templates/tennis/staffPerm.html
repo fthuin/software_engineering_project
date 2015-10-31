@@ -1,0 +1,147 @@
+{% extends "tennis/staff.html" %}
+
+{% block title %}Gestion des permissions{% endblock %}
+{% block ongPerm %}class="active"{% endblock %}
+
+{% block bodyStaff %}
+{% load static from staticfiles %}
+<!-- Gestionnaire des utilisateurs -->
+<div class="content-box" id="gestionTerrain">
+	<h2 class="center">Gestionnaire des permissions</h2>
+	<hr class="line">	
+    <div class="row">
+        <div class="col-sm-6">
+            <!-- Rechercher -->
+            <div class="row" style="margin-bottom:15px;">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Rechercher" id="search_value">
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" id="search_user_button" onclick="search_user()"><span class="glyphicon glyphicon-search"></span></button>
+                      </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Liste des users -->
+            <div class="panel panel-default center-block">
+                <div class="panel-heading">Utilisateurs</div>
+                <div class="list-group" id="UserList">
+                </div>
+            </div>
+
+            <!-- Info -->
+            <p class="center" id="UserInfo"></p>
+
+            <!-- Bottom pagination -->
+            <div class="text-center">
+                <div id="paginationholder">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <!-- User -->
+            <div class="panel panel-default center-block">
+                <div class="panel-heading">Utilisateur</div>
+                <div class="panel-body">
+                    <h4 class="center" id="userInfo">-</h4>
+                </div>
+            </div>
+
+            <!-- Permissions -->
+            <!-- TODO form -->
+            <form class="form-horizontal" action="">
+                <input type="text" name="username" id="usernameID" value="" style="display:none">
+                <div class="panel panel-default center-block">
+                    <div class="panel-heading">Permissions</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                          <label class="control-label col-sm-4" for="username">Permissions : </label>
+                          <div class="col-sm-8">
+                            <!-- TODO check box if user has perm -->
+                            {% for tournoi in tournoiAll %}
+                            <div class="checkbox">
+                              <label><input type="checkbox" name = "{{ tournoi.nom }}" value="{{ tournoi.id }}">Permissions du {{ tournoi.nom }}</label>
+                            </div>
+                            {% endfor %}
+                            <div class="checkbox">
+                              <label><input type="checkbox" name = "terrain" value="terrain">Permissions des terrains</label>
+                            </div>
+                            <div class="checkbox">
+                              <label><input type="checkbox" name = "paire" value="paire">Permissions des paires</label>
+                            </div>
+                            <div class="checkbox">
+                              <label><input type="checkbox" name = "extra" value="extra">Permissions des extras</label>
+                            </div>
+                            <div class="checkbox">
+                              <label><input type="checkbox" name = "user" value="user">Permissions des utilisateurs</label>
+                            </div>
+                            <div class="checkbox">
+                              <label><input type="checkbox" name = "perm" value="perm">Permissions des permissions</label>
+                            </div>
+
+                          </div>
+                        </div>
+                        <button class="btn btn-default center-block" id="valider" disabled>Valider</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+	
+
+</div>
+{% endblock %}
+
+{% block commande %}
+<script>
+function pagination(list) {
+    //Nombre d'entrée par page
+    var pageLength = 10;
+    //Nombre de page
+    var total = Math.max(Math.ceil(list.length/pageLength), 1);
+    //Notre pagination
+    $('#paginationholder').html('');
+    $('#paginationholder').html('<ul class="pagination" id="UserPagination"></ul>');
+    $('#UserPagination').twbsPagination({
+      totalPages: total,
+      visiblePages: Math.min(total, 5),
+      onPageClick: function (event, page) {
+      	//Lorsqu'on clique sur une page, on met à jour le contenu
+	    //On met à jour la page en fonction du tournoi selectionné
+	    setUserPermStaff(page);
+      }
+    });
+    //On met à jour les info (liste des users et longueur de chaque page)
+    setUserListInfo(list,pageLength);
+
+    //On met à jour la première page
+    setUserPermStaff(1);
+}
+
+//Recuperation des users et stockage dans un tableau
+var userList = [];
+{% for use in Use %}
+userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.fb }}']);
+{% endfor %}
+
+pagination(userList);
+
+function search_user() {
+    var retour = document.getElementById("search_value").value.toLocaleUpperCase();
+    // Copie du tableau pour garder l'original
+    var resultList = userList.slice();
+    var nbr = resultList.length;
+    for (var i = nbr-1; i >= 0 ; i--) {
+        var myUser = resultList[i];
+        var username = myUser[0];
+        var prenom = myUser[1];
+        var nom = myUser[2];
+        if (! (username.toLocaleUpperCase().indexOf(retour) != -1 || prenom.toLocaleUpperCase().indexOf(retour) != -1 || nom.toLocaleUpperCase().indexOf(retour) != -1)) {
+            resultList.splice(i, 1);
+        }
+    }
+    pagination(resultList);
+}
+</script>
+{% endblock %}

@@ -29,4 +29,5 @@ urlpatterns = patterns('tennis.views',
 	url(r'^staff/extras$','staffExtra'),
 	url(r'^staff/utilisateurs$','staffUser'),
 	url(r'^staff/utilisateurs/(\w+)$','viewUser'),
+	url(r'^staff/permissions$','staffPerm'),
 )

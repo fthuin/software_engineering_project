@@ -370,6 +370,36 @@ function setUserStaff(page){
 
 }
 
+function setUserPermStaff(page){
+	//Conteneur de notre liste
+	var panneau = document.getElementById("UserList");
+	panneau.innerHTML = "";
+
+	var debut = (page-1)*pageLength;
+	var fin = page*pageLength;
+
+	//Ajout des users
+	for (var i = debut; i < UserList.length && i<fin; i++) {
+		var year = UserList[i][4].split('/')[2];
+		var now = new Date().getFullYear();
+		var age = now-year;
+		var p = '<a onClick="selectUserStaff('+"'"+UserList[i][0]+"',"+"'"+UserList[i][2]+"',"+"'"+UserList[i][1]+"'"+');" href="javascript:void(0)" class="list-group-item">'+UserList[i][0]+' - '+UserList[i][3]+' '+UserList[i][1]+' '+UserList[i][2]+' - '+age+' ans</a>';
+		panneau.innerHTML += p;
+	};
+
+	//Info maj
+	var info = document.getElementById("UserInfo");
+	info.innerHTML = (debut+1)+'-'+i+' sur '+pageLength+' résultats ('+UserList.length+' au total)';
+
+}
+
+function selectUserStaff(username,nom,prenom){
+	document.getElementById("usernameID").value = username;
+	document.getElementById("userInfo").innerHTML = prenom +' '+nom+' ('+username+')';
+	document.getElementById("valider").disabled = false;
+}
+
+
 //EXTRA
 //permet de selectionner un extra
 function extra(id, nom,prix,comment){

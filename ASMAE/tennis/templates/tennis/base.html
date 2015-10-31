@@ -89,6 +89,8 @@
                     {% if perms.auth.User %}
                   <li><a href="{% url "tennis.views.staffUser" %}">Utilisateurs</a></li>
                     {% endif %}
+                    <!-- TODO permission droit -->
+                  <li><a href="{% url "tennis.views.staffPerm" %}">Permissions</a></li>
                 </ul>
               </li>
 

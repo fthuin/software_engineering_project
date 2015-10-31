@@ -478,6 +478,19 @@ def staffExtra(request):
 			return render(request,'tennis/staffExtra.html',locals())
 	return redirect(reverse(home))
 
+#TODO permission droit
+def staffPerm(request):
+	Use = User.objects.all().order_by('username')
+	tournoiAll = Tournoi.objects.all()
+	for u in Use:
+		bd = u.participant.datenaissance
+		fb = bd.strftime('%d/%m/%Y')
+		u.fb = fb
+	if request.user.is_authenticated():
+		if request.user.is_staff: #TODO
+			return render(request,'tennis/staffPerm.html',locals())
+	return redirect(reverse(home))
+
 @permission_required('auth.User')
 def staffUser(request):
 	Use = User.objects.all().order_by('username')
