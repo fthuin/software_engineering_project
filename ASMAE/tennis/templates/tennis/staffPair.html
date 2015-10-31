@@ -20,35 +20,52 @@
 		</div>
 	</div>
 	<!-- Paramètres de recherche avancée -->
-	<div class="panel panel-default center-block" style="max-width:300px;">
-	    <div class="panel-heading">Critères d'affichage</div>
-	    <div class="list-group-item">
-	    <label>Validation :</label>
-	    <select id="validation_selector" class="form-group">
-	        <option value="" selected>Tous</option>
-	        <option value="oui">Valide</option>
-	        <option value="non">Non validée</option>
-	    </select>
-	    </div>
-	    <div class="list-group-item">
-	    <label>Paiement :</label>
-	    <select id="payment_selector" class="form-group">
-	        <option value="" selected>Tous</option>
-	        <option value="oui">Valide</option>
-	        <option value="non">Non validée</option>
-	    </select>
-	    </div>
-	    <div class="list-group-item">
-	    <label>Tournoi :</label>
-	    <select id="tournament_selector" class="form-group">
-	            <option value="" selected>Tous</option>
-		    {% for elem in Tour %}
-		        <option value="{{ elem.nom }}">{{ elem.nom }}</option>
-		    {% endfor %}
-	    </select>
-	    </div>
-	</div>
+	<form action="" class="form-horizontal">
+		<div class="panel panel-default center-block" style="max-width:300px;">
+		    <div class="panel-heading">Critères d'affichage</div>
+		    <div class="list-group">
+			    <li class="list-group-item">
+				    <div class="row">
+					    <label class="control-label col-sm-4">Validation</label>
+					    <div class="col-sm-8">
+						    <select id="validation_selector" class="form-control">
+						        <option value="" selected>Tous</option>
+						        <option value="oui">Valide</option>
+						        <option value="non">Non validée</option>
+						    </select>
+						</div>
+					</div>
+			    </li>
 
+			    <li class="list-group-item">
+				    <div class="row">
+					    <label class="control-label col-sm-4">Paiement</label>
+					    <div class="col-sm-8">
+						    <select id="payment_selector" class="form-control">
+						        <option value="" selected>Tous</option>
+						        <option value="oui">Valide</option>
+						        <option value="non">Non validée</option>
+						    </select>
+						</div>
+					</div>
+			    </li>
+
+			    <li class="list-group-item">
+				    <div class="row">
+					    <label class="control-label col-sm-4">Tournoi</label>
+					    <div class="col-sm-8">
+						    <select id="tournament_selector" class="form-control">
+						        <option value="" selected>Tous</option>
+							    {% for elem in Tour %}
+							    <option value="{{ elem.nom }}">{{ elem.nom }}</option>
+							    {% endfor %}
+						    </select>
+						</div>
+					</div>
+			    </li>
+		    </div>
+		</div>
+	</form>
 	<!-- Liste des terrains -->
 	<div class="panel panel-default center-block" style="max-width:600px;">
 		<div class="panel-heading">Paires</div>
