@@ -13,7 +13,7 @@
 					<div class="col-sm-6">
 						<h3>Propriétaire</h3>
 						<address>
-							{{ court.user.participant.titre }} {{ court.user.participant.prenom }} {{ court.user.participant.nom }} <br>
+							<a href="{% url "tennis.views.viewUser" court.user.username %}">{{ court.user.participant.titre }} {{ court.user.participant.prenom }} {{ court.user.participant.nom }}</a> <br>
 							{{ court.user.participant.rue }}, {{ court.user.participant.numero }} {% if court.user.participant.boite %}
 							bte {{ court.user.participant.boite }} {% endif %}<br>
 							{{ court.user.participant.codepostal }} {{ court.user.participant.localite }}<br> 
