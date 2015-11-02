@@ -73,7 +73,7 @@
               <li {% block nav-sponsors %}{% endblock %}><a href="{% url "tennis.views.sponsors" %}"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> Sponsors</a></li>
               <li {% block nav-contact %}{% endblock %}><a href="{% url "tennis.views.contact" %}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Contact</a></li>
               <!-- TODO if staff only -->
-              {% if perms.auth.Staff %}
+              {% if perms.auth.Pair or perms.tennis.Extra or perms.auth.User or perms.auth.Admin or perms.tennis.Court or perms.tennis.DoubleHommes or perms.tennis.DoubleFemmes or perms.tennis.DoubleMixte or perms.tennis.TournoiDesFamilles %}
               <li {% block nav-staff %}class="dropdown"{% endblock %}><a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-lock fa-lg"></i> Staff <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <li><a href="{% url "tennis.views.staffTournoi" %}">Tournois</a></li>
@@ -90,8 +90,8 @@
                   <li><a href="{% url "tennis.views.staffUser" %}">Utilisateurs</a></li>
                     {% endif %}
                     <!-- TODO permission droit -->
-                  <li><a href="{% url "tennis.views.staffPerm" %}">Permissions</a></li>
-                </ul>
+                 {% if perms.auth.Admin %}<li><a href="{% url "tennis.views.staffPerm" %}">Permissions</a></li>
+                </ul>{% endif %}
               </li>
 
               {% endif %}

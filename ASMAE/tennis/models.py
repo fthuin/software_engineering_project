@@ -30,6 +30,7 @@ class Extra(models.Model):
 	nom = models.CharField(max_length=30)
 	prix = models.DecimalField(max_digits=11,decimal_places=2)
 	commentaires = models.TextField(null=True)
+    
 
 	def __str__(self):
 		return self.nom
@@ -86,5 +87,6 @@ class Pair(models.Model):
 	confirm = models.BooleanField(default=False)
 	valid = models.BooleanField(default=False)
 	pay = models.BooleanField(default=False)
+    
 	def __str__(self):
 		return str(self.id) +" "+ self.tournoi.nom+" : "+self.user1.username+" et "+self.user2.username
