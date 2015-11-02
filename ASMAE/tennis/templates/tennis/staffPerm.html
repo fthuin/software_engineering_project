@@ -61,23 +61,23 @@
                             <!-- TODO check box if user has perm -->
                             {% for tournoi in tournoiAll %}
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "{{ tournoi.nom }}" value="{{ tournoi.id }}">Permissions du {{ tournoi.nom }}</label>
+                              <label><input type="checkbox" name = "{{ tournoi.nom }}" value="{{ tournoi.id }}">{{ tournoi.nom }}</label>
                             </div>
                             {% endfor %}
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "terrain" value="terrain">Permissions des terrains</label>
+                              <label><input type="checkbox" name = "terrain" value="terrain">Gérer les terrains</label>
                             </div>
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "paire" value="paire">Permissions des paires</label>
+                              <label><input type="checkbox" name = "paire" value="paire">Gérer les paires</label>
                             </div>
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "extra" value="extra">Permissions des extras</label>
+                              <label><input type="checkbox" name = "extra" value="extra">Gérer les extras</label>
                             </div>
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "user" value="user">Permissions des utilisateurs</label>
+                              <label><input type="checkbox" name = "user" value="user">Gérer les utilisateurs</label>
                             </div>
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "perm" value="perm">Permissions des permissions</label>
+                              <label><input type="checkbox" name = "perm" value="perm">Admin</label>
                             </div>
 
                           </div>
