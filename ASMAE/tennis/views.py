@@ -480,7 +480,7 @@ def staffExtra(request):
 			return render(request,'tennis/staffExtra.html',locals())
 	return redirect(reverse(home))
 
-@permission_required('auth.Droit')
+@permission_required('tennis.Droit')
 #TODO permission droit
 def staffPerm(request):
     
@@ -566,7 +566,7 @@ def staffPerm(request):
 		    return render(request,'tennis/staffPerm.html',locals())
     return redirect(reverse(home))
 
-@permission_required('auth.User')
+@permission_required('tennis.User')
 def staffUser(request):
 	Use = User.objects.all().order_by('username')
 	for u in Use:
@@ -578,7 +578,7 @@ def staffUser(request):
 			return render(request,'tennis/staffUser.html',locals())
 	return redirect(reverse(home))
 
-@permission_required('auth.User')
+@permission_required('tennis.User')
 def viewUser(request,name):
 
 	use = User.objects.filter(username=name)

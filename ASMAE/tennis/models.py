@@ -25,16 +25,26 @@ class Participant(models.Model):
 	def __unicode__(self):
 		return u'' + self.prenom + self.nom
 
+	class Meta:
+		permissions = (
+			("User", "Manage User"),
+			("Droit","Donner droit"),
+		)
+
 class Extra(models.Model):
 	id = models.AutoField(primary_key=True)
 	nom = models.CharField(max_length=30)
 	prix = models.DecimalField(max_digits=11,decimal_places=2)
 	commentaires = models.TextField(null=True)
-    
 
 	def __str__(self):
 		return self.nom
-    
+
+	class Meta:
+		permissions = (
+			("Extra", "Manage Extra"),
+		)
+	
 
 class Court(models.Model):
 	id = models.AutoField(primary_key=True)
@@ -57,12 +67,25 @@ class Court(models.Model):
 	def __str__(self):
 		return str(self.id) +" "+ self.rue
 
+	class Meta:
+		permissions = (
+			("Court", "Manage Court"),
+		)
+
 class Tournoi(models.Model):
 	nom = models.CharField(max_length=50,primary_key=True)
 	description = models.TextField(null=True)
 	jour = models.CharField(max_length=50)
 	def __str__(self):
 		return self.nom
+
+	class Meta:
+		permissions = (
+			("TournoiDesFamilles", "Manage tournoi des familles"),
+			("DoubleHommes", "Manage double hommes"),
+			("DoubleFemmes", "Manage double femmes"),
+			("DoubleMixte", "Manage double mixte"),
+		)
 		
 class Group(models.Model):
 	id = models.AutoField(primary_key=True)
@@ -73,7 +96,7 @@ class Group(models.Model):
 		return "Groupe n " + str(self.id)
 
 	
-
+		
 class Pair(models.Model):
 	id = models.AutoField(primary_key=True)
 	tournoi = models.ForeignKey(Tournoi)
@@ -87,6 +110,11 @@ class Pair(models.Model):
 	confirm = models.BooleanField(default=False)
 	valid = models.BooleanField(default=False)
 	pay = models.BooleanField(default=False)
-    
+	
 	def __str__(self):
 		return str(self.id) +" "+ self.tournoi.nom+" : "+self.user1.username+" et "+self.user2.username
+
+	class Meta:
+		permissions = (
+			("Pair", "Manage Pair"),
+		)
