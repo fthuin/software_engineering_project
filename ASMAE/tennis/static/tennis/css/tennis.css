@@ -298,6 +298,22 @@ div.info{
     text-align: right;
 }
 
+a.UserLink{
+    font-weight: bold;
+    font-size: 16px;
+    color: black;
+    margin:auto;
+    display: block;
+}
+
+/*
+a.UserLink:hover,
+a.UserLink:focus,{
+    font-weight: bold;
+    font-size: 16px;
+    color: grey;
+}*/
+
 /* List group */
 .list-group-item{
     background-color: rgba(238, 231, 203, 1) !important;

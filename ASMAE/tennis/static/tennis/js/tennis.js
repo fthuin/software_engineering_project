@@ -383,7 +383,7 @@ function setUserPermStaff(page){
 		var year = UserList[i][4].split('/')[2];
 		var now = new Date().getFullYear();
 		var age = now-year;
-		var p = '<a onClick="selectUserStaff('+"'"+UserList[i][0]+"',"+"'"+UserList[i][2]+"',"+"'"+UserList[i][1]+"'"+');" href="javascript:void(0)" class="list-group-item">'+UserList[i][0]+' - '+UserList[i][3]+' '+UserList[i][1]+' '+UserList[i][2]+' - '+age+' ans</a>';
+		var p = '<a onClick="selectUserStaff('+"'"+UserList[i][0]+"',"+"'"+UserList[i][2]+"',"+"'"+UserList[i][1]+"',"+"'"+UserList[i][5]+"'"+');" href="javascript:void(0)" class="list-group-item">'+UserList[i][0]+' - '+UserList[i][3]+' '+UserList[i][1]+' '+UserList[i][2]+' - '+age+' ans</a>';
 		panneau.innerHTML += p;
 	};
 
@@ -393,10 +393,14 @@ function setUserPermStaff(page){
 
 }
 
-function selectUserStaff(username,nom,prenom){
+function selectUserStaff(username,nom,prenom,perm){
+	alert(perm);
 	document.getElementById("usernameID").value = username;
 	document.getElementById("userInfo").innerHTML = prenom +' '+nom+' ('+username+')';
 	document.getElementById("valider").disabled = false;
+	document.getElementById("userInfo").href = "/tennis/staff/utilisateurs/"+username;
+	
+	//TODO set permissions on checkpoint
 }
 
 
