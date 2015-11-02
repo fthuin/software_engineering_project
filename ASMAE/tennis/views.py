@@ -388,9 +388,8 @@ def editTerrain(request,id):
 	return redirect(reverse(home))
 
 def staff(request):
-	if request.user.is_authenticated():
-		if request.user.is_staff: #TODO
-			return render(request,'tennis/staff.html',locals())
+	if request.user.is_authenticated():#TODO
+		return render(request,'tennis/staff.html',locals())
 	return redirect(reverse(home))
 
 def staffTournoi(request):
@@ -399,11 +398,11 @@ def staffTournoi(request):
 				send_email_start_tournament() #TODO to change and link to a tournament
 				successSend = "Les mails ont bien été envoyé"
 	if request.user.is_authenticated():
-		if request.user.is_staff: #TODO
-			allTournois = Tournoi.objects.all()
-			allPairs = Pair.objects.all()
-			allCourts = Court.objects.all()
-			return render(request,'tennis/staffTournoi.html',locals())
+	
+		allTournois = Tournoi.objects.all()
+		allPairs = Pair.objects.all()
+		allCourts = Court.objects.all()
+		return render(request,'tennis/staffTournoi.html',locals())
 	return redirect(reverse(home))
 
 @permission_required('tennis.Court')
@@ -411,8 +410,7 @@ def staffTerrain(request):
 	#List of Court
 	allCourt = Court.objects.all()
 	if request.user.is_authenticated():
-		if request.user.is_staff: #TODO
-			return render(request,'tennis/staffTerrain.html',locals())
+		return render(request,'tennis/staffTerrain.html',locals())
 	return redirect(reverse(home))
 
 @permission_required('tennis.Pair')
@@ -421,63 +419,63 @@ def staffPaire(request):
 	allPair = Pair.objects.all()
 	Tour = Tournoi.objects.all()
 	if request.user.is_authenticated():
-		if request.user.is_staff: #TODO
-			return render(request,'tennis/staffPair.html',locals())
+		return render(request,'tennis/staffPair.html',locals())
 	return redirect(reverse(home))
+
 @permission_required('tennis.Extra')
 def staffExtra(request):
-	if request.user.is_staff: #TODO
-		Ex = Extra.objects.all()
-		if request.method == "POST":
-			if request.POST['action'] == "addExtra":
-				nom = request.POST['name']
-				prix = request.POST['price']
-				message = request.POST['message']
 
-				if nom=="":
-					errorAdd = "Veuillez rajouter un nom à l'extra!"
-					return render(request,'tennis/staffExtra.html',locals())
+	Ex = Extra.objects.all()
+	if request.method == "POST":
+		if request.POST['action'] == "addExtra":
+			nom = request.POST['name']
+			prix = request.POST['price']
+			message = request.POST['message']
 
-				if not is_number(prix):
-					errorAdd = "Le prix n'a pas le bon format"
-					return render(request,'tennis/staffExtra.html',locals())
+			if nom=="":
+				errorAdd = "Veuillez rajouter un nom à l'extra!"
+				return render(request,'tennis/staffExtra.html',locals())
 
-				extra = Extra(nom=nom,prix=prix,commentaires = message)
-				extra.save()
+			if not is_number(prix):
+				errorAdd = "Le prix n'a pas le bon format"
+				return render(request,'tennis/staffExtra.html',locals())
 
-				successAdd = "Extra bien ajouté!"
+			extra = Extra(nom=nom,prix=prix,commentaires = message)
+			extra.save()
 
-			if request.POST['action'] == "modifyExtra":
-				id = request.POST['id']
-				nom = request.POST['name']
-				prix = request.POST['price']
-				message = request.POST['message']
+			successAdd = "Extra bien ajouté!"
 
-				extra = Extra.objects.filter(id = id)[0]
+		if request.POST['action'] == "modifyExtra":
+			id = request.POST['id']
+			nom = request.POST['name']
+			prix = request.POST['price']
+			message = request.POST['message']
 
-				if nom=="":
-					errorEdit = "Veuillez rajouter un nom à l'extra!"
-					return render(request,'tennis/staffExtra.html',locals())
+			extra = Extra.objects.filter(id = id)[0]
 
-				if not is_number(prix):
-					errorEdit = "Le prix n'a pas le bon format"
-					return render(request,'tennis/staffExtra.html',locals())
+			if nom=="":
+				errorEdit = "Veuillez rajouter un nom à l'extra!"
+				return render(request,'tennis/staffExtra.html',locals())
+
+			if not is_number(prix):
+				errorEdit = "Le prix n'a pas le bon format"
+				return render(request,'tennis/staffExtra.html',locals())
 
 
-				extra.nom = nom
-				extra.prix = prix
-				extra.commentaires = message
-				extra.save()
-				successEdit = "Extra bien édité!"
+			extra.nom = nom
+			extra.prix = prix
+			extra.commentaires = message
+			extra.save()
+			successEdit = "Extra bien édité!"
 
-			if request.POST['action'] == "deleteExtra":
-				id = request.POST['id']
-				extra = Extra.objects.filter(id = id)[0]
-				extra.delete()
-				successDelete = "Extra bien supprimé!"
+		if request.POST['action'] == "deleteExtra":
+			id = request.POST['id']
+			extra = Extra.objects.filter(id = id)[0]
+			extra.delete()
+			successDelete = "Extra bien supprimé!"
 
-		if request.user.is_authenticated():
-			return render(request,'tennis/staffExtra.html',locals())
+	if request.user.is_authenticated():
+		return render(request,'tennis/staffExtra.html',locals())
 	return redirect(reverse(home))
 
 @permission_required('tennis.Droit')
@@ -562,8 +560,7 @@ def staffPerm(request):
 	    fb = bd.strftime('%d/%m/%Y')
 	    u.fb = fb
     if request.user.is_authenticated():
-	    if request.user.is_staff: #TODO
-		    return render(request,'tennis/staffPerm.html',locals())
+		return render(request,'tennis/staffPerm.html',locals())
     return redirect(reverse(home))
 
 @permission_required('tennis.User')
@@ -574,8 +571,7 @@ def staffUser(request):
 		fb = bd.strftime('%d/%m/%Y')
 		u.fb = fb
 	if request.user.is_authenticated():
-		if request.user.is_staff: #TODO
-			return render(request,'tennis/staffUser.html',locals())
+		return render(request,'tennis/staffUser.html',locals())
 	return redirect(reverse(home))
 
 @permission_required('tennis.User')
@@ -595,140 +591,137 @@ def viewUser(request,name):
 	tournoi2 = Pair.objects.filter(user2=use,confirm=True)
 	tournoi = list(chain(tournoi1, tournoi2))
 	if request.user.is_authenticated():
-		if request.user.is_staff: #TODO
-			return render(request,'tennis/viewUser.html',locals())
+		return render(request,'tennis/viewUser.html',locals())
 	return redirect(reverse(home))
 
 @permission_required('tennis.Court')
 def validateTerrain(request, id):
-	if request.user.is_staff:
-		court = Court.objects.filter(id=id)[0]
-		if request.method == "POST":
-			message = request.POST['message']
-			if request.POST.__contains__("valide"):
-				valide = True
-			else:
-				valide = False
 
-			court.commentaireStaff = message
-			court.valide = valide
-			court.save()
-			successEdit = "Terrain bien édité!"
+	court = Court.objects.filter(id=id)[0]
+	if request.method == "POST":
+		message = request.POST['message']
+		if request.POST.__contains__("valide"):
+			valide = True
+		else:
+			valide = False
 
-		if request.user.is_authenticated():
-			return render(request,'tennis/validateTerrain.html',locals())
+		court.commentaireStaff = message
+		court.valide = valide
+		court.save()
+		successEdit = "Terrain bien édité!"
+
+	if request.user.is_authenticated():
+		return render(request,'tennis/validateTerrain.html',locals())
 	return redirect(reverse(home))
 
 @permission_required('tennis.Court')
 def editTerrainStaff(request, id):
-	if request.user.is_staff:
-		court = Court.objects.filter(id=id)[0]
-		if request.method == "POST":
-			if request.POST['action'] == "modifyCourt":
-				rue = request.POST['rue']
-				numero = request.POST['numero']
-				boite = request.POST['boite']
-				postalcode = request.POST['postalcode']
-				locality = request.POST['loclity']
-				acces = request.POST['acces']
-				matiere = request.POST['matiere']
-				type = request.POST['type']
-				etat = request.POST['etat']
-				commentaire = request.POST['comment']
-				if request.POST.__contains__("dispoSamedi"):
-						dispoSamedi = True
-				else:
-					dispoSamedi = False
-				if request.POST.__contains__("dispoDimanche"):
-						dispoDimanche = True
-				else:
-					dispoDimanche = False
+	court = Court.objects.filter(id=id)[0]
+	if request.method == "POST":
+		if request.POST['action'] == "modifyCourt":
+			rue = request.POST['rue']
+			numero = request.POST['numero']
+			boite = request.POST['boite']
+			postalcode = request.POST['postalcode']
+			locality = request.POST['loclity']
+			acces = request.POST['acces']
+			matiere = request.POST['matiere']
+			type = request.POST['type']
+			etat = request.POST['etat']
+			commentaire = request.POST['comment']
+			if request.POST.__contains__("dispoSamedi"):
+					dispoSamedi = True
+			else:
+				dispoSamedi = False
+			if request.POST.__contains__("dispoDimanche"):
+					dispoDimanche = True
+			else:
+				dispoDimanche = False
 
 
-				if (rue=="" or numero=="" or postalcode=="" or locality=="" or matiere=="" or type=="" or etat==""):
-					errorAdd = "Veuillez remplir tous les champs obligatoires !"
-					return render(request,'tennis/registerTerrain.html',locals())
+			if (rue=="" or numero=="" or postalcode=="" or locality=="" or matiere=="" or type=="" or etat==""):
+				errorAdd = "Veuillez remplir tous les champs obligatoires !"
+				return render(request,'tennis/registerTerrain.html',locals())
 
 
-				court.rue = rue
-				court.numero=numero
-				court.boite=boite
-				court.codepostal=postalcode
-				court.localite=locality
-				court.acces=acces
-				court.matiere=matiere
-				court.type=type
-				court.dispoDimanche=dispoDimanche
-				court.dispoSamedi=dispoSamedi
-				court.etat= etat
-				court.commentaire=commentaire
-				court.user = request.user
-				court.save()
-				#successEdit = "Terrain "+str(id)+" bien édité!"
-				return redirect(reverse(validateTerrain,args={id}))
+			court.rue = rue
+			court.numero=numero
+			court.boite=boite
+			court.codepostal=postalcode
+			court.localite=locality
+			court.acces=acces
+			court.matiere=matiere
+			court.type=type
+			court.dispoDimanche=dispoDimanche
+			court.dispoSamedi=dispoSamedi
+			court.etat= etat
+			court.commentaire=commentaire
+			court.user = request.user
+			court.save()
+			#successEdit = "Terrain "+str(id)+" bien édité!"
+			return redirect(reverse(validateTerrain,args={id}))
 
-			if request.POST['action'] == "deleteCourt":
-				#TODO delete terrain staff
-				court.delete()
-				return redirect(reverse(staffTerrain))
-		if request.user.is_authenticated():
-			return render(request,'tennis/editTerrainStaff.html',locals())
+		if request.POST['action'] == "deleteCourt":
+			#TODO delete terrain staff
+			court.delete()
+			return redirect(reverse(staffTerrain))
+	if request.user.is_authenticated():
+		return render(request,'tennis/editTerrainStaff.html',locals())
 	return redirect(reverse(home))
 
 @permission_required('tennis.Pair')
 def validatePair(request, id):
-	if request.user.is_staff:
-		pair = Pair.objects.filter(id=id)[0]
-		if request.method == "POST":
-			if request.POST['action'] == "editPair":
-				valid = request.POST['valid']
-				paid = request.POST['pay']
-				if valid == "Oui":
-					valider = True
-				else:
-					valider = False
-				if paid == "Oui":
-					payer = True
-				else:
-					payer = False
-				pair.valid = valider
-				pair.pay = payer
-				pair.save()
+	pair = Pair.objects.filter(id=id)[0]
+	if request.method == "POST":
+		if request.POST['action'] == "editPair":
+			valid = request.POST['valid']
+			paid = request.POST['pay']
+			if valid == "Oui":
+				valider = True
+			else:
+				valider = False
+			if paid == "Oui":
+				payer = True
+			else:
+				payer = False
+			pair.valid = valider
+			pair.pay = payer
+			pair.save()
 
-				return redirect(reverse(staffPaire))
+			return redirect(reverse(staffPaire))
 
-			if request.POST['action'] == "deletePair":
-				pair.delete()
-				return redirect(reverse(staffPaire))
+		if request.POST['action'] == "deletePair":
+			pair.delete()
+			return redirect(reverse(staffPaire))
 
 
-		Ex = Extra.objects.all()
-		extra1 = pair.extra1.all()
-		extranot1 = list()
-		for elem in Ex:
-			contained = False
-			for el in extra1:
-				if elem.id == el.id:
-					contained = True
-			if contained == False:
-				extranot1.append(Extra.objects.filter(id=elem.id)[0])
+	Ex = Extra.objects.all()
+	extra1 = pair.extra1.all()
+	extranot1 = list()
+	for elem in Ex:
+		contained = False
+		for el in extra1:
+			if elem.id == el.id:
+				contained = True
+		if contained == False:
+			extranot1.append(Extra.objects.filter(id=elem.id)[0])
 
-		extra2 = pair.extra2.all()
-		extranot2 = list()
-		for elem in Ex:
-			contained = False
-			for el in extra2:
-				if elem.id == el.id:
-					contained = True
-			if contained == False:
-				extranot2.append(Extra.objects.filter(id=elem.id)[0])
+	extra2 = pair.extra2.all()
+	extranot2 = list()
+	for elem in Ex:
+		contained = False
+		for el in extra2:
+			if elem.id == el.id:
+				contained = True
+		if contained == False:
+			extranot2.append(Extra.objects.filter(id=elem.id)[0])
 
-		birthdate1 = pair.user1.participant.datenaissance
-		formatedBirthdate1 = birthdate1.strftime('%d/%m/%Y')
-		birthdate2 = pair.user2.participant.datenaissance
-		formatedBirthdate2 = birthdate2.strftime('%d/%m/%Y')
-		if request.user.is_authenticated():
-			return render(request,'tennis/validatePair.html',locals())
+	birthdate1 = pair.user1.participant.datenaissance
+	formatedBirthdate1 = birthdate1.strftime('%d/%m/%Y')
+	birthdate2 = pair.user2.participant.datenaissance
+	formatedBirthdate2 = birthdate2.strftime('%d/%m/%Y')
+	if request.user.is_authenticated():
+		return render(request,'tennis/validatePair.html',locals())
 	return redirect(reverse(home))
 
 def profil(request):
