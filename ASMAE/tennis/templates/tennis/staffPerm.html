@@ -44,7 +44,7 @@
             <div class="panel panel-default center-block">
                 <div class="panel-heading">Utilisateur</div>
                 <div class="panel-body">
-                    <h4 class="center" id="userInfo">-</h4>
+                    <a class="UserLink" href="" id="userInfo" style="text-align:center"></a>
                 </div>
             </div>
 
@@ -61,23 +61,23 @@
                             <!-- TODO check box if user has perm -->
                             {% for tournoi in tournoiAll %}
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "{{ tournoi.nom }}" value="{{ tournoi.id }}">Permissions du {{ tournoi.nom }}</label>
+                              <label><input type="checkbox" id="{{ tournoi.nom }}Check" name = "{{ tournoi.nom }}" value="{{ tournoi.id }}">Permissions du {{ tournoi.nom }}</label>
                             </div>
                             {% endfor %}
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "terrain" value="terrain">Permissions des terrains</label>
+                              <label><input type="checkbox" id ="terrainCheck" name = "terrain" value="terrain">Permissions des terrains</label>
                             </div>
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "paire" value="paire">Permissions des paires</label>
+                              <label><input type="checkbox" id ="paireCheck" name = "paire" value="paire">Permissions des paires</label>
                             </div>
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "extra" value="extra">Permissions des extras</label>
+                              <label><input type="checkbox" id ="extraCheck" name = "extra" value="extra">Permissions des extras</label>
                             </div>
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "user" value="user">Permissions des utilisateurs</label>
+                              <label><input type="checkbox" id ="userCheck" name = "user" value="user">Permissions des utilisateurs</label>
                             </div>
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "perm" value="perm">Permissions des permissions</label>
+                              <label><input type="checkbox" id ="permCheck" name = "perm" value="perm">Permissions des permissions</label>
                             </div>
 
                           </div>
@@ -122,7 +122,7 @@ function pagination(list) {
 //Recuperation des users et stockage dans un tableau
 var userList = [];
 {% for use in Use %}
-userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.fb }}']);
+userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.fb }}','{{ use.user_permissions.all }}']);
 {% endfor %}
 
 pagination(userList);
