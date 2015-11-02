@@ -8,6 +8,7 @@ from tennis.forms import LoginForm
 from tennis.models import Extra, Participant,Court, Tournoi, Pair
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament
 import re, math
+import json
 import datetime
 from itertools import chain
 from django.contrib.auth.decorators import permission_required
@@ -398,6 +399,14 @@ def staffTournoi(request):
 		if request.POST['action'] == "sendTournamentDataByMail":
 				send_email_start_tournament() #TODO to change and link to a tournament
 				successSend = "Les mails ont bien été envoyé"
+	if request.method == "GET":
+		if request.GET.get('action') == 'enregistrer':
+		        print 'COUCOU'
+		        tournament = json.load(request.GET.get('groups'))
+		        print 'COUCOU2'
+		        
+		        # creer les groupes a l'aide de groupsJSON
+		        # acces a un champs 'x': groupsJSON['x']
 	if request.user.is_authenticated():
 		if request.user.is_staff: #TODO
 			allTournois = Tournoi.objects.all()

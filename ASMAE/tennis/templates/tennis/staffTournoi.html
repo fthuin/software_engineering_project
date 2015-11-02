@@ -205,6 +205,35 @@ text-align:left;
 				tournament.try_naively_select_group_leaders();
 				graphic_update();
 		}, false);
+		
+		document.getElementById("register").addEventListener('click', function() {
+		        if(tournament.uninserted_pairs.length != 0) {
+		              alert("Des paires n'ont pas de groupe(s) d'attribué(s)");
+		              return;
+		        }
+		        
+		        var list = tournament.groups;
+		        var new_list = []
+		        for(var i = 0; i < list.length; i++) {
+		              if(list[i].pairs.length != 0) {
+		                  new_list.push(list[i]);
+		              }
+		        }
+		        
+		        tournament.groups = new_list;
+		        var test = JSON.stringify(tournament);
+		        $.ajax({
+        	       url: '',
+           	       data: { 'action':'enregistrer', 'groups':test},
+           	       type: 'get',
+           	       cache: false,
+           	       success: function (data) {
+			       window.location.reload(true);
+           	   }
+        });
+
+		        alert("coucou2");
+		}, false);
 
         var apply_swap = function() {
             // check si swap effectuable (par prudence)
