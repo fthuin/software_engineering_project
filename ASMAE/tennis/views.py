@@ -480,6 +480,8 @@ def staffExtra(request):
 
 #TODO permission droit
 def staffPerm(request):
+    if request.method == "POST":
+        print("do smth")
 	Use = User.objects.all().order_by('username')
 	tournoiAll = Tournoi.objects.all()
 	for u in Use:
@@ -782,8 +784,6 @@ def connect(request):
 			#invalide login
 			error = "Nom d'utilisateur ou mot de passe non conforme !"
 			return render(request,'tennis/login.html',locals())
-	if request.user.is_authenticated():
-		return redirect(reverse(tournoi))
 	return render(request,'tennis/login.html',locals())
 
 def deconnect(request):
