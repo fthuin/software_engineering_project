@@ -383,7 +383,7 @@ function setUserPermStaff(page){
 		var year = UserList[i][4].split('/')[2];
 		var now = new Date().getFullYear();
 		var age = now-year;
-		var p = '<a onClick="selectUserStaff('+"'"+UserList[i][0]+"',"+"'"+UserList[i][2]+"',"+"'"+UserList[i][1]+"',"+"'"+UserList[i][5]+"'"+');" href="javascript:void(0)" class="list-group-item">'+UserList[i][0]+' - '+UserList[i][3]+' '+UserList[i][1]+' '+UserList[i][2]+' - '+age+' ans</a>';
+		var p = '<a onClick="selectUserStaff('+"'"+UserList[i][0]+"',"+"'"+UserList[i][2]+"',"+"'"+UserList[i][1]+"',"+"'"+UserList[i][5]+"','"+UserList[i][6]+"'"+');" href="javascript:void(0)" class="list-group-item">'+UserList[i][0]+' - '+UserList[i][3]+' '+UserList[i][1]+' '+UserList[i][2]+' - '+age+' ans</a>';
 		panneau.innerHTML += p;
 	};
 
@@ -392,15 +392,111 @@ function setUserPermStaff(page){
 	info.innerHTML = (debut+1)+'-'+i+' sur '+pageLength+' résultats ('+UserList.length+' au total)';
 
 }
-
-function selectUserStaff(username,nom,prenom,perm){
-	alert(perm);
+function admin()
+{
+    if(document.getElementById("permID").checked == true)
+    {
+        document.getElementById("extraID").disabled = true;
+        document.getElementById("userID").disabled = true;
+        document.getElementById("pairID").disabled = true;
+        document.getElementById("courtID").disabled = true;      
+        document.getElementById("Tournoi des famillesID").disabled = true;
+        document.getElementById("Double hommesID").disabled = true;
+        document.getElementById("Double femmesID").disabled = true;
+        document.getElementById("Double mixteID").disabled = true;
+    }
+    if(document.getElementById("permID").checked == false)
+    {
+        document.getElementById("extraID").disabled = false;
+        document.getElementById("userID").disabled = false;
+        document.getElementById("pairID").disabled = false;
+        document.getElementById("courtID").disabled = false;      
+        document.getElementById("Tournoi des famillesID").disabled = false;
+        document.getElementById("Double hommesID").disabled = false;
+        document.getElementById("Double femmesID").disabled = false;
+        document.getElementById("Double mixteID").disabled = false;
+    }
+}
+function selectUserStaff(username,nom,prenom,perm,group){
 	document.getElementById("usernameID").value = username;
 	document.getElementById("userInfo").innerHTML = prenom +' '+nom+' ('+username+')';
 	document.getElementById("valider").disabled = false;
 	document.getElementById("userInfo").href = "/tennis/staff/utilisateurs/"+username;
 	
 	//TODO set permissions on checkpoint
+    if(perm.indexOf("extra") > -1)
+    {
+        document.getElementById("extraID").checked = true;
+    }
+    else
+    {
+        document.getElementById("extraID").checked = false;
+    }
+    if(perm.indexOf("pair") > -1)
+    {
+        document.getElementById("pairID").checked = true;
+    }
+    else
+    {
+        document.getElementById("pairID").checked = false;
+    }
+    if(perm.indexOf("court") > -1)
+    {
+        document.getElementById("courtID").checked = true;
+    }
+    else
+    {
+        document.getElementById("courtID").checked = false;
+    }
+    if(perm.indexOf("User") > -1)
+    {
+        document.getElementById("userID").checked = true;
+    }
+    else
+    {
+        document.getElementById("userID").checked = false;
+    }
+     if(perm.indexOf("tournoi des familles") > -1)
+    {
+        document.getElementById("Tournoi des famillesID").checked = true;
+    }
+    else
+    {
+        document.getElementById("Tournoi des famillesID").checked = false;
+    }
+     if(perm.indexOf("double hommes") > -1)
+    {
+        document.getElementById("Double hommesID").checked = true;
+    }
+    else
+    {
+        document.getElementById("Double hommesID").checked = false;
+    }
+     if(perm.indexOf("double femmes") > -1)
+    {
+        document.getElementById("Double femmesID").checked = true;
+    }
+    else
+    {
+        document.getElementById("Double femmesID").checked = false;
+    }
+     if(perm.indexOf("double mixte") > -1)
+    {
+        document.getElementById("Double mixteID").checked = true;
+    }
+    else
+    {
+        document.getElementById("Double mixteID").checked = false;
+    }
+     if(group.indexOf("Admin") > -1)
+    {
+        document.getElementById("permID").checked = true;
+    }
+    else
+    {
+        document.getElementById("permID").checked = false;
+    }
+    admin();
 }
 
 
