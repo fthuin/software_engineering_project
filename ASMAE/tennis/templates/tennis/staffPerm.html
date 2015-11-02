@@ -50,7 +50,8 @@
 
             <!-- Permissions -->
             <!-- TODO form -->
-            <form class="form-horizontal" action="">
+            <form class="form-horizontal" method="post" action="{% url "tennis.views.staffPerm" %}">
+                {% csrf_token %}
                 <input type="text" name="username" id="usernameID" value="" style="display:none">
                 <div class="panel panel-default center-block">
                     <div class="panel-heading">Permissions</div>
@@ -61,23 +62,23 @@
                             <!-- TODO check box if user has perm -->
                             {% for tournoi in tournoiAll %}
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "{{ tournoi.nom }}" value="{{ tournoi.id }}">{{ tournoi.nom }}</label>
+                              <label><input type="checkbox" name = "{{ tournoi.nom }}" value="{{ tournoi.id }}" id="{{tournoi.nom }}ID" >{{ tournoi.nom }}</label>
                             </div>
                             {% endfor %}
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "terrain" value="terrain">Gérer les terrains</label>
+                              <label><input type="checkbox" name = "court" value="terrain" id="courtID" >Gérer les terrains</label>
                             </div>
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "paire" value="paire">Gérer les paires</label>
+                              <label><input type="checkbox" name = "pair" value="paire" id="pairID" >Gérer les paires</label>
                             </div>
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "extra" value="extra">Gérer les extras</label>
+                              <label><input type="checkbox" name = "extra" value="extra" id="extraID" >Gérer les extras</label>
                             </div>
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "user" value="user">Gérer les utilisateurs</label>
+                              <label><input type="checkbox" name = "user" value="user" id="userID">Gérer les utilisateurs</label>
                             </div>
                             <div class="checkbox">
-                              <label><input type="checkbox" name = "perm" value="perm">Admin</label>
+                              <label><input type="checkbox" name = "perm" value="perm" id="permID" onchange="admin()">Admin</label>
                             </div>
 
                           </div>
@@ -122,10 +123,11 @@ function pagination(list) {
 //Recuperation des users et stockage dans un tableau
 var userList = [];
 {% for use in Use %}
-userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.fb }}','{{ use.user_permissions.all }}']);
+userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.fb }}','{{ use.user_permissions.all }}','{{ use.groups.all }}']);
 {% endfor %}
 
 pagination(userList);
+
 
 function search_user() {
     var retour = document.getElementById("search_value").value.toLocaleUpperCase();

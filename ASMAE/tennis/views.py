@@ -11,6 +11,8 @@ import re, math
 import datetime
 from itertools import chain
 from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.models import Permission,Group
+
 
 # Create your views here.
 def home(request):
@@ -478,18 +480,91 @@ def staffExtra(request):
 			return render(request,'tennis/staffExtra.html',locals())
 	return redirect(reverse(home))
 
+@permission_required('auth.Droit')
 #TODO permission droit
 def staffPerm(request):
-	Use = User.objects.all().order_by('username')
-	tournoiAll = Tournoi.objects.all()
-	for u in Use:
-		bd = u.participant.datenaissance
-		fb = bd.strftime('%d/%m/%Y')
-		u.fb = fb
-	if request.user.is_authenticated():
-		if request.user.is_staff: #TODO
-			return render(request,'tennis/staffPerm.html',locals())
-	return redirect(reverse(home))
+    
+    if request.method == "POST":
+        
+        usernamefield = request.POST['username']
+        utilisateur = User.objects.filter(username=usernamefield)[0]
+        if request.POST.__contains__("Tournoi des familles"):
+            perm = Permission.objects.filter(codename="TournoiDesFamilles")[0]
+            utilisateur.user_permissions.add(perm)
+        else:
+            perm = Permission.objects.filter(codename="TournoiDesFamilles")[0]
+            utilisateur.user_permissions.remove(perm)
+
+        if request.POST.__contains__("Double mixte"):
+            perm = Permission.objects.filter(codename="DoubleMixte")[0]
+            utilisateur.user_permissions.add(perm)
+        else:
+            perm = Permission.objects.filter(codename="DoubleMixte")[0]
+            utilisateur.user_permissions.remove(perm)
+
+        if request.POST.__contains__("Double hommes"):
+            perm = Permission.objects.filter(codename="DoubleHommes")[0]
+            utilisateur.user_permissions.add(perm)
+        else:
+            perm = Permission.objects.filter(codename="DoubleHommes")[0]
+            utilisateur.user_permissions.remove(perm)
+
+        if request.POST.__contains__("Double femmes"):
+            perm = Permission.objects.filter(codename="DoubleFemmes")[0]
+            utilisateur.user_permissions.add(perm)
+        else:
+            perm = Permission.objects.filter(codename="DoubleFemmes")[0]
+            utilisateur.user_permissions.remove(perm)
+
+        if request.POST.__contains__("court"):
+            perm = Permission.objects.filter(codename="Court")[0]
+            utilisateur.user_permissions.add(perm)
+        else:
+            perm = Permission.objects.filter(codename="Court")[0]
+            utilisateur.user_permissions.remove(perm)
+
+        if request.POST.__contains__("pair"):
+            perm = Permission.objects.filter(codename="Pair")[0]
+            utilisateur.user_permissions.add(perm)
+        else:
+            perm = Permission.objects.filter(codename="Pair")[0]
+            utilisateur.user_permissions.remove(perm)
+
+        if request.POST.__contains__("extra"):
+            perm = Permission.objects.filter(codename="Extra")[0]
+            utilisateur.user_permissions.add(perm)
+        else:
+            perm = Permission.objects.filter(codename="Extra")[0]
+            utilisateur.user_permissions.remove(perm)
+
+        if request.POST.__contains__("user"):
+            perm = Permission.objects.filter(codename="User")[0]
+            utilisateur.user_permissions.add(perm)
+        else:
+            perm = Permission.objects.filter(codename="User")[0]
+            utilisateur.user_permissions.remove(perm)
+
+        if request.POST.__contains__("perm"):
+            group = Group.objects.filter(name="Admin")[0]
+            utilisateur.groups.add(group)
+        else:
+            group = Group.objects.filter(name="Admin")[0]
+            utilisateur.groups.remove(group)
+       
+        
+	    
+
+    Use = User.objects.all().order_by('username')
+    tournoiAll = Tournoi.objects.all()
+    
+    for u in Use:
+	    bd = u.participant.datenaissance
+	    fb = bd.strftime('%d/%m/%Y')
+	    u.fb = fb
+    if request.user.is_authenticated():
+	    if request.user.is_staff: #TODO
+		    return render(request,'tennis/staffPerm.html',locals())
+    return redirect(reverse(home))
 
 @permission_required('auth.User')
 def staffUser(request):
@@ -782,8 +857,6 @@ def connect(request):
 			#invalide login
 			error = "Nom d'utilisateur ou mot de passe non conforme !"
 			return render(request,'tennis/login.html',locals())
-	if request.user.is_authenticated():
-		return redirect(reverse(tournoi))
 	return render(request,'tennis/login.html',locals())
 
 def deconnect(request):
