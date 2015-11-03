@@ -55,54 +55,62 @@
 		<div class="col-md-8">
 			<form class="form-horizontal" name="editExtra" id="editExtra" role="form" method="post" action="{% url "tennis.views.staffExtra" %}">
 				{% csrf_token %}
+				<div class="panel panel-default">
+					<div class="panel-heading" id="formTitle">
+						Editer {{ Ex.0.nom }}
+					</div>
+					<div class="panel-body">
+						<!-- ID -->
+					    <input type="text" class="form-control" name="id" id="extraID" value="{{ Ex.0.id }}" style="display:none;">
+					      	
+						<!-- Nom -->
+						<div class="form-group">
+					      <label class="control-label col-sm-2" for="username">Nom</label>
+					      <div class="col-sm-10">
+					      	<input type="text" class="form-control" maxlength="30" name="name" id="extraName" value="{{ Ex.0.nom }}">
+					      	<p class="hint" id="hint-username"></p>
+					      </div>
+					    </div>
 
-				<h4 class="center" id="formTitle">Editer {{ Ex.0.nom }}</h4>
+					    <!-- Prix -->
+						<div class="form-group">
+					      <label class="control-label col-sm-2" for="username">Prix</label>
+					      <div class="col-sm-10">
+					      	<input type="text" class="form-control" maxlength="30" name="price" id="extraPrice" value="{{ Ex.0.prix }}">
+					      	<p class="hint" id="hint-username"></p>
+					      </div>
+					    </div>
+
+					    <!-- Commentaire -->
+						<div class="form-group">
+					      <label class="control-label col-sm-2" for="username">Commentaires</label>
+					      <div class="col-sm-10">
+					      	<textarea class="form-control" rows="5" name="message" id="extracommentaire">{{ Ex.0.commentaires }}</textarea>
+					      	<p class="hint" id="hint-username"></p>
+					      </div>
+					    </div>
+
+						<ul class="list-inline text-center">
+							<li>
+								<button class="btn-default btn" name="action" value="modifyExtra">Editer</button>
+							</li>
+							<li>
+								<button class="btn-default btn" type="button" data-toggle="modal" data-target="#myModal">Supprimer</button>
+
+								<form name="deleteExtra" id="deleteExtra" role="form" method="post" action="{% url "tennis.views.staff" %}">
+									<input type="text" class="form-control" name="id" id="deleteID" value="{{ Ex.0.id }}" style="display:none;">
+									<button style="display:none" class="btn-default btn" name="action" id="deleteExtra" value="deleteExtra">Supprimer</button>
+								</form>
+								
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				
 				
 
-				<!-- ID -->
-			    <input type="text" class="form-control" name="id" id="extraID" value="{{ Ex.0.id }}" style="display:none;">
-			      	
-				<!-- Nom -->
-				<div class="form-group">
-			      <label class="control-label col-sm-2" for="username">Nom</label>
-			      <div class="col-sm-10">
-			      	<input type="text" class="form-control" maxlength="30" name="name" id="extraName" value="{{ Ex.0.nom }}">
-			      	<p class="hint" id="hint-username"></p>
-			      </div>
-			    </div>
-
-			    <!-- Prix -->
-				<div class="form-group">
-			      <label class="control-label col-sm-2" for="username">Prix</label>
-			      <div class="col-sm-10">
-			      	<input type="text" class="form-control" maxlength="30" name="price" id="extraPrice" value="{{ Ex.0.prix }}">
-			      	<p class="hint" id="hint-username"></p>
-			      </div>
-			    </div>
-
-			    <!-- Commentaire -->
-				<div class="form-group">
-			      <label class="control-label col-sm-2" for="username">Commentaires</label>
-			      <div class="col-sm-10">
-			      	<textarea class="form-control" rows="5" name="message" id="extracommentaire">{{ Ex.0.commentaires }}</textarea>
-			      	<p class="hint" id="hint-username"></p>
-			      </div>
-			    </div>
-
-				<ul class="list-inline text-center">
-					<li>
-						<button class="btn-default btn" name="action" value="modifyExtra">Editer</button>
-					</li>
-					<li>
-						<button class="btn-default btn" type="button" data-toggle="modal" data-target="#myModal">Supprimer</button>
-
-						<form name="deleteExtra" id="deleteExtra" role="form" method="post" action="{% url "tennis.views.staff" %}">
-							<input type="text" class="form-control" name="id" id="deleteID" value="{{ Ex.0.id }}" style="display:none;">
-							<button style="display:none" class="btn-default btn" name="action" id="deleteExtra" value="deleteExtra">Supprimer</button>
-						</form>
-						
-					</li>
-				</ul>
+				
 				
 				
 			  </form>
@@ -110,38 +118,39 @@
 			<!-- Ajouter un extrat -->
 			  <form class="form-horizontal" name="newExtra" id="newExtra" role="form" method="post" action="{% url "tennis.views.staffExtra" %}" onsubmit="return validateRegister()" style="display:none" >
 				{% csrf_token %}
+				<div class="panel panel-default">
+					<div class="panel-heading">Ajouter extra</div>
+					<div class="panel-body">
+						<!-- Nom -->
+						<div class="form-group">
+					      <label class="control-label col-sm-2" for="username">Nom</label>
+					      <div class="col-sm-10">
+					      	<input type="text" class="form-control" maxlength="30" name="name" id="name" placeholder="Nom de l'extra">
+					      	<p class="hint" id="hint-username"></p>
+					      </div>
+					    </div>
 
-				<h4 class="center">Ajouter extra</h4>
+					    <!-- Prix -->
+						<div class="form-group">
+					      <label class="control-label col-sm-2" for="username">Prix</label>
+					      <div class="col-sm-10">
+					      	<input type="text" class="form-control" maxlength="30" name="price" id="price" placeholder="Prix de l'extra">
+					      	<p class="hint" id="hint-username"></p>
+					      </div>
+					    </div>
 
-				<!-- Nom -->
-				<div class="form-group">
-			      <label class="control-label col-sm-2" for="username">Nom</label>
-			      <div class="col-sm-10">
-			      	<input type="text" class="form-control" maxlength="30" name="name" id="name" placeholder="Nom de l'extra">
-			      	<p class="hint" id="hint-username"></p>
-			      </div>
-			    </div>
+					    <!-- Commentaire -->
+						<div class="form-group">
+					      <label class="control-label col-sm-2" for="username">Commentaires</label>
+					      <div class="col-sm-10">
+					      	<textarea class="form-control" rows="5" name="message" placeholder="Commentaires"></textarea>
+					      	<p class="hint" id="hint-username"></p>
+					      </div>
+					    </div>
 
-			    <!-- Prix -->
-				<div class="form-group">
-			      <label class="control-label col-sm-2" for="username">Prix</label>
-			      <div class="col-sm-10">
-			      	<input type="text" class="form-control" maxlength="30" name="price" id="price" placeholder="Prix de l'extra">
-			      	<p class="hint" id="hint-username"></p>
-			      </div>
-			    </div>
-
-			    <!-- Commentaire -->
-				<div class="form-group">
-			      <label class="control-label col-sm-2" for="username">Commentaires</label>
-			      <div class="col-sm-10">
-			      	<textarea class="form-control" rows="5" name="message" placeholder="Commentaires"></textarea>
-			      	<p class="hint" id="hint-username"></p>
-			      </div>
-			    </div>
-
-				<button class="btn-default btn center-block" name="action" value="addExtra">Ajouter</button>
-				
+						<button class="btn-default btn center-block" name="action" value="addExtra">Ajouter</button>
+					</div>
+				</div>
 			  </form>
 		</div>
 	</div>
