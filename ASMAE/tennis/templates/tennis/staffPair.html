@@ -124,7 +124,7 @@ pagination(pairList);
 function search_pair() {
      var retour = document.getElementById("search_value").value.toLocaleUpperCase();
      var validation_selector = document.getElementById("validation_selector");
-     var validation_choice = validation_selector.options[validation_selector.selectedIndex].value;
+     var validation_choice = validation_selector.options[validation_selector.selectedIndex].value.toLocaleUpperCase();
      var payment_selector = document.getElementById("payment_selector");
      var payment_choice = payment_selector.options[payment_selector.selectedIndex].value;
      var tournament_selector = document.getElementById("tournament_selector");
@@ -144,7 +144,7 @@ function search_pair() {
          var prenom1 = myPair[7];
          var prenom2 = myPair[8];
          var tournoi = myPair[9];
-         if (! (pairID.toLocaleUpperCase().indexOf(retour) != -1 || username1.toLocaleUpperCase().indexOf(retour) != -1 || username2.toLocaleUpperCase().indexOf(retour) != -1 || nom1.toLocaleUpperCase().indexOf(retour) != -1 || nom2.toLocaleUpperCase().indexOf(retour) != -1 || prenom1.toLocaleUpperCase().indexOf(retour) != -1 || prenom2.toLocaleUpperCase().indexOf(retour) != -1 ) || validationStatus.indexOf(validation_choice) == -1 || paymentStatus.indexOf(payment_choice) == -1 || tournoi.toLocaleUpperCase().indexOf(tournament_choice) == -1 ) {
+         if (! (pairID.toLocaleUpperCase().indexOf(retour) != -1 || username1.toLocaleUpperCase().indexOf(retour) != -1 || username2.toLocaleUpperCase().indexOf(retour) != -1 || nom1.toLocaleUpperCase().indexOf(retour) != -1 || nom2.toLocaleUpperCase().indexOf(retour) != -1 || prenom1.toLocaleUpperCase().indexOf(retour) != -1 || prenom2.toLocaleUpperCase().indexOf(retour) != -1 ) || validationStatus.toLocaleUpperCase().indexOf(validation_choice) == -1 || paymentStatus.indexOf(payment_choice) == -1 || tournoi.toLocaleUpperCase().indexOf(tournament_choice) == -1 ) {
               resultList.splice(i,1);
          }
      }

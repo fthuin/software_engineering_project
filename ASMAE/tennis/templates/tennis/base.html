@@ -86,11 +86,11 @@
                     {% if perms.tennis.Extra %}
                   <li><a href="{% url "tennis.views.staffExtra" %}">Extras</a></li>
                     {% endif %}
-                    {% if perms.auth.User %}
+                    {% if perms.tennis.User %}
                   <li><a href="{% url "tennis.views.staffUser" %}">Utilisateurs</a></li>
                     {% endif %}
                     <!-- TODO permission droit -->
-                 {% if perms.auth.Droit %}<li><a href="{% url "tennis.views.staffPerm" %}">Permissions</a></li>
+                 {% if perms.tennis.Droit %}<li><a href="{% url "tennis.views.staffPerm" %}">Permissions</a></li>
                 </ul>{% endif %}
               </li>
 
