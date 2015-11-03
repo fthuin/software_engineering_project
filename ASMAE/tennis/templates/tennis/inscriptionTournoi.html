@@ -193,6 +193,9 @@ function search_user() {
     }
     pagination(resultList);
 }
+$('#user_search_value').on('input', function() { 
+    search_user();
+});
 </script>
 {% endblock %}
 

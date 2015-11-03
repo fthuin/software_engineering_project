@@ -90,5 +90,9 @@ function search_user() {
     }
     pagination(resultList);
 }
+
+$('#search_value').on('input', function() { 
+    search_user();
+});
 </script>
 {% endblock %}
