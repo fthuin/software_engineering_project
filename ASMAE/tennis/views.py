@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi, Pair
+from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament
 import re, math
 import json
@@ -408,33 +408,32 @@ def staffTournoi(request):
             tournamentJSON = request.GET.get('groups')
             tournament_dict = json.loads(tournamentJSON)
             # **** groups_dict = tournament_dict['groups']
-            groups_dict = tournament['groups']
-            for group_dict in tournament_groups_dict:
+            groups_dict = tournament_dict['groups']
+            for group_dict in groups_dict:
                 # creation du groupe
-                group = Group()
                 # insertion du gsize
-                group.gsize = group_dict['gsize']
+                group_gsize = group_dict['gsize']
+                
+                # insertion du leader
+                group_leader_dict = group_dict['leader']
+                group_leader_id = group_leader_dict[0]
+                #group_leader = Pair.objects.get(id=group_leader_id)
+                
+                # insertion du court
+                group_court_id = group_dict['court']
+                # insertion du tournoi
+                group_tournoi_nom = tournament_dict['tournoi']
+                group = Groupe(tournoi=Tournoi.objects.get(nom=group_tournoi_nom), leader=Pair.objects.get(id=group_leader_id), court=Court.objects.get(id=group_court_id), gsize=group_gsize)
+                group.save()
                 # insertion des pairs
                 # find pairs with given id
                 group_pairs_dict = group_dict['pairs']
                 for group_pair_dict in group_pairs_dict:
-                    group_pair_id = tournament_group_pair['id']
+                    group_pair_id = group_pair_dict[0]
                     group_pair = Pair.objects.get(id=group_pair_id)
-                    group.add(pairs=group_pair)
-                # insertion du leader
-                group_leader_dict = tournament_group['leader']
-                group_leader_id = group_leader['id']
-                group_leader = Pair.objects.get(id=group_leader_id)
-                group.add(leader=group_leader)
-                # insertion du court
-                group_court_id = tournament_group['court']
-                group_court = Court.objects.get(id=group_court_id)
-                group.add(court=group_court)
-                # insertion du tournoi
-                # **** group_tournoi_nom = tournament_dict['tournoi']
-                # **** group_tournoi = Tournoi.objects.get(nom=group_tournoi_nom)
-                # **** group.add(tournoi=group_tournoi)
-                # **** group.save()
+                    group_pair.group = group
+                    group_pair.save()
+                
     if request.user.is_authenticated():
         if request.user.is_staff: #TODO
             allTournois = Tournoi.objects.all()

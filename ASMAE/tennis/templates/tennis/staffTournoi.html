@@ -103,7 +103,7 @@ text-align:left;
     <h4>Groupes du tournoi</h4>
     <hr class="line">
     <div class="group-box" id="liste_groupes"></div>
-    <button id="register" style="float:right" class="btn btn-default">Enregistrer les groupes (TO DO)</button>
+    <button id="register" style="float:right" class="btn btn-default">Enregistrer les groupes</button>
 </div>
 {% endblock %}
 
@@ -114,7 +114,6 @@ text-align:left;
          * listeners sont mis plus bas                                        *
          **********************************************************************/
         var tournament;
-
         var selected_item = 0;
         
         //Recuperation des tournois et stockage dans un tableau
@@ -168,7 +167,7 @@ text-align:left;
                 {% for court in allCourts %}
                     courtList.push('{{ court.id }}');
                 {% endfor %}
-                tournament = new Tournament(pairList, courtList);
+                tournament = new Tournament(document.getElementById("tournois").value, pairList, courtList);
 
                 // display group module
                 var gestionGroupModule = document.getElementById("gestionGroup");
