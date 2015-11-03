@@ -19,7 +19,58 @@
 		    </div>
 		</div>
 	</div>
+	<!-- Paramètres de recherche avancée -->
+	<form action="" class="form-horizontal">
+		<div class="panel panel-default center-block" style="max-width:300px;">
+		    <div class="panel-heading">Critères d'affichage</div>
+		    <div class="list-group">
+			    <li class="list-group-item">
+				    <div class="row">
+					    <label class="control-label col-sm-4">Validation</label>
+					    <div class="col-sm-8">
+						    <select id="validation_selector" class="form-control">
+						        <option value="" selected>Tous</option>
+						        <option value="oui">Valide</option>
+						        <option value="non">Non validé</option>
+						    </select>
+						</div>
+					</div>
+			    </li>
 
+			    <li class="list-group-item">
+				    <div class="row">
+					    <label class="control-label col-sm-4">Disponibilité</label>
+					    <div class="col-sm-8">
+						    <select id="availability_selector" class="form-control">
+						        <option value="" selected>Tous</option>
+						        <option value="saturday">Samedi</option>
+						        <option value="sunday">Dimanche</option>
+						        <option value="saturday_sunday">Samedi et dimanche</option>
+						    </select>
+						</div>
+					</div>
+			    </li>
+
+			    <li class="list-group-item">
+				    <div class="row">
+					    <label class="control-label col-sm-4">Matière</label>
+					    <div class="col-sm-8">
+						    <select id="material_selector" class="form-control">
+						        <option value="" selected>Tous</option>
+							  	<option value="beton">Béton</option>
+								<option value="brique">Brique</option>
+							  	<option value="gazon">Gazon</option>
+								<option value="synth">Synthétique</option>
+							   	<option value="terre">Terre battue</option>
+								<option value="quick">Quick</option>
+							   	<option value="autre">Autre</option>
+						    </select>
+						</div>
+					</div>
+			    </li>
+		    </div>
+		</div>
+	</form>
 	<!-- Liste des terrains -->
 	<div class="panel panel-default center-block" style="max-width:600px;">
 		<div class="panel-heading">Terrains</div>
@@ -73,22 +124,38 @@ courtList.push(['{{ court.user.username }}','{{ court.user.participant.prenom }}
 
 pagination(courtList);
 
+//username,prenom,nom courtID, matiere, rue, numero, codepostal, localite, boite, courtValide(oui,non), courtDispo (Samedi et dimanche, Samedi, Dimanche,  - )
+
 function search_court() {
     var retour = document.getElementById("search_value").value.toLocaleUpperCase();
+    var validation_selector = document.getElementById("validation_selector");
+    var validation_choice = validation_selector.options[validation_selector.selectedIndex].value.toLocaleUpperCase();
+    var availability_selector = document.getElementById("availability_selector");
+    var availability_choice = availability_selector.options[availability_selector.selectedIndex].text.toLocaleUpperCase();
+    var material_selector = document.getElementById("material_selector");
+    var material_choice = material_selector.options[material_selector.selectedIndex].text.toLocaleUpperCase();
+    if (material_choice.indexOf("Tous".toLocaleUpperCase()) != -1) {
+    	material_choice = "";
+    }
+    if (availability_choice.indexOf("Tous".toLocaleUpperCase()) != -1) {
+    	availability_choice = "";
+    }
     // Copie du tableau pour garder l'original
     var resultList = courtList.slice();
     var nbr = resultList.length;
     for (var i = nbr-1 ; i >= 0 ; i--) {
          var myCourt = resultList[i];
-         var username = myCourt[0];
-         var prenom = myCourt[1];
-         var nom = myCourt[2];
-         var id = myCourt[3];
-         var matiere = myCourt[4];
-         var rue = myCourt[5];
-         var codepostal = myCourt[7];
-         var localite = myCourt[8];
-         if (! (username.toLocaleUpperCase().indexOf(retour) != -1 || prenom.toLocaleUpperCase().indexOf(retour) != -1 || nom.toLocaleUpperCase().indexOf(retour) != -1 || id.toLocaleUpperCase().indexOf(retour) != -1 || matiere.toLocaleUpperCase().indexOf(retour) != -1 || rue.toLocaleUpperCase().indexOf(retour) != -1 || codepostal.toLocaleUpperCase().indexOf(retour) != -1 || localite.toLocaleUpperCase().indexOf(retour) != -1 )) {
+         var username = myCourt[0].toLocaleUpperCase();
+         var prenom = myCourt[1].toLocaleUpperCase();
+         var nom = myCourt[2].toLocaleUpperCase();
+         var id = myCourt[3].toLocaleUpperCase();
+         var matiere = myCourt[4].toLocaleUpperCase();
+         var rue = myCourt[5].toLocaleUpperCase();
+         var codepostal = myCourt[7].toLocaleUpperCase();
+         var localite = myCourt[8].toLocaleUpperCase();
+         var validationStatus = myCourt[10].toLocaleUpperCase();
+         var availabilityStatus = myCourt[11].toLocaleUpperCase();
+         if (! (username.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1 || id.indexOf(retour) != -1 || rue.indexOf(retour) != -1 || codepostal.indexOf(retour) != -1 || localite.indexOf(retour) != -1 ) || matiere.indexOf(material_choice) == -1 || validationStatus.indexOf(validation_choice) == -1 || availabilityStatus.indexOf(availability_choice) == -1) {
             resultList.splice(i, 1);
          }
     }

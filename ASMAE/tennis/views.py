@@ -5,9 +5,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi, Pair
+from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament
 import re, math
+import json
 import datetime
 from itertools import chain
 from django.contrib.auth.decorators import permission_required
@@ -397,6 +398,41 @@ def staffTournoi(request):
 		if request.POST['action'] == "sendTournamentDataByMail":
 				send_email_start_tournament() #TODO to change and link to a tournament
 				successSend = "Les mails ont bien été envoyé"
+	if request.method == "GET":
+		if request.GET.get('action') == 'enregistrer':
+			# tous les commentaires avec ****
+			# indiquent ce qui doit y avoir
+			# apres avoir mis le nom du tournoi dans le json
+			# **** tournamentJSON = request.GET.get('tournament')
+			tournamentJSON = request.GET.get('groups')
+			tournament_dict = json.loads(tournamentJSON)
+			# **** groups_dict = tournament_dict['groups']
+			groups_dict = tournament_dict['groups']
+			for group_dict in groups_dict:
+				# creation du groupe
+				# insertion du gsize
+				group_gsize = group_dict['gsize']
+				
+				# insertion du leader
+				group_leader_dict = group_dict['leader']
+				group_leader_id = group_leader_dict[0]
+				#group_leader = Pair.objects.get(id=group_leader_id)
+				
+				# insertion du court
+				group_court_id = group_dict['court']
+				# insertion du tournoi
+				group_tournoi_nom = tournament_dict['tournoi']
+				group = Groupe(tournoi=Tournoi.objects.get(nom=group_tournoi_nom), leader=Pair.objects.get(id=group_leader_id), court=Court.objects.get(id=group_court_id), gsize=group_gsize)
+				group.save()
+				# insertion des pairs
+				# find pairs with given id
+				group_pairs_dict = group_dict['pairs']
+				for group_pair_dict in group_pairs_dict:
+					group_pair_id = group_pair_dict[0]
+					group_pair = Pair.objects.get(id=group_pair_id)
+					group_pair.group = group
+					group_pair.save()
+				
 	if request.user.is_authenticated():
 	
 		allTournois = Tournoi.objects.all()
@@ -481,87 +517,87 @@ def staffExtra(request):
 @permission_required('tennis.Droit')
 #TODO permission droit
 def staffPerm(request):
-    
-    if request.method == "POST":
-        
-        usernamefield = request.POST['username']
-        utilisateur = User.objects.filter(username=usernamefield)[0]
-        if request.POST.__contains__("Tournoi des familles"):
-            perm = Permission.objects.filter(codename="TournoiDesFamilles")[0]
-            utilisateur.user_permissions.add(perm)
-        else:
-            perm = Permission.objects.filter(codename="TournoiDesFamilles")[0]
-            utilisateur.user_permissions.remove(perm)
+	
+	if request.method == "POST":
+		
+		usernamefield = request.POST['username']
+		utilisateur = User.objects.filter(username=usernamefield)[0]
+		if request.POST.__contains__("Tournoi des familles"):
+			perm = Permission.objects.filter(codename="TournoiDesFamilles")[0]
+			utilisateur.user_permissions.add(perm)
+		else:
+			perm = Permission.objects.filter(codename="TournoiDesFamilles")[0]
+			utilisateur.user_permissions.remove(perm)
 
-        if request.POST.__contains__("Double mixte"):
-            perm = Permission.objects.filter(codename="DoubleMixte")[0]
-            utilisateur.user_permissions.add(perm)
-        else:
-            perm = Permission.objects.filter(codename="DoubleMixte")[0]
-            utilisateur.user_permissions.remove(perm)
+		if request.POST.__contains__("Double mixte"):
+			perm = Permission.objects.filter(codename="DoubleMixte")[0]
+			utilisateur.user_permissions.add(perm)
+		else:
+			perm = Permission.objects.filter(codename="DoubleMixte")[0]
+			utilisateur.user_permissions.remove(perm)
 
-        if request.POST.__contains__("Double hommes"):
-            perm = Permission.objects.filter(codename="DoubleHommes")[0]
-            utilisateur.user_permissions.add(perm)
-        else:
-            perm = Permission.objects.filter(codename="DoubleHommes")[0]
-            utilisateur.user_permissions.remove(perm)
+		if request.POST.__contains__("Double hommes"):
+			perm = Permission.objects.filter(codename="DoubleHommes")[0]
+			utilisateur.user_permissions.add(perm)
+		else:
+			perm = Permission.objects.filter(codename="DoubleHommes")[0]
+			utilisateur.user_permissions.remove(perm)
 
-        if request.POST.__contains__("Double femmes"):
-            perm = Permission.objects.filter(codename="DoubleFemmes")[0]
-            utilisateur.user_permissions.add(perm)
-        else:
-            perm = Permission.objects.filter(codename="DoubleFemmes")[0]
-            utilisateur.user_permissions.remove(perm)
+		if request.POST.__contains__("Double femmes"):
+			perm = Permission.objects.filter(codename="DoubleFemmes")[0]
+			utilisateur.user_permissions.add(perm)
+		else:
+			perm = Permission.objects.filter(codename="DoubleFemmes")[0]
+			utilisateur.user_permissions.remove(perm)
 
-        if request.POST.__contains__("court"):
-            perm = Permission.objects.filter(codename="Court")[0]
-            utilisateur.user_permissions.add(perm)
-        else:
-            perm = Permission.objects.filter(codename="Court")[0]
-            utilisateur.user_permissions.remove(perm)
+		if request.POST.__contains__("court"):
+			perm = Permission.objects.filter(codename="Court")[0]
+			utilisateur.user_permissions.add(perm)
+		else:
+			perm = Permission.objects.filter(codename="Court")[0]
+			utilisateur.user_permissions.remove(perm)
 
-        if request.POST.__contains__("pair"):
-            perm = Permission.objects.filter(codename="Pair")[0]
-            utilisateur.user_permissions.add(perm)
-        else:
-            perm = Permission.objects.filter(codename="Pair")[0]
-            utilisateur.user_permissions.remove(perm)
+		if request.POST.__contains__("pair"):
+			perm = Permission.objects.filter(codename="Pair")[0]
+			utilisateur.user_permissions.add(perm)
+		else:
+			perm = Permission.objects.filter(codename="Pair")[0]
+			utilisateur.user_permissions.remove(perm)
 
-        if request.POST.__contains__("extra"):
-            perm = Permission.objects.filter(codename="Extra")[0]
-            utilisateur.user_permissions.add(perm)
-        else:
-            perm = Permission.objects.filter(codename="Extra")[0]
-            utilisateur.user_permissions.remove(perm)
+		if request.POST.__contains__("extra"):
+			perm = Permission.objects.filter(codename="Extra")[0]
+			utilisateur.user_permissions.add(perm)
+		else:
+			perm = Permission.objects.filter(codename="Extra")[0]
+			utilisateur.user_permissions.remove(perm)
 
-        if request.POST.__contains__("user"):
-            perm = Permission.objects.filter(codename="User")[0]
-            utilisateur.user_permissions.add(perm)
-        else:
-            perm = Permission.objects.filter(codename="User")[0]
-            utilisateur.user_permissions.remove(perm)
+		if request.POST.__contains__("user"):
+			perm = Permission.objects.filter(codename="User")[0]
+			utilisateur.user_permissions.add(perm)
+		else:
+			perm = Permission.objects.filter(codename="User")[0]
+			utilisateur.user_permissions.remove(perm)
 
-        if request.POST.__contains__("perm"):
-            group = Group.objects.filter(name="Admin")[0]
-            utilisateur.groups.add(group)
-        else:
-            group = Group.objects.filter(name="Admin")[0]
-            utilisateur.groups.remove(group)
-       
-        
-	    
+		if request.POST.__contains__("perm"):
+			group = Group.objects.filter(name="Admin")[0]
+			utilisateur.groups.add(group)
+		else:
+			group = Group.objects.filter(name="Admin")[0]
+			utilisateur.groups.remove(group)
+	   
+		
+		
 
-    Use = User.objects.all().order_by('username')
-    tournoiAll = Tournoi.objects.all()
-    
-    for u in Use:
-	    bd = u.participant.datenaissance
-	    fb = bd.strftime('%d/%m/%Y')
-	    u.fb = fb
-    if request.user.is_authenticated():
+	Use = User.objects.all().order_by('username')
+	tournoiAll = Tournoi.objects.all()
+	
+	for u in Use:
+		bd = u.participant.datenaissance
+		fb = bd.strftime('%d/%m/%Y')
+		u.fb = fb
+	if request.user.is_authenticated():
 		return render(request,'tennis/staffPerm.html',locals())
-    return redirect(reverse(home))
+	return redirect(reverse(home))
 
 @permission_required('tennis.User')
 def staffUser(request):
@@ -959,4 +995,5 @@ def is_number(s):
 		return True
 	except ValueError:
 		return False
+
 

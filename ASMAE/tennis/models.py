@@ -44,7 +44,6 @@ class Extra(models.Model):
 		permissions = (
 			("Extra", "Manage Extra"),
 		)
-	
 
 class Court(models.Model):
 	id = models.AutoField(primary_key=True)
@@ -86,21 +85,21 @@ class Tournoi(models.Model):
 			("DoubleFemmes", "Manage double femmes"),
 			("DoubleMixte", "Manage double mixte"),
 		)
-		
-class Group(models.Model):
+
+class Groupe(models.Model):
 	id = models.AutoField(primary_key=True)
-	tournoi = models.ForeignKey(Tournoi)
-	leader = models.ForeignKey(User)
-	court = models.OneToOneField(Court)
-	def _str_(self):
+	tournoi = models.ForeignKey(Tournoi, default=None)
+	leader = models.ForeignKey('Pair', default=None) #TO CHANGE: ca doit etre un USER et pas une PAIR
+	court = models.ForeignKey(Court, default=None) #TO CHANGE: OneToOneField
+	gsize = models.IntegerField(null=True)
+
+	def __str__(self):
 		return "Groupe n " + str(self.id)
 
-	
-		
 class Pair(models.Model):
 	id = models.AutoField(primary_key=True)
 	tournoi = models.ForeignKey(Tournoi)
-	group = models.ForeignKey(Group, null=True, default=None)
+	group = models.ForeignKey(Groupe, null=True, default=None)
 	user1 = models.ForeignKey(User, related_name='user1')
 	user2 = models.ForeignKey(User, related_name='user2')
 	extra1 = models.ManyToManyField(Extra, related_name='extra1')
@@ -110,11 +109,11 @@ class Pair(models.Model):
 	confirm = models.BooleanField(default=False)
 	valid = models.BooleanField(default=False)
 	pay = models.BooleanField(default=False)
-	
+
 	def __str__(self):
 		return str(self.id) +" "+ self.tournoi.nom+" : "+self.user1.username+" et "+self.user2.username
 
 	class Meta:
 		permissions = (
 			("Pair", "Manage Pair"),
-		)
+	)
