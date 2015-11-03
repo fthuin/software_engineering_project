@@ -258,7 +258,8 @@ textarea {
 
 /* Panel */
 .panel-body{
-    background-color: rgba(238, 231, 203, 1);
+    /*background-color: rgba(238, 231, 203, 1);*/
+    /*background-color: #FBF9F1;*/
 }
 
 .panel-heading{
@@ -316,13 +317,15 @@ a.UserLink:focus,{
 
 /* List group */
 .list-group-item{
-    background-color: rgba(238, 231, 203, 1) !important;
     border-color: #D4542D !important;
+    /*background-color: rgba(238, 231, 203, 1);*/
+    /*background-color: #E1886C !important;*/
 }
 
 .list-group-item.active{
-    color:#D4542D !important;
-    font-weight: bold;;
+    color:#852000 !important;
+    font-weight: bold;
+    background-color: white !important;
 }
 
 /* Navtabs in staff */
