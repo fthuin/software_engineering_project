@@ -348,6 +348,7 @@ text-align:left;
 
             // graphic code for uninserted pairs
             var uninserted_pairs = tournament.uninserted_pairs;
+            if(uninserted_pairs.length!=0) {
             var group_display = document.createElement("table");
             group_display.className="table table-hover table-responsive panel panel-default";
             var group_name = document.createElement("th");
@@ -391,6 +392,7 @@ text-align:left;
                     }
                 }, false);
                 numRows++;
+            }
             }
             container.appendChild(group_display);
             document.getElementById("geneGroup").style.visibility = "visible";

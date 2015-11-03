@@ -68,7 +68,7 @@ class Groupe(models.Model):
     id = models.AutoField(primary_key=True)
     tournoi = models.ForeignKey(Tournoi, default=None)
     leader = models.ForeignKey('Pair', default=None) #TO CHANGE: ca doit etre un USER et pas une PAIR
-    court = models.OneToOneField(Court, default=None)    
+    court = models.ForeignKey(Court, default=None) #TO CHANGE: OneToOneField
     gsize = models.IntegerField(null=True)
 
     def __str__(self):
