@@ -255,6 +255,17 @@ hr.line {
 textarea {
   resize: vertical; /* user can resize vertically, but width is fixed */
 }
+/*MODAL*/
+.modal-header{
+    background-color: #D4542D;
+    border-radius: 5px 5px 0 0;
+    color:white;
+}
+
+.modal-body{
+    background-color: rgba(238, 231, 203, 1);
+    border-radius: 0 0  5px 5px;
+}
 
 /* Panel */
 .panel-body{

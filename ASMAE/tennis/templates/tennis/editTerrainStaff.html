@@ -147,12 +147,40 @@
 					<button class="btn-default btn" name="action" value="modifyCourt">Editer</button>
 				</li>
 				<li>
-					<button class="btn-default btn" name="action" value="deleteCourt">Supprimer</button>
+					<button class="btn-default btn" type="button" data-toggle="modal" data-target="#myModal">Supprimer</button>
+					<button class="btn-default btn" style="display:none" id="deleteCourt" name="action" value="deleteCourt">Supprimer</button>
 				</li>
 			</ul>
 		</form>
 	</div>
 </div>
+
+<!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title center">Confirmation de suppression</h4>
+        </div>
+        <div class="modal-body">
+          <p>Etes-vous sûr de vouloir supprimer ce terrain?</p>
+        
+	    	<ul class="list-inline text-center">
+				<li>
+					<button type="button" class="btn btn-default" onclick="document.getElementById('deleteCourt').click();">oui</button>
+				</li>
+				<li>
+					<button type="button" class="btn btn-default" data-dismiss="modal">non</button>
+				</li>
+			</ul>
+		</div>
+      </div>
+      
+    </div>
+  </div>
 
 
 {% endblock %}

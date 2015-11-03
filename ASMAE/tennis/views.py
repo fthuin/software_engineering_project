@@ -761,6 +761,7 @@ def validatePair(request, id):
 	return redirect(reverse(home))
 
 def profil(request):
+	yearLoop = range(1900,2015)
 	birthdate = request.user.participant.datenaissance
 	formatedBirthdate = birthdate.strftime('%d/%m/%Y')
 	if request.method == "POST":
@@ -823,6 +824,7 @@ def profil(request):
 			birthdate2 = birthdate.split("/")
 			datenaissance = datetime.datetime(int(birthdate2[2]),int(birthdate2[1]),int(birthdate2[0]))
 
+			formatedBirthdate = birthdate 
 			participant = request.user.participant
 			participant.titre = title
 			participant.nom = lastname
@@ -839,13 +841,7 @@ def profil(request):
 			participant.classement = classement
 			participant.oldparticipant = oldparticipant
 			participant.save()
-
-
-
 			successEdit = "Le profil a bien été changé"
-
-
-
 			return render(request,'tennis/profil.html',locals())
 
 	if request.user.is_authenticated():
@@ -905,6 +901,7 @@ def email_present(email):
 	return False
 
 def register(request):
+	yearLoop = range(1900,2015)
 	if request.method == "POST":
 		#Recuperation des donnees
 		username = request.POST['username']
