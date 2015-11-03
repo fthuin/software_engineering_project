@@ -161,5 +161,17 @@ function search_court() {
     }
     pagination(resultList);
 }
+$('#search_value').on('input', function() { 
+    search_court();
+});
+$('#validation_selector').on('input', function() { 
+    search_court();
+});
+$('#availability_selector').on('input', function() { 
+    search_court();
+});
+$('#material_selector').on('input', function() { 
+    search_court();
+});
 </script>
 {% endblock %}
