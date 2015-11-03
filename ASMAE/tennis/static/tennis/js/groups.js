@@ -4,8 +4,10 @@
 /*******************  
 * Tournament class *
 *******************/
-function Tournament(pairs, courts, groups) {    
+function Tournament(tournoi, pairs, courts, groups) {    
     // pairs
+    this.tournoi = tournoi;
+    
     if (pairs == undefined)
         this.pairs = [];
     else
