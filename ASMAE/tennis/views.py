@@ -388,7 +388,7 @@ def editTerrain(request,id):
 	return redirect(reverse(home))
 
 def staff(request):
-	if request.user.is_authenticated():#TODO
+	if request.user.is_authenticated():
 		return render(request,'tennis/staff.html',locals())
 	return redirect(reverse(home))
 
