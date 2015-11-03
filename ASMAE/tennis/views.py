@@ -420,9 +420,12 @@ def staffTournoi(request):
 				
 				# insertion du court
 				group_court_id = group_dict['court']
+				group_court = Court.objects.get(id=group_court_id)
+				group_court.attribue = True
+				group_court.save()
 				# insertion du tournoi
 				group_tournoi_nom = tournament_dict['tournoi']
-				group = Groupe(tournoi=Tournoi.objects.get(nom=group_tournoi_nom), leader=Pair.objects.get(id=group_leader_id), court=Court.objects.get(id=group_court_id), gsize=group_gsize)
+				group = Groupe(tournoi=Tournoi.objects.get(nom=group_tournoi_nom), leader=Pair.objects.get(id=group_leader_id), court=group_court, gsize=group_gsize)
 				group.save()
 				# insertion des pairs
 				# find pairs with given id
@@ -437,7 +440,7 @@ def staffTournoi(request):
 	
 		allTournois = Tournoi.objects.all()
 		allPairs = Pair.objects.all()
-		allCourts = Court.objects.all()
+		allCourts = Court.objects.filter(attribue=False)
 		return render(request,'tennis/staffTournoi.html',locals())
 	return redirect(reverse(home))
 
