@@ -39,23 +39,18 @@ text-align:left;
 <div class="content-box" id="gestionTournoi">
     <h2 class="center">Gestionnaire des tournois</h2>
     <hr class="line">
-    
+    <div class="alert alert-danger" id="errorModule" style="display:none">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Error!</strong> <span id="errorMsg">{{ errorAdd }}</span>
+    </div>
+    <div class="alert alert-success" id="successModule" style="display:none">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Succès!</strong> <span id="successMsg">{{ successSend }}</span>
+    </div>
     <div class="panel panel-default center-block" style="max-width:90%;">
         <div class="panel-heading">Tournois</div>
         <div class="list-group" id="ListTournoi"></div>
     </div>
-    
-    {% if errorAdd %}
-    <div class="alert alert-danger">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Error!</strong> {{ errorAdd }}
-    </div>
-    {% elif successSend %}
-    <div class="alert alert-success">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <strong>Succès!</strong> {{ successSend }}
-    </div>
-    {% endif %}
     <form name="sendTournamentDataByMail" id="sendTournamentDataByMail" role="form" method="post" action="{% url "tennis.views.staff" %}">
         {% csrf_token %}
         <input type="text" class="form-control" name="id" id="sendTournamentDataByMailID" value="{{ Ex.0.id }}" style="display:none;">
@@ -79,7 +74,7 @@ text-align:left;
     </div>
 </div>
 
-<div class="content-box" id="gestionGroup" style="visibility:hidden">
+<div class="content-box" id="gestionGroup" style="display:none">
        <h4>Configuration des groupes</h4>
        <hr class="line">
        <div class="form-horizontal">
@@ -98,7 +93,7 @@ text-align:left;
     </div>
 </div>
 
-<div class="content-box" id="geneGroup" style="visibility:hidden">
+<div class="content-box" id="geneGroup" style="display:none">
     <div id="group-box">
     <h4>Groupes du tournoi</h4>
     <hr class="line">
@@ -109,6 +104,19 @@ text-align:left;
 
     {% block commande %}
     <script>
+
+    {% if errorAdd %}
+
+    var errorModule = document.getElementById("errorModule");
+    errorModule.style.display = "block";
+
+    {% elif successSend %}
+
+    var successModule = document.getElementById("successModule");
+    successModule.style.display = "block";
+
+    {% endif %}
+
         /**********************************************************************
          * Ensemble de variables et fonction pour le swap. Attention, les     *
          * listeners sont mis plus bas                                        *
@@ -171,7 +179,7 @@ text-align:left;
 
                 // display group module
                 var gestionGroupModule = document.getElementById("gestionGroup");
-                gestionGroupModule.style.visibility = "visible";
+                gestionGroupModule.style.display = "block";
                 adapt_tournament_groups();
             }
             // ignore if same tournament selected
@@ -207,7 +215,14 @@ text-align:left;
         
         document.getElementById("register").addEventListener('click', function() {
             if(tournament.uninserted_pairs.length != 0) {
-                alert("Des paires n'ont pas de groupe(s) d'attribué(s)");
+                var errorMessage = "Des paires n'ont pas de groupe(s) d'attribué(s)";
+                var errorMsgSpan = document.getElementById("errorMsg");
+                errorMsgSpan.innerHTML = errorMessage
+                var errorModule = document.getElementById("errorModule");
+                errorModule.style.display = "block";
+                $('html, body').animate({
+                    scrollTop: $("#errorModule").offset().top
+                }, 'slow');
                 return;
             }
             var list = tournament.groups;
@@ -218,15 +233,23 @@ text-align:left;
                 }
                 
                 if(list[i].court == undefined) {
-                    alert("Des groupes n'ont pas de terrain d'attribué");
+                    // afficher erreur
+                    var errorMessage = "Des groupes n'ont pas de terrain d'attribué";
+                    var errorMsgSpan = document.getElementById("errorMsg");
+                    errorMsgSpan.innerHTML = errorMessage;
+                    var errorModule = document.getElementById("errorModule");
+                    errorModule.style.display = "block";
+                    $('html, body').animate({
+                        scrollTop: $("#errorModule").offset().top
+                    }, 'slow');
                     return;
                 }
             }
             tournament.groups = new_list;
-            var test = JSON.stringify(tournament);
+            var tournamentJSON = JSON.stringify(tournament);
             $.ajax({
                 url: '',
-                data: { 'action':'enregistrer', 'groups':test},
+                data: { 'action':'enregistrer', 'tournament':tournamentJSON},
                 type: 'get',
                 cache: false,
                 success: function (data) {
@@ -284,15 +307,35 @@ text-align:left;
             for (var index = 0; index < list.length; index++) {
                 var group_display = document.createElement("table");
                 group_display.className="table table-hover table-responsive panel panel-default";
+                group_display.style.tableLayout = "fixed";
+                group_display.setAttribute("id_group", index);
+                var group_name_head = document.createElement("thead");
                 var group_name = document.createElement("th");
                 group_name.colSpan = 2;
-                group_name.className="panel panel-heading";
+                group_name.className="panel panel-heading clickable";
+                group_name.setAttribute("id_group", index);
                 group_name.innerHTML = "Groupe n° " + (index+1);
-                group_display.appendChild(group_name);
+                group_name_head.appendChild(group_name);
+                group_display.appendChild(group_name_head);
+                var group_display_body = document.createElement("tbody");
+                group_display.appendChild(group_display_body);
                 var numRows = group_display.rows.length;
+
+                $("thead > th", group_display).click(function() {
+                    var group_id = this.getAttribute("id_group");
+                    var table_tbody = this.parentNode.parentNode.childNodes[1];
+                    var display_value = table_tbody.style.display;
+                    if (display_value === "none") {
+                        table_tbody.style.display = "table-row-group";
+                        var tbody_child_nodes = table_tbody.childNodes;
+                    }
+                    else {
+                        table_tbody.style.display = "none";
+                    }
+                });
                 // insert an entry for each group index
                 for (var j = 0; j < list[index].gsize; j++) {
-                    var pair_row = group_display.insertRow(-1); // -1 appends at the end of the table
+                    var pair_row = group_display_body.insertRow(-1);
                     pair_row.setAttribute("id_group", index.toString());
                     pair_row.setAttribute("index_group", j.toString());
                     // insert pair info if there is a pair in the given index of the group
@@ -341,7 +384,7 @@ text-align:left;
                     }
                 }
                     
-                var court_row = group_display.insertRow(-1); //-1 appends at the end of the table
+                var court_row = group_display_body.insertRow(-1); //-1 appends at the end of the table
                 court_row.insertCell(0).innerHTML = "<b>Terrain n°</b>";
                 if (list[index].court != undefined) 
                     court_row.insertCell(1).innerHTML = list[index].court;
@@ -400,7 +443,7 @@ text-align:left;
             }
             }
             container.appendChild(group_display);
-            document.getElementById("geneGroup").style.visibility = "visible";
+            document.getElementById("geneGroup").style.display = "block";
         };
 
     </script>
