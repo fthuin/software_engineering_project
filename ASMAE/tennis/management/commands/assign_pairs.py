@@ -49,15 +49,21 @@ class Command(BaseCommand):
         for pair in self.Pairs:
             username1 = pair.user1.username
             username2 = pair.user2.username
+            toRemove = []
+            
             for participant in alone_participants:
                 user = participant.user
                 if username1 == user.username:
-                    alone_participants.remove(participant)
+                    toRemove.append(participant)
+                    print("username1 was " + username1)
                 if username2 == user.username:
-                    alone_participants.remove(participant)
+                    toRemove.append(participant)
+                    print("username2 was " + username2)
+            for e in toRemove:
+                alone_participants.remove(e)
         i = 0
         while i < len(alone_participants) - 2:
-            participant1=alone_participants[i]
+            participant1=alone_participants[i] 
             participant2=alone_participants[i+1]
             tournoi = getRandomElementFromList(allowedTournaments(participant1, participant2))
             for tour in self.Tournois:
