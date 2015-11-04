@@ -9,14 +9,14 @@ class Participant(models.Model):
 	prenom = models.CharField(max_length=30, verbose_name="Prénom")
 	rue = models.CharField(max_length=100)
 	numero = models.CharField(max_length=10, verbose_name="Numéro")
-	boite = models.CharField(max_length=10,null=True)
+	boite = models.CharField(max_length=10,null=True, blank=True)
 	codepostal = models.CharField(max_length=10, verbose_name="Code postal")
 	localite = models.CharField(max_length=30, verbose_name="Localité")
-	telephone = models.CharField(max_length=30,null=True, verbose_name="Téléphone")
-	fax = models.CharField(max_length=30,null=True)
+	telephone = models.CharField(max_length=30,null=True, blank=True, verbose_name="Téléphone")
+	fax = models.CharField(max_length=30,null=True, blank=True)
 	gsm = models.CharField(max_length=30,null=True)
 	datenaissance = models.DateTimeField(null=True, verbose_name="Date de naissance")
-	classement = models.CharField(max_length=10,null=True)
+	classement = models.CharField(max_length=10,null=True, blank=True)
 	oldparticipant = models.BooleanField(default=False)
 	isGroupLeader = models.BooleanField(default=False)
 
@@ -54,6 +54,18 @@ class Extra(models.Model):
 			("Extra", "Manage Extra"),
 		)
 
+class CourtSurface(models.Model):
+    nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
+    
+    def __str__(self):
+        return self.nom
+    
+    def __unicode__(self):
+        return u'' + self.nom
+        
+    class Meta:
+        verbose_name = "Surface de court"
+
 class CourtState(models.Model):
     nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
     
@@ -70,17 +82,17 @@ class Court(models.Model):
 	id = models.AutoField(primary_key=True, verbose_name='ID')
 	rue = models.CharField(max_length=100 , verbose_name='Rue')
 	numero = models.CharField(max_length=10, verbose_name='Numéro')
-	boite = models.CharField(max_length=10,null=True)
+	boite = models.CharField(max_length=10,null=True, blank=True)
 	codepostal = models.CharField(max_length=10, verbose_name='Code postal')
 	localite = models.CharField(max_length=30, verbose_name='Localité')
-	acces = models.TextField(null=True)
-	matiere = models.CharField(max_length=30, verbose_name='Matière')
+	acces = models.TextField(null=True,blank=True)
+	matiere = models.ForeignKey(CourtSurface, verbose_name='Surface')
 	type = models.CharField(max_length=30)
 	dispoSamedi = models.BooleanField(default=False, verbose_name='Dispo samedi')
 	dispoDimanche = models.BooleanField(default=False, verbose_name='Dispo dimanche')
 	etat = models.ForeignKey(CourtState, verbose_name='Etat')
-	commentaire = models.TextField(null=True)
-	commentaireStaff = models.TextField(null=True)
+	commentaire = models.TextField(null=True, blank=True)
+	commentaireStaff = models.TextField(null=True, blank=True)
 	valide = models.BooleanField(default=False, verbose_name='Validé')
 	user = models.ForeignKey(User, verbose_name='Utilisateur')
 
@@ -128,8 +140,8 @@ class Pair(models.Model):
 	user2 = models.ForeignKey(User, related_name='user2', verbose_name = "Utilisateur 2")
 	extra1 = models.ManyToManyField(Extra, related_name='extra1')
 	extra2 = models.ManyToManyField(Extra, related_name='extra2')
-	comment1 = models.TextField(null=True)
-	comment2 = models.TextField(null=True)
+	comment1 = models.TextField(null=True, blank=True)
+	comment2 = models.TextField(null=True, blank=True)
 	confirm = models.BooleanField(default=False, verbose_name = "Confirmation")
 	valid = models.BooleanField(default=False, verbose_name = "Validation")
 	pay = models.BooleanField(default=False, verbose_name="Paiement")

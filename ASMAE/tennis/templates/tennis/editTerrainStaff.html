@@ -81,13 +81,9 @@
 					      <label class="control-label col-sm-4" for="matiere">Matière *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
 					      	<select class="form-control" name="matiere" id="matiere">
-							   	<option value="Béton">Béton</option>
-								<option value="Brique">Brique</option>
-							  	<option value="Gazon">Gazon</option>
-								<option value="Synthétique">Synthétique</option>
-							   	<option value="Terre">Terre battue</option>
-								<option value="Quick">Quick</option>
-							   <option value="Autre">Autre</option>
+						        {% for courtSurface in allCourtSurface %}
+							  	<option value="{{ courtSurface.nom }}">{{ courtSurface.nom }}</option>
+							  	{% endfor %}
 							</select>
 					      </div>
 					    </div>

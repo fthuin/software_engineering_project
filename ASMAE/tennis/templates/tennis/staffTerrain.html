@@ -57,13 +57,9 @@
 					    <div class="col-sm-8">
 						    <select id="material_selector" class="form-control" onchange="search_court()">
 						        <option value="" selected>Tous</option>
-							  	<option value="beton">Béton</option>
-								<option value="brique">Brique</option>
-							  	<option value="gazon">Gazon</option>
-								<option value="synth">Synthétique</option>
-							   	<option value="terre">Terre battue</option>
-								<option value="quick">Quick</option>
-							   	<option value="autre">Autre</option>
+						        {% for courtSurface in allCourtSurface %}
+							  	<option value="{{ courtSurface.nom }}">{{ courtSurface.nom }}</option>
+							  	{% endfor %}
 						    </select>
 						</div>
 					</div>
