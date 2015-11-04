@@ -28,7 +28,7 @@
 				    <div class="row">
 					    <label class="control-label col-sm-4">Validation</label>
 					    <div class="col-sm-8">
-						    <select id="validation_selector" class="form-control">
+						    <select id="validation_selector" class="form-control" onchange="search_court()">
 						        <option value="" selected>Tous</option>
 						        <option value="oui">Valide</option>
 						        <option value="non">Non validé</option>
@@ -41,7 +41,7 @@
 				    <div class="row">
 					    <label class="control-label col-sm-4">Disponibilité</label>
 					    <div class="col-sm-8">
-						    <select id="availability_selector" class="form-control">
+						    <select id="availability_selector" class="form-control" onchange="search_court()">
 						        <option value="" selected>Tous</option>
 						        <option value="saturday">Samedi</option>
 						        <option value="sunday">Dimanche</option>
@@ -55,7 +55,7 @@
 				    <div class="row">
 					    <label class="control-label col-sm-4">Matière</label>
 					    <div class="col-sm-8">
-						    <select id="material_selector" class="form-control">
+						    <select id="material_selector" class="form-control" onchange="search_court()">
 						        <option value="" selected>Tous</option>
 							  	<option value="beton">Béton</option>
 								<option value="brique">Brique</option>
@@ -64,6 +64,33 @@
 							   	<option value="terre">Terre battue</option>
 								<option value="quick">Quick</option>
 							   	<option value="autre">Autre</option>
+						    </select>
+						</div>
+					</div>
+			    </li>
+			    <li class="list-group-item">
+				    <div class="row">
+					    <label class="control-label col-sm-4">Etat du terrain</label>
+					    <div class="col-sm-8">
+						    <select id="state_selector" class="form-control" onchange="search_court()">
+						        <option value="" selected>Tous</option>
+							  	<option value="beton">Très bon</option>
+								<option value="brique">Bon</option>
+							  	<option value="gazon">Correct</option>
+								<option value="synth">Mauvais</option>
+							   	<option value="terre">Très mauvais</option>
+						    </select>
+						</div>
+					</div>
+			    </li>
+			    <li class="list-group-item">
+				    <div class="row">
+					    <label class="control-label col-sm-4">Type</label>
+					    <div class="col-sm-8">
+						    <select id="type_selector" class="form-control" onchange="search_court()">
+						        <option value="" selected>Tous</option>
+							  	<option value="ouvert">Ouvert</option>
+								<option value="couvert">Couvert</option>
 						    </select>
 						</div>
 					</div>
@@ -119,7 +146,7 @@ function pagination(list) {
 //Recuperation des court et stockage dans un tableau
 var courtList = [];
 {% for court in allCourt %}
-courtList.push(['{{ court.user.username }}','{{ court.user.participant.prenom }}','{{ court.user.participant.nom }}','{{ court.id }}','{{ court.matiere }}','{{ court.rue }}','{{ court.numero }}','{{ court.codepostal }}','{{ court.localite }}','{{ court.boite }}',{% if court.valide %}'oui'{% else %}'non'{% endif %},{% if court.dispoSamedi and court.dispoDimanche %}'Samedi et dimanche'{% elif court.dispoSamedi %}'Samedi'{% elif court.dispoDimanche %}'Dimanche'{% else %}' - '{% endif %}]);
+courtList.push(['{{ court.user.username }}','{{ court.user.participant.prenom }}','{{ court.user.participant.nom }}','{{ court.id }}','{{ court.matiere }}','{{ court.rue }}','{{ court.numero }}','{{ court.codepostal }}','{{ court.localite }}','{{ court.boite }}',{% if court.valide %}'oui'{% else %}'non'{% endif %},{% if court.dispoSamedi and court.dispoDimanche %}'Samedi et dimanche'{% elif court.dispoSamedi %}'Samedi'{% elif court.dispoDimanche %}'Dimanche'{% else %}' - '{% endif %},'{{ court.etat }}', '{{ court.type }}']);
 {% endfor %}
 
 pagination(courtList);
@@ -134,11 +161,21 @@ function search_court() {
     var availability_choice = availability_selector.options[availability_selector.selectedIndex].text.sansAccent().toLocaleUpperCase();
     var material_selector = document.getElementById("material_selector");
     var material_choice = material_selector.options[material_selector.selectedIndex].text.sansAccent().toLocaleUpperCase();
+    var state_selector = document.getElementById("state_selector");
+    var state_choice = state_selector.options[state_selector.selectedIndex].text.sansAccent().toLocaleUpperCase();
+    var type_selector = document.getElementById("type_selector");
+    var type_choice = type_selector.options[type_selector.selectedIndex].text.sansAccent().toLocaleUpperCase();
     if (material_choice.indexOf("Tous".toLocaleUpperCase()) != -1) {
     	material_choice = "";
     }
     if (availability_choice.indexOf("Tous".toLocaleUpperCase()) != -1) {
     	availability_choice = "";
+    }
+    if (state_choice.indexOf("Tous".toLocaleUpperCase()) != -1) {
+    	state_choice = "";
+    }
+    if (type_choice.indexOf("Tous".toLocaleUpperCase()) != -1) {
+    	type_choice = "";
     }
     // Copie du tableau pour garder l'original
     var resultList = courtList.slice();
@@ -155,7 +192,9 @@ function search_court() {
          var localite = myCourt[8].sansAccent().toLocaleUpperCase();
          var validationStatus = myCourt[10].sansAccent().toLocaleUpperCase();
          var availabilityStatus = myCourt[11].sansAccent().toLocaleUpperCase();
-         if (! (username.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1 || id.indexOf(retour) != -1 || rue.indexOf(retour) != -1 || codepostal.indexOf(retour) != -1 || localite.indexOf(retour) != -1 ) || matiere.indexOf(material_choice) == -1 || validationStatus.indexOf(validation_choice) == -1 || availabilityStatus.indexOf(availability_choice) == -1) {
+         var etat = myCourt[12].sansAccent().toLocaleUpperCase();
+         var type = myCourt[13].sansAccent().toLocaleUpperCase();
+         if (! (username.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1 || id.indexOf(retour) != -1 || rue.indexOf(retour) != -1 || codepostal.indexOf(retour) != -1 || localite.indexOf(retour) != -1 ) || matiere.indexOf(material_choice) == -1 || validationStatus.indexOf(validation_choice) == -1 || availabilityStatus.indexOf(availability_choice) == -1 || etat.indexOf(state_choice) || type.indexOf(type_choice) ) {
             resultList.splice(i, 1);
          }
     }
