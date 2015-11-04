@@ -28,7 +28,7 @@
 				    <div class="row">
 					    <label class="control-label col-sm-4">Validation</label>
 					    <div class="col-sm-8">
-						    <select id="validation_selector" class="form-control">
+						    <select id="validation_selector" class="form-control" onchange="search_pair()">
 						        <option value="" selected>Tous</option>
 						        <option value="oui">Valide</option>
 						        <option value="non">Non validée</option>
@@ -41,7 +41,7 @@
 				    <div class="row">
 					    <label class="control-label col-sm-4">Paiement</label>
 					    <div class="col-sm-8">
-						    <select id="payment_selector" class="form-control">
+						    <select id="payment_selector" class="form-control" onchange="search_pair()">
 						        <option value="" selected>Tous</option>
 						        <option value="oui">Valide</option>
 						        <option value="non">Non validée</option>
@@ -54,7 +54,7 @@
 				    <div class="row">
 					    <label class="control-label col-sm-4">Tournoi</label>
 					    <div class="col-sm-8">
-						    <select id="tournament_selector" class="form-control">
+						    <select id="tournament_selector" class="form-control" onchange="search_pair()">
 						        <option value="" selected>Tous</option>
 							    {% for elem in Tour %}
 							    <option value="{{ elem.nom }}">{{ elem.nom }}</option>
@@ -122,13 +122,13 @@ pairList.push(['{{ pair.id }}',{% if pair.valid %}'oui'{% else %}'non'{% endif %
 pagination(pairList);
 
 function search_pair() {
-     var retour = document.getElementById("search_value").value.sansAccent().toLocaleUpperCase();
+     var retour = (document.getElementById("search_value").value).sansAccent().toLocaleUpperCase();
      var validation_selector = document.getElementById("validation_selector");
-     var validation_choice = validation_selector.options[validation_selector.selectedIndex].value.sansAccent().toLocaleUpperCase();
+     var validation_choice = (validation_selector.options[validation_selector.selectedIndex].value).sansAccent().toLocaleUpperCase();
      var payment_selector = document.getElementById("payment_selector");
-     var payment_choice = payment_selector.options[payment_selector.selectedIndex].value;
+     var payment_choice = (payment_selector.options[payment_selector.selectedIndex].value).sansAccent().toLocaleUpperCase();
      var tournament_selector = document.getElementById("tournament_selector");
-     var tournament_choice = tournament_selector.options[tournament_selector.selectedIndex].valuesansAccent().toLocaleUpperCase();
+     var tournament_choice = (tournament_selector.options[tournament_selector.selectedIndex].value).sansAccent().toLocaleUpperCase();
      // Copie du tableau pour garder l'original
      var resultList = pairList.slice();
      var nbr = resultList.length;
@@ -160,7 +160,7 @@ $('#validation_selector').on('input', function() {
 $('#payment_selector').on('input', function() { 
     search_pair();
 });
-$('#tournament_selector').on('input', function() { 
+$('#tournament_selector').on('input', function() {
     search_pair();
 });
 </script>
