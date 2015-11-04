@@ -114,11 +114,9 @@
 					      <label class="control-label col-sm-4" for="etat">Etat du terrain *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
 					      	<select class="form-control" name="etat">
-					      		<option>Très bon</option>
-							    <option>Bon</option>
-							    <option>Correct</option>
-							    <option>Mauvais</option>
-							    <option>Très mauvais</option>
+						        {% for courtState in allCourtState %}
+							  	<option value="{{ courtState.nom }}">{{ courtState.nom }}</option>
+							   	{% endfor %}
 							</select>
 					      </div>
 					    </div>

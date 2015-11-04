@@ -6,16 +6,16 @@ class Participant(models.Model):
 	user = models.OneToOneField(User,null=True)
 	titre = models.CharField(max_length=5)
 	nom = models.CharField(max_length=30)
-	prenom = models.CharField(max_length=30)
+	prenom = models.CharField(max_length=30, verbose_name="Prénom")
 	rue = models.CharField(max_length=100)
-	numero = models.CharField(max_length=10)
+	numero = models.CharField(max_length=10, verbose_name="Numéro")
 	boite = models.CharField(max_length=10,null=True)
-	codepostal = models.CharField(max_length=10)
-	localite = models.CharField(max_length=30)
-	telephone = models.CharField(max_length=30,null=True)
+	codepostal = models.CharField(max_length=10, verbose_name="Code postal")
+	localite = models.CharField(max_length=30, verbose_name="Localité")
+	telephone = models.CharField(max_length=30,null=True, verbose_name="Téléphone")
 	fax = models.CharField(max_length=30,null=True)
 	gsm = models.CharField(max_length=30,null=True)
-	datenaissance = models.DateTimeField(null=True)
+	datenaissance = models.DateTimeField(null=True, verbose_name="Date de naissance")
 	classement = models.CharField(max_length=10,null=True)
 	oldparticipant = models.BooleanField(default=False)
 	isGroupLeader = models.BooleanField(default=False)
@@ -30,6 +30,7 @@ class Participant(models.Model):
 		return self.user.username == other.user.username
 		
 	class Meta:
+		verbose_name = "Participant"
 		permissions = (
 			("User", "Manage User"),
 			("Droit","Donner droit"),
@@ -48,32 +49,46 @@ class Extra(models.Model):
 		return u'' + self.nom
 
 	class Meta:
+		verbose_name = "Extra"
 		permissions = (
 			("Extra", "Manage Extra"),
 		)
 
+class CourtState(models.Model):
+    nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
+    
+    def __str__(self):
+        return self.nom
+    
+    def __unicode__(self):
+        return u'' + self.nom
+    
+    class Meta:
+        verbose_name = "Etat de court"
+
 class Court(models.Model):
-	id = models.AutoField(primary_key=True)
-	rue = models.CharField(max_length=100)
-	numero = models.CharField(max_length=10)
+	id = models.AutoField(primary_key=True, verbose_name='ID')
+	rue = models.CharField(max_length=100 , verbose_name='Rue')
+	numero = models.CharField(max_length=10, verbose_name='Numéro')
 	boite = models.CharField(max_length=10,null=True)
-	codepostal = models.CharField(max_length=10)
-	localite = models.CharField(max_length=30)
+	codepostal = models.CharField(max_length=10, verbose_name='Code postal')
+	localite = models.CharField(max_length=30, verbose_name='Localité')
 	acces = models.TextField(null=True)
-	matiere = models.CharField(max_length=30)
+	matiere = models.CharField(max_length=30, verbose_name='Matière')
 	type = models.CharField(max_length=30)
-	dispoSamedi = models.BooleanField(default=False)
-	dispoDimanche = models.BooleanField(default=False)
-	etat = models.CharField(max_length=30)
+	dispoSamedi = models.BooleanField(default=False, verbose_name='Dispo samedi')
+	dispoDimanche = models.BooleanField(default=False, verbose_name='Dispo dimanche')
+	etat = models.ForeignKey(CourtState, verbose_name='Etat')
 	commentaire = models.TextField(null=True)
 	commentaireStaff = models.TextField(null=True)
-	valide = models.BooleanField(default=False)
-	user = models.ForeignKey(User)
+	valide = models.BooleanField(default=False, verbose_name='Validé')
+	user = models.ForeignKey(User, verbose_name='Utilisateur')
 
 	def __str__(self):
 		return str(self.id) +" "+ self.rue
 
 	class Meta:
+		verbose_name = "Court"
 		permissions = (
 			("Court", "Manage Court"),
 		)
@@ -86,6 +101,7 @@ class Tournoi(models.Model):
 		return self.nom
 
 	class Meta:
+		verbose_name = 'Tournoi'
 		permissions = (
 			("TournoiDesFamilles", "Manage tournoi des familles"),
 			("DoubleHommes", "Manage double hommes"),
@@ -104,24 +120,25 @@ class Groupe(models.Model):
 		return "Groupe n " + str(self.id)
 
 class Pair(models.Model):
-	id = models.AutoField(primary_key=True)
+	id = models.AutoField(primary_key=True, verbose_name="ID")
 	tournoi = models.ForeignKey(Tournoi)
 	group = models.ForeignKey(Groupe, null=True, default=None)
 	# TODO : Ca serait cool que ça soit 2 participants
-	user1 = models.ForeignKey(User, related_name='user1')
-	user2 = models.ForeignKey(User, related_name='user2')
+	user1 = models.ForeignKey(User, related_name='user1', verbose_name = "Utilisateur 1")
+	user2 = models.ForeignKey(User, related_name='user2', verbose_name = "Utilisateur 2")
 	extra1 = models.ManyToManyField(Extra, related_name='extra1')
 	extra2 = models.ManyToManyField(Extra, related_name='extra2')
 	comment1 = models.TextField(null=True)
 	comment2 = models.TextField(null=True)
-	confirm = models.BooleanField(default=False)
-	valid = models.BooleanField(default=False)
-	pay = models.BooleanField(default=False)
+	confirm = models.BooleanField(default=False, verbose_name = "Confirmation")
+	valid = models.BooleanField(default=False, verbose_name = "Validation")
+	pay = models.BooleanField(default=False, verbose_name="Paiement")
 
 	def __str__(self):
 		return str(self.id) +" "+ self.tournoi.nom+" : "+self.user1.username+" et "+self.user2.username
 
 	class Meta:
+		verbose_name = 'Paire'
 		permissions = (
 			("Pair", "Manage Pair"),
 	)

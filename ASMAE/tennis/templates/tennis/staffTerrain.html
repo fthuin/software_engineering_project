@@ -74,11 +74,9 @@
 					    <div class="col-sm-8">
 						    <select id="state_selector" class="form-control" onchange="search_court()">
 						        <option value="" selected>Tous</option>
-							  	<option value="beton">Très bon</option>
-								<option value="brique">Bon</option>
-							  	<option value="gazon">Correct</option>
-								<option value="synth">Mauvais</option>
-							   	<option value="terre">Très mauvais</option>
+						        {% for courtState in allCourtState %}
+							  	<option value="{{ courtState.nom }}">{{ courtState.nom }}</option>
+							   	{% endfor %}
 						    </select>
 						</div>
 					</div>
