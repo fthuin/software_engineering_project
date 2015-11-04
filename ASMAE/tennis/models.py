@@ -95,7 +95,7 @@ class Groupe(models.Model):
 	gsize = models.IntegerField(null=True)
 
 	def __str__(self):
-		return "Groupe n " + str(self.id)
+		return "Groupe " + str(self.id)
 
 class Pair(models.Model):
 	id = models.AutoField(primary_key=True)
@@ -118,3 +118,13 @@ class Pair(models.Model):
 		permissions = (
 			("Pair", "Manage Pair"),
 	)
+
+class Match(models.Model):
+	id = models.AutoField(primary_key=True)
+	paire_gagnante = models.ForeignKey(Pair, related_name='paire_gagnante')
+	paire_perdante = models.ForeignKey(Pair, related_name='paire_perdante')
+	court = models.ForeignKey(Court, default=None)
+	score = models.CharField(max_length=50)
+
+	def __str__(self):
+		return "Paire " + str(self.paire_gagnante.id) + " vs " + "Paire " + str(self.paire_perdante.id)

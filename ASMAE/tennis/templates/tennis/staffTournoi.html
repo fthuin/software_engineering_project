@@ -216,6 +216,11 @@ text-align:left;
                 if(list[i].pairs.length != 0) {
                     new_list.push(list[i]);
                 }
+                
+                if(list[i].court == undefined) {
+                    alert("Des groupes n'ont pas de terrain d'attribué");
+                    return;
+                }
             }
             tournament.groups = new_list;
             var test = JSON.stringify(tournament);
