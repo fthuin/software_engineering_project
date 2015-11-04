@@ -130,16 +130,16 @@ pagination(userList);
 
 
 function search_user() {
-    var retour = document.getElementById("search_value").value.toLocaleUpperCase();
+    var retour = document.getElementById("search_value").value.sansAccent().toLocaleUpperCase();
     // Copie du tableau pour garder l'original
     var resultList = userList.slice();
     var nbr = resultList.length;
     for (var i = nbr-1; i >= 0 ; i--) {
         var myUser = resultList[i];
-        var username = myUser[0];
-        var prenom = myUser[1];
-        var nom = myUser[2];
-        if (! (username.toLocaleUpperCase().indexOf(retour) != -1 || prenom.toLocaleUpperCase().indexOf(retour) != -1 || nom.toLocaleUpperCase().indexOf(retour) != -1)) {
+        var username = myUser[0].sansAccent().toLocaleUpperCase();
+        var prenom = myUser[1].sansAccent().toLocaleUpperCase();
+        var nom = myUser[2].sansAccent().toLocaleUpperCase();
+        if (! (username.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1)) {
             resultList.splice(i, 1);
         }
     }

@@ -127,13 +127,13 @@ pagination(courtList);
 //username,prenom,nom courtID, matiere, rue, numero, codepostal, localite, boite, courtValide(oui,non), courtDispo (Samedi et dimanche, Samedi, Dimanche,  - )
 
 function search_court() {
-    var retour = document.getElementById("search_value").value.toLocaleUpperCase();
+    var retour = document.getElementById("search_value").value.sansAccent().toLocaleUpperCase();
     var validation_selector = document.getElementById("validation_selector");
-    var validation_choice = validation_selector.options[validation_selector.selectedIndex].value.toLocaleUpperCase();
+    var validation_choice = validation_selector.options[validation_selector.selectedIndex].value.sansAccent().toLocaleUpperCase();
     var availability_selector = document.getElementById("availability_selector");
-    var availability_choice = availability_selector.options[availability_selector.selectedIndex].text.toLocaleUpperCase();
+    var availability_choice = availability_selector.options[availability_selector.selectedIndex].text.sansAccent().toLocaleUpperCase();
     var material_selector = document.getElementById("material_selector");
-    var material_choice = material_selector.options[material_selector.selectedIndex].text.toLocaleUpperCase();
+    var material_choice = material_selector.options[material_selector.selectedIndex].text.sansAccent().toLocaleUpperCase();
     if (material_choice.indexOf("Tous".toLocaleUpperCase()) != -1) {
     	material_choice = "";
     }
@@ -145,16 +145,16 @@ function search_court() {
     var nbr = resultList.length;
     for (var i = nbr-1 ; i >= 0 ; i--) {
          var myCourt = resultList[i];
-         var username = myCourt[0].toLocaleUpperCase();
-         var prenom = myCourt[1].toLocaleUpperCase();
-         var nom = myCourt[2].toLocaleUpperCase();
-         var id = myCourt[3].toLocaleUpperCase();
-         var matiere = myCourt[4].toLocaleUpperCase();
-         var rue = myCourt[5].toLocaleUpperCase();
-         var codepostal = myCourt[7].toLocaleUpperCase();
-         var localite = myCourt[8].toLocaleUpperCase();
-         var validationStatus = myCourt[10].toLocaleUpperCase();
-         var availabilityStatus = myCourt[11].toLocaleUpperCase();
+         var username = myCourt[0].sansAccent().toLocaleUpperCase();
+         var prenom = myCourt[1].sansAccent().toLocaleUpperCase();
+         var nom = myCourt[2].sansAccent().toLocaleUpperCase();
+         var id = myCourt[3].sansAccent().toLocaleUpperCase();
+         var matiere = myCourt[4].sansAccent().toLocaleUpperCase();
+         var rue = myCourt[5].sansAccent().toLocaleUpperCase();
+         var codepostal = myCourt[7].sansAccent().toLocaleUpperCase();
+         var localite = myCourt[8].sansAccent().toLocaleUpperCase();
+         var validationStatus = myCourt[10].sansAccent().toLocaleUpperCase();
+         var availabilityStatus = myCourt[11].sansAccent().toLocaleUpperCase();
          if (! (username.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1 || id.indexOf(retour) != -1 || rue.indexOf(retour) != -1 || codepostal.indexOf(retour) != -1 || localite.indexOf(retour) != -1 ) || matiere.indexOf(material_choice) == -1 || validationStatus.indexOf(validation_choice) == -1 || availabilityStatus.indexOf(availability_choice) == -1) {
             resultList.splice(i, 1);
          }

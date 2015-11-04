@@ -122,29 +122,29 @@ pairList.push(['{{ pair.id }}',{% if pair.valid %}'oui'{% else %}'non'{% endif %
 pagination(pairList);
 
 function search_pair() {
-     var retour = document.getElementById("search_value").value.toLocaleUpperCase();
+     var retour = document.getElementById("search_value").value.sansAccent().toLocaleUpperCase();
      var validation_selector = document.getElementById("validation_selector");
-     var validation_choice = validation_selector.options[validation_selector.selectedIndex].value.toLocaleUpperCase();
+     var validation_choice = validation_selector.options[validation_selector.selectedIndex].value.sansAccent().toLocaleUpperCase();
      var payment_selector = document.getElementById("payment_selector");
      var payment_choice = payment_selector.options[payment_selector.selectedIndex].value;
      var tournament_selector = document.getElementById("tournament_selector");
-     var tournament_choice = tournament_selector.options[tournament_selector.selectedIndex].value.toLocaleUpperCase();
+     var tournament_choice = tournament_selector.options[tournament_selector.selectedIndex].valuesansAccent().toLocaleUpperCase();
      // Copie du tableau pour garder l'original
      var resultList = pairList.slice();
      var nbr = resultList.length;
      for (var i = nbr-1; i >= 0; i--) {
          var myPair = resultList[i];
-         var pairID = myPair[0];
-         var validationStatus = myPair[1];
-         var paymentStatus = myPair[2];
-         var username1 = myPair[3];
-         var username2 = myPair[4];
-         var nom1 = myPair[5];
-         var nom2 = myPair[6];
-         var prenom1 = myPair[7];
-         var prenom2 = myPair[8];
-         var tournoi = myPair[9];
-         if (! (pairID.toLocaleUpperCase().indexOf(retour) != -1 || username1.toLocaleUpperCase().indexOf(retour) != -1 || username2.toLocaleUpperCase().indexOf(retour) != -1 || nom1.toLocaleUpperCase().indexOf(retour) != -1 || nom2.toLocaleUpperCase().indexOf(retour) != -1 || prenom1.toLocaleUpperCase().indexOf(retour) != -1 || prenom2.toLocaleUpperCase().indexOf(retour) != -1 ) || validationStatus.toLocaleUpperCase().indexOf(validation_choice) == -1 || paymentStatus.indexOf(payment_choice) == -1 || tournoi.toLocaleUpperCase().indexOf(tournament_choice) == -1 ) {
+         var pairID = myPair[0].sansAccent().toLocaleUpperCase();
+         var validationStatus = myPair[1].sansAccent().toLocaleUpperCase();
+         var paymentStatus = myPair[2].sansAccent().toLocaleUpperCase();
+         var username1 = myPair[3].sansAccent().toLocaleUpperCase();
+         var username2 = myPair[4].sansAccent().toLocaleUpperCase();
+         var nom1 = myPair[5].sansAccent().toLocaleUpperCase();
+         var nom2 = myPair[6].sansAccent().toLocaleUpperCase();
+         var prenom1 = myPair[7].sansAccent().toLocaleUpperCase();
+         var prenom2 = myPair[8].sansAccent().toLocaleUpperCase();
+         var tournoi = myPair[9].sansAccent().toLocaleUpperCase();
+         if (! (pairID.indexOf(retour) != -1 || username1.indexOf(retour) != -1 || username2.indexOf(retour) != -1 || nom1.indexOf(retour) != -1 || nom2.indexOf(retour) != -1 || prenom1.indexOf(retour) != -1 || prenom2.indexOf(retour) != -1 ) || validationStatus.indexOf(validation_choice) == -1 || paymentStatus.indexOf(payment_choice) == -1 || tournoi.indexOf(tournament_choice) == -1 ) {
               resultList.splice(i,1);
          }
      }
