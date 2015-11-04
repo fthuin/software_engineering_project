@@ -762,8 +762,8 @@ function validateRegister() {
 	//TODO vérification addresse correcte
 
 	//Verification date de naissance présent
-	var birthdate = document.getElementById("birthdate").value;
-	if(birthdate==null || birthdate == ""){
+	var birthdate = document.getElementById("birthdateID").value;
+	if(birthdate.indexOf("x") > -1){
 		document.getElementById("hint-birthdate").innerHTML = " ! Entrer votre date de naissance";
 		valid = false;
 	}else{
