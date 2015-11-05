@@ -322,7 +322,8 @@ function setCourt(page){
 		var valid = CourtList[i][10];
 		var dispo = CourtList[i][11];
 		
-		var p = '<a href="terrains/'+CourtList[i][3]+'" class="list-group-item"><b>ID : </b>'+CourtList[i][3]+' / <b>Matière : </b>'+CourtList[i][4]+' / <b>Valide : </b>'+valid+' / <b>Dispo : </b>'+dispo+'<br><b>Propriétaire : </b>'+CourtList[i][1]+' '+CourtList[i][2]+' ('+CourtList[i][0]+') <br> <b>Adresse : </b>'+adress+'</a>';
+		//var p = '<tr class="clickable-row" data-href="utilisateurs/'+UserList[i][0]+'"><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td>'+age+' ans</td></tr>';
+		var p = '<tr class="clickable-row" data-href="terrains/'+CourtList[i][3]+'"><td>'+CourtList[i][3]+'</td><td>'+CourtList[i][4]+'</td><td>'+valid+'</td><td>'+dispo+'</td><td>'+CourtList[i][1]+'</td><td>'+CourtList[i][2]+'</td><td>'+CourtList[i][0]+'</td><td>'+adress+'</td></tr>';
 		panneau.innerHTML += p;
 	};
 
