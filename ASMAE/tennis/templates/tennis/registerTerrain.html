@@ -83,8 +83,9 @@
 					      <label class="control-label col-sm-4" for="type">Type *</label>
 					      <div class="col-sm-8" style="max-width:600px;">
 					      	<select class="form-control" name="type">
-					      		<option>Ouvert</option>
-							    <option>Couvert</option>
+					      	{% for courtType in allCourtType %}
+					      		<option value="{{ courtType.nom }}">{{ courtType.nom }}</option>
+							{% endfor %}
 							</select>
 					      </div>
 					    </div>

@@ -83,8 +83,9 @@
 					    <div class="col-sm-8">
 						    <select id="type_selector" class="form-control" onchange="search_court()">
 						        <option value="" selected>Tous</option>
-							  	<option value="ouvert">Ouvert</option>
-								<option value="couvert">Couvert</option>
+					      	{% for courtType in allCourtType %}
+					      		<option value="{{ courtType.nom }}">{{ courtType.nom }}</option>
+							{% endfor %}
 						    </select>
 						</div>
 					</div>

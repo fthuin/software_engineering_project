@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface
+from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament
 import re, math
 import json
@@ -287,6 +287,7 @@ def terrain(request):
 
 def registerTerrain(request):
 	allCourtSurface = CourtSurface.objects.all()
+	allCourtType = CourtType.objects.all()
 	allCourtState = CourtState.objects.all()
 	if request.method == "POST":
 		rue = request.POST['rue']
@@ -328,6 +329,7 @@ def registerTerrain(request):
 
 def editTerrain(request,id):
 	allCourtSurface = CourtSurface.objects.all()
+	allCourtType = CourtType.objects.all()
 	allCourtState = CourtState.objects.all()
 	court = Court.objects.filter(id=id)
 
@@ -450,6 +452,7 @@ def staffTerrain(request):
 	#List of Court
 	allCourt = Court.objects.all()
 	allCourtSurface = CourtSurface.objects.all()
+	allCourtType = CourtType.objects.all()
 	allCourtState = CourtState.objects.all()
 	if request.user.is_authenticated():
 		return render(request,'tennis/staffTerrain.html',locals())
@@ -659,6 +662,7 @@ def validateTerrain(request, id):
 @permission_required('tennis.Court')
 def editTerrainStaff(request, id):
 	allCourtSurface = CourtSurface.objects.all()
+	allCourtType = CourtType.objects.all()
 	allCourtState = CourtState.objects.all()
 	court = Court.objects.filter(id=id)[0]
 	if request.method == "POST":

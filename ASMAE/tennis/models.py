@@ -78,6 +78,18 @@ class CourtState(models.Model):
     class Meta:
         verbose_name = "Etat de court"
 
+class CourtType(models.Model):
+    nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
+    
+    def __str__(self):
+        return self.nom
+    
+    def __unicode__(self):
+        return u'' + self.nom
+    
+    class Meta:
+        verbose_name = "Type de court"
+
 class Court(models.Model):
 	id = models.AutoField(primary_key=True, verbose_name='ID')
 	rue = models.CharField(max_length=100 , verbose_name='Rue')
@@ -87,7 +99,7 @@ class Court(models.Model):
 	localite = models.CharField(max_length=30, verbose_name='Localité')
 	acces = models.TextField(null=True,blank=True)
 	matiere = models.ForeignKey(CourtSurface, verbose_name='Surface')
-	type = models.CharField(max_length=30)
+	type = models.ForeignKey(CourtType, verbose_name='Type')
 	dispoSamedi = models.BooleanField(default=False, verbose_name='Dispo samedi')
 	dispoDimanche = models.BooleanField(default=False, verbose_name='Dispo dimanche')
 	etat = models.ForeignKey(CourtState, verbose_name='Etat')
