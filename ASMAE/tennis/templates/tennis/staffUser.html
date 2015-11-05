@@ -24,8 +24,19 @@
 	<!-- Liste des users -->
 	<div class="panel panel-default center-block" style="max-width:600px;">
 		<div class="panel-heading">Utilisateurs</div>
-		<div class="list-group" id="UserList">
-		</div>
+		<table class="table table-hover">
+		<thead>
+          <tr>
+            <th>Nom d'utilisateur</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Age</th>
+          </tr>
+          <tbody id="UserList">
+          </tbody>
+        </thead>
+        
+		</table>
 	</div>
 
 	<!-- Info -->
@@ -93,6 +104,11 @@ function search_user() {
 
 $('#search_value').on('input', function() { 
     search_user();
+});
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.document.location = $(this).data("href");
+    });
 });
 </script>
 {% endblock %}
