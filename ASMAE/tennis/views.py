@@ -529,7 +529,7 @@ def staffExtra(request):
 
 
 def staffLog(request):
-	logs = LogActivity.objects.all()
+	logs = LogActivity.objects.order_by('-date')
 	if request.user.is_authenticated():
 		return render(request,'tennis/staffLog.html',locals())
 	return redirect(reverse(home))
