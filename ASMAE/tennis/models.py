@@ -55,40 +55,40 @@ class Extra(models.Model):
 		)
 
 class CourtSurface(models.Model):
-    nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
-    
-    def __str__(self):
-        return self.nom
-    
-    def __unicode__(self):
-        return u'' + self.nom
-        
-    class Meta:
-        verbose_name = "Surface de court"
+	nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
+	
+	def __str__(self):
+		return self.nom
+	
+	def __unicode__(self):
+		return u'' + self.nom
+		
+	class Meta:
+		verbose_name = "Surface de court"
 
 class CourtState(models.Model):
-    nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
-    
-    def __str__(self):
-        return self.nom
-    
-    def __unicode__(self):
-        return u'' + self.nom
-    
-    class Meta:
-        verbose_name = "Etat de court"
+	nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
+	
+	def __str__(self):
+		return self.nom
+	
+	def __unicode__(self):
+		return u'' + self.nom
+	
+	class Meta:
+		verbose_name = "Etat de court"
 
 class CourtType(models.Model):
-    nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
-    
-    def __str__(self):
-        return self.nom
-    
-    def __unicode__(self):
-        return u'' + self.nom
-    
-    class Meta:
-        verbose_name = "Type de court"
+	nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
+	
+	def __str__(self):
+		return self.nom
+	
+	def __unicode__(self):
+		return u'' + self.nom
+	
+	class Meta:
+		verbose_name = "Type de court"
 
 class Court(models.Model):
 	id = models.AutoField(primary_key=True, verbose_name='ID')
@@ -165,4 +165,17 @@ class Pair(models.Model):
 		verbose_name = 'Paire'
 		permissions = (
 			("Pair", "Manage Pair"),
-	)
+        )
+
+class LogActivity(models.Model):
+	date = models.DateTimeField(auto_now_add=True)
+	user = models.ForeignKey(User)
+	section = models.CharField(max_length=50)
+	details = models.CharField(max_length=200)
+
+	def __str__(self):
+		return self.user.username + self.section + self.details
+
+
+
+

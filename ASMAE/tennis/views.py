@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType
+from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament
 import re, math
 import json
@@ -487,8 +487,10 @@ def staffExtra(request):
 
 			extra = Extra(nom=nom,prix=prix,commentaires = message)
 			extra.save()
+			LogActivity(user=request.user,section="Extra",details="Extra "+nom+ " ajoute").save()
 
 			successAdd = "Extra bien ajouté!"
+
 
 		if request.POST['action'] == "modifyExtra":
 			id = request.POST['id']
@@ -511,17 +513,27 @@ def staffExtra(request):
 			extra.prix = prix
 			extra.commentaires = message
 			extra.save()
+			LogActivity(user=request.user,section="Extra",details="Extra "+nom+ " modifie").save()
 			successEdit = "Extra bien édité!"
 
 		if request.POST['action'] == "deleteExtra":
 			id = request.POST['id']
 			extra = Extra.objects.filter(id = id)[0]
 			extra.delete()
+			LogActivity(user=request.user,section="Extra",details="Extra "+extra.nom+ " delete").save()
 			successDelete = "Extra bien supprimé!"
 
 	if request.user.is_authenticated():
 		return render(request,'tennis/staffExtra.html',locals())
 	return redirect(reverse(home))
+
+
+def staffLog(request):
+	logs = LogActivity.objects.order_by('-date')
+	if request.user.is_authenticated():
+		return render(request,'tennis/staffLog.html',locals())
+	return redirect(reverse(home))
+
 
 @permission_required('tennis.Droit')
 #TODO permission droit
@@ -593,6 +605,8 @@ def staffPerm(request):
 		else:
 			group = Group.objects.filter(name="Admin")[0]
 			utilisateur.groups.remove(group)
+
+		LogActivity(user=request.user,section="Permissions",details="Changed permission of user "+utilisateur.username).save()
 	   
 		
 		
@@ -647,13 +661,16 @@ def validateTerrain(request, id):
 		message = request.POST['message']
 		if request.POST.__contains__("valide"):
 			valide = True
+			LogActivity(user=request.user,section="Terrain",details="Terrain "+id+ " valide").save()
 		else:
 			valide = False
-
+			LogActivity(user=request.user,section="Terrain",details="Terrain "+id+ " non valide").save()
+	
 		court.commentaireStaff = message
 		court.valide = valide
 		court.save()
 		successEdit = "Terrain bien édité!"
+		
 
 	if request.user.is_authenticated():
 		return render(request,'tennis/validateTerrain.html',locals())
@@ -705,12 +722,14 @@ def editTerrainStaff(request, id):
 			court.commentaire=commentaire
 			court.user = request.user
 			court.save()
+			LogActivity(user=request.user,section="Terrain",details="Terrain "+id+ " edite").save()
 			#successEdit = "Terrain "+str(id)+" bien édité!"
 			return redirect(reverse(validateTerrain,args={id}))
 
 		if request.POST['action'] == "deleteCourt":
 			#TODO delete terrain staff
 			court.delete()
+			LogActivity(user=request.user,section="Terrain",details="Terrain "+id+ " delete").save()
 			return redirect(reverse(staffTerrain))
 	if request.user.is_authenticated():
 		return render(request,'tennis/editTerrainStaff.html',locals())
@@ -725,12 +744,16 @@ def validatePair(request, id):
 			paid = request.POST['pay']
 			if valid == "Oui":
 				valider = True
+				LogActivity(user=request.user,section="Pair",details="Pair "+id+ " valide").save()
 			else:
 				valider = False
+				LogActivity(user=request.user,section="Pair",details="Pair "+id+ " non valide").save()
 			if paid == "Oui":
 				payer = True
+				LogActivity(user=request.user,section="Pair",details="Pair "+id+ " paye").save()
 			else:
 				payer = False
+				LogActivity(user=request.user,section="Pair",details="Pair "+id+ " non paye").save()
 			pair.valid = valider
 			pair.pay = payer
 			pair.save()
@@ -739,6 +762,7 @@ def validatePair(request, id):
 
 		if request.POST['action'] == "deletePair":
 			pair.delete()
+			LogActivity(user=request.user,section="Pair",details="Pair "+id+ " delete").save()
 			return redirect(reverse(staffPaire))
 
 

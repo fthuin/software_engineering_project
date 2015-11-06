@@ -89,6 +89,8 @@
                     {% if perms.tennis.User %}
                   <li><a href="{% url "tennis.views.staffUser" %}">Utilisateurs</a></li>
                     {% endif %}
+                    <!-- Permission des logs -->
+                  <li><a href="{% url "tennis.views.staffLog" %}">Historique</a></li>
                     <!-- TODO permission droit -->
                  {% if perms.tennis.Droit %}<li><a href="{% url "tennis.views.staffPerm" %}">Permissions</a></li>
                 </ul>{% endif %}
