@@ -6,7 +6,7 @@
 
 <div class="container">
 	<div class="content-box">
-		<h2 class="center">Pair {{ pair.id }}</h2>
+		<h2 class="center">Paire {{ pair.id }}</h2>
 		<hr class="line">
 
 		<div class="row">
@@ -85,8 +85,8 @@
 			</div>
 		</div>
 
-		<h4 class="center">Pair validée : {% if pair.valid %}oui{% else %}non{% endif %}</h4>
-		<h4 class="center">Pair payée : {% if pair.pay %}oui{% else %}non{% endif %}</h4>
+		<h4 class="center">Paire validée : {% if pair.valid %}oui{% else %}non{% endif %}</h4>
+		<h4 class="center">Paire payée : {% if pair.pay %}oui{% else %}non{% endif %}</h4>
 
 		<!-- Inscription button -->
 		<button class="btn btn-default center-block" onClick="location.href='{% url "tennis.views.payPair" pair.id %}';" style="margin-top:20px;">Payer</button>
