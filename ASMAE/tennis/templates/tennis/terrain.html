@@ -41,15 +41,26 @@
 				<!-- Panel infos -->
 				<div class="panel panel-default">
 					<div class="panel-heading">Mes terrains</div>
-					<div class="list-group">
-					{% for elem in court %}
-					<a href="{% url 'tennis.views.editTerrain' elem.id %}" class="list-group-item"><b>ID : </b>{{ elem.id}} / <b>Matière : </b>{{ elem.matiere }}<br> 
-					<b>Adresse : </b>{{elem.rue }} {{elem.numero}}, {{elem.codepostal}} {{elem.localite}}					
-					</a>
-				
-					  {% endfor %}
+		                <div class="table-responsive">
+		                    <table class="table table-hover">
+		                        <thead>
+                                  <tr>
+                                    <th>ID</th>
+                                    <th>Matière</th>
+                                    <th>Adresse</th>
+                                  </tr>
+                                  <tbody>
+                                    {% for elem in court %}
+                                        <tr onclick="window.document.location='{% url 'tennis.views.editTerrain' elem.id %}'" class="clickable-row">
+                                           <td>{{ elem.id }}</td>
+                                           <td>{{ elem.matiere }}</td>
+                                           <td>{{ elem.rue }} {elem.numero}}, {{ elem.codepostal }} {{ elem.localite }}</td>
+                                    {% endfor %}
+                                  </tbody>
+                                </thead>
+		                    </table>
+		                </div>
 					</div>
-				</div>
 
 				<!-- Inscription -->
 				<button onClick="location.href='{% url "tennis.views.registerTerrain" %}';" class="btn btn-default b-center">Enregistrer un nouveau terrain</button>
