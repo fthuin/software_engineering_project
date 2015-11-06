@@ -103,15 +103,13 @@
             <th>ID</th>
             <th>Matière</th>
             <th>Valide</th>
-            <th>Dispo</th>
-            <th>Prénom</th>
-            <th>Nom</th>
+            <th>Disponibilité</th>
             <th>Nom d'utilisateur</th>
             <th>Adresse</th>
           </tr>
+          </thead>
           <tbody id="CourtList">
           </tbody>
-        </thead>
 		</table>
 		</div>
 	</div>
@@ -222,11 +220,6 @@ $('#availability_selector').on('input', function() {
 });
 $('#material_selector').on('input', function() { 
     search_court();
-});
-jQuery(document).ready(function($) {
-    $(".clickable-row").click(function() {
-        window.document.location = $(this).data("href");
-    });
 });
 </script>
 {% endblock %}
