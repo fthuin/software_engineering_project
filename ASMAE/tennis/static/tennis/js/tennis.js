@@ -315,15 +315,15 @@ function setCourt(page){
 		//Set info court
 		var adress;
 		if(CourtList[i][9]!=""){
-			adress = CourtList[i][5]+' '+CourtList[i][6]+' bte '+CourtList[i][9]+', '+CourtList[i][7]+' '+CourtList[i][8];
+			adress = CourtList[i][5]+' '+CourtList[i][6]+' bte '+CourtList[i][9]+',<br> '+CourtList[i][7]+' '+CourtList[i][8];
 		}else{
-			adress = CourtList[i][5]+' '+CourtList[i][6]+', '+CourtList[i][7]+' '+CourtList[i][8];
+			adress = CourtList[i][5]+' '+CourtList[i][6]+',<br> '+CourtList[i][7]+' '+CourtList[i][8];
 		}
 		var valid = CourtList[i][10];
 		var dispo = CourtList[i][11];
 		
 		//var p = '<tr class="clickable-row" data-href="utilisateurs/'+UserList[i][0]+'"><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td>'+age+' ans</td></tr>';
-		var p = '<tr class="clickable-row" data-href="terrains/'+CourtList[i][3]+'"><td>'+CourtList[i][3]+'</td><td>'+CourtList[i][4]+'</td><td>'+valid+'</td><td>'+dispo+'</td><td>'+CourtList[i][1]+'</td><td>'+CourtList[i][2]+'</td><td>'+CourtList[i][0]+'</td><td>'+adress+'</td></tr>';
+		var p = '<tr onclick="window.document.location='+"'terrains/"+CourtList[i][3]+"'"+';" class="clickable-row"><td>'+CourtList[i][3]+'</td><td>'+CourtList[i][4]+'</td><td>'+valid+'</td><td>'+dispo+'</td><td>'+CourtList[i][1]+' '+CourtList[i][2]+' ('+CourtList[i][0]+')</td><td>'+adress+'</td></tr>';
 		panneau.innerHTML += p;
 	};
 
@@ -387,7 +387,7 @@ function setUserStaff(page){
 		var year = UserList[i][4].split('/')[2];
 		var now = new Date().getFullYear();
 		var age = now-year;
-		var p = '<tr class="clickable-row" data-href="utilisateurs/'+UserList[i][0]+'"><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td>'+age+' ans</td></tr>';
+		var p = '<tr onclick="window.document.location='+"'utilisateurs/"+UserList[i][0]+"'"+';" class="clickable-row"><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td>'+age+' ans</td></tr>';
 		panneau.innerHTML += p;
 	};
 
