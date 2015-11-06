@@ -54,7 +54,7 @@
                                         <tr onclick="window.document.location='{% url 'tennis.views.editTerrain' elem.id %}'" class="clickable-row">
                                            <td>{{ elem.id }}</td>
                                            <td>{{ elem.matiere }}</td>
-                                           <td>{{ elem.rue }} {elem.numero}}, {{ elem.codepostal }} {{ elem.localite }}</td>
+                                           <td>{{ elem.rue }} {{ elem.numero}}, {{ elem.codepostal }} {{ elem.localite }}</td>
                                     {% endfor %}
                                   </tbody>
                                 </thead>
