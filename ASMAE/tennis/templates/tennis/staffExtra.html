@@ -187,7 +187,9 @@
 {% block commande %}
 <script>
 //On met le premier extra de la liste en "active"
+extra('{{ Ex.0.id }}', '{{ Ex.0.nom }}','{{ Ex.0.prix }}','{{ Ex.0.commentaires }}');
 activeExtra();
+
 </script>
 
 {% if successAdd %} 

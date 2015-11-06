@@ -21,13 +21,15 @@
 			          </tr>
 			      	</thead>
 		         	<tbody id="LogList">
-		         		<!-- Example -->
-		         		<tr>
-				            <td>10/06/2016 : 22h15</td>
-				            <td>Jean-Michel Foucault (Jean-Mi)</td>
-				            <td>Extra</td>
-				            <td>Ajout extra Golf (80€)</td>
-			          	</tr>
+                    {% for item in  logs %}
+                      <tr>
+                       <td>{{ item.date }}</td>
+				       <td>{{ item.user.participant.prenom }} {{ item.user.participant.nom }} ({{ item.user.username }})</td>
+				       <td>{{ item.section }}</td>
+				       <td>{{ item.details }}</td>
+                        </tr>
+                    {% endfor %}
+		       
 		          	</tbody>  
 				</table>
 			</div>
