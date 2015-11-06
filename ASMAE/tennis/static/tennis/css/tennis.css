@@ -318,13 +318,10 @@ a.UserLink{
     display: block;
 }
 
-/*
-a.UserLink:hover,
-a.UserLink:focus,{
-    font-weight: bold;
-    font-size: 16px;
-    color: grey;
-}*/
+
+.clickable-row td:hover {
+    cursor: pointer;
+}
 
 /* List group */
 .list-group-item{

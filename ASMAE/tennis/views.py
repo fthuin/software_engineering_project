@@ -523,6 +523,13 @@ def staffExtra(request):
 		return render(request,'tennis/staffExtra.html',locals())
 	return redirect(reverse(home))
 
+#TODO add permission @permission_required('tennis.Log')
+def staffLog(request):
+	if request.user.is_authenticated():
+		return render(request,'tennis/staffLog.html',locals())
+	return redirect(reverse(home))
+
+
 @permission_required('tennis.Droit')
 #TODO permission droit
 def staffPerm(request):

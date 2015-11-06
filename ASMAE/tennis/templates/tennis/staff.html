@@ -12,7 +12,7 @@
 	    {% if perms.tennis.Pair %}<li {% block ongPaires %}{% endblock %} id="paire"><a href="{% url "tennis.views.staffPaire" %}">Paires</a></li>{% endif %}
 	    {% if perms.tennis.Extra %}<li {% block ongExtras %}{% endblock %} id="extra"><a href="{% url "tennis.views.staffExtra" %}">Extras</a></li>{% endif %}
 	    {% if perms.tennis.User %}<li {% block ongUser %}{% endblock %} id="user"><a href="{% url "tennis.views.staffUser" %}">Utilisateurs</a></li>{% endif %}
-	    <!-- TODO if perm auth droit -->
+	    <li {% block ongLog %}{% endblock %} id="log"><a href="{% url "tennis.views.staffLog" %}">Historique</a></li>
 	    {% if perms.tennis.Droit %}<li {% block ongPerm %}{% endblock %} id="droit"><a href="{% url "tennis.views.staffPerm" %}">Permissions</a></li>{% endif %}
   	</ul>
 	{% block bodyStaff %}
