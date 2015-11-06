@@ -387,7 +387,7 @@ function setUserStaff(page){
 		var year = UserList[i][4].split('/')[2];
 		var now = new Date().getFullYear();
 		var age = now-year;
-		var p = '<tr class="clickable-row" data-href="utilisateurs/'+UserList[i][0]+'"><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td>'+age+' ans</td></tr>';
+		var p = '<tr onclick="window.document.location='+"'utilisateurs/"+UserList[i][0]+"'"+';" class="clickable-row"><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td>'+age+' ans</td></tr>';
 		panneau.innerHTML += p;
 	};
 
