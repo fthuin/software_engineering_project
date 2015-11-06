@@ -296,9 +296,9 @@ def registerTerrain(request):
 		postalcode = request.POST['postalcode']
 		locality = request.POST['loclity']
 		acces = request.POST['acces']
-		matiere = request.POST['matiere']
-		type = request.POST['type']
-		etat = request.POST['etat']
+		matiere = (u'' + request.POST['matiere']).encode('utf-8')
+		type = (u'' + request.POST['type']).encode('utf-8')
+		etat = (u'' + request.POST['etat']).encode('utf-8')
 		commentaire = request.POST['comment']
 		if request.POST.__contains__("dispoSamedi"):
 				dispoSamedi = True
@@ -314,7 +314,7 @@ def registerTerrain(request):
 			return render(request,'tennis/registerTerrain.html',locals())
 
 		# Create court object
-		court = Court(rue = rue,numero=numero,boite=boite,codepostal=postalcode,localite=locality,acces=acces,matiere=matiere,type=type,dispoDimanche=dispoDimanche,dispoSamedi=dispoSamedi,etat= etat,commentaire=commentaire,user = request.user)
+		court = Court(rue = rue,numero=numero,boite=boite,codepostal=postalcode,localite=locality,acces=acces,matiere=CourtSurface.objects.filter(nom=matiere)[0],type=CourtType.objects.filter(nom=type)[0],dispoDimanche=dispoDimanche,dispoSamedi=dispoSamedi,etat=CourtState.objects.filter(nom=etat)[0],commentaire=commentaire,user = request.user)
 
 		# Send confirmation mail
 		##send_confirmation_email_court_registered(Participant.objects.get(user=request.user), court)
@@ -347,9 +347,9 @@ def editTerrain(request,id):
 			postalcode = request.POST['postalcode']
 			locality = request.POST['loclity']
 			acces = request.POST['acces']
-			matiere = request.POST['matiere']
-			type = request.POST['type']
-			etat = request.POST['etat']
+			matiere = (u'' +request.POST['matiere']).encode('utf-8')
+			type = (u'' + request.POST['type']).encode('utf-8')
+			etat = (u'' + request.POST['etat']).encode('utf-8')
 			commentaire = request.POST['comment']
 			if request.POST.__contains__("dispoSamedi"):
 					dispoSamedi = True
@@ -372,11 +372,11 @@ def editTerrain(request,id):
 			court.codepostal=postalcode
 			court.localite=locality
 			court.acces=acces
-			court.matiere=matiere
-			court.type=type
+			court.matiere=CourtSurface.objects.filter(nom=matiere)[0]
+			court.type=CourtType.objects.filter(nom=type)[0]
 			court.dispoDimanche=dispoDimanche
 			court.dispoSamedi=dispoSamedi
-			court.etat= etat
+			court.etat=CourtState.objects.filter(nom=etat)[0]
 			court.commentaire=commentaire
 			court.user = request.user
 			court.save()
@@ -673,9 +673,9 @@ def editTerrainStaff(request, id):
 			postalcode = request.POST['postalcode']
 			locality = request.POST['loclity']
 			acces = request.POST['acces']
-			matiere = request.POST['matiere']
+			matiere = (u''+request.POST['matiere']).encode('utf-8')
 			type = request.POST['type']
-			etat = request.POST['etat']
+			etat = (u''+request.POST['etat']).encode('utf-8')
 			commentaire = request.POST['comment']
 			if request.POST.__contains__("dispoSamedi"):
 					dispoSamedi = True
@@ -691,18 +691,17 @@ def editTerrainStaff(request, id):
 				errorAdd = "Veuillez remplir tous les champs obligatoires !"
 				return render(request,'tennis/registerTerrain.html',locals())
 
-
 			court.rue = rue
 			court.numero=numero
 			court.boite=boite
 			court.codepostal=postalcode
 			court.localite=locality
 			court.acces=acces
-			court.matiere=matiere
-			court.type=type
+			court.matiere=CourtSurface.objects.filter(nom=matiere)[0]
+			court.type=CourtType.objects.filter(nom=type)[0]
 			court.dispoDimanche=dispoDimanche
 			court.dispoSamedi=dispoSamedi
-			court.etat= etat
+			court.etat=CourtState.objects.filter(nom=etat)[0]
 			court.commentaire=commentaire
 			court.user = request.user
 			court.save()
