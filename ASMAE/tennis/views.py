@@ -996,4 +996,8 @@ def is_number(s):
 	except ValueError:
 		return False
 
-
+def printScoreboard(request):
+    if request.method == "GET":
+        return render(request,'tennis/printScoreboard.html',locals())
+    else:
+        return render(request,'tennus/prinScoreboard.html', request.GET.get('data'))

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html><head>
+    <style type="text/css" media="print">
+        .black_box {
+            background: grey;
+            -webkit-print-color-adjust: exact;
+        }
+    </style>
+</head>
+<body>
+<table id="match_display" border="1" style="text-align: center">
+
+</table>
+<script>
+
+    var liste_pairs = [];
+	
+	var tmp = sessionStorage.getItem("data");
+    var elem = document.createElement("div");
+    elem.innerHTML = tmp;
+    var tmp_list = elem.querySelectorAll("tbody > tr");
+
+    var i;
+    for (i = 0; i < tmp_list.length -1 ; i++){
+        liste_pairs.push(tmp_list[i].childNodes[1].innerHTML);
+    }
+
+	var match_display = document.getElementById("match_display");
+
+    //creation de la premiere ligne (avec les noms des pairs)
+
+    var row = match_display.insertRow(-1);
+    //case noir en haute à gauche
+    row.insertCell(-1).className = "black_box";
+    row.cells[0].style.width = "100px";
+    row.cells[0].style.height = "50px";
+    row.cells[0].style.backgroundColor = "grey";
+
+    var i;
+    for (i = 0; i < liste_pairs.length; i++){
+        row.insertCell(-1).innerHTML = liste_pairs[i].toString();
+    }
+
+
+    // fonction pour générer une ligne avec une case grisée pour
+    function add_row(index){
+        var row = match_display.insertRow(-1);
+        row.insertCell(-1).innerHTML = liste_pairs[index].toString();
+        var i;
+        for(i = 0 ; i < liste_pairs.length; i++){
+            if (i == index){
+                row.insertCell(-1);
+                row.cells[i+1].className = "black_box";
+                row.cells[i+1].style.width = "100px";
+                row.cells[i+1].style.height = "50px";
+                row.cells[i+1].style.backgroundColor = "grey";
+            }
+
+            else{
+                var box = document.createElement("div");
+                box.style.width = "100px";
+                box.style.height = "50px";
+                //box.setAttribute("type","number");
+                row.insertCell(-1).appendChild(box);
+            }
+        }
+    }
+
+    for (i = 0; i < liste_pairs.length; i++) {
+        add_row(i);
+    }
+
+    window.print();
+
+</script>
+</body></html>

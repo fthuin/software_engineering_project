@@ -317,6 +317,27 @@ text-align:left;
                 group_name.innerHTML = "Groupe n° " + (index+1);
                 group_name_head.appendChild(group_name);
                 group_display.appendChild(group_name_head);
+
+                var print_button = document.createElement("span");
+                print_button.className = "glyphicon glyphicon-print";
+                print_button.title = "Imprimer le tableau des scores";
+                print_button.style.float = "right";
+                print_button.style.margin = "3px";
+                group_name.appendChild(print_button);
+
+                print_button.addEventListener("click", function(event){
+                    event.stopPropagation();
+                    sessionStorage.setItem("data", this.parentNode.parentNode.parentNode.outerHTML);
+                    window.location.href = "{% url 'printScoreboard' %}";
+                }, false);
+
+                var edit_button = document.createElement("span");
+                edit_button.className = "glyphicon glyphicon-edit";
+                edit_button.title = "Editer scores du groupe";
+                edit_button.style.float = "right";
+                edit_button.style.margin = "3px";
+                group_name.appendChild(edit_button);
+
                 var group_display_body = document.createElement("tbody");
                 group_display.appendChild(group_display_body);
                 var numRows = group_display.rows.length;
