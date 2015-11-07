@@ -365,6 +365,10 @@ a.UserLink{
     font-weight: bold;
 }
 
+.pagination {
+    margin: 0 !important;
+}
+
 .pagination>.active>a, .pagination>.active>a:focus, 
 .pagination>.active>a:hover, .pagination>.active>span, 
 .pagination>.active>span:focus, 
