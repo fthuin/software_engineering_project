@@ -45,11 +45,16 @@
 						</p>
 					</div>
 				</div>
-				
-				<div class="row" style="margin-top:20px;">
+
+				<ul class="list-inline text-center" style="padding-top:10px">
+				<li>
+					<button onclick="location.href='{% url "tennis.views.terrainPDF" court.id %}';" class="btn btn-default center-block">Version PDF</button>
+				</li>
+				<li>
 					<button onClick="location.href='{% url "tennis.views.editTerrainStaff" court.id %}';" class="btn btn-default center-block">Editer info</button>
-					<button onclick="location.href='{% url "tennis.views.terrainPDF" court.id %}';" class="btn btn-default center-block">Créer un PDF</button>
-				</div>
+				</li>
+			</ul>
+				
 				
 				<h3>Google Map (TODO)</h3>
 				<div id="map" style="height:250px;"></div>
