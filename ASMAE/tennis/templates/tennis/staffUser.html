@@ -61,7 +61,7 @@ function pagination(list) {
     var total = Math.max(Math.ceil(list.length/pageLength), 1);
     //Notre pagination
     $('#paginationholder').html('');
-    $('#paginationholder').html('<ul class="pagination" id="UserPagination"></ul>');
+    $('#paginationholder').html('<div class="pagination" id="UserPagination"></div>');
     $('#UserPagination').twbsPagination({
       totalPages: total,
       visiblePages: Math.min(total, 5),
