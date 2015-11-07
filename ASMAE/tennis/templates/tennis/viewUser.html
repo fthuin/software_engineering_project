@@ -51,19 +51,46 @@
 			<div class="col-sm-6">
 				<div class="panel panel-default center-block" style="max-width:600px;">
 					<div class="panel-heading">Tournois</div>
-					<div class="list-group">
-						{% for item in tournoi %}
-						<a href="{% url "tennis.views.validatePair" item.id %}" class="list-group-item">
-							<b>ID : </b> {{ item.id}} / <b>Tournoi : </b> {{item.tournoi.nom}} / <b>Jour : </b>{{ item.tournoi.jour }} <br> 
-							<b>Valide : </b>{% if item.valid %}oui{% else %}non{% endif %} / <b>Payé : </b>{% if item.pay %}oui{% else %}non{% endif %} <br>
-							<b>Joueur 1 : </b>{{item.user1.participant.prenom}} {{item.user1.participant.nom}} - <b>Joueur 2 : </b>{{item.user2.participant.prenom}} {{item.user2.participant.nom}}
-						</a>
-						{% empty %}
-						<li class="list-group-item center">Cet utilisateur ne participe pas encore à un tournoi</li>
-						{% endfor %}
+					<div class="table-responsive">
+					<table class="table table-hover">
+					<thead>
+					    <tr>
+					        <th>ID</th>
+					        <th>Tournoi</th>
+					        <th>Jour</th>
+					        <th>Validé</th>
+					        <th>Payé</th>
+					        <th>Joueur 1</th>
+					        <th>Joueur 2</th>
+					   </tr>
+					</thead>
+					<tbody>
+					    {% for item in tournoi %}
+					    <tr onclick='window.document.location="{% url 'tennis.views.validatePair' item.id %}"' class="clickable-row">
+					        <td>{{ item.id }}</td>
+					        <td>{{ item.tournoi.nom }}</td>
+					        <td>{{ item.tournoi.jour }}</td>
+					        <td>{% if item.valid %}oui{% else %}non{% endif %}</td>
+					        <td>{% if item.pay %}oui{% else %}non{% endif %}</td>
+					        <td>{{item.user1.participant.prenom}} {{item.user1.participant.nom}}</td>
+					        <td>{{item.user2.participant.prenom}} {{item.user2.participant.nom}}</td>
+					    </tr>
+					    {% empty %}
+					    <tr>
+					        <td>-</td>
+					        <td>-</td>
+					        <td>-</td>
+					        <td>-</td>
+					        <td>-</td>
+					        <td>-</td>
+					        <td>-</td>
+					    </tr>
+					    {% endfor %}
+					</tbody>
+					</table>
 					</div>
-				</div>
-			</div>
+					</div>
+			    </div>
 			<div class="col-sm-6">
 				<div class="panel panel-default center-block" style="max-width:600px;">
 					<div class="panel-heading">Terrains</div>

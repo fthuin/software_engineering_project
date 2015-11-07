@@ -22,8 +22,8 @@
 	<!-- Paramètres de recherche avancée -->
 	<form action="" class="form-horizontal">
 		<div class="panel panel-default center-block" style="max-width:300px;">
-		    <div class="panel-heading">Critères d'affichage</div>
-		    <div class="list-group">
+		    <div class="panel-heading" data-toggle="collapse" data-target="#list_criteria" href="#list_criteria">Critères d'affichage</div>
+		    <div class="list-group panel-collapse collapse in" id="list_criteria">
 			    <li class="list-group-item">
 				    <div class="row">
 					    <label class="control-label col-sm-4">Validation</label>
@@ -67,10 +67,24 @@
 		</div>
 	</form>
 	<!-- Liste des terrains -->
-	<div class="panel panel-default center-block" style="max-width:600px;">
+	<div class="panel panel-default center-block">
 		<div class="panel-heading">Paires</div>
-		<div class="list-group" id="PairList">
-		</div>
+		    <div class="table-responsive">
+		        <table class="table table-hover">
+		            <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Tournoi</th>
+                        <th>Validé</th>
+                        <th>Payé</th>
+                        <th>Joueur 1</th>
+                        <th>Joueur 2</th>
+                      </tr>
+                    </thead>
+                    <tbody id="PairList">
+                    </tbody>
+		        </table>
+		    </div>
 	</div>
 
 	<!-- Info -->
