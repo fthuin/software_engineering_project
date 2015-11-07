@@ -861,7 +861,7 @@ def profil(request):
 	if request.method == "POST":
 		if request.POST['action'] == 'sendMailConfirmationMail':
 			# Send email with code to finish registration and validate account
-			successSendMail = "Un email vous a ete renvoye sur votre adresse courante. En cas de non - réception veuillez rrevérifier l'adresse enregistrée ci-dessous."
+			successSendMail = "Un email vous a ete renvoye sur votre adresse courante. En cas de non - réception veuillez revérifier l'adresse enregistrée ci-dessous."
 			participant = Participant.objects.get(user = request.user)
 			activationObject = UserInWaitOfActivation.objects.get(participant = participant)
 			activationObject.dayOfRegistration = datetime.datetime.now()
