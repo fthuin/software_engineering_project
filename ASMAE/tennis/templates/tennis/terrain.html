@@ -49,15 +49,16 @@
                                     <th>Matière</th>
                                     <th>Adresse</th>
                                   </tr>
-                                  <tbody>
+                                </thead>
+                                <tbody>
                                     {% for elem in court %}
                                         <tr onclick="window.document.location='{% url 'tennis.views.editTerrain' elem.id %}'" class="clickable-row">
                                            <td>{{ elem.id }}</td>
                                            <td>{{ elem.matiere }}</td>
                                            <td>{{ elem.rue }} {{ elem.numero}}, {{ elem.codepostal }} {{ elem.localite }}</td>
+                                        </tr>
                                     {% endfor %}
-                                  </tbody>
-                                </thead>
+                                </tbody>
 		                    </table>
 		                </div>
 					</div>
