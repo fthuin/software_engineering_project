@@ -8,6 +8,17 @@
 	<div class="content-box">
 		<h2 class="center">Historique des modifications</h2>
 		<hr class="line">
+	    <!-- Rechercher -->
+	    <div class="row" style="margin-bottom:15px;">
+		    <div class="col-sm-4 col-sm-offset-4">
+			    <div class="input-group">
+		          <input type="text" class="form-control" placeholder="Rechercher" id="search_value">
+		          <span class="input-group-btn">
+		            <button class="btn btn-default" type="button" id="search_button" onclick="search_log()"><span class="glyphicon glyphicon-search"></span></button>
+		          </span>
+		        </div>
+		    </div>
+	    </div>
 		<div class="panel panel-default">
 			<div class="panel-heading">Historique des modifications</div>
 			<div class="table-responsive">
@@ -21,19 +32,77 @@
 			          </tr>
 			      	</thead>
 		         	<tbody id="LogList">
-                    {% for item in  logs %}
-                      <tr>
-                       <td>{{ item.date }}</td>
-				       <td>{{ item.user.participant.prenom }} {{ item.user.participant.nom }} ({{ item.user.username }})</td>
-				       <td>{{ item.section }}</td>
-				       <td>{{ item.details }}</td>
-                        </tr>
-                    {% endfor %}
-		       
 		          	</tbody>  
 				</table>
 			</div>
 		</div>
 	</div>
+	<!-- Info -->
+	<p class="center" id="LogInfo"></p>
+
+	<!-- Bottom pagination -->
+	<div class="text-center">
+	    <div id="paginationholder">
+		</div>
+	</div>
 </div>
+{% endblock %}
+
+{% block commande %}
+<script>
+function pagination(list) {
+    //Nombre d'entrée par page
+    var pageLength = 10;
+    //Nombre de page
+    var total = Math.max(Math.ceil(list.length/pageLength), 1);
+    //Notre pagination
+    $('#paginationholder').html('');
+    $('#paginationholder').html('<div class="pagination" id="LogPagination"></div>');
+    $('#LogPagination').twbsPagination({
+      totalPages: total,
+      visiblePages: Math.min(total, 5),
+      onPageClick: function (event, page) {
+      	//Lorsqu'on clique sur une page, on met à jour le contenu
+	    setLogStaff(page);
+      }
+    });
+    //On met à jour les info (liste des logs et longueur de chaque page)
+    setLogListInfo(list,pageLength);
+
+    //On met à jour la première page
+    setLogStaff(1);
+}
+
+//Recuperation des logs et stockage dans un tableau
+var log_list = [];
+{% for item in logs %}
+log_list.push(['{{ item.date }}','{{ item.user.participant.prenom }}','{{ item.user.participant.nom }}','{{ item.user.username }}','{{ item.section }}','{{ item.details }}']);
+{% endfor %}
+
+pagination(log_list);
+
+function search_log() {
+    var retour = document.getElementById("search_value").value.sansAccent().toLocaleUpperCase();
+    // Copie du tableau pour garder l'original
+    var resultList = log_list.slice();
+    var nbr = resultList.length;
+    for (var i = nbr-1; i >= 0 ; i--) {
+        var myLog = resultList[i];
+        var date = myLog[0].sansAccent().toLocaleUpperCase();
+        var prenom = myLog[1].sansAccent().toLocaleUpperCase();
+        var nom = myLog[2].sansAccent().toLocaleUpperCase();
+        var username = myLog[3].sansAccent().toLocaleUpperCase();
+        var section = myLog[4].sansAccent().toLocaleUpperCase();
+        var details = myLog[5].sansAccent().toLocaleUpperCase();
+        if (! (date.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1 || username.indexOf(retour) != -1 || section.indexOf(retour) != -1 || details.indexOf(retour) != -1 )) {
+            resultList.splice(i, 1);
+        }
+    }
+    pagination(resultList);
+}
+
+$('#search_value').on('input', function() { 
+    search_log();
+});
+</script>
 {% endblock %}

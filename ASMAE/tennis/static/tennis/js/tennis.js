@@ -419,6 +419,33 @@ function setUserPermStaff(page){
 	info.innerHTML = (debut+1)+'-'+i+' sur '+pageLength+' résultats ('+UserList.length+' au total)';
 
 }
+
+var logList;
+var logListPageLength;
+function setLogListInfo(list, pageLength) {
+    logList = list;
+    logListPageLength = pageLength;
+}
+
+function setLogStaff(page) {
+	//Conteneur de notre liste
+	var panneau = document.getElementById("LogList");
+	panneau.innerHTML = "";
+
+	var debut = (page-1)*logListPageLength;
+	var fin = page*logListPageLength;
+
+	//Ajout des logs
+	for (var i = debut; i < logList.length && i<fin; i++) {
+	    var p = '<tr><td>'+logList[i][0]+'</td><td>'+logList[i][1]+' '+logList[i][2]+' ('+logList[i][3]+')</td><td>'+logList[i][4]+'</td><td>'+logList[i][5]+'</td></tr>';
+		panneau.innerHTML += p;
+	};
+
+	//Info maj
+	var info = document.getElementById("LogInfo");
+	info.innerHTML = (debut+1)+'-'+i+' sur '+logListPageLength+' résultats ('+logList.length+' au total)';
+}
+
 function admin()
 {
     if(document.getElementById("permID").checked == true)
