@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
 class Participant(models.Model):
 	user = models.OneToOneField(User,null=True)
@@ -19,6 +20,7 @@ class Participant(models.Model):
 	classement = models.CharField(max_length=10,null=True, blank=True)
 	oldparticipant = models.BooleanField(default=False)
 	isGroupLeader = models.BooleanField(default=False)
+	isAccountActivated = models.BooleanField(default=True)
 
 	def __str__(self):
 		return self.prenom +" "+ self.nom
@@ -35,6 +37,17 @@ class Participant(models.Model):
 			("User", "Manage User"),
 			("Droit","Donner droit"),
 		)
+
+class UserInWaitOfActivation(models.Model):
+	participant = models.OneToOneField(Participant, null=False)
+	dayOfRegistration = models.DateTimeField(null=False)
+	confirmation_key = models.CharField(max_length=100,null=False)
+	
+	def isStillValid(self):
+		return self.dayOfRegistration + timedelta(weeks=1) > datetime.datetime.now()
+		
+	def isKeyValid(self, key):
+		return key.equals(confirmation_key)
 
 class Extra(models.Model):
 	id = models.AutoField(primary_key=True)

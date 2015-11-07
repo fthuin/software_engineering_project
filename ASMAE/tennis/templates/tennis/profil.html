@@ -19,7 +19,17 @@
 		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 		    <strong>Succès!</strong> {{ successMDP }}
 		</div>
+		{% elif successSendMail %}
+		<div class="alert alert-success">
+		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		    <strong>Succès!</strong> {{ successSendMail }}
+		</div>
 		{% endif %}
+		<!-- Mail sending form-->
+		<form class="form-horizontal" name="registerForm" id="sendMailConfirmationMail" role="form" method="post" action="{% url "tennis.views.profil" %}" {% if not user.participant.isAccountActivated %}{% else %}style="display:none"{% endif %}>
+			{% csrf_token %}
+			<button type="submit" class="btn btn-default b-center" style="margin-top:20px; margin-bottom:20px;" name="action" value="sendMailConfirmationMail">Demander le renvoi de l'email de confirmation d'adresse mail</button>
+		</form>
 		<!-- Information du compte-->
 		<!-- TODO set real info-->
 		<div  id="compteInfo" style="margin-bottom:20px;{% if errorMDP %}display:none;{% else %}{% endif %}">
