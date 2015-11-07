@@ -35,6 +35,10 @@ class CourtSurfaceAdmin(admin.ModelAdmin):
 class CourtTypeAdmin(admin.ModelAdmin):
     list_display = ('nom',)
     ordering = ('nom',)
+    
+class LogActivityAdmin(admin.ModelAdmin):
+    list_display = ('date', 'user', 'section', 'details')
+    ordering = ('date',)
 
 admin.site.register(Participant, ParticipantAdmin)
 admin.site.register(Extra, ExtraAdmin)
@@ -42,7 +46,7 @@ admin.site.register(Court, CourtAdmin)
 admin.site.register(Tournoi)
 admin.site.register(Pair, PairAdmin)
 admin.site.register(Groupe)
-admin.site.register(LogActivity)
+admin.site.register(LogActivity, LogActivityAdmin)
 admin.site.register(CourtState, CourtStateAdmin)
 admin.site.register(CourtSurface, CourtSurfaceAdmin)
 admin.site.register(CourtType, CourtTypeAdmin)

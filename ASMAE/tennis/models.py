@@ -169,12 +169,15 @@ class Pair(models.Model):
 
 class LogActivity(models.Model):
 	date = models.DateTimeField(auto_now_add=True)
-	user = models.ForeignKey(User)
+	user = models.ForeignKey(User, verbose_name="Utilisateur")
 	section = models.CharField(max_length=50)
 	details = models.CharField(max_length=200)
 
 	def __str__(self):
 		return self.user.username + self.section + self.details
+	
+	class Meta:
+		verbose_name = "Log"
 
 
 
