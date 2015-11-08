@@ -55,10 +55,8 @@ class Command(BaseCommand):
                 user = participant.user
                 if username1 == user.username:
                     toRemove.append(participant)
-                    print("username1 was " + username1)
                 if username2 == user.username:
                     toRemove.append(participant)
-                    print("username2 was " + username2)
             for e in toRemove:
                 alone_participants.remove(e)
         i = 0
