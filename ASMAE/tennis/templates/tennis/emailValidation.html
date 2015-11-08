@@ -1,0 +1,26 @@
+{% extends "tennis/base.html" %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+
+<div class="container">
+		<div class="content-box">
+		<h2 class="center">Validation de l'email</h2>
+		<hr class="line">
+		<!-- Si error lors du nouveau mdp -->
+		{% if errorValidate %}
+		<div class="alert alert-danger">
+		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		    <strong>Error!</strong> {{ errorValidate }}
+		</div>
+		{% elif successValidate %}
+		<div class="alert alert-success">
+		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		    <strong>Succès!</strong> {{ successValidate}}
+		</div>
+		{% endif %}
+	</div>
+</div>
+
+{% endblock %}

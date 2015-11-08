@@ -215,7 +215,7 @@ def cancelPair(request,id):
 
 		return render(request,'tennis/cancelPair.html',locals())
 	return redirect(reverse(home))
-
+	
 def viewPair(request,id):
 	pair = Pair.objects.filter(id=id)
 	if len(pair) <1:
@@ -866,7 +866,8 @@ def profil(request):
 			activationObject = UserInWaitOfActivation.objects.get(participant = participant)
 			activationObject.dayOfRegistration = datetime.datetime.now()
 			activationObject.save()
-			send_register_confirmation_email(activationObject, participant)
+			link = "http://" + request.get_host() + "/tennis/emailValidation/"
+			send_register_confirmation_email(activationObject, participant, link)
 			return render(request,'tennis/profil.html',locals())
 		if request.POST['action'] == 'updatePassword':
 
@@ -952,9 +953,6 @@ def profil(request):
 		return render(request,'tennis/profil.html',locals())
 	return redirect(reverse(home))
 
-
-
-
 def connect(request):
 	if request.method == "POST":
 		#Recuperation des donnees
@@ -1003,6 +1001,33 @@ def email_present(email):
 
 	return False
 
+def emailValidation(request, key):
+	# Read all objects, clean those out of date
+	compteToValidate = None
+	listOfAll = UserInWaitOfActivation.objects.all()
+	for account in listOfAll:
+		if account.isStillValid():
+			# Keep in memory
+			if account.isKeyValid(key):
+				compteToValidate = account
+		else:
+			#account.participant.delete() #TODO ON LE DELETE OU PAS LE PARTICIPANT ?
+			account.delete()
+	# End of cleaning, if account to validate has been found, validate it and return succes, else failure
+	if compteToValidate == None:
+		# Failure
+		errorValidate = "La cle de validation de compte reçue semble être invalide ou expirée."
+	else:
+		# Validate participant
+		participant = compteToValidate.participant
+		participant.isAccountActivated = True
+		participant.save()
+		#Delete accounr
+		compteToValidate.delete()
+		#Print succes
+		successValidate = "Votre adresse mail est désormais validée, merci de votre coopération."
+	return render(request,'tennis/emailValidation.html',locals())
+	
 def register(request):
 	yearLoop = range(1900,2015)
 	if request.method == "POST":
@@ -1080,9 +1105,10 @@ def register(request):
 			key = get_random_string(20, allowed_chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
 		activationObject = UserInWaitOfActivation(participant = participant, dayOfRegistration = today, confirmation_key= key)
 		activationObject.save()
+		link = "http://" + request.get_host() + "/tennis/emailValidation/"
 		
 		# Send email with code to finish registration and validate account
-		send_register_confirmation_email(activationObject, participant)
+		send_register_confirmation_email(activationObject, participant, link)
 		
 		#On connecte l'utilisateur
 		user2 = authenticate(username=username, password=password)
