@@ -133,45 +133,6 @@ class People :
         res+= "\n"
         return res
 
-class AllPeople :
-
-    def __init__(self) :
-        self.peoples = []
-
-    def add(self, p) :
-        self.peoples.append(p)
-
-    def write(self, path) :
-        f = open(path, 'w')
-
-        f.write(', '.join(name))
-        f.write('\n')
-
-        for p in self.peoples :
-            p.write(f)
-        f.close()
-
-    def writeRandom(self, browser) :
-        browser.get(URL_RANDOM )
-        src = browser.page_source
-
-        # Read one people
-        f = open(TMP_FILE, 'w')
-        f.write(src.encode('ascii', 'ignore'))
-        f.close()
-
-    def addRandom(self) :
-        f = open(TMP_FILE, 'r')
-        ple = People()
-
-        for line in f :
-            for i, (found, get) in enumerate(zip(regex_found, regex_get)):
-                if re.match(found, line) :
-                    ple.add(i, re.match(get, next(f)).group(2))
-
-        f.close()
-        self.add(ple)
-
 
 def generatePeople(browser):
     browser.get(URL_RANDOM)
