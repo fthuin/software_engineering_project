@@ -12,3 +12,4 @@
 ./ASMAE/venv
 *.pyc
 staticfiles
+.idea
