@@ -110,9 +110,12 @@ class Court(models.Model):
 
 	def __str__(self):
 		return str(self.id) +" "+ self.rue
+		
+	def __unicode__(self):
+		return u'' + repr(self.id) + ' '+ self.rue
 
 	class Meta:
-		verbose_name = "Court"
+		verbose_name = "Terrain"
 		permissions = (
 			("Court", "Manage Court"),
 		)
