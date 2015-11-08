@@ -148,6 +148,23 @@ def send_email_payment_issue(participant):
     """
 
     send_mail(subject, message, "", [mail], fail_silently=True)    
+	
+def send_register_confirmation_email(activationObject, participant): 
+	prenom = participant.prenom
+	mail = participant.user.email
+	subject = "Le charle de lorraine : validation de votre adresse email"
+	lien = activationObject.confirmation_key # http://127.0.0.1:8000/accounts/activate/6342fca5ffd430a820be6d98acde6e59a4c2d29c/ TODO METTRE LIEN CLIQUABLE
+	
+	message =  "Bonjour " + prenom + """,
+	Afin de finaliser la creation de votre compte 'Le Charle de Lorraine',  merci de cliquer sur le lien suivant.
+
+	""" + lien + """
+	
+	Merci de votre cooperation, 
+	L'équipe 'Le charle de Lorraine'
+	"""
+	
+	send_mail(subject, message, "", [mail], fail_silently=True)
 
 # Envoye a tout les groupes leader TODO
 def send_email_score_board(participant):

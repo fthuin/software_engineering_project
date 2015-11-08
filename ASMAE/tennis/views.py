@@ -5,14 +5,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity
-from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament
+from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation
+from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email
 import re, math
 import json
 import datetime
 from itertools import chain
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Permission,Group
+from django.utils.crypto import get_random_string
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
@@ -858,6 +859,15 @@ def profil(request):
 	birthdate = request.user.participant.datenaissance
 	formatedBirthdate = birthdate.strftime('%d/%m/%Y')
 	if request.method == "POST":
+		if request.POST['action'] == 'sendMailConfirmationMail':
+			# Send email with code to finish registration and validate account
+			successSendMail = "Un email vous a ete renvoye sur votre adresse courante. En cas de non - réception veuillez revérifier l'adresse enregistrée ci-dessous."
+			participant = Participant.objects.get(user = request.user)
+			activationObject = UserInWaitOfActivation.objects.get(participant = participant)
+			activationObject.dayOfRegistration = datetime.datetime.now()
+			activationObject.save()
+			send_register_confirmation_email(activationObject, participant)
+			return render(request,'tennis/profil.html',locals())
 		if request.POST['action'] == 'updatePassword':
 
 
@@ -1056,13 +1066,24 @@ def register(request):
 		birthdate2 = birthdate.split("/")
 		datenaissance = datetime.datetime(int(birthdate2[2]),int(birthdate2[1]),int(birthdate2[0]))
 
-		#TODO : send email with code to finish registration and validate account
-
 		#Account creation & redirect
 		user = User.objects.create_user(username,email,password)
 		user.save()
-		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement = classement,oldparticipant = oldparticipant,datenaissance = datenaissance).save()
+		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement = classement,oldparticipant = oldparticipant,datenaissance = datenaissance, isAccountActivated = False)
+		participant.save()
 
+		# Create UserInWaitOfActivation object to keep track of the activation
+		today = datetime.datetime.now()
+		key = get_random_string(20, allowed_chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+		while len(UserInWaitOfActivation.objects.filter(confirmation_key= key)) > 0 :
+			#Key already in user, generate new one
+			key = get_random_string(20, allowed_chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+		activationObject = UserInWaitOfActivation(participant = participant, dayOfRegistration = today, confirmation_key= key)
+		activationObject.save()
+		
+		# Send email with code to finish registration and validate account
+		send_register_confirmation_email(activationObject, participant)
+		
 		#On connecte l'utilisateur
 		user2 = authenticate(username=username, password=password)
 		login(request, user2)
