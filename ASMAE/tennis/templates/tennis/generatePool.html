@@ -114,6 +114,7 @@
 
 <script>
 
+//Creation de la liste des paires
 var PairList = [] ;
 
 {% for elem in allPair %}
@@ -126,16 +127,17 @@ PairList.push(p);
 
 {% endfor %}
 
+//on ajout la liste des pair dans le cache
 setPairList(PairList);
 
+//On set les poules pour en avoir max 6 par poules
 setPoules({{defaultValue}});
 
+//Listener sur le nombre de pair
 $('#poulesNumber').on('input', function() { 
     var nbr = document.getElementById("poulesNumber").value;
     setPoules(nbr);
 });
-
-
 </script>
 {% endblock %}
     

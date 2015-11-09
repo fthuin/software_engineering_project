@@ -1,3 +1,4 @@
+//utilisé pour le drag and drop
 function drag (ev) {
   ev.dataTransfer.setData("src", ev.target.id);
 }
@@ -10,12 +11,15 @@ function drop (ev) {
 
   ev.currentTarget.replaceChild(src, tgt);
   srcParent.appendChild(tgt);
+
+  //TODO update leader liste
 }
 
 function allowDrop(ev) {
     ev.preventDefault();
 }
 
+//Listener pour le popover
 $(document).ready(function(){
     $('[data-toggle="popover"]').popover();   
 });
@@ -29,26 +33,41 @@ function setPairList(pairL){
 }
 
 function setPoules(nbrPoules){
+	//On flush le contenant de nous poules
 	document.getElementById("poulesDiv").innerHTML = "";
+	//On recupere le nombre de pair
 	var v = pairList.length;
+	//on recupere le nombre de poules
 	var poules = nbrPoules;
+	//il y aura au max 'max' pair par poules
 	var max = Math.ceil(v/poules);
 	var count = 0;
+	//on crée nbrPoules de poules
 	for (var i = 0; i < nbrPoules; i++) {
+		//On compte le nombre d'element dans cette poule
 		var nbr = Math.ceil(v/poules);
 		v = v - nbr;
 		poules = poules - 1;
+		//Creation du panel de la poule
 		var panel = createPanel(i+1);
 		document.getElementById("poulesDiv").appendChild(panel);
 
-
+		//Ajout des pair dans le panel et dans la liste du leader
 		for (var j = 0; j < nbr; j++) {
+			//Panel
 			var p = createPair(pairList[count]);
-			count = count + 1;
 			document.getElementById("list"+(i+1)).appendChild(p);
 
+			//List
+			var nom1 = pairList[count].user1;
+			var nom2 = pairList[count].user2;
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1));
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2));
+
+			count = count + 1;
 
 		};
+		//Si c'est plutot que le nombre max on rajotue des espaces vides
 		for (var j = 0; j < max - nbr; j++) {
 			var p = createEmptyPair(i);
 			document.getElementById("list"+(i+1)).appendChild(p);
@@ -57,7 +76,16 @@ function setPoules(nbrPoules){
 	};
 }
 
+//Return une option avec comme nom et valeur le name
+function getOption(name){
+	var o = document.createElement("option");
+	o.value = name;
+	o.innerHTML = name;
 
+	return o;
+}
+
+//Return le panel d'une poule
 function createPanel(number){
 	var panel = document.createElement("div");
 	panel.className = 'col-lg-4';
@@ -65,6 +93,7 @@ function createPanel(number){
     return panel;
 }
 
+//Return une pair
 function createPair(pair){
 	var p = document.createElement("div");
 	
@@ -93,6 +122,7 @@ function createPair(pair){
 	return p;
 }
 
+//return une pair vide
 function createEmptyPair(i){
 	var p = document.createElement("div");
 	p.innerHTML='<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;"><div id="bidon'+i+'" draggable="true" ondragstart="drag(event)"><div class="zone"><div class="row"><div class="col-xs-10"><br><br></div><div class="col-xs-2"></div></div></div></div></div>';
