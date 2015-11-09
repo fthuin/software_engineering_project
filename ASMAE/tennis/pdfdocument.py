@@ -113,7 +113,7 @@ class PDFTerrain():
         owner_content = {}
         court_content = {}
         
-        owner_content['Nom'] = owner.nom
+        owner_content['Nom'] = owner.titre + ' '+ owner.prenom + ' '+ owner.nom
         owner_content['Adresse du propriétaire'] = owner.rue + ', ' + owner.numero + ' ' + owner.localite + ' ' + owner.codepostal
         owner_content['Téléphone'] = owner.telephone
         owner_content['GSM'] = owner.gsm
