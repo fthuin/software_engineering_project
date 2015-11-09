@@ -44,10 +44,10 @@ class UserInWaitOfActivation(models.Model):
 	confirmation_key = models.CharField(max_length=100,null=False)
 	
 	def isStillValid(self):
-		return self.dayOfRegistration + timedelta(weeks=1) > datetime.datetime.now()
+		return self.dayOfRegistration + datetime.timedelta(weeks=1) > datetime.datetime.now()
 		
 	def isKeyValid(self, key):
-		return key.equals(confirmation_key)
+		return key == self.confirmation_key
 
 class Extra(models.Model):
 	id = models.AutoField(primary_key=True)

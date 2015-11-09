@@ -149,11 +149,11 @@ def send_email_payment_issue(participant):
 
     send_mail(subject, message, "", [mail], fail_silently=True)    
 	
-def send_register_confirmation_email(activationObject, participant): 
+def send_register_confirmation_email(activationObject, participant, link): 
 	prenom = participant.prenom
 	mail = participant.user.email
 	subject = "Le charle de lorraine : validation de votre adresse email"
-	lien = activationObject.confirmation_key # http://127.0.0.1:8000/accounts/activate/6342fca5ffd430a820be6d98acde6e59a4c2d29c/ TODO METTRE LIEN CLIQUABLE
+	lien = link + activationObject.confirmation_key # http://domain/tennis/emailValidation/confirmation_key
 	
 	message =  "Bonjour " + prenom + """,
 	Afin de finaliser la creation de votre compte 'Le Charle de Lorraine',  merci de cliquer sur le lien suivant.
