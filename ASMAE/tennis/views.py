@@ -15,10 +15,7 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Permission,Group
 from django.utils.crypto import get_random_string
 from django.http import HttpResponse
-from reportlab.pdfgen import canvas
-from reportlab.lib.units import inch
-from io import BytesIO
-
+from tennis.pdfdocument import PDFTerrain
 
 # Create your views here.
 def home(request):
@@ -659,50 +656,7 @@ def terrainPDF(request, id):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment;filename="terrain'+id+'.pdf"'
     
-    buffer = BytesIO()
-    
-    p = canvas.Canvas(buffer)
-    #p.translate(inch, inch)
-    p.setLineWidth(.3)
-    p.setFont('Helvetica', 20)
-    p.drawString(50, 750, "Terrain " + repr(court.id))
-    
-    # Informations à propos du propriétaire
-    p.setFont('Helvetica', 18)
-    p.drawString(50, 700, "Propriétaire")
-    p.setFont('Helvetica', 12)
-    p.drawString(50, 680, ""+ proprietaire.titre + " " + proprietaire.prenom + " " + proprietaire.nom)
-    p.drawString(50, 660, ""+ proprietaire.rue + ", " + proprietaire.numero + " boite " + proprietaire.boite)
-    p.drawString(50, 640, ""+ proprietaire.codepostal + " " + proprietaire.localite)
-    p.drawString(50, 620, u"Téléphone : "+ proprietaire.telephone)
-    p.drawString(50, 600, "GSM : " + proprietaire.gsm)
-    p.drawString(50, 580, "Fax : " + proprietaire.fax)
-    
-    # Informations permanentes à propos du terrain
-    p.setFont('Helvetica', 18)
-    p.drawString(50, 540, "Terrain")
-    p.setFont('Helvetica', 12)
-    p.drawString(50, 520, court.rue + ", " + court.numero +" boite " + court.boite)
-    
-    p.drawString(50, 480, u"Informations d'accès : " + court.acces)
-    
-    if (court.dispoSamedi and court.dispoDimanche):
-        p.drawString(50, 440, u"Disponibilité : Samedi et dimanche")
-    elif (court.dispoSamedi):
-        p.drawString(50, 440, u"Disponibilité : Samedi")
-    elif (court.dispoDimanche):
-        p.drawString(50, 440, u"Disponibilité : Dimanche")
-    
-    p.drawString(50, 400, "Etat du terrain : " + court.etat.nom)
-    p.drawString(50, 380, "Type de surface : " + court.matiere.nom)
-    p.drawString(50, 360, "Type d'infrastructure : " + court.type.nom)
-    
-    p.showPage()
-    p.save()
-    
-    pdf = buffer.getvalue()
-    buffer.close()
-    response.write(pdf)
+    PDFTerrain(response, court, proprietaire)
     
     return response
     
