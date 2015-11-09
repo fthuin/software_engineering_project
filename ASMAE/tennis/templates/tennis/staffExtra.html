@@ -97,7 +97,7 @@
 							<li>
 								<button class="btn-default btn" type="button" data-toggle="modal" data-target="#myModal">Supprimer</button>
 
-								<form name="deleteExtra" id="deleteExtra" role="form" method="post" action="{% url "tennis.views.staff" %}">
+								<form name="deleteExtra" id="deleteExtra" role="form" method="post" action="{% url "tennis.views.staffExtra" %}">
 									<input type="text" class="form-control" name="id" id="deleteID" value="{{ Ex.0.id }}" style="display:none;">
 									<button style="display:none" class="btn-default btn" name="action" id="deleteExtra" value="deleteExtra">Supprimer</button>
 								</form>

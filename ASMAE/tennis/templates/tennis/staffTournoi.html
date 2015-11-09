@@ -56,7 +56,7 @@ text-align:left;
         <strong>Succès!</strong> {{ successSend }}
     </div>
     {% endif %}
-    <form name="sendTournamentDataByMail" id="sendTournamentDataByMail" role="form" method="post" action="{% url "tennis.views.staff" %}">
+    <form name="sendTournamentDataByMail" id="sendTournamentDataByMail" role="form" method="post" action="">
         {% csrf_token %}
         <input type="text" class="form-control" name="id" id="sendTournamentDataByMailID" value="{{ Ex.0.id }}" style="display:none;">
         <button class="btn-default btn center-block" name="action" value="sendTournamentDataByMail">Envoyer les informations du tournois par mail</button>

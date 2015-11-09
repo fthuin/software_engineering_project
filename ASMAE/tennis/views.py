@@ -396,10 +396,12 @@ def editTerrain(request,id):
 			return render(request,'tennis/editTerrain.html',locals())
 	return redirect(reverse(home))
 
+'''
 def staff(request):
 	if request.user.is_authenticated():
 		return render(request,'tennis/staff.html',locals())
 	return redirect(reverse(home))
+'''
 
 def staffTournoi(request):
 	if request.method == "POST":
