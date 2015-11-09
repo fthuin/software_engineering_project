@@ -9,10 +9,16 @@ function drop (ev) {
   var srcParent = src.parentNode;
   var tgt = ev.currentTarget.firstElementChild;
 
+  var targetID = tgt.parentNode.parentNode.parentNode.parentNode.id;
+  var sourceID = src.parentNode.parentNode.parentNode.parentNode.id;
+
   ev.currentTarget.replaceChild(src, tgt);
   srcParent.appendChild(tgt);
 
-  //TODO update leader liste
+  //update leader liste
+  updatePanel(targetID);
+  updatePanel(sourceID);
+  
 }
 
 function allowDrop(ev) {
@@ -76,6 +82,32 @@ function setPoules(nbrPoules){
 	};
 }
 
+//Update the list of user in the leader list of a panel
+function updatePanel(numero){
+	//Panel et liste
+	var panel = document.getElementById("list"+numero);
+	var list = document.getElementById("Leader"+numero);
+	list.innerHTML = "<option disabled selected>Choisir un leader</option>";
+	var c = panel.childNodes
+	//Update des noms
+	for (var i = 0; i < c.length; i++) {
+		var id = c[i].childNodes[0].childNodes[0].id;
+		if(id.indexOf("bidon")<0){
+			var pair = getPairbyId(id);
+			list.appendChild(getOption(pair.user1));
+			list.appendChild(getOption(pair.user2));
+		}
+	};
+}
+
+function getPairbyId(ID){
+	for (var i = 0; i < pairList.length; i++) {
+		if(pairList[i].id == ID){
+			return pairList[i];
+		};
+	};
+}
+
 //Return une option avec comme nom et valeur le name
 function getOption(name){
 	var o = document.createElement("option");
@@ -89,7 +121,7 @@ function getOption(name){
 function createPanel(number){
 	var panel = document.createElement("div");
 	panel.className = 'col-lg-4';
-	panel.innerHTML = '<div class="panel panel-default"><div class="panel-heading"><div class="row"><label class="control-label col-xs-4">Poule '+number+'</label><div class="col-xs-8"><select class="form-control" name="Leader" id="Leader'+number+'"><option disabled selected>Choisir un leader</option></select></div></div></div><div class="list-group" id="list'+number+'"></div></div>';
+	panel.innerHTML = '<div class="panel panel-default" id="'+number+'"><div class="panel-heading"><div class="row"><label class="control-label col-xs-4">Poule '+number+'</label><div class="col-xs-8"><select class="form-control" name="Leader" id="Leader'+number+'"><option disabled selected>Choisir un leader</option></select></div></div></div><div class="list-group" id="list'+number+'"></div></div>';
     return panel;
 }
 
@@ -111,13 +143,12 @@ function createPair(pair){
 	}
 
 	
-	var comm ;
+	var comm = "" ;
 	if(pair.comment != ""){
-		comm = document.createElement("div");
-		comm.innerHTML = '<a href="javascript:void(0);" data-toggle="popover" data-html="true" data-placement="left" data-content="'+pair.comment+'"><b style="color:#222;"><i class="fa fa-file-text-o fa-2x"></i></b></a>';
+		comm = '<a href="javascript:void(0);" data-toggle="popover" data-html="true" data-placement="left" data-content="'+pair.comment+'"><b style="color:#222;"><i class="fa fa-file-text-o fa-2x"></i></b></a>';
 	}
 	
-	p.innerHTML = '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;"><div id="'+pair.id+'" draggable="true" ondragstart="drag(event)"><div class="zone"><div class="row"><div class="col-xs-10"><b style="color:#222"><i class="'+gender1+'"></i></b> '+pair.user1+' ('+pair.age1+' ans)'+'<br><b style="color:#222"><i class="'+gender2+'"></i></b> '+pair.user2+'('+pair.age2+' ans)'+'</div><div class="col-xs-2"></div></div></div></div></div>';
+	p.innerHTML = '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;"><div id="'+pair.id+'" draggable="true" ondragstart="drag(event)"><div class="zone"><div class="row"><div class="col-xs-10"><b style="color:#222"><i class="'+gender1+'"></i></b> '+pair.user1+' ('+pair.age1+' ans)'+'<br><b style="color:#222"><i class="'+gender2+'"></i></b> '+pair.user2+' ('+pair.age2+' ans)'+'</div><div class="col-xs-2">'+comm+'</div></div></div></div></div>';
 
 	return p;
 }
