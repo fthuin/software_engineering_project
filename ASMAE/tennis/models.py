@@ -137,6 +137,7 @@ class Tournoi(models.Model):
 	nom = models.CharField(max_length=50,primary_key=True)
 	description = models.TextField(null=True)
 	jour = models.CharField(max_length=50)
+	status = models.CharField(max_length=50,null=True)
 	def __str__(self):
 		return self.nom
 

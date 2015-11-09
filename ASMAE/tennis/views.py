@@ -406,52 +406,21 @@ def staff(request):
 	return redirect(reverse(home))
 '''
 
-def staffTournoi(request):
-	if request.method == "POST":
-		if request.POST['action'] == "sendTournamentDataByMail":
-				send_email_start_tournament() #TODO to change and link to a tournament
-				successSend = "Les mails ont bien été envoyé"
-	if request.method == "GET":
-		if request.GET.get('action') == 'enregistrer':
-			# tous les commentaires avec ****
-			# indiquent ce qui doit y avoir
-			# apres avoir mis le nom du tournoi dans le json
-			# **** tournamentJSON = request.GET.get('tournament')
-			tournamentJSON = request.GET.get('groups')
-			tournament_dict = json.loads(tournamentJSON)
-			# **** groups_dict = tournament_dict['groups']
-			groups_dict = tournament_dict['groups']
-			for group_dict in groups_dict:
-				# creation du groupe
-				# insertion du gsize
-				group_gsize = group_dict['gsize']
-				
-				# insertion du leader
-				group_leader_dict = group_dict['leader']
-				group_leader_id = group_leader_dict[0]
-				#group_leader = Pair.objects.get(id=group_leader_id)
-				
-				# insertion du court
-				group_court_id = group_dict['court']
-				# insertion du tournoi
-				group_tournoi_nom = tournament_dict['tournoi']
-				group = Groupe(tournoi=Tournoi.objects.get(nom=group_tournoi_nom), leader=Pair.objects.get(id=group_leader_id), court=Court.objects.get(id=group_court_id), gsize=group_gsize)
-				group.save()
-				# insertion des pairs
-				# find pairs with given id
-				group_pairs_dict = group_dict['pairs']
-				for group_pair_dict in group_pairs_dict:
-					group_pair_id = group_pair_dict[0]
-					group_pair = Pair.objects.get(id=group_pair_id)
-					group_pair.group = group
-					group_pair.save()
-				
+#TODO permission QUENTIN GUSBIN
+def staffTournoi(request):				
 	if request.user.is_authenticated():
-	
-		allTournois = Tournoi.objects.all()
-		allPairs = Pair.objects.all()
-		allCourts = Court.objects.all()
+		allTournoi = Tournoi.objects.all()
+		for tourn in allTournoi:
+			nbrPair = len(Pair.objects.filter(tournoi=tourn))
+			tourn.np = nbrPair
 		return render(request,'tennis/staffTournoi.html',locals())
+	return redirect(reverse(home))
+
+#TODO permission QUENTIN GUSBIN
+def generatePool(request,name):
+	if request.user.is_authenticated():
+		tournoi = Tournoi.objects.filter(nom=name)[0]
+		return render(request,'tennis/generatePool.html',locals())
 	return redirect(reverse(home))
 
 @permission_required('tennis.Court')

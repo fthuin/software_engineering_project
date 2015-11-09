@@ -288,6 +288,15 @@ function setTournoi(TournoiList){
 	};
 }
 
+function setPlusMoins(){
+	if(document.getElementById("plusmoins").className.indexOf("chevron-up")>-1){
+		document.getElementById("plusmoins").className  = "glyphicon glyphicon-chevron-down pull-right"
+	}else{
+		document.getElementById("plusmoins").className  = "glyphicon glyphicon-chevron-up pull-right"
+	}
+	
+}
+
 
 //TERRAIN
 //Lite des terrains
