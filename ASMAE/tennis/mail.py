@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*- 
 
+import threading
 from django.core.mail import send_mail
 from tennis.models import Extra, Participant,Court, Tournoi, Pair
 
 #send_mail('Subject here', 'Here is the message.', 'from@example.com', ['to@example.com'], fail_silently=False)
 # From : noreply@leCharleDeLorraine.com
+
+def send_mail_via_thread(subject, message, fromAdresse, mailingList, fail_silently=True):
+	threading.Thread(target=send_mail, args=(subject, message, fromAdresse, mailingList, fail_silently, )).start()
 
 # Send a confirmation email for pair registration
 def send_confirmation_email_pair_registered(participantOne, participantTwo): 
@@ -47,8 +51,8 @@ def send_confirmation_email_pair_registered(participantOne, participantTwo):
     """
 
     #Send
-    send_mail(subject, messagePlayerOne, "", [playerOneAdresseMail], fail_silently=True)
-    send_mail(subject, messagePlayerTwo, "", [playerTwoAdresseMail], fail_silently=True)
+    send_mail_via_thread(subject, messagePlayerOne, "", [playerOneAdresseMail])
+    send_mail_via_thread(subject, messagePlayerTwo, "", [playerTwoAdresseMail])
 
 
 # Send a confirmation email for court registration
@@ -94,7 +98,7 @@ def send_confirmation_email_court_registered(participant, court):
     """
 
     #Send
-    send_mail(subject, message, "", [mail], fail_silently=True)
+    send_mail_via_thread(subject, message, "", [mail])
 
 # TODO methode qui envoie les message des court adresse ou les payment issue selon la situation du client
 # A tout les joueurs (excepte les iregularité de payment et les groups leader), envoyé le court sur lequels ils va jouer
@@ -118,7 +122,7 @@ def send_email_court_adress(participant):
     L'équipe 'Le charle de Lorraine'
     """
 
-    send_mail(subject, message, "", [mail], fail_silently=True)
+    send_mail_via_thread(subject, message, "", [mail])
 
 
 # Envoye a tout les player en irregularite de payment
@@ -147,7 +151,7 @@ def send_email_payment_issue(participant):
     L'équipe 'Le charle de Lorraine'
     """
 
-    send_mail(subject, message, "", [mail], fail_silently=True)    
+    send_mail_via_thread(subject, message, "", [mail])
 	
 def send_register_confirmation_email(activationObject, participant, link): 
 	prenom = participant.prenom
@@ -164,7 +168,7 @@ def send_register_confirmation_email(activationObject, participant, link):
 	L'équipe 'Le charle de Lorraine'
 	"""
 	
-	send_mail(subject, message, "", [mail], fail_silently=True)
+	send_mail_via_thread(subject, message, "", [mail])
 
 # Envoye a tout les groupes leader TODO
 def send_email_score_board(participant):
@@ -189,7 +193,7 @@ def send_email_score_board(participant):
     L'équipe 'Le charle de Lorraine'
     """
 
-    send_mail(subject, message, "", [mail], fail_silently=True)
+    send_mail_via_thread(subject, message, "", [mail])
 
 def choose_mail_start_tournament(pair, participant):
     if(not pair.pay):
@@ -215,3 +219,6 @@ def send_prospectus_by_mail(participant):
 def send_invitation_to_player_of_previous_year(participant):
 	#TODO Envoye un mail aux joueurs ayant participer les années précédentes
 	pass
+
+def test_send_mail():
+	send_mail_via_thread("test", "It works", "", ["pokcyril@hotmail.com"])
