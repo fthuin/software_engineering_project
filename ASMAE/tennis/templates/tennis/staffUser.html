@@ -81,7 +81,7 @@ function pagination(list) {
 //Recuperation des users et stockage dans un tableau
 var userList = [];
 {% for use in Use %}
-userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.fb }}']);
+userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.age }}']);
 {% endfor %}
 
 pagination(userList);

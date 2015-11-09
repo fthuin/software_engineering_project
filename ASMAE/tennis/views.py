@@ -43,10 +43,10 @@ def inscriptionTournoi(request):
 	Tour = Tournoi.objects.all()
 	Use = User.objects.all().order_by('username')
 
+	today = date.today()
 	for u in Use:
-		bd = u.participant.datenaissance
-		fb = bd.strftime('%d/%m/%Y')
-		u.fb = fb
+		born = u.participant.datenaissance
+		u.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
 	if request.method == "POST":
 		#On recupère les donnée du formualaire
@@ -426,7 +426,6 @@ def generatePool(request,name):
 			u1.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 			u2 = elem.user2
 			born = u2.participant.datenaissance
-			today = date.today()
 			u2.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 			#elem.commentaires = str(elem.comment1) + '\n' + str(elem.comment2)
 			c1 = ""
@@ -628,10 +627,10 @@ def staffPerm(request):
 @permission_required('tennis.User')
 def staffUser(request):
 	Use = User.objects.all().order_by('username')
+	today = date.today()
 	for u in Use:
-		bd = u.participant.datenaissance
-		fb = bd.strftime('%d/%m/%Y')
-		u.fb = fb
+		born = u.participant.datenaissance
+		u.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 	if request.user.is_authenticated():
 		return render(request,'tennis/staffUser.html',locals())
 	return redirect(reverse(home))
