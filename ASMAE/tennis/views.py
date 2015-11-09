@@ -414,6 +414,7 @@ def staffTournoi(request):
 def generatePool(request,name):
 	if request.user.is_authenticated():
 		tournoi = Tournoi.objects.filter(nom=name)[0]
+		allPair = Pair.objects.filter(tournoi=tournoi)
 		pair = Pair.objects.filter(tournoi=tournoi)
 		today = date.today()
 		for elem in pair:

@@ -31,6 +31,7 @@
     
 
     <div class="row" style="margin-top:20px;" id="poulesDiv">
+        <!--
         {% for key, paires in pairListAll.items %}
         <div class="col-lg-4">
             <div class="panel panel-default">
@@ -96,6 +97,7 @@
             </div>
         </div>
         {% endfor %}
+    -->
     </div>
     
         <button class="btn btn-default center-block">Enregistrer</button>
@@ -114,18 +116,24 @@
 
 var PairList = [] ;
 
-{% for elem in pair %}
-var nom1 = {{ elem.user1.participant.prenom }} + " "+{{ elem.user1.participant.nom }};
-alert(nom1);
-/*
-var nom2 = {{ elem.user2.participant.prenom }}+ " "+{{ elem.user2.participant.nom }};
-var p = {user1:nom1,user2:nom2,age1:{{elem.user1.age}},age2:{{elem.user2.age}},comment:{{elem.commentaires}},titre1:{{user1.participant.titre}},titre2:{{user2.participant.titre}}};
-PairList.push(p);*/
+{% for elem in allPair %}
+
+var nom1 = '{{ elem.user1.participant.prenom }}' +" "+'{{ elem.user1.participant.nom }}';
+var nom2 = '{{ elem.user2.participant.prenom }}'+" "+'{{ elem.user2.participant.nom }}';
+
+var p = {id:'{{elem.id}}',user1:nom1,user2:nom2,age1:'{{elem.user1.age}}',age2:'{{elem.user2.age}}',comment:'{{elem.commentaires}}',titre1:'{{elem.user1.participant.titre}}',titre2:'{{elem.user2.participant.titre}}'};
+PairList.push(p);
+
 {% endfor %}
 
 setPairList(PairList);
 
-alert(PairList.length)
+setPoules({{defaultValue}});
+
+$('#poulesNumber').on('input', function() { 
+    var nbr = document.getElementById("poulesNumber").value;
+    setPoules(nbr);
+});
 
 
 </script>
