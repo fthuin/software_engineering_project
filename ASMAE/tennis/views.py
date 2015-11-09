@@ -32,12 +32,15 @@ def contact(request):
 
 def tournoi(request):
 	if request.user.is_authenticated():
-		nonComfirme = request.user.user1.filter(confirm=False)
-		demande = request.user.user2.filter(confirm=False)
-		inscrit1 = request.user.user1.filter(confirm=True)
-		inscrit2 = request.user.user2.filter(confirm=True)
-		inscrit =  list(chain(inscrit1,inscrit2))
-		return render(request,'tennis/tournoi.html',locals())
+		if Participant.objects.get(user=request.user).isAccountActivated:
+			nonComfirme = request.user.user1.filter(confirm=False)
+			demande = request.user.user2.filter(confirm=False)
+			inscrit1 = request.user.user1.filter(confirm=True)
+			inscrit2 = request.user.user2.filter(confirm=True)
+			inscrit =  list(chain(inscrit1,inscrit2))
+			return render(request,'tennis/tournoi.html',locals())
+		else:
+			return render(request,'tennis/tournoiUserNotValidated.html',locals())
 	return redirect(reverse(home))
 
 def inscriptionTournoi(request):
@@ -286,8 +289,11 @@ def payPair(request,id):
 
 def terrain(request):
 	if request.user.is_authenticated():
-		court = Court.objects.filter(user=request.user)
-		return render(request,'tennis/terrain.html',locals())
+		if Participant.objects.get(user=request.user).isAccountActivated:
+			court = Court.objects.filter(user=request.user)
+			return render(request,'tennis/terrain.html',locals())
+		else:
+			return render(request,'tennis/terrainUserNotValidated.html',locals())
 	return redirect(reverse(home))
 
 def registerTerrain(request):

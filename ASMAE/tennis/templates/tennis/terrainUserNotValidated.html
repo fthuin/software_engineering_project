@@ -1,0 +1,20 @@
+{% extends "tennis/base.html" %}
+
+{% block title %}Ma page{% endblock %}
+{% block nav-terrain %}class="active"{% endblock %}
+
+{% block body %}
+
+<div class="container">
+	<div class="content-box" {% if court.0 %}style="display:none;"{% endif %}>
+		<h2 class="center">Informations</h2>
+		<hr class="line">
+		<div class="alert alert-danger">
+		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			Veuillez valider votre <strong>adresse email</strong> avant d'enregistrer un terrain. <br>
+			Dans le cas ou aucun mail de validation n'est reçu, il est possible d'en redemander l'envoi depuis votre profil
+		</div>
+	</div>
+</div>
+
+{% endblock %}

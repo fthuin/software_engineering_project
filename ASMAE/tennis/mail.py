@@ -203,7 +203,15 @@ def choose_mail_start_tournament(pair, participant):
         send_email_court_adress(participant)
 
 def send_email_start_tournament():
-    #Work on all user in tournament
+    #Work on all user in tournament TODO : Le staff qui clique sur le bouton a son nom dans le mail + modal comme dans validatePair.html
     for pair in Pair.objects.all():
         choose_mail_start_tournament(pair, Participant.objects.get(user=pair.user1))
         choose_mail_start_tournament(pair, Participant.objects.get(user=pair.user2))
+		
+def send_prospectus_by_mail(participant):
+	#TODO Envoye un mail contenant les pdf devant etre envoyer. Ne pas créer de pdf dupliquer pour les adresses equivalentes
+	pass
+
+def send_invitation_to_player_of_previous_year(participant):
+	#TODO Envoye un mail aux joueurs ayant participer les années précédentes
+	pass
