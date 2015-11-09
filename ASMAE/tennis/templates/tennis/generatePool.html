@@ -32,14 +32,14 @@
 
     <div class="row" style="margin-top:20px;" id="poulesDiv">
         {% for key, paires in pairListAll.items %}
-        <div class="col-lg-4 col-sm-6">
+        <div class="col-lg-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
                         <label class="control-label col-xs-4">Poule {{ key }}</label>
                         <div class="col-xs-8">
                             <select class="form-control" name="Leader" id="Leader{{key}}">
-                                <option disabled selected>Choisir un chef</option>
+                                <option disabled selected>Choisir un leader</option>
                                 {% for elem in paires %}
                                 <option value="{{ elem.user1.participant.prenom }} {{ elem.user1.participant.nom }}">{{ elem.user1.participant.prenom }} {{ elem.user1.participant.nom }}</option>
                                 <option value="{{ elem.user2.participant.prenom }} {{ elem.user2.participant.nom }}">{{ elem.user2.participant.prenom }} {{ elem.user2.participant.nom }}</option>
@@ -53,28 +53,40 @@
                     {% for elem in paires %}
                     <div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">
                         <div id="{{ elem.id }}" draggable="true" ondragstart="drag(event)">
-                            <p class="zone">
-                                <b style="color:#222">
-                                    {% if elem.user1.participant.titre == "Mr" %}
-                                    <i class="fa fa-male"></i> 
-                                    {% else %}
-                                    <i class="fa fa-female"></i>
-                                    {% endif %}
-                                </b> {{ elem.user1.participant.prenom }} {{ elem.user1.participant.nom }} ({{ elem.user1.age }} ans)<br>
-                                <b style="color:#222">
-                                {% if elem.user2.participant.titre == "Mr" %}
-                                    <i class="fa fa-male"></i>
-                                    {% else %}
-                                    <i class="fa fa-female"></i>
-                                    {% endif %}
-                                </b> {{ elem.user2.participant.prenom }} {{ elem.user2.participant.nom }} ({{ elem.user2.age }} ans)</p>
+                            <div class="zone">
+                                <div class="row">
+                                    <div class="col-xs-10">
+                                        <b style="color:#222">
+                                        {% if elem.user1.participant.titre == "Mr" %}
+                                        <i class="fa fa-male"></i> 
+                                        {% else %}
+                                        <i class="fa fa-female"></i>
+                                        {% endif %}
+                                        </b> {{ elem.user1.participant.prenom }} {{ elem.user1.participant.nom }} ({{ elem.user1.age }} ans)<br>
+                                        <b style="color:#222">
+                                        {% if elem.user2.participant.titre == "Mr" %}
+                                            <i class="fa fa-male"></i>
+                                            {% else %}
+                                            <i class="fa fa-female"></i>
+                                            {% endif %}
+                                        </b> {{ elem.user2.participant.prenom }} {{ elem.user2.participant.nom }} ({{ elem.user2.age }} ans)
+                                    </div>
+                                    <div class="col-xs-2">
+                                        {% if elem.commentaires %}
+                                        <a href="javascript:void(0);" data-toggle="popover" data-html="true" data-placement="left" data-content="{{ elem.commentaires }}">
+                                            <b style="color:#222;"><i class="fa fa-file-text-o fa-2x"></i></b>
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     {% endfor %}
                     {% if key == defaultValue %}
                         {% for elem in complement %}
                         <div class=" dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">
-                            <div id="bidon" draggable="true" ondragstart="drag(event)">
+                            <div id="bidon{{elem}}" draggable="true" ondragstart="drag(event)">
                             <p class="zone"> <br><br></p>
                         </div>
                         </div>
@@ -85,6 +97,9 @@
         </div>
         {% endfor %}
     </div>
+    
+        <button class="btn btn-default center-block">Enregistrer</button>
+
     </form>
 </div>
 
@@ -112,9 +127,10 @@ function allowDrop(ev) {
     ev.preventDefault();
 }
 
-    $('#poulesNumber').on('input', function() { 
-    setPoules();
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover();   
 });
+
 </script>
 {% endblock %}
     

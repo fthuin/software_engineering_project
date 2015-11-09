@@ -428,6 +428,15 @@ def generatePool(request,name):
 			born = u2.participant.datenaissance
 			today = date.today()
 			u2.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+			#elem.commentaires = str(elem.comment1) + '\n' + str(elem.comment2)
+			c1 = ""
+			c2 = ""
+			if elem.comment1:
+				c1 = str(elem.comment1)
+			if elem.comment2:
+				c2 = str(elem.comment2)
+			if c1 != "" or c2 != "":
+				elem.commentaires = c1 + "<hr>" + c2
 		defaultSize = 6.0
 		defaultValue = math.ceil((len(pair)/defaultSize))
 		poolRange = range(0,defaultValue)

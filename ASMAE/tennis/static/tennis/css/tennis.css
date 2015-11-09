@@ -323,6 +323,11 @@ a.UserLink{
     cursor: pointer;
 }
 
+/* The max width is dependant on the container (more info below) */
+.popover{
+    width: 200px ; /* Max Width of the popover (depending on the container!) */
+}
+
 .zone {
     /*
     background-color: rgba(238, 231, 203, 1);
