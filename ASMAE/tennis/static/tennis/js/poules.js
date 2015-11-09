@@ -69,10 +69,12 @@ function setPoules(nbrPoules){
 			var nom2 = pairList[count].user2;
 			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1));
 			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2));
+			document.getElementById("Leader"+(i+1)).appendChild(getSpaceOption());
 
 			count = count + 1;
 
 		};
+		document.getElementById("Leader"+(i+1)).removeChild(document.getElementById("Leader"+(i+1)).childNodes[document.getElementById("Leader"+(i+1)).childNodes.length-1]);
 		//Si c'est plutot que le nombre max on rajotue des espaces vides
 		for (var j = 0; j < max - nbr; j++) {
 			var p = createEmptyPair(i);
@@ -96,8 +98,10 @@ function updatePanel(numero){
 			var pair = getPairbyId(id);
 			list.appendChild(getOption(pair.user1));
 			list.appendChild(getOption(pair.user2));
+			list.appendChild(getSpaceOption());
 		}
 	};
+	list.removeChild(list.childNodes[list.childNodes.length-1]);
 }
 
 function getPairbyId(ID){
@@ -113,6 +117,15 @@ function getOption(name){
 	var o = document.createElement("option");
 	o.value = name;
 	o.innerHTML = name;
+
+	return o;
+}
+
+function getSpaceOption() {
+	var o = document.createElement("option");
+	o.disabled = true;
+	o.value = "";
+	o.innerHTML = "";
 
 	return o;
 }
