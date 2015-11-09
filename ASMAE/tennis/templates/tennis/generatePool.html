@@ -107,29 +107,26 @@
 
 
 {% block commande %}
+{% load static from staticfiles %}
+<script src="{% static 'tennis/js/poules.js' %}" type="text/javascript"></script>
+
 <script>
 
-function drag (ev) {
-  ev.dataTransfer.setData("src", ev.target.id);
-}
+var PairList = [] ;
 
-function drop (ev) {
-  ev.preventDefault();
-  var src = document.getElementById(ev.dataTransfer.getData("src"));
-  var srcParent = src.parentNode;
-  var tgt = ev.currentTarget.firstElementChild;
+{% for elem in pair %}
+var nom1 = {{ elem.user1.participant.prenom }} + " "+{{ elem.user1.participant.nom }};
+alert(nom1);
+/*
+var nom2 = {{ elem.user2.participant.prenom }}+ " "+{{ elem.user2.participant.nom }};
+var p = {user1:nom1,user2:nom2,age1:{{elem.user1.age}},age2:{{elem.user2.age}},comment:{{elem.commentaires}},titre1:{{user1.participant.titre}},titre2:{{user2.participant.titre}}};
+PairList.push(p);*/
+{% endfor %}
 
-  ev.currentTarget.replaceChild(src, tgt);
-  srcParent.appendChild(tgt);
-}
+setPairList(PairList);
 
-function allowDrop(ev) {
-    ev.preventDefault();
-}
+alert(PairList.length)
 
-$(document).ready(function(){
-    $('[data-toggle="popover"]').popover();   
-});
 
 </script>
 {% endblock %}
