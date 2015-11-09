@@ -417,7 +417,7 @@ def generatePool(request,name):
 		allPair = Pair.objects.filter(tournoi=tournoi)
 		pair = Pair.objects.filter(tournoi=tournoi)
 		today = date.today()
-		for elem in pair:
+		for elem in allPair:
 			u1 = elem.user1
 			born = u1.participant.datenaissance
 			u1.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
@@ -433,12 +433,12 @@ def generatePool(request,name):
 			if c1 != "" or c2 != "":
 				elem.commentaires = c1 + "<hr>" + c2
 		defaultSize = 6.0
-		defaultValue = int(math.ceil((len(pair)/defaultSize)))
+		defaultValue = int(math.ceil((len(allPair)/defaultSize)))
 		poolRange = range(0,defaultValue)
 		pairListAll = dict()
 		for x in range(0,defaultValue):
 			index = int(x*defaultSize)
-			pairListAll[x+1] = (pair[index:index+int(defaultSize)])
+			pairListAll[x+1] = (allPair[index:index+int(defaultSize)])
 			if x==defaultValue-1 :
 				v = int(defaultSize) - len(pairListAll[x+1])
 				complement = range(0,v)
