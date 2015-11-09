@@ -10,6 +10,7 @@ from tennis.mail import send_confirmation_email_court_registered, send_confirmat
 import re, math
 import json
 import datetime
+from datetime import date
 from itertools import chain
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Permission,Group
@@ -417,6 +418,26 @@ def staffTournoi(request):
 def generatePool(request,name):
 	if request.user.is_authenticated():
 		tournoi = Tournoi.objects.filter(nom=name)[0]
+		pair = Pair.objects.filter(tournoi=tournoi)
+		for elem in pair:
+			u1 = elem.user1
+			born = u1.participant.datenaissance
+			today = date.today()
+			u1.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+			u2 = elem.user2
+			born = u2.participant.datenaissance
+			today = date.today()
+			u2.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+		defaultSize = 6.0
+		defaultValue = math.ceil((len(pair)/defaultSize))
+		poolRange = range(0,defaultValue)
+		pairListAll = dict()
+		for x in range(0,defaultValue):
+			index = int(x*defaultSize)
+			pairListAll[x+1] = (pair[index:index+int(defaultSize)])
+			if x==defaultValue-1 :
+				v = int(defaultSize) - len(pairListAll[x+1])
+				complement = range(0,v)
 		return render(request,'tennis/generatePool.html',locals())
 	return redirect(reverse(home))
 

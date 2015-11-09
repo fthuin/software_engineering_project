@@ -323,6 +323,25 @@ a.UserLink{
     cursor: pointer;
 }
 
+.zone {
+    /*
+    background-color: rgba(238, 231, 203, 1);
+    background: -webkit-linear-gradient(right, rgba(209, 199, 159, 1) 0%, rgba(238, 231, 203, 1) 100%);
+    background: linear-gradient(to left, rgba(209, 199, 159, 1) 0%, rgba(238, 231, 203, 1) 100%);
+    */
+    background-color: #EEEECC;
+    border-radius: 15px;
+    color:#D4542D;;
+    font-weight: bold;
+    border: solid 1px #aaa;
+    padding:12px;
+    margin:0;
+}
+
+.dropBox{
+    background-color: #FFFFDD !important;
+}
+
 /* List group */
 .list-group-item{
     border-color: #D4542D !important;

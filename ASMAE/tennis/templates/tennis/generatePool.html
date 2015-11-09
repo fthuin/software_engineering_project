@@ -8,8 +8,113 @@
 <div class="content-box" id="gestionTournoi">
     <h2 class="center">{{ tournoi.nom }}</h2>
     <hr class="line">
-    <p>TODO</p>
+    <form class="form-horizontal" action="">
+        <div class="panel panel-default">
+            <div class="panel-heading">Configuration</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-4 col-sm-offset-2">
+                        <label class="control-label col-sm-8">Nombre de paires</label>
+                        <div class="col-sm-4">
+                            <p class="info">{{ pair|length }}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="control-label col-sm-8">Nombre de poules</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="number" value="{{ defaultValue }}" id="poulesNumber">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+
+    <div class="row" style="margin-top:20px;" id="poulesDiv">
+        {% for key, paires in pairListAll.items %}
+        <div class="col-lg-4 col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <label class="control-label col-xs-4">Poule {{ key }}</label>
+                        <div class="col-xs-8">
+                            <select class="form-control" name="Leader" id="Leader{{key}}">
+                                <option disabled selected>Choisir un chef</option>
+                                {% for elem in paires %}
+                                <option value="{{ elem.user1.participant.prenom }} {{ elem.user1.participant.nom }}">{{ elem.user1.participant.prenom }} {{ elem.user1.participant.nom }}</option>
+                                <option value="{{ elem.user2.participant.prenom }} {{ elem.user2.participant.nom }}">{{ elem.user2.participant.prenom }} {{ elem.user2.participant.nom }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="list-group">
+                    {% for elem in paires %}
+                    <div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">
+                        <div id="{{ elem.id }}" draggable="true" ondragstart="drag(event)">
+                            <p class="zone">
+                                <b style="color:#222">
+                                    {% if elem.user1.participant.titre == "Mr" %}
+                                    <i class="fa fa-male"></i> 
+                                    {% else %}
+                                    <i class="fa fa-female"></i>
+                                    {% endif %}
+                                </b> {{ elem.user1.participant.prenom }} {{ elem.user1.participant.nom }} ({{ elem.user1.age }} ans)<br>
+                                <b style="color:#222">
+                                {% if elem.user2.participant.titre == "Mr" %}
+                                    <i class="fa fa-male"></i>
+                                    {% else %}
+                                    <i class="fa fa-female"></i>
+                                    {% endif %}
+                                </b> {{ elem.user2.participant.prenom }} {{ elem.user2.participant.nom }} ({{ elem.user2.age }} ans)</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% if key == defaultValue %}
+                        {% for elem in complement %}
+                        <div class=" dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">
+                            <div id="bidon" draggable="true" ondragstart="drag(event)">
+                            <p class="zone"> <br><br></p>
+                        </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    </form>
 </div>
 
+{% endblock %}
+
+
+{% block commande %}
+<script>
+
+function drag (ev) {
+  ev.dataTransfer.setData("src", ev.target.id);
+}
+
+function drop (ev) {
+  ev.preventDefault();
+  var src = document.getElementById(ev.dataTransfer.getData("src"));
+  var srcParent = src.parentNode;
+  var tgt = ev.currentTarget.firstElementChild;
+
+  ev.currentTarget.replaceChild(src, tgt);
+  srcParent.appendChild(tgt);
+}
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+    $('#poulesNumber').on('input', function() { 
+    setPoules();
+});
+</script>
 {% endblock %}
     
