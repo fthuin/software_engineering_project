@@ -414,6 +414,7 @@ def staffTournoi(request):
 def generatePool(request,name):
 	if request.user.is_authenticated():
 		tournoi = Tournoi.objects.filter(nom=name)[0]
+		allPair = Pair.objects.filter(tournoi=tournoi)
 		pair = Pair.objects.filter(tournoi=tournoi)
 		today = date.today()
 		for elem in pair:
@@ -423,7 +424,6 @@ def generatePool(request,name):
 			u2 = elem.user2
 			born = u2.participant.datenaissance
 			u2.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-			#elem.commentaires = str(elem.comment1) + '\n' + str(elem.comment2)
 			c1 = ""
 			c2 = ""
 			if elem.comment1:
