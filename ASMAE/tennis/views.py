@@ -258,26 +258,22 @@ def payPair(request,id):
 		return redirect(reverse(tournoi))
 	if request.user.is_authenticated():
 		#TODO check si il peut payer cette pair
-		Ex = Extra.objects.all()
+		allExtras = Extra.objects.all()
 		extra1 = pair.extra1.all()
 		extra2 = pair.extra2.all()
-		extraa = extra1 | extra2
-		extraa.order_by('nom')
 		totalprice = 40.00
-		extraList = list()
-		currentItem = extraa[0]
-		count = 0
-		for extra in extraa:
-			if currentItem.id == extra.id:
-				count = count+1
-			else:
-				extraList.append((currentItem.nom,currentItem.prix,count))
-				totalprice = totalprice + float((count*currentItem.prix))
-				currentItem = extra
-				count = 1
-		extraList.append((currentItem.nom,currentItem.prix,count))
-		totalprice = totalprice + float((count*currentItem.prix))
-
+		listUniqueExtra = list(set(list(extra1) + list(extra2)))
+		extraList = []
+		for extra in listUniqueExtra:
+			count = 0
+			for e1 in extra1:
+				if extra.id == e1.id:
+					count += 1
+			for e2 in extra2:
+				if extra.id == e2.id:
+					count += 1
+			extraList.append((extra.nom, extra.prix, count))
+			totalprice += float(count*extra.prix)
 
 		return render(request,'tennis/payPair.html',locals())
 	return redirect(reverse(home))
@@ -419,10 +415,10 @@ def generatePool(request,name):
 	if request.user.is_authenticated():
 		tournoi = Tournoi.objects.filter(nom=name)[0]
 		pair = Pair.objects.filter(tournoi=tournoi)
+		today = date.today()
 		for elem in pair:
 			u1 = elem.user1
 			born = u1.participant.datenaissance
-			today = date.today()
 			u1.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 			u2 = elem.user2
 			born = u2.participant.datenaissance
@@ -437,7 +433,7 @@ def generatePool(request,name):
 			if c1 != "" or c2 != "":
 				elem.commentaires = c1 + "<hr>" + c2
 		defaultSize = 6.0
-		defaultValue = math.ceil((len(pair)/defaultSize))
+		defaultValue = int(math.ceil((len(pair)/defaultSize)))
 		poolRange = range(0,defaultValue)
 		pairListAll = dict()
 		for x in range(0,defaultValue):
