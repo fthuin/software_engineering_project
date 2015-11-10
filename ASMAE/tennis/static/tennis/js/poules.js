@@ -43,7 +43,7 @@ function setTerrains(terrains, nbrPoules) {
     var lenTer = terrains.length;
     var nbr = Math.ceil(v/nbrPoules);
     for (var i = 0 ; i < nbr ; i++) {
-        for (var j = 0 ; i < lenTer ; j++) {
+        for (var j = 0 ; j < lenTer ; j++) {
             document.getElementById("terrain"+(i+1)).appendChild(getOption(terrains[j].user + " ("+terrains[j].id + ")"));
         }
     }
