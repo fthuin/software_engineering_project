@@ -13,16 +13,26 @@
             <div class="panel-heading">Configuration</div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-sm-4 col-sm-offset-2">
+                    <div class="col-sm-4">
                         <label class="control-label col-sm-8">Nombre de paires</label>
                         <div class="col-sm-4">
                             <p class="info">{{ pair|length }}</p>
                         </div>
                     </div>
                     <div class="col-sm-4">
+                        <label class="control-label col-sm-8">Nombre de terrains disponible</label>
+                        <p class="info">{{ nbrTerrains }}</p>
+                    </div>
+                    <div class="col-sm-4">
                         <label class="control-label col-sm-8">Nombre de poules</label>
                         <div class="col-sm-4">
-                            <input class="form-control" type="number" value="{{ defaultValue }}" id="poulesNumber">
+                            <input class="form-control" style="min-width:50px;max-width:100px;" type="number" value="{{ defaultValue }}" id="poulesNumber">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="control-label col-sm-8">Taille des poules</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" style="min-width:50px;max-width:100px;" type="number" value="6" id="poulesSize">
                         </div>
                     </div>
                 </div>
@@ -116,6 +126,7 @@
 
 //Creation de la liste des paires
 var PairList = [] ;
+var TerrainList = [];
 
 {% for elem in allPair %}
 
@@ -126,17 +137,31 @@ var p = {id:'{{elem.id}}',user1:nom1,user2:nom2,age1:'{{elem.user1.age}}',age2:'
 PairList.push(p);
 
 {% endfor %}
+{% for elem in listTerrains %}
+
+TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}'})
+
+{% endfor %}
 
 //on ajout la liste des pair dans le cache
 setPairList(PairList);
 
 //On set les poules pour en avoir max 6 par poules
 setPoules({{defaultValue}});
+setTerrains(TerrainList, {{defaultValue}});
+//updatePanel(1);
 
 //Listener sur le nombre de pair
 $('#poulesNumber').on('input', function() { 
     var nbr = document.getElementById("poulesNumber").value;
     setPoules(nbr);
+});
+
+//Listener sur le size des poules
+$('#poulesSize').on('input', function() { 
+    var nbr = document.getElementById("poulesSize").value;
+    var poules = Math.ceil(PairList.length/nbr);
+    setPoules(poules);
 });
 </script>
 {% endblock %}

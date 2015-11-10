@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation
+from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email
 import re, math
 import json
@@ -416,6 +416,21 @@ def generatePool(request,name):
 		tournoi = Tournoi.objects.filter(nom=name)[0]
 		allPair = Pair.objects.filter(tournoi=tournoi)
 		pair = Pair.objects.filter(tournoi=tournoi)
+		terrains = Court.objects.all()
+		poules = Poule.objects.all()
+		dictTerrains = {}
+		for terrain in terrains:
+			dictTerrains[terrain.id] = terrain
+		
+		for poule in poules:
+			try:
+				del dictTerrains[poule.court.id]
+			except KeyError, e:
+				pass
+		
+		listTerrains = list(dictTerrains.values())
+		nbrTerrains = len(listTerrains)
+		
 		today = date.today()
 		for elem in allPair:
 			u1 = elem.user1
