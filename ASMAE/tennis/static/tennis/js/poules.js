@@ -33,18 +33,19 @@ $(document).ready(function(){
 
 
 var pairList;
+var terrainList;
 
-function setPairList(pairL){
+function setPairList(pairL,terrainL){
 	pairList = pairL;
+	terrainList = terrainL;
 }
 
-function setTerrains(terrains, nbrPoules) {
+function setTerrains(nbrPoules) {
     var v = pairList.length;
-    var lenTer = terrains.length;
-    var nbr = Math.ceil(v/nbrPoules);
-    for (var i = 0 ; i < nbr ; i++) {
+    var lenTer = terrainList.length;
+    for (var i = 0 ; i < nbrPoules ; i++) {
         for (var j = 0 ; j < lenTer ; j++) {
-            document.getElementById("terrain"+(i+1)).appendChild(getOption(terrains[j].user + " ("+terrains[j].id + ")"));
+            document.getElementById("terrain"+(i+1)).appendChild(getDropDownOption(terrainList[j].user,terrainList[j].addr,terrainList[j].matiere,terrainList[j].id,(i+1)));
         }
     }
 }
@@ -98,6 +99,8 @@ function setPoules(nbrPoules){
 		}
 		
 	}
+
+	setTerrains(nbrPoules);
 }
 
 //Update the list of user in the leader list of a panel
@@ -128,6 +131,23 @@ function getPairbyId(ID){
 	};
 }
 
+function getDropDownOption(proprio,addr,matiere,id,number){
+	var li = document.createElement("LI");
+	li.innerHTML = 	'<a href="javascript:void(0);" onclick="setInfoTerrain('+"'"+proprio+"','"+matiere+"','"+addr+"','"+id+"','"+number+"'"+');">['+id+'] <b>'+proprio+'</b> ('+matiere+')'+'<br>'+
+						addr
+					'</a>';
+
+	return li;
+
+}
+
+function setInfoTerrain(p,matiere,addr,ID,number){
+	document.getElementById("proprio"+number).innerHTML = p;
+	document.getElementById("matiere"+number).innerHTML = matiere;
+	document.getElementById("addr"+number).innerHTML = addr;
+	document.getElementById("ID"+number).innerHTML = ID;
+}
+
 //Return une option avec comme nom et valeur le name
 function getOption(name){
 	var o = document.createElement("option");
@@ -141,7 +161,7 @@ function getSpaceOption() {
 	var o = document.createElement("option");
 	o.disabled = true;
 	o.value = "";
-	o.innerHTML = "";
+	o.innerHTML = '';
 
 	return o;
 }
@@ -150,7 +170,54 @@ function getSpaceOption() {
 function createPanel(number){
 	var panel = document.createElement("div");
 	panel.className = 'col-lg-4';
-	panel.innerHTML = '<div class="panel panel-default" id="'+number+'"><div class="panel-heading"><div class="row"><label class="control-label col-xs-4">Poule '+number+'</label><div class="col-xs-8"><select class="form-control" name="Leader" id="Leader'+number+'"><option disabled selected>Choisir un leader</option></select></div></div></div><div class="list-group" id="list'+number+'"></div><div class="panel-footer"><div class="row"><label class="control-label col-xs-4">Terrain</label><div class="col-xs-8"><select class="form-control" name="terrain" id="terrain'+number+'"><option disabled selected>Choisir un terrain</option></select></div></div><div class="row"><label class="control-label col-xs-7">Empreinte Carbone</label><div class="col-xs-5"><p class="info">TODO</p></div></div></div></div>';
+	panel.innerHTML = '<div class="panel panel-default" id="'+number+'">'+
+						'<div class="panel-heading">'+
+							'<div class="row">'+
+								'<label class="control-label col-xs-4">Poule '+number+'</label>'+
+								'<div class="col-xs-8">'+
+									'<select class="form-control" name="Leader" id="Leader'+number+'">'+
+										'<option disabled selected>Choisir un leader</option>'+
+									'</select>'+
+								'</div>'+
+							'</div>'+
+						'</div>'+
+						'<div class="list-group" id="list'+number+'">'+
+						'</div>'+
+						'<div class="panel-footer">'+
+							'<hr class="line2">'+
+							'<div class="row">'+
+								'<div class="col-xs-7">'+
+									'<div class="dropdown">'+
+			    						'<button class="btn btn-default dropdown-toggle" type="button"  data-toggle="dropdown">Choisir un terrain '+
+			    						'<span class="caret"></span></button>'+
+										'<ul class="dropdown-menu scrollable-menu" role="menu" id="terrain'+number+'">'+
+										'</ul>'+
+									'</div>'+
+								'</div>'+
+								'<div class="col-xs-5">'+
+									'<label class="control-label col-xs-6">ID</label>'+
+									'<div class="col-xs-6"><p class="info" id="ID'+number+'">-</p></div>'+
+								'</div>'+
+							'</div>'+
+							'<div class="row">'+
+								'<label class="control-label col-xs-4">Propriétaire</label>'+
+								'<div class="col-xs-8"><p class="info" id="proprio'+number+'">-</p></div>'+
+							'</div>'+
+							'<div class="row">'+
+								'<label class="control-label col-xs-4">Matiere</label>'+
+								'<div class="col-xs-8"><p class="info" id="matiere'+number+'">-</p></div>'+
+							'</div>'+
+							'<div class="row">'+
+								'<label class="control-label col-xs-4">Adresse</label>'+
+								'<div class="col-xs-8"><p class="info" id="addr'+number+'">-<br><br></p></div>'+
+							'</div>'+
+							
+							'<div class="row">'+
+								'<label class="control-label col-xs-7">Empreinte Carbone</label>'+
+								'<div class="col-xs-5"><p class="info" id="empreinte'+number+'"> - </p></div>'+
+							'</div>'+
+						'</div>'+
+					'</div>';
     return panel;
 }
 

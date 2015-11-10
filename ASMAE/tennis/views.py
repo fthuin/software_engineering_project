@@ -421,13 +421,13 @@ def generatePool(request,name):
 		dictTerrains = {}
 		for terrain in terrains:
 			dictTerrains[terrain.id] = terrain
-		
+		'''
 		for poule in poules:
 			try:
 				del dictTerrains[poule.court.id]
 			except KeyError, e:
 				pass
-		
+		'''
 		listTerrains = list(dictTerrains.values())
 		nbrTerrains = len(listTerrains)
 		
