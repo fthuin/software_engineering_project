@@ -190,9 +190,13 @@ $('#poulesNumber').on('input', function() {
 
 //Listener sur le size des poules
 $('#poulesSize').on('input', function() { 
+    /*
     var nbr = document.getElementById("poulesSize").value;
     var poules = Math.ceil(PairList.length/nbr);
     setPoules(poules);
+    */
+    var nbr = document.getElementById("poulesSize").value;
+    setPoules2(nbr);
 });
 </script>
 {% endblock %}
