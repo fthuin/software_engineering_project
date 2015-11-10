@@ -99,7 +99,9 @@ text-align:left;
     <hr class="line">
     <div class="group-box" id="liste_groupes"></div>
     <button id="register" style="float:right" class="btn btn-default">Enregistrer les groupes</button>
+    </div>
 </div>
+
 {% endblock %}
 
     {% block commande %}
@@ -147,51 +149,96 @@ text-align:left;
             if (new_selected_tournament != selected_tournament) {
                 selected_tournament = new_selected_tournament;
 
-                // remove specific tournament modules
-                // TODO
+                // reset group_num and size
+                document.getElementById("group_num").value = 1;
+            	document.getElementById("group_size").value = 1;
 
                 // detect which modules to load
-                // TODO
-                var tournament_status = document.getElementById("tournament-status");
-                tournament_status.innerHTML = "<em> Création des poules. </em>"
-                tournament_status.style.color = "green";
-
-                // deal with modules
-                // TODO
-
-                // load data from given tournament
-                // Recuperation des paires confirmees du tournoi
-                var pairList = [];
-                {% for pair in allPairs %}
-                    {% if pair.confirm %}
-                        if('{{ pair.tournoi.nom }}' === selected_tournament) {
-                            pairList.push(['{{ pair.id }}','{{ pair.user1.participant.nom }}','{{ pair.user1.participant.prenom }}','{{ pair.user2.participant.nom }}','{{ pair.user2.participant.prenom }}']);
-                    }
-                    {% endif %}
+                var tournament_status_text = undefined;
+                {% for tournoi in allTournois %}
+                	if ('{{ tournoi.nom }}' === selected_tournament) {
+                		tournament_status_text = '{{ tournoi.status }}';
+                	}
                 {% endfor %}
+                if (tournament_status_text === 'creation des groupes') {
+					tournament_status = document.getElementById("tournament-status");
+					tournament_status.innerHTML = "<em> Création des poules. </em>";
+					tournament_status.style.color = "green";	
+
+					// load data from given tournament
+                	// Recuperation des paires confirmees du tournoi
+                	var pairList = [];
+                	{% for pair in allPairs %}
+                    	{% if pair.confirm %}
+                        	if('{{ pair.tournoi.nom }}' === selected_tournament) {
+                           	 pairList.push(['{{ pair.id }}','{{ pair.user1.participant.nom }}','{{ pair.user1.participant.prenom }}','{{ pair.user2.participant.nom }}','{{ pair.user2.participant.prenom }}']);
+                   			}
+                   		{% endif %}
+               		{% endfor %}
                  
-                //Recuperation des court et stockage dans un tableau
-                var courtList = [];
-                {% for court in allCourts %}
-                    courtList.push('{{ court.id }}');
-                {% endfor %}
-                tournament = new Tournament(document.getElementById("tournois").value, pairList, courtList);
+               		//Recuperation des court et stockage dans un tableau
+               		var courtList = [];
+               		{% for court in allCourtsNonAttribues %}
+                   		courtList.push('{{ court.id }}');
+               		{% endfor %}
+               		tournament = new Tournament(document.getElementById("tournois").value, pairList, courtList);
 
-                // display group module
-                var gestionGroupModule = document.getElementById("gestionGroup");
-                gestionGroupModule.style.display = "block";
-                adapt_tournament_groups();
+            	   	// display group module
+        	       	var gestionGroupModule = document.getElementById("gestionGroup");
+    	           	gestionGroupModule.style.display = "block";
+    	           	var register_btn = document.getElementById("register");
+    	           	register_btn.style.display = "block";
+	               	adapt_tournament_groups(tournament_status_text);
+				}
+				else if (tournament_status_text === 'groupes crees') {
+					tournament_status = document.getElementById("tournament-status");
+					tournament_status.innerHTML = "<em> Groupes crées. </em>";
+                	tournament_status.style.color = "green";
+
+                	var gestionGroupModule = document.getElementById("gestionGroup");
+    	           	gestionGroupModule.style.display = "none";
+
+                	var groupList = [];
+                	{% for groupe in allGroupes %}
+                		if ('{{ groupe.tournoi.nom }}' === selected_tournament) {
+                			// find pairs of the group
+                			var pairList = [];
+                			var leader = undefined;
+                			{% for pair in allPairs %}
+                				{% if pair.confirm %}
+                					if ('{{ pair.tournoi.nom }}' === selected_tournament) {
+                						{% if pair.group %}
+                							if ('{{ pair.group.id }}' === '{{ groupe.id }}') {
+                								var pair = ['{{ pair.id }}','{{ pair.user1.participant.nom }}','{{ pair.user1.participant.prenom }}','{{ pair.user2.participant.nom }}','{{ pair.user2.participant.prenom }}'];
+                								if ('{{ pair.id }}' === '{{ groupe.leader.id }}') {
+                									leader = ['{{ pair.id }}','{{ pair.user1.participant.nom }}','{{ pair.user1.participant.prenom }}','{{ pair.user2.participant.nom }}','{{ pair.user2.participant.prenom }}'];
+                								}
+                								pairList.push(pair);
+                							}
+                						{% endif %}
+                					}
+                				{% endif %}
+                			{% endfor %}
+                			groupList.push(new Group({{ groupe.gsize }}, pairList, {{ groupe.court.id }}, leader));
+                		}
+                	{% endfor %}
+                	tournament = new Tournament(selected_tournament, undefined, undefined, groupList);
+                	var register_btn = document.getElementById("register");
+    	           	register_btn.style.display = "none";
+	               	graphic_update(tournament_status_text);
+                }
+                
             }
             // ignore if same tournament selected
         };
         var selected_tournament = document.getElementById("tournois").value;
 
         document.getElementById("group_size").onchange = function() {
-            adapt_tournament_groups();
+            adapt_tournament_groups('creation des groupes');
         }
 
         document.getElementById("group_num").onchange = function() {
-            adapt_tournament_groups();
+            adapt_tournament_groups('creation des groupes');
         }
 
         var adapt_tournament_groups = function() {
@@ -203,14 +250,14 @@ text-align:left;
                 tournament.adapt_groups(group_num, group_size);
 
             // change group layout accordingly
-            graphic_update();
+            graphic_update('creation des groupes');
 
         };
 
         document.getElementById("fill").addEventListener('click', function() {
                 tournament.try_naively_fill_groups();
                 tournament.try_naively_select_group_leaders();
-                graphic_update();
+                graphic_update('creation des groupes');
         }, false);
         
         document.getElementById("register").addEventListener('click', function() {
@@ -274,7 +321,7 @@ text-align:left;
                 tournament.try_naively_select_group_leaders();
 
                 // Update graphique
-                graphic_update();
+                graphic_update('creation des groupes');
 
                 // reset swap selection
                 selected_item = 0;
@@ -295,7 +342,13 @@ text-align:left;
             }
         };
 
-        var graphic_update = function() {
+        var graphic_update = function(tournament_status) {
+        	if (tournament_status === 'creation des groupes' || tournament_status === 'groupes crees') {
+        		graphic_update_groups(tournament_status);
+        	}
+        };
+
+        var graphic_update_groups = function(tournament_status) {
             var list = tournament.groups;
             var container = document.getElementById("liste_groupes");
             
@@ -318,25 +371,27 @@ text-align:left;
                 group_name_head.appendChild(group_name);
                 group_display.appendChild(group_name_head);
 
-                var print_button = document.createElement("span");
-                print_button.className = "glyphicon glyphicon-print";
-                print_button.title = "Imprimer le tableau des scores";
-                print_button.style.float = "right";
-                print_button.style.margin = "3px";
-                group_name.appendChild(print_button);
+                if (tournament_status === 'groupes crees') {
+					var print_button = document.createElement("span");
+                	print_button.className = "glyphicon glyphicon-print";
+                	print_button.title = "Imprimer le tableau des scores";
+                	print_button.style.float = "right";
+                	print_button.style.margin = "3px";
+                	group_name.appendChild(print_button);
 
-                print_button.addEventListener("click", function(event){
-                    event.stopPropagation();
-                    sessionStorage.setItem("data", this.parentNode.parentNode.parentNode.outerHTML);
-                    window.location.href = "{% url 'printScoreboard' %}";
-                }, false);
+                	print_button.addEventListener("click", function(event){
+                    	event.stopPropagation();
+                    	sessionStorage.setItem("data", this.parentNode.parentNode.parentNode.outerHTML);
+                    	window.location.href = "{% url 'printScoreboard' %}";
+                	}, false);
 
-                var edit_button = document.createElement("span");
-                edit_button.className = "glyphicon glyphicon-edit";
-                edit_button.title = "Editer scores du groupe";
-                edit_button.style.float = "right";
-                edit_button.style.margin = "3px";
-                group_name.appendChild(edit_button);
+                	var edit_button = document.createElement("span");
+                	edit_button.className = "glyphicon glyphicon-edit";
+                	edit_button.title = "Editer scores du groupe";
+                	edit_button.style.float = "right";
+                	edit_button.style.margin = "3px";
+                	group_name.appendChild(edit_button);
+                }
 
                 var group_display_body = document.createElement("tbody");
                 group_display.appendChild(group_display_body);
@@ -379,25 +434,27 @@ text-align:left;
                     }
                        
                     pair_row.cells[0].style.width="50%";
-                    pair_row.draggable="true";
-                    pair_row.addEventListener("click", function() {
-                        if (this.getAttribute("selected") == "false"){
-                            this.setAttribute("selected", "true");
-                            this.setAttribute("oldcolor", this.getAttribute("class"));
-                            this.className ='success';
-                            selected_item++;
-                            if (selected_item == 2)
-                                apply_swap();
-                        }
-                        else {
-                            this.setAttribute('selected', "false");
-                            this.className = this.getAttribute("oldcolor");
-                            this.removeAttribute("oldcolor");
-                            selected_item--;
-                            if (selected_item == 2)
-                                apply_swap();
-                        }
-                    }, false);
+                   	if (tournament_status === 'creation des groupes') {
+                   		pair_row.draggable="true";
+                    	pair_row.addEventListener("click", function() {
+                        	if (this.getAttribute("selected") == "false"){
+                            	this.setAttribute("selected", "true");
+                            	this.setAttribute("oldcolor", this.getAttribute("class"));
+                            	this.className ='success';
+                            	selected_item++;
+                            	if (selected_item == 2)
+                                	apply_swap();
+                        	}
+                        	else {
+                            	this.setAttribute('selected', "false");
+                            	this.className = this.getAttribute("oldcolor");
+                            	this.removeAttribute("oldcolor");
+                            	selected_item--;
+                            	if (selected_item == 2)
+                                	apply_swap();
+                        	}
+                    	}, false);
+                   	}
                     
                     if(j < list[index].pairs.length && (list[index].pairs[j] == list[index].leader)) {
                         pair_row.className="danger";
@@ -415,55 +472,57 @@ text-align:left;
                 container.appendChild(group_display);
             }
 
-            // graphic code for uninserted pairs
-            var uninserted_pairs = tournament.uninserted_pairs;
-            if(uninserted_pairs.length!=0) {
-            var group_display = document.createElement("table");
-            group_display.className="table table-hover table-responsive panel panel-default";
-            var group_name = document.createElement("th");
-            group_name.colSpan = 2;
-            group_name.className="panel panel-heading";
-            group_name.innerHTML = "Groupe des paires non attribuées"; 
-            group_display.appendChild(group_name);
-            var numRows = group_display.rows.length;
-            // insert an entry for each uninserted pairs index
-            for (var j = 0; j < uninserted_pairs.length; j++) {
-                var pair_row = group_display.insertRow(-1); // -1 appends at the end of the table
-                pair_row.setAttribute("id_group", "-1");
-                pair_row.setAttribute("index_group", j.toString());
-                // insert pair info if there is a pair in the given index of the group
-                // otherwise put empty entry
-                pair_row.setAttribute("id_pair", uninserted_pairs[j][0].toString());
-                pair_row.setAttribute("selected", "false");
-                pair_row.insertCell(0).innerHTML = uninserted_pairs[j][0];
-                pair_row.insertCell(1).innerHTML = 
-                    uninserted_pairs[j][1] + " " + uninserted_pairs[j][2] + "</br>" 
-                    + uninserted_pairs[j][3] + " " + uninserted_pairs[j][4];
+            if (tournament_status === 'creation des groupes') {
+            	// graphic code for uninserted pairs
+            	var uninserted_pairs = tournament.uninserted_pairs;
+            	if(uninserted_pairs.length!=0) {
+            		var group_display = document.createElement("table");
+            		group_display.className="table table-hover table-responsive panel panel-default";
+            		var group_name = document.createElement("th");
+            		group_name.colSpan = 2;
+            		group_name.className="panel panel-heading";
+            		group_name.innerHTML = "Groupe des paires non attribuées"; 
+            		group_display.appendChild(group_name);
+            		var numRows = group_display.rows.length;
+            		// insert an entry for each uninserted pairs index
+            		for (var j = 0; j < uninserted_pairs.length; j++) {
+                		var pair_row = group_display.insertRow(-1); // -1 appends at the end of the table
+                		pair_row.setAttribute("id_group", "-1");
+                		pair_row.setAttribute("index_group", j.toString());
+                		// insert pair info if there is a pair in the given index of the group
+                		// otherwise put empty entry
+                		pair_row.setAttribute("id_pair", uninserted_pairs[j][0].toString());
+                		pair_row.setAttribute("selected", "false");
+                		pair_row.insertCell(0).innerHTML = uninserted_pairs[j][0];
+                		pair_row.insertCell(1).innerHTML = 
+                    		uninserted_pairs[j][1] + " " + uninserted_pairs[j][2] + "</br>" 
+                    		+ uninserted_pairs[j][3] + " " + uninserted_pairs[j][4];
                        
-                pair_row.cells[0].style.width="50%";
-                pair_row.draggable="true";
-                pair_row.addEventListener("click", function() {
-                    if (this.getAttribute("selected") == "false"){
-                        this.setAttribute("selected", "true");
-                        this.setAttribute("oldcolor", this.getAttribute("class"));
-                        this.className ='success';
-                        selected_item++;
-                        if (selected_item == 2)
-                            apply_swap();
-                    }
-                    else{
-                        this.setAttribute('selected', "false");
-                        this.className = this.getAttribute("oldcolor");
-                        this.removeAttribute("oldcolor");
-                        selected_item--;
-                        if (selected_item == 2)
-                            apply_swap();
-                    }
-                }, false);
-                numRows++;
+                		pair_row.cells[0].style.width="50%";
+                		pair_row.draggable="true";
+                		pair_row.addEventListener("click", function() {
+                    		if (this.getAttribute("selected") == "false") {
+                        		this.setAttribute("selected", "true");
+                        		this.setAttribute("oldcolor", this.getAttribute("class"));
+                        		this.className ='success';
+                        		selected_item++;
+                        		if (selected_item == 2)
+                            		apply_swap();
+                    		}
+                    		else {
+                        		this.setAttribute('selected', "false");
+                        		this.className = this.getAttribute("oldcolor");
+                        		this.removeAttribute("oldcolor");
+                        		selected_item--;
+                        		if (selected_item == 2)
+                            		apply_swap();
+                    		}
+                		}, false);
+                		numRows++;
+            		}
+            	}
+            	container.appendChild(group_display);
             }
-            }
-            container.appendChild(group_display);
             document.getElementById("geneGroup").style.display = "block";
         };
 

@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair
+from tennis.models import Extra, Participant, Court, Tournoi, Groupe, Pair
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament
 import re, math
 import json
@@ -403,10 +403,8 @@ def staffTournoi(request):
 			# tous les commentaires avec ****
 			# indiquent ce qui doit y avoir
 			# apres avoir mis le nom du tournoi dans le json
-			# **** tournamentJSON = request.GET.get('tournament')
-			tournamentJSON = request.GET.get('groups')
+			tournamentJSON = request.GET.get('tournament')
 			tournament_dict = json.loads(tournamentJSON)
-			# **** groups_dict = tournament_dict['groups']
 			groups_dict = tournament_dict['groups']
 			for group_dict in groups_dict:
 				# creation du groupe
@@ -440,7 +438,9 @@ def staffTournoi(request):
 	
 		allTournois = Tournoi.objects.all()
 		allPairs = Pair.objects.all()
-		allCourts = Court.objects.filter(attribue=False)
+		allCourts = Court.objects.all()
+		allGroupes = Groupe.objects.all()
+		allCourtsNonAttribues = Court.objects.filter(attribue=False)
 		return render(request,'tennis/staffTournoi.html',locals())
 	return redirect(reverse(home))
 

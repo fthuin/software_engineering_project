@@ -1,6 +1,5 @@
 'use strict';
 
-
 /*******************  
 * Tournament class *
 *******************/
@@ -8,19 +7,19 @@ function Tournament(tournoi, pairs, courts, groups) {
     // pairs
     this.tournoi = tournoi;
     
-    if (pairs == undefined)
+    if (pairs === undefined)
         this.pairs = [];
     else
         this.pairs = pairs;
 
     // courts
-    if (courts == undefined)
+    if (courts === undefined)
         this.courts = [];
     else
         this.courts = courts;
 
     // groups
-    if (groups == undefined)
+    if (groups === undefined)
         this.groups = [];
     else
         this.groups = groups;
