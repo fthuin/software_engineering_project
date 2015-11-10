@@ -36,7 +36,40 @@
             </table>
         </div>
     </div>
-    <button onclick="location.href='{% url "tennis.views.setScore" %}';" class="btn btn-default center-block">Entrer les scores</button>
+
+    <div class="row">
+        {% for tournoi in allTournoi %}
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">{{ tournoi.nom }} ({{tournoi.jour}})</div>
+                <div class="list-group">
+                    {% for key, value in allPoules.items %}
+                        {% if key == tournoi.nom %}
+                            {% for p in value %}
+                            <a class="list-group-item" href="{% url "tennis.views.pouleScore" p.id %}">
+                                <b>Leader : </b>{{p.leader.participant.prenom}} {{p.leader.participant.nom}}
+                                <br>
+                                <b>Participant : </b> (TODO afficher les scores ? )<br>
+                                {% for pair in p.paires.all %}
+                                <b>{{ pair.id }}</b> - 
+                                {{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} &#38; 
+                                {{ pair.user2.participant.prenom }} {{ pair.user2.participant.nom }}
+                                <br>
+                                {% endfor %}
+                            </a>
+                            {% empty %}
+                            <div class="list-group-item">Il n'y a pas encore de poules enregistrées pour ce tournoi</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="panel-footer">
+                    <button onclick="location.href='{% url "tennis.views.knockOff" tournoi.nom %}';" class="btn btn-default center-block">Knock-Off Table</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
 {% endblock %}

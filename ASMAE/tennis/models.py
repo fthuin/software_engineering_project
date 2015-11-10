@@ -183,12 +183,25 @@ class Pair(models.Model):
 			("Pair", "Manage Pair"),
         )
 
+class Score(models.Model):
+	paire1 = models.ForeignKey(Pair, related_name='paire1', verbose_name = "Paire 1")
+	paire2 = models.ForeignKey(Pair, related_name='paire2', verbose_name = "Paire 2")
+	point1 = models.IntegerField(null=True)
+	point2 = models.IntegerField(null=True)
+
+	def __str__(self):
+		return "Score " + str(self.paire1.id) + " vs "+ str(self.paire2.id)
+
+	def __unicode__(self):
+		return u'' + "Score " + str(self.paire1.id) + " vs "+ str(self.paire2.id)
+
 class Poule(models.Model):
 	id = models.AutoField(primary_key=True)
 	tournoi = models.ForeignKey(Tournoi)
 	paires = models.ManyToManyField(Pair)
 	leader = models.ForeignKey(User)
 	court = models.ForeignKey(Court)
+	score = models.ManyToManyField(Score,null=True)
 
 	def __str__(self):
 		return "Poule n " + str(self.id)

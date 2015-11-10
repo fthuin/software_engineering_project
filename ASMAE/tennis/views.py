@@ -403,27 +403,30 @@ def staff(request):
 #TODO permission QUENTIN GUSBIN
 def staffTournoi(request):				
 	if request.user.is_authenticated():
+		allPoules = dict()
 		allTournoi = Tournoi.objects.all()
 		for tourn in allTournoi:
 			nbrPair = len(Pair.objects.filter(tournoi=tourn))
 			tourn.np = nbrPair
+			allPoules[tourn.nom] = Poule.objects.filter(tournoi=tourn);
 		return render(request,'tennis/staffTournoi.html',locals())
 	return redirect(reverse(home))
 
 #TODO permissions QUENTIN GUSBIN
-def setScore(request):
+def knockOff(request,name):
 	if request.user.is_authenticated():
-		allPoules = dict()
-		allTournoi = Tournoi.objects.all()
-		for tournoi in allTournoi:
-			allPoules[tournoi.nom] = Poule.objects.filter(tournoi=tournoi);
-		return render(request,'tennis/setScore.html',locals())
+		tournoi = Tournoi.objects.filter(nom=name)[0]
+		poules = Poule.objects.filter(tournoi=tournoi)
+		return render(request,'tennis/knockOff.html',locals())
 	return redirect(reverse(home))
 
 #TODO permission QUENTIN GUSBIN
 def pouleScore(request,id):
+	poule = Poule.objects.filter(id=id)[0]
+	if request.method == "POST":
+		pass
+		#TODO QUENTIN GUSBIN
 	if request.user.is_authenticated():
-		poule = Poule.objects.filter(id=id)[0]
 		return render(request,'tennis/pouleScore.html',locals())
 	return redirect(reverse(home))
 
