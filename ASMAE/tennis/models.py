@@ -196,6 +196,9 @@ class Poule(models.Model):
 	def __unicode__(self):
 		return u'' + "Poule n " + str(self.id)
 
+	class Meta:
+		verbose_name = "Poule"
+
 class LogActivity(models.Model):
 	date = models.DateTimeField(auto_now_add=True)
 	user = models.ForeignKey(User, verbose_name="Utilisateur")

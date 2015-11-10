@@ -410,6 +410,23 @@ def staffTournoi(request):
 		return render(request,'tennis/staffTournoi.html',locals())
 	return redirect(reverse(home))
 
+#TODO permissions QUENTIN GUSBIN
+def setScore(request):
+	if request.user.is_authenticated():
+		allPoules = dict()
+		allTournoi = Tournoi.objects.all()
+		for tournoi in allTournoi:
+			allPoules[tournoi.nom] = Poule.objects.filter(tournoi=tournoi);
+		return render(request,'tennis/setScore.html',locals())
+	return redirect(reverse(home))
+
+#TODO permission QUENTIN GUSBIN
+def pouleScore(request,id):
+	if request.user.is_authenticated():
+		poule = Poule.objects.filter(id=id)[0]
+		return render(request,'tennis/pouleScore.html',locals())
+	return redirect(reverse(home))
+
 #TODO permission QUENTIN GUSBIN
 def generatePool(request,name):
 	if request.user.is_authenticated():

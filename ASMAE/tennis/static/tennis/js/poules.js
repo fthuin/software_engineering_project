@@ -50,6 +50,8 @@ function setTerrains(nbrPoules) {
     }
 }
 
+
+//Fonction utilsié pour set les poules en fonction du nombre de poules
 function setPoules(nbrPoules){
 	//On flush le contenant de nous poules
 	document.getElementById("poulesDiv").innerHTML = "";
@@ -103,6 +105,7 @@ function setPoules(nbrPoules){
 	setTerrains(nbrPoules);
 }
 
+//fonction utilisé pour set les poules en fonction de la taille des poules
 function setPoules2(taillePoule){
 	//On flush le contenant de nous poules
 	document.getElementById("poulesDiv").innerHTML = "";

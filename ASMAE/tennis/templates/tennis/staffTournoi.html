@@ -16,10 +16,10 @@
                 <thead>
                   <tr>
                     <th>Nom</th>
-                    <th>Jour</th>
+                    <th style="text-align:center">Jour</th>
                     <th>Descriptions</th>
-                    <th>Paires</th>
-                    <th>Status</th>
+                    <th style="text-align:center">Paires</th>
+                    <th style="text-align:center">Status</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -36,6 +36,7 @@
             </table>
         </div>
     </div>
+    <button onclick="location.href='{% url "tennis.views.setScore" %}';" class="btn btn-default center-block">Entrer les scores</button>
 </div>
 
 {% endblock %}

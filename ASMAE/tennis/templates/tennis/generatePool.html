@@ -170,7 +170,7 @@ PairList.push(p);
 
 {% endfor %}
 {% for elem in listTerrains %}
-var addr = '{{elem.rue}}'+ " ,"+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
+var addr = '{{elem.rue}}'+ ", "+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
 TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr})
 
 {% endfor %}
