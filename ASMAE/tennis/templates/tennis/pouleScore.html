@@ -53,8 +53,11 @@
 <script>
 {% for pair in poule.paires.all %}
     {% for p in poule.paires.all %}
-        $('.{{pair.id}}{{p.id}}').on('input', function() { 
-        
+        $('.{{pair.id}}{{p.id}}').on('input', function() {
+        var x = document.getElementsByClassName('{{pair.id}}{{p.id}}');
+        for (var i = 0; i < x.length; i++) {
+            x[i].value = document.activeElement.value;
+        };
     });
     {% endfor %}
 {% endfor %}
