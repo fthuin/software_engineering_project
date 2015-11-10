@@ -139,7 +139,7 @@ function getSpaceOption() {
 function createPanel(number){
 	var panel = document.createElement("div");
 	panel.className = 'col-lg-4';
-	panel.innerHTML = '<div class="panel panel-default" id="'+number+'"><div class="panel-heading"><div class="row"><label class="control-label col-xs-4">Poule '+number+'</label><div class="col-xs-8"><select class="form-control" name="Leader" id="Leader'+number+'"><option disabled selected>Choisir un leader</option></select></div></div></div><div class="list-group" id="list'+number+'"></div><div class="panel-footer"><div class="row"><label class="control-label col-xs-4">Terrain (TODO)</label><div class="col-xs-8"><select class="form-control" name="terrain" id="terrain'+number+'"><option disabled selected>Choisir un terrain</option></select></div></div></div></div>';
+	panel.innerHTML = '<div class="panel panel-default" id="'+number+'"><div class="panel-heading"><div class="row"><label class="control-label col-xs-4">Poule '+number+'</label><div class="col-xs-8"><select class="form-control" name="Leader" id="Leader'+number+'"><option disabled selected>Choisir un leader</option></select></div></div></div><div class="list-group" id="list'+number+'"></div><div class="panel-footer"><div class="row"><label class="control-label col-xs-4">Terrain (TODO)</label><div class="col-xs-8"><select class="form-control" name="terrain" id="terrain'+number+'"><option disabled selected>Choisir un terrain</option></select></div></div><div class="row"><label class="control-label col-xs-7">Empreinte Carbone</label><div class="col-xs-5"><p class="info">TODO</p></div></div></div></div>';
     return panel;
 }
 
