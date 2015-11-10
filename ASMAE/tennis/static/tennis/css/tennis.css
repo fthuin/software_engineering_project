@@ -273,6 +273,11 @@ textarea {
     background-color: #FFFFDD;
 }
 
+.panel-footer{
+    /*background-color: rgba(238, 231, 203, 1);*/
+    background-color: #FFFFDD !important;
+}
+
 .panel-heading{
     background-color: #D4542D !important;
     color: white !important;

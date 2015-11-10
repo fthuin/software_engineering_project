@@ -13,7 +13,7 @@
             <div class="panel-heading">Configuration</div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-sm-4 col-sm-offset-2">
+                    <div class="col-sm-4">
                         <label class="control-label col-sm-8">Nombre de paires</label>
                         <div class="col-sm-4">
                             <p class="info">{{ pair|length }}</p>
@@ -22,7 +22,13 @@
                     <div class="col-sm-4">
                         <label class="control-label col-sm-8">Nombre de poules</label>
                         <div class="col-sm-4">
-                            <input class="form-control" type="number" value="{{ defaultValue }}" id="poulesNumber">
+                            <input class="form-control" style="min-width:50px;max-width:100px;" type="number" value="{{ defaultValue }}" id="poulesNumber">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="control-label col-sm-8">Taille des poules</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" style="min-width:50px;max-width:100px;" type="number" value="6" id="poulesSize">
                         </div>
                     </div>
                 </div>
@@ -139,6 +145,13 @@ setPoules({{defaultValue}});
 $('#poulesNumber').on('input', function() { 
     var nbr = document.getElementById("poulesNumber").value;
     setPoules(nbr);
+});
+
+//Listener sur le size des poules
+$('#poulesSize').on('input', function() { 
+    var nbr = document.getElementById("poulesSize").value;
+    var poules = Math.ceil(PairList.length/nbr);
+    setPoules(poules);
 });
 </script>
 {% endblock %}
