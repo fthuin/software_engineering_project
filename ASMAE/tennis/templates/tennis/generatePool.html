@@ -14,14 +14,14 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-sm-4">
-                        <label class="control-label col-sm-8">Nombre de paires</label>
-                        <div class="col-sm-4">
+                        <label class="control-label col-sm-10">Nombre de paires</label>
+                        <div class="col-sm-2">
                             <p class="info">{{ pair|length }}</p>
                         </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <label class="control-label col-sm-8">Nombre de terrains disponible</label>
-                        <p class="info">{{ nbrTerrains }}</p>
+                        <label class="control-label col-sm-10">Nombre de terrains disponible</label>
+                        <div class="col-sm-2">
+                            <p class="info">{{ nbrTerrains }}</p>
+                        </div>
                     </div>
                     <div class="col-sm-4">
                         <label class="control-label col-sm-8">Nombre de poules</label>
@@ -109,11 +109,43 @@
         {% endfor %}
     -->
     </div>
-    
-        <button class="btn btn-default center-block">Enregistrer</button>
-
+        <ul class="list-inline text-center" style="padding-top:10px">
+            <li>
+                <button class="btn btn-default center-block" type="button">Sauvegarder</button>
+            </li>
+            <li>
+                <button class="btn btn-default center-block" data-toggle="modal" data-target="#myModal" type="button">Valider et envoyer les mails</button>
+            </li>
+        </ul>
     </form>
 </div>
+
+<!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title center">Confirmation validation</h4>
+        </div>
+        <div class="modal-body">
+          <p>Etes-vous sûr de valider la formations des groupes de ce tournoi et envoyer les mails aux utilisateurs concernés?</p>
+        
+            <ul class="list-inline text-center">
+                <li>
+                    <button type="button" class="btn btn-default" onclick="">oui</button>
+                </li>
+                <li>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">non</button>
+                </li>
+            </ul>
+        </div>
+      </div>
+      
+    </div>
+  </div>
 
 {% endblock %}
 
@@ -138,17 +170,16 @@ PairList.push(p);
 
 {% endfor %}
 {% for elem in listTerrains %}
-
-TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}'})
+var addr = '{{elem.rue}}'+ " ,"+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
+TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr})
 
 {% endfor %}
 
 //on ajout la liste des pair dans le cache
-setPairList(PairList);
+setPairList(PairList,TerrainList);
 
 //On set les poules pour en avoir max 6 par poules
 setPoules({{defaultValue}});
-setTerrains(TerrainList, {{defaultValue}});
 //updatePanel(1);
 
 //Listener sur le nombre de pair

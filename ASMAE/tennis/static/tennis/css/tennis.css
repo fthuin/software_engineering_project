@@ -231,12 +231,23 @@ p.textHome{
     color:white !important;
 }
 
+.scrollable-menu {
+    height: auto;
+    max-height: 250px;
+    overflow-x: hidden;
+}
+
 /* break line */
 hr.line {
     border-color: #D4542D;
     border-width: 2px;
 }
 
+hr.line2{
+    margin-top: 0;
+    border-color: #D4542D;
+    border-width: 2px;
+}
 
 .sponsors{
     padding:10px;
