@@ -11,6 +11,7 @@ function drop (ev) {
 
   ev.currentTarget.replaceChild(src, tgt);
   srcParent.appendChild(tgt);
+  <
 
   //TODO update leader liste
 }
@@ -66,14 +67,14 @@ function setPoules(nbrPoules){
 
 			count = count + 1;
 
-		};
+		}
 		//Si c'est plutot que le nombre max on rajotue des espaces vides
 		for (var j = 0; j < max - nbr; j++) {
 			var p = createEmptyPair(i);
 			document.getElementById("list"+(i+1)).appendChild(p);
-		};
+		}
 		
-	};
+	}
 }
 
 //Return une option avec comme nom et valeur le name
