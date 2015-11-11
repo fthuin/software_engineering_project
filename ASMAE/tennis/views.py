@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
 from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule
-from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email
+from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail
 import re, math
 import json
 import datetime
@@ -21,6 +21,9 @@ from tennis.pdfdocument import PDFTerrain
 # Create your views here.
 def home(request):
 	return render(request,'tennis/home.html',locals())
+
+def qcq(request):
+	return render(request,'tennis/404.html',locals())
 
 def sponsors(request):
 	return render(request,'tennis/sponsors.html',locals())
