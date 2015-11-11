@@ -28,6 +28,9 @@ class Participant(models.Model):
 	def __unicode__(self):
 		return u'' + self.prenom + self.nom
 	
+	def fullName(self):
+		return u'' + self.titre +  " " + self.prenom + " " + self.nom
+		
 	#def __eq__(self, other):
 	#	return self.username == other.user.username
 		
