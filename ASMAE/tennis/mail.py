@@ -18,32 +18,32 @@ def send_confirmation_email_pair_registered(participantOne, participantTwo):
     playerTwoAdresseMail = participantTwo.user.email
 
     #adresseAsmae = 'noreply@leCharleDeLorraine.com'
-    subject = "Confirmation d'inscription au tournoi 'Le charle de Lorraine'"
+    subject = u"Confirmation d'inscription au tournoi 'Le Charles de Lorraine'"
 
-    messagePlayerOne =  "Bonjour " + playerOnePrenom + """,
+    messagePlayerOne =  u"Bonjour " + playerOnePrenom + u""",
 
-    Vous avez été enregistrer pour jouer en pair avec """ + playerTwoFullName + """
+    Vous avez été enregistré pour jouer en paire avec """ + playerTwoFullName + u"""
     lors du prochain tournoi 'Le Charle de Lorraine'.
 
-    Si ce enregistrement a été fait par erreur, sachez qu'il reste possible de modifier les
-    informations d'inscription sur notre site jusqu'a l'avant veille du tournoi. Nous somme
+    Si cet enregistrement a été fait par erreur, sachez qu'il reste possible de modifier les
+    informations d'inscription sur notre site jusqu'à l'avant veille du tournoi. Nous sommes
     également disponible en cas de besoin via l'onglet contact du site internet.
 
     Merci encore de votre inscription,
-    L'équipe 'Le charle de Lorraine'
+    L'équipe 'Le Charles de Lorraine'
     """
 
-    messagePlayerTwo =  "Bonjour " + playerTwoPrenom + """,
+    messagePlayerTwo =  u"Bonjour " + playerTwoPrenom + u""",
 
-    Vous avez été enregistrer pour jouer en pair avec """ + playerOneFullName + """
-    lors du prochain tournoi 'Le Charle de Lorraine'.
+    Vous avez été enregistré pour jouer en paire avec """ + playerOneFullName + u"""
+    lors du prochain tournoi 'Le Charles de Lorraine'.
 
-    Si ce enregistrement a été fait par erreur, sachez qu'il reste possible de modifier les
-    informations d'inscription sur notre site jusqu'a l'avant veille du tournoi. Nous somme
+    Si cet enregistrement a été fait par erreur, sachez qu'il reste possible de modifier les
+    informations d'inscription sur notre site jusqu'à l'avant veille du tournoi. Nous sommes
     également disponible en cas de besoin via l'onglet contact du site internet.
 
     Merci encore de votre inscription,
-    L'équipe 'Le charle de Lorraine'
+    L'équipe 'Le Charles de Lorraine'
     """
 
     #Send
@@ -62,17 +62,17 @@ def send_confirmation_email_court_registered(participant, court):
     mail = participant.user.email
 
     #adresseAsmae = 'noreply@leCharleDeLorraine.com'
-    subject = "Confirmation d'enregistrement du terrain"
+    subject = u"Confirmation d'enregistrement du terrain"
 
-    message =  "Bonjour " + prenom + """,
+    message =  u"Bonjour " + prenom + u""",
 
-    Merci d'avoir prêter votre court de tennis pour le prochain tournoi
-    'le charle de lorraine'. Veuillez s'il vous plais re-vérifier que les
-    informations ci-dessous correspondent bien a votre terrain.
+    Merci d'avoir mis à disposition votre terrain de tennis pour le prochain tournoi
+    'Le Charles de Lorraine'. Veuillez s'il vous plait re-vérifier que les
+    informations ci-dessous correspondent bien à votre terrain.
 
     Adresse : """ + adresseCourt + """
     Type : """ + typeCourt + """
-    Disponibilitée : """
+    Disponibilité : """
 
     if disponibleDimanche and disponibleSamedi:
         message += "samedi et dimanche"
@@ -86,11 +86,11 @@ def send_confirmation_email_court_registered(participant, court):
     message += """
 
     Si une quelconque erreur reste présente dans l'enregistrement, sachez qu'il reste possible
-    de modifier les informations d'inscription sur notre site. Nous somme également disponible
+    de modifier les informations d'inscription sur notre site. Nous sommes également disponible
     en cas de besoin via l'onglet contact du site internet.
 
     Merci encore de votre soutien,
-    L'équipe 'Le charle de Lorraine'
+    L'équipe 'Le Charles de Lorraine'
     """
 
     #Send
@@ -103,19 +103,19 @@ def send_email_court_adress(participant):
     mail = participant.user.email
     #mail = "pokcyril@hotmail.com" # For tests
     courtAdresse = "'TODO link court adress to pair or player in database'"
-    subject = "Le charle de lorraine : emplacement de votre premier match"
-    message =  "Bonjour " + prenom + """,
+    subject = u"Le Charles de Lorraine : emplacement de votre premier match"
+    message =  u"Bonjour " + prenom + u""",
 
-    Le tournoi approche a grand pas et l'endroit ou se deroulera
+    Le tournoi approche à grand pas et l'endroit où se deroulera
     votre premier match a été décidé. Veuillez donc vous rendre a
     l'adresse suivante :
 
-    """ + courtAdresse + """
+    """ + courtAdresse + u"""
 
     En cas de problème, nous restons disponible via l'onglet contact du site internet.
 
-    Merci encore de votre soutien et bon matchs
-    L'équipe 'Le charle de Lorraine'
+    Merci encore de votre soutien et bons matchs,
+    L'équipe 'Le Charles de Lorraine'
     """
 
     send_mail(subject, message, "", [mail], fail_silently=True)
@@ -128,23 +128,23 @@ def send_email_payment_issue(participant):
     adresseHQ = "PutAdresseHQ Here"
     mail = participant.user.email
     #mail = "pokcyril@hotmail.com" # For tests
-    subject = "Le charle de lorraine : Problème de payment"
+    subject = u"Le Charles de Lorraine : Problème de payment"
 
-    message =  "Bonjour " + prenom + """,
+    message =  u"Bonjour " + prenom + u""",
 
-    Il semblerais que vous soyez toujours en irregularité de payment pour le tournoi.
+    Il semblerait que vous soyez toujours en irrégularité de payment pour le tournoi.
     Veuillez donc vous présenter samedi matin afin de régulariser votre situation et
     d'obtenier l'adresse a laquelle vous pourrez jouer. L'adresse du quartier général
     a laquelle vous devez vous présenter ainsi que le montant a fournir peuvent etre
     trouver ci-dessous :
 
-    Montant : """ + montant + """ euros
-    Adresse : """ + adresseHQ + """
+    Montant : """ + montant + u""" euros
+    Adresse : """ + adresseHQ + u"""
 
     En cas de problème, nous restons disponible via l'onglet contact du site internet.
 
     Merci encore de votre soutien
-    L'équipe 'Le charle de Lorraine'
+    L'équipe 'Le Charles de Lorraine'
     """
 
     send_mail(subject, message, "", [mail], fail_silently=True)    
@@ -152,16 +152,16 @@ def send_email_payment_issue(participant):
 def send_register_confirmation_email(activationObject, participant, link): 
 	prenom = participant.prenom
 	mail = participant.user.email
-	subject = "Le charle de lorraine : validation de votre adresse email"
+	subject = "Le Charles de Lorraine : validation de votre adresse email"
 	lien = link + activationObject.confirmation_key # http://domain/tennis/emailValidation/confirmation_key
 	
-	message =  "Bonjour " + prenom + """,
-	Afin de finaliser la creation de votre compte 'Le Charle de Lorraine',  merci de cliquer sur le lien suivant.
+	message = u"Bonjour " + prenom + u""",
+	Afin de finaliser la création de votre compte 'Le Charles de Lorraine',  merci de cliquer sur le lien suivant.
 
-	""" + lien + """
+	""" + lien + u"""
 	
 	Merci de votre cooperation, 
-	L'équipe 'Le charle de Lorraine'
+	L'équipe 'Le Charles de Lorraine'
 	"""
 	
 	send_mail(subject, message, "", [mail], fail_silently=True)
@@ -172,16 +172,16 @@ def send_email_score_board(participant):
     adresseHQ = "PutAdresseHQ Here"
     mail = participant.user.email
     #mail = "pokcyril@hotmail.com" # For tests
-    subject = "Le charle de lorraine : récuperation de la feuille de cotation"
+    subject = u"Le Charles de lorraine : récuperation de la feuille de résultats"
 
-    message =  "Bonjour " + prenom + """,
+    message =  u"Bonjour " + prenom + u""",
 
-    Pour le prochain tournois vous avez été designer en temps que group leader.
-    Nous vous demandons donc de vous présenter le samedi matin a l'adresse ci - dessous
+    Pour le prochain tournoi vous avez été designé en tant que leader de groupe.
+    Nous vous demandons donc de vous présenter le samedi matin a l'adresse ci dessous
     afin de recuperer la feuille de cotation. Vous serez également informer de
-    l'adresse a laquelle se tiendra votre premier match sur place.
+    l'adresse à laquelle se tiendra votre premier match sur place.
 
-    Adresse : """ + adresseHQ + """
+    Adresse : """ + adresseHQ + u"""
 
     En cas de problème, nous restons disponible via l'onglet contact du site internet.
 
