@@ -1,0 +1,13 @@
+.g_gracket { width: 1000px; background-color: transparent; padding: 55px 15px 5px; line-height: 100%; position: relative; overflow: hidden;}
+.g_round { float: left; margin-right: 50px; }
+.g_game { position: relative; margin-bottom: 15px; }
+.g_gracket h3 { margin: 0; padding: 10px 8px 8px; font-size: 12px; font-weight: normal; color: #000}
+.g_team { background: #EEEECC; height:46px; border:solid 1px #aaa; border-radius:10px; margin-bottom:2px;}
+.g_team small {color:black; font-size: 14px; float:right;vertical-align: middle; font-weight: bold;}
+.g_team:last-child {  background: #DDDDBB; }
+.g_round:last-child { margin-right: 20px; }
+.g_winner { background: #D4542D; color:white; border-radius:10px;}
+.g_winner h3 { background: #D4542D; color:white; border-radius:10px;}
+.g_winner .g_team { background: none; }
+.g_current h3, .g_current small{ cursor: pointer; background: #D4542D!important; color:white!important; border-radius:10px;}
+.g_round_label { top: -5px; font-weight: normal; color: #222; text-align: center; font-size: 18px; }
