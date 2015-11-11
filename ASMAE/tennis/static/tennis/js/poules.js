@@ -9,8 +9,8 @@ function drop (ev) {
   var srcParent = src.parentNode;
   var tgt = ev.currentTarget.firstElementChild;
 
-  var targetID = tgt.parentNode.parentNode.parentNode.parentNode.id;
-  var sourceID = src.parentNode.parentNode.parentNode.parentNode.id;
+  var targetID = ('' + tgt.parentNode.parentNode.parentNode.parentNode.id).replace('panel', '');
+  var sourceID = ('' + src.parentNode.parentNode.parentNode.parentNode.id).replace('panel', '');
 
   ev.currentTarget.replaceChild(src, tgt);
   srcParent.appendChild(tgt);
