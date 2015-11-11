@@ -8,7 +8,8 @@
 <div class="content-box" id="gestionTournoi">
     <h2 class="center">{{ tournoi.nom }}</h2>
     <hr class="line">
-    <form class="form-horizontal" action="">
+    <form class="form-horizontal" action="{% url 'tennis.views.generatePool' tournoi.nom %}" method="post">
+{% csrf_token %}
         <div class="panel panel-default">
             <div class="panel-heading">Configuration</div>
             <div class="panel-body">
@@ -16,7 +17,7 @@
                     <div class="col-sm-4">
                         <label class="control-label col-sm-10">Nombre de paires</label>
                         <div class="col-sm-2">
-                            <p class="info">{{ pair|length }}</p>
+                            <p class="info">{{ allPair|length }}</p>
                         </div>
                         <label class="control-label col-sm-10">Nombre de terrains disponible</label>
                         <div class="col-sm-2">
@@ -26,7 +27,7 @@
                     <div class="col-sm-4">
                         <label class="control-label col-sm-8">Nombre de poules</label>
                         <div class="col-sm-4">
-                            <input class="form-control" style="min-width:50px;max-width:100px;" type="number" value="{{ defaultValue }}" id="poulesNumber">
+                            <input class="form-control" style="min-width:50px;max-width:100px;" type="number" value="{{ defaultValue }}" name="poulesNumber" id="poulesNumber">
                         </div>
                     </div>
                     <div class="col-sm-4">
@@ -44,13 +45,15 @@
     </div>
         <ul class="list-inline text-center" style="padding-top:10px">
             <li>
-                <button class="btn btn-default center-block" type="button">Sauvegarder</button>
+                <button class="btn btn-default center-block" type="submit" onclick="save()">Sauvegarder</button>
             </li>
             <li>
                 <button class="btn btn-default center-block" data-toggle="modal" data-target="#myModal" type="button">Valider et envoyer les mails</button>
             </li>
         </ul>
-
+    <input id="assignTerrains" name="assignTerrains" value="" style="display:none;">
+    <input id="assignPairPoules" name="assignPairPoules" value="" style="display:none;">
+    <input id="assignLeaders" name="assignLeaders" value="" style="display:none;">
     </form>
 </div>
 
@@ -69,7 +72,7 @@
         
             <ul class="list-inline text-center">
                 <li>
-                    <button type="button" class="btn btn-default" onclick="save_and_email()">oui</button>
+                    <button type="button" class="btn btn-default">oui</button>
                 </li>
                 <li>
                     <button type="button" class="btn btn-default" data-dismiss="modal">non</button>
@@ -93,27 +96,45 @@
 //Creation de la liste des paires
 var PairList = [] ;
 var TerrainList = [];
+var PairDict = {};
+{% for key, value in pairListAll.items %}
+    PairDict[{{key}}] = []
+    {% for elem in value %}
+        var nom1 = '{{ elem.user1.participant.prenom }}' +" "+'{{ elem.user1.participant.nom }}';
+        var nom2 = '{{ elem.user2.participant.prenom }}'+" "+'{{ elem.user2.participant.nom }}';
 
-{% for elem in allPair %}
-
-var nom1 = '{{ elem.user1.participant.prenom }}' +" "+'{{ elem.user1.participant.nom }}';
-var nom2 = '{{ elem.user2.participant.prenom }}'+" "+'{{ elem.user2.participant.nom }}';
-
-var p = {id:'{{elem.id}}',user1:nom1,user2:nom2,age1:'{{elem.user1.age}}',age2:'{{elem.user2.age}}',comment:'{{elem.commentaires}}',titre1:'{{elem.user1.participant.titre}}',titre2:'{{elem.user2.participant.titre}}'};
-PairList.push(p);
-
+        var p = {id:'{{elem.id}}', user1:nom1,user2:nom2, age1:'{{elem.user1.age}}', age2:'{{elem.user2.age}}', comment:'{{elem.commentaires}}', titre1:'{{elem.user1.participant.titre}}', titre2:'{{elem.user2.participant.titre}}'};
+        PairDict[{{key}}].push(p);
+        PairList.push(p);
+    {% endfor %}
 {% endfor %}
+
 {% for elem in listTerrains %}
 var addr = '{{elem.rue}}'+ ", "+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
 TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr})
 
 {% endfor %}
 
+var terrainSaved = []
+{% for elem in listTerrainSaved %}
+var addr = '{{elem.rue}}'+ ", "+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
+terrainSaved.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr})
+{% endfor %}
+var leaderSaved = []
+{% for elem in listLeaderSaved %}
+var fullname = '{{ elem.participant.prenom }}' + ' ' + '{{ elem.participant.nom }}'
+leaderSaved.push({fullname:fullname})
+{% endfor %}
+
 //on ajout la liste des pair dans le cache
 setPairList(PairList,TerrainList);
-
+setPairDict(PairDict);
 //On set les poules pour en avoir max 6 par poules
+{% if saved %}
+mySetPoules({{defaultValue}}, {{defaultSize}});
+{% else %}
 setPoules({{defaultValue}});
+{% endif %}
 //updatePanel(1);
 
 //Listener sur le nombre de pair
@@ -128,7 +149,10 @@ $('#poulesSize').on('input', function() {
     setPoules2(nbr);
 });
 
-function save_and_email() {
+function save() {
+    document.getElementById("assignTerrains").value = ""
+    document.getElementById("assignPairPoules").value = ""
+    document.getElementById("assignLeaders").value = ""
     var nbr = document.getElementById("poulesNumber").value;
     var poulesDict = {};
     for (var i = 0; i < nbr ; i++) {
@@ -141,9 +165,17 @@ function save_and_email() {
     }
     for (var i = 0; i < PairList.length ; i++) {
         // On link les paires aux ID des poules
-        id = "" + document.getElementById(""+PairList[i].id).parentNode.parentNode.parentNode.id;
+        var id = "" + document.getElementById(""+PairList[i].id).parentNode.parentNode.parentNode.id;
         id = id.replace("list", "");
         poulesDict[''+(id-1)]['pairList'].push(PairList[i]);
+    }
+    for (var i = 0; i < nbr ; i++) {
+         document.getElementById("assignTerrains").value += poulesDict[''+i]['terrainID'] + '-';
+         document.getElementById("assignPairPoules").value += '[' + i + ']-'
+         for (var j = 0 ; j < poulesDict[''+i]['pairList'].length ; j++) {
+            document.getElementById("assignPairPoules").value += poulesDict[''+i]['pairList'][j].id + '-';
+         }
+         document.getElementById("assignLeaders").value += poulesDict[''+i]['leader'] + '/';
     }
     /*for (var i = 0; i < nbr ; i++) {
         alert("Poule " + i);

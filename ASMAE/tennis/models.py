@@ -202,8 +202,8 @@ class Poule(models.Model):
 	id = models.AutoField(primary_key=True)
 	tournoi = models.ForeignKey(Tournoi)
 	paires = models.ManyToManyField(Pair)
-	leader = models.ForeignKey(User,null=True)
-	court = models.ForeignKey(Court,null=True)
+	leader = models.ForeignKey(User, null=True, blank=True)
+	court = models.ForeignKey(Court, null=True, blank=True)
 	score = models.ManyToManyField(Score)
 
 	def __str__(self):
