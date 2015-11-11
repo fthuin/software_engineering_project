@@ -103,7 +103,7 @@ PairList.push(p);
 
 {% endfor %}
 {% for elem in listTerrains %}
-var addr = '{{elem.rue}}'+ " ,"+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
+var addr = '{{elem.rue}}'+ ", "+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
 TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr})
 
 {% endfor %}
@@ -123,9 +123,13 @@ $('#poulesNumber').on('input', function() {
 
 //Listener sur le size des poules
 $('#poulesSize').on('input', function() { 
+    /*
     var nbr = document.getElementById("poulesSize").value;
     var poules = Math.ceil(PairList.length/nbr);
     setPoules(poules);
+    */
+    var nbr = document.getElementById("poulesSize").value;
+    setPoules2(nbr);
 });
 
 function save_and_email() {

@@ -50,6 +50,8 @@ function setTerrains(nbrPoules) {
     }
 }
 
+
+//Fonction utilsié pour set les poules en fonction du nombre de poules
 function setPoules(nbrPoules){
 	//On flush le contenant de nous poules
 	document.getElementById("poulesDiv").innerHTML = "";
@@ -102,6 +104,65 @@ function setPoules(nbrPoules){
 
 	setTerrains(nbrPoules);
 }
+
+//fonction utilisé pour set les poules en fonction de la taille des poules
+function setPoules2(taillePoule){
+	//On flush le contenant de nous poules
+	document.getElementById("poulesDiv").innerHTML = "";
+	//On recupere le nombre de pair
+	var v = pairList.length;
+	//on recupere le nombre de poules
+	var poules = Math.ceil(PairList.length/taillePoule);
+	var nbrPoules = poules
+	//il y aura au max 'max' pair par poules
+	var max = taillePoule;
+
+	//alert(max);
+
+	document.getElementById("poulesSize").value = max;
+
+	document.getElementById("poulesNumber").value = nbrPoules;
+
+	var count = 0;
+	//on crée nbrPoules de poules
+	for (var i = 0; i < nbrPoules; i++) {
+		//On compte le nombre d'element dans cette poule
+		var nbr = Math.ceil(v/poules);
+		v = v - nbr;
+		poules = poules - 1;
+		//Creation du panel de la poule
+		var panel = createPanel(i+1);
+		document.getElementById("poulesDiv").appendChild(panel);
+
+		//Ajout des pair dans le panel et dans la liste du leader
+		for (var j = 0; j < nbr; j++) {
+			//Panel
+			var p = createPair(pairList[count]);
+			document.getElementById("list"+(i+1)).appendChild(p);
+
+			//List
+			var nom1 = pairList[count].user1;
+			var nom2 = pairList[count].user2;
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1));
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2));
+			document.getElementById("Leader"+(i+1)).appendChild(getSpaceOption());
+
+			count = count + 1;
+
+		}
+		document.getElementById("Leader"+(i+1)).removeChild(document.getElementById("Leader"+(i+1)).childNodes[document.getElementById("Leader"+(i+1)).childNodes.length-1]);
+		//Si c'est plutot que le nombre max on rajotue des espaces vides
+		for (var j = 0; j < max - nbr; j++) {
+			var p = createEmptyPair(i);
+			document.getElementById("list"+(i+1)).appendChild(p);
+		}
+		
+	}
+
+	setTerrains(nbrPoules);
+}
+
+
 
 //Update the list of user in the leader list of a panel
 function updatePanel(numero){
