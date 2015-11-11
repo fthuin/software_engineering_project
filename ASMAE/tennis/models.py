@@ -204,7 +204,7 @@ class Poule(models.Model):
 	paires = models.ManyToManyField(Pair)
 	leader = models.ForeignKey(User,null=True)
 	court = models.ForeignKey(Court,null=True)
-	score = models.ManyToManyField(Score,null=True)
+	score = models.ManyToManyField(Score)
 
 	def __str__(self):
 		return "Poule n " + str(self.id)
