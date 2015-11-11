@@ -28,8 +28,8 @@ class Participant(models.Model):
 	def __unicode__(self):
 		return u'' + self.prenom + self.nom
 	
-	def __eq__(self, other):
-		return self.user.username == other.user.username
+	#def __eq__(self, other):
+	#	return self.username == other.user.username
 		
 	class Meta:
 		verbose_name = "Participant"
