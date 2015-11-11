@@ -4,6 +4,10 @@
 // MIT
 // Version 1.5.5
 
+function test(data){
+  alert(data);
+}
+
 
 (function($) {
   $.fn.gracket = function(method) {
@@ -27,6 +31,7 @@
       canvasLineWidth : 2,
       canvasLineGap : 15,
       roundLabels : [],
+      funct : function test(data){alert(data);},
       src : []
     };
 
@@ -136,7 +141,7 @@
       build : {
         team : function(data, node){
           var html = [
-            '<h3'+ ((typeof data.score === "undefined") ? "" : " title=\"Score: " + data.score + "\"") +'>',
+            '<h3'+ ((typeof data.score === "undefined") ? "" : " title=\"Score: " + data.score + "\"") +' >',
               '<span class="' + node.seedClass + '">',
                 ((typeof data.displaySeed === "undefined") ? data.seed : data.displaySeed),
               '</span>',
@@ -351,12 +356,16 @@
         // 1. Hover Trail
         var _gameSelector = "." + node.teamClass + " > h3";
         $.each($(_gameSelector), function(e){
-          var id = "." + $(this).parent().attr("class").split(" ")[1];
+          var id = "." + $(this).parent().attr("class").split(" ")[2];
+          var realID = "." + $(this).parent().attr("class").split(" ")[1];
           if (id !== undefined) {
             $(id).hover(function(){
               $(id).addClass(node.currentClass);
             }, function(){
               $(id).removeClass(node.currentClass);
+            });
+            $(realID).click(function(){
+              node.funct(realID.split(".")[1]);
             });
           };
         });

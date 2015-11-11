@@ -30,10 +30,34 @@
     </div>
 
     </div>
-    
-    
-    
 </div>
+
+<!-- Modal -->
+  <div class="modal fade" id="scoreModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title center">Score</h4>
+        </div>
+        <div class="modal-body">
+          <p id="infoModal"></p>
+        
+        <ul class="list-inline text-center">
+        <li>
+          <button type="button" class="btn btn-default" onclick="">oui</button>
+        </li>
+        <li>
+          <button type="button" class="btn btn-default" data-dismiss="modal">non</button>
+        </li>
+      </ul>
+    </div>
+      </div>
+      
+    </div>
+  </div>
 
 {% endblock %}
 
@@ -41,7 +65,41 @@
 
 <script type="text/javascript">
 
+function setScore(id){
+
+   document.getElementById("infoModal").innerHTML = id+" ";
+  
+  //Function test A refaire
+  /*
+
+  var emplacement ;
+  //round
+  for (var i = 0; i < TreeData.length; i++) {
+    var round = TreeData[TreeData.length-(i+1)];
+    for (var j = 0; j < round.length; j++) {
+      var match = round[j];
+      for (var k = 0; k < match.length; k++) {
+        if(parseInt(match[k].id) == id){
+          emplacement = match[k];
+          document.getElementById("infoModal").innerHTML = JSON.stringify(match[k]) ;
+          break;
+        }
+      };
+      //document.getElementById("infoModal").innerHTML += JSON.stringify(jso[j])+" ";
+    };
+  };
+
+  emplacement.name="LOLL <br>&nbsp;LOOAJ";
+  emplacement.id=id+" pair";
+  emplacement.score=5;
+  setArbre(TreeData,TreeLabel);
+  */
+  
+  $('#scoreModal').modal('show');
+}
+
 function setArbre(data,label){
+  document.getElementById("my_gracket").innerHTML = "";
     (function(win, doc, $){
 
       $("#my_gracket").gracket({ 
@@ -50,14 +108,19 @@ function setArbre(data,label){
         canvasLineGap : 10,        // adjusts the gap between element and line
         canvasLineCap : "round",  // or "square"
         canvasLineColor : "#D4542D", // or #HEX
-        roundLabels : label
+        roundLabels : label,
+        funct: setScore
       });
 
     })(window, document, jQuery);
 }
 
+//&nbsp;
 //Donnée de notre arbre
 var TreeData;
+
+//label
+var TreeLabel;
 
 function setEmptyTree(size){
   //liste des labels
@@ -86,12 +149,12 @@ function setEmptyTree(size){
       var jsonDuel = [];
       jsonDuel.push({
         name: "<br />",
-        id: count
+        id: ""+count+" "+count
       })
       count = count + 1;
       jsonDuel.push({
         name: "<br />",
-        id: count
+        id: ""+count+" "+count
       })
       jsonRound.push(jsonDuel);
       count = count + 1;
@@ -105,13 +168,16 @@ function setEmptyTree(size){
   var jsonWinner = [];
   jsonWinner.push({
         name: "<br />",
-        id: "gagnat"
+        id: "gagnant"
   })
   jsonLastRound.push(jsonWinner);
   jsonArbre.push(jsonLastRound);
 
   //Update label
   l.push("Gagnant");
+
+  //Enregistremetn des labels
+  TreeLabel = l;
 
   //Enregistrement de l'arbre
   TreeData = jsonArbre;
