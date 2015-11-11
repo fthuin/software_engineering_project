@@ -6,9 +6,11 @@
 {% block bodyStaff %}
 <!-- Gestionnaire des groupes -->
 <div class="content-box" id="gestionTournoi">
+	<p class="hint" id="hint-poule"></p>
     <h2 class="center">Poules {{poule.id}}</h2>
     <hr class="line">
-    <form action="">
+    <form action="{% url "tennis.views.pouleScore" poule.id %}" method="post" onsubmit="checkPouleScoreInput()">
+	{% csrf_token %}
         <input type="text" name="poule" value="{{poule.id}}" style="display:none">
         <div class="table-responsive">
             <table class="table table-hover">
@@ -32,9 +34,9 @@
                             <div class="form-group" style="margin-top:5px;margin-bottom:5px;">
                                 <div class="row">
                                     <ul class="list-inline center">
-                                        <li style="margin:0;padding:0;"><input maxlength="2" type="text" name="{{pair.id}}-{{p.id}}" class="sc {{pair.id}}-{{p.id}} form-control" style="max-width:50px;text-align:center"></li>
+                                        <li style="margin:0;padding:0;"><input maxlength="2" type="text" name="{{pair.id}}-{{p.id}}"  class="sc {{pair.id}}-{{p.id}} form-control" style="max-width:50px;text-align:center"></li>
                                         <li>-</li>
-                                        <li style="margin:0;padding:0;"><input maxlength="2" type="text" class="sc {{p.id}}-{{pair.id}} form-control" style="max-width:50px;text-align:center"></li>
+                                        <li style="margin:0;padding:0;"><input maxlength="2"  type="text" class="sc {{p.id}}-{{pair.id}} form-control" style="max-width:50px;text-align:center"></li>
                                     </ul>
                                 </div>
                             </div>
@@ -46,13 +48,28 @@
                 </tbody>
             </table>
         </div>
-        <button class="btn btn-default center-block" style="margin-top:20px;">Enregistrer</button>
+        <button class="btn btn-default center-block" style="margin-top:20px;" >Enregistrer</button>
     </form>
 </div>
 
 {% endblock %}
 
 {% block commande %}
+<script>
+var scoreValues = '{{ scoreValues }}';	
+var tabscoreValues = scoreValues.split(".");
+for(var i =0;i<tabscoreValues.length;i++)
+	{
+		var input = tabscoreValues[i].split(",");
+		var s = document.getElementsByClassName(input[0]);
+		for (var j = 0; j < s.length; j++) {
+            s[j].value = input[1];
+        };
+	
+
+	}
+
+</script>
 <script>
 
 {% for pair in poule.paires.all %}
@@ -67,5 +84,30 @@
 {% endfor %}
 
 </script>
+<script>
+function checkPouleScoreInput()
+{
+	
+	{% for pair in poule.paires.all %}
+		{% for p in poule.paires.all %}
+
+		    var x = document.getElementsByClassName('{{pair.id}}-{{p.id}}');
+			 for (var i = 0; i < x.length; i++) {
+				var value = x[i].value
+				if(isNaN(value))
+				{;
+					document.getElementById("hint-poule").innerHTML = " Veuillez entrer des chiffres pour les résultats";
+					return false;
+				}
+		        
+		    };
+
+		   
+		
+		{% endfor %}
+{% endfor %}
+}
+</script>
+
 {% endblock %}
     

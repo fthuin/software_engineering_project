@@ -6,7 +6,7 @@
 {% block bodyStaff %}
 <!-- Gestionnaire des groupes -->
 <div class="content-box" id="gestionTournoi">
-    <h2 class="center">Knock Off : {{tournoi.nom}}</h2>
+    <h2 class="center">Knock Out : {{tournoi.nom}}</h2>
     <hr class="line">
     <div class="panel panel-default">
         <div class="panel-heading">Poules</div>
@@ -25,57 +25,172 @@
         </div>
     </div>
 
-    <div class="row">
-        <div id="test">
+    <div class="table-responsive">
+    <div class="center-block" id="my_gracket"></div>
     </div>
+
     </div>
-    
-    
-    
 </div>
+
+<!-- Modal -->
+  <div class="modal fade" id="scoreModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title center">Score</h4>
+        </div>
+        <div class="modal-body">
+          <p id="infoModal"></p>
+        
+        <ul class="list-inline text-center">
+        <li>
+          <button type="button" class="btn btn-default" onclick="">oui</button>
+        </li>
+        <li>
+          <button type="button" class="btn btn-default" data-dismiss="modal">non</button>
+        </li>
+      </ul>
+    </div>
+      </div>
+      
+    </div>
+  </div>
 
 {% endblock %}
 
 {% block commande %}
-{% load static from staticfiles %}
-<script>
-var saveData = {
-    teams : [
-      ["Team 1", "Team 2"], /* first matchup */
-      ["Team 3", "Team 4"]  /* second matchup */
-    ],
-    results : [[1,0], [2,7]]
-  }
- 
-/* Called whenever bracket is modified
- *
- * data:     changed bracket object in format given to init
- * userData: optional data given when bracket is created.
- */
-function saveFn(data, userData) {
-  var json = jQuery.toJSON(data)
-  $('#saveOutput').text('POST '+userData+' '+json)
-  /* You probably want to do something like this
-  jQuery.ajax("rest/"+userData, {contentType: 'application/json',
-                                dataType: 'json',
-                                type: 'post',
-                                data: json})
+
+<script type="text/javascript">
+
+function setScore(id){
+
+   document.getElementById("infoModal").innerHTML = id+" ";
+  
+  //Function test A refaire
+  /*
+
+  var emplacement ;
+  //round
+  for (var i = 0; i < TreeData.length; i++) {
+    var round = TreeData[TreeData.length-(i+1)];
+    for (var j = 0; j < round.length; j++) {
+      var match = round[j];
+      for (var k = 0; k < match.length; k++) {
+        if(parseInt(match[k].id) == id){
+          emplacement = match[k];
+          document.getElementById("infoModal").innerHTML = JSON.stringify(match[k]) ;
+          break;
+        }
+      };
+      //document.getElementById("infoModal").innerHTML += JSON.stringify(jso[j])+" ";
+    };
+  };
+
+  emplacement.name="LOLL <br>&nbsp;LOOAJ";
+  emplacement.id=id+" pair";
+  emplacement.score=5;
+  setArbre(TreeData,TreeLabel);
   */
+  
+  $('#scoreModal').modal('show');
 }
- 
-$(function() {
-    var container = $('#test')
-    container.bracket({
-      init: saveData,
-      save: saveFn,
-      userData: "http://myapi"})
- 
-    /* You can also inquiry the current data */
-    var data = container.bracket('data')
-    $('#dataOutput').text(jQuery.toJSON(data))
+
+function setArbre(data,label){
+  document.getElementById("my_gracket").innerHTML = "";
+    (function(win, doc, $){
+
+      $("#my_gracket").gracket({ 
+        src : data,
+        canvasLineWidth : 2,      // adjusts the thickness of a line
+        canvasLineGap : 10,        // adjusts the gap between element and line
+        canvasLineCap : "round",  // or "square"
+        canvasLineColor : "#D4542D", // or #HEX
+        roundLabels : label,
+        funct: setScore
+      });
+
+    })(window, document, jQuery);
+}
+
+//&nbsp;
+//Donnée de notre arbre
+var TreeData;
+
+//label
+var TreeLabel;
+
+function setEmptyTree(size){
+  //liste des labels
+  var l = [];
+  //Data contenant notre arbre
+  var jsonArbre = [];
+  //utilise pour donner des id uniques
+  var count = 0
+
+  //Parcours de la taille de l'arbre
+  for (var i = 0; i < size ; i++) {
+    //Json du round
+    var jsonRound = [];
+    //Nombre d'entrée par rounds
+    var nbr = Math.pow(2,(size-i));
+
+    //Mise à jours des labels
+    if(nbr==2){
+      l.push("Finale");
+    }else{
+      l.push("1/"+nbr/2+" finale");
+    };
+    
+    //Ajouts des paires vide
+    for (var j = 0; j < nbr/2; j++) {
+      var jsonDuel = [];
+      jsonDuel.push({
+        name: "<br />",
+        id: ""+count+" "+count
+      })
+      count = count + 1;
+      jsonDuel.push({
+        name: "<br />",
+        id: ""+count+" "+count
+      })
+      jsonRound.push(jsonDuel);
+      count = count + 1;
+    };
+
+    jsonArbre.push(jsonRound);
+  };
+
+  //Dernier round (gagnant)
+  var jsonLastRound = [];
+  var jsonWinner = [];
+  jsonWinner.push({
+        name: "<br />",
+        id: "gagnant"
   })
-</script>
-<script type="text/javascript" src="{% static 'tennis/js/jquery.bracket.min.js' %}"></script>
-<link rel="stylesheet" type="text/css" href="{% static 'tennis/css/jquery.bracket.min.css' %}" />
+  jsonLastRound.push(jsonWinner);
+  jsonArbre.push(jsonLastRound);
+
+  //Update label
+  l.push("Gagnant");
+
+  //Enregistremetn des labels
+  TreeLabel = l;
+
+  //Enregistrement de l'arbre
+  TreeData = jsonArbre;
+
+  //On afficher l'arbre 
+  setArbre(jsonArbre,l)
+}
+
+//Afficher un arbre vide de taille 4
+setEmptyTree(4);
+
+
+  </script>
+
 {% endblock %}
     

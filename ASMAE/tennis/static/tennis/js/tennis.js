@@ -1,3 +1,9 @@
+
+
+
+
+
+
 /*
  * Fonction pour mettre des Strings en majuscules (ignorant les
  * accents)

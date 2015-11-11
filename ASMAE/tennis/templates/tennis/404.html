@@ -1,0 +1,20 @@
+{% extends "tennis/base.html" %}
+
+{% block title %}Page 404{% endblock %}
+{% block nav-home %}class="active"{% endblock %}
+
+{% block body %}
+{% load static from staticfiles %}
+<div class="container">
+	<div class="row">
+<div class="col-lg-12">
+				<img class="img-responsive sponsors" src="{% static 'tennis/img/404.png' %}" alt="404">
+			</div>
+</div>
+	<div class="row">
+<div class="col-lg-12">
+La page que vous recherchez n'a pas été trouvée!
+	</div>
+</div>
+</div>
+{% endblock %}

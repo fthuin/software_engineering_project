@@ -5,8 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule
-from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email
+from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score
+from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail
 import re, math
 import json
 import datetime
@@ -17,10 +17,16 @@ from django.contrib.auth.models import Permission,Group
 from django.utils.crypto import get_random_string
 from django.http import HttpResponse
 from tennis.pdfdocument import PDFTerrain
+from django.template.defaulttags import register
+
+
 
 # Create your views here.
 def home(request):
 	return render(request,'tennis/home.html',locals())
+
+def qcq(request):
+	return render(request,'tennis/404.html',locals())
 
 def sponsors(request):
 	return render(request,'tennis/sponsors.html',locals())
@@ -422,11 +428,30 @@ def knockOff(request,name):
 
 #TODO permission QUENTIN GUSBIN
 def pouleScore(request,id):
-	poule = Poule.objects.filter(id=id)[0]
+	poule = Poule.objects.get(id=id)
 	if request.method == "POST":
-		pass
-		#TODO QUENTIN GUSBIN
+		poule.score.all().delete()
+		pairList = poule.paires.all()
+		dictionnaire = dict()
+		for id1 in pairList:
+			for id2 in pairList:
+				if((str(id1.id)+"-"+str(id2.id) in dictionnaire) or (str(id2.id)+"-"+str(id1.id) in dictionnaire) or (id1==id2)):
+					pass
+				else:
+					dictionnaire[str(id1.id)+"-"+str(id2.id)] = True
+					dictionnaire[str(id2.id)+"-"+str(id1.id)] = True
+					print(dictionnaire)
+					if (is_number(request.POST[str(id1.id)+"-"+str(id2.id)]) and is_number(request.POST[str(id2.id)+"-"+str(id1.id)])):
+						score = Score(paire1 = id1,paire2=id2,point1=int(request.POST[str(id1.id)+"-"+str(id2.id)]),point2=int(request.POST[str(id2.id)+"-"+str(id1.id)]))
+						score.save()
+						poule.score.add(score)
+						
 	if request.user.is_authenticated():
+		scoreList = poule.score.all()
+		scoreValues = ""
+		for sco in scoreList:
+			scoreValues = scoreValues + repr(sco.paire1.id)+"-"+repr(sco.paire2.id)+","+repr(sco.point1)+"."+repr(sco.paire2.id)+"-"+repr(sco.paire1.id)+","+repr(sco.point2)+"."
+		scoreValues = scoreValues[:-1]
 		return render(request,'tennis/pouleScore.html',locals())
 	return redirect(reverse(home))
 
@@ -1197,5 +1222,7 @@ def is_number(s):
 		return True
 	except ValueError:
 		return False
+
+
 
 
