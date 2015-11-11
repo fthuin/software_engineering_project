@@ -394,10 +394,13 @@ def staff(request):
 	return redirect(reverse(home))
 
 def staffTournoi(request):
+	successSend = None
 	if request.method == "POST":
 		if request.POST['action'] == "sendTournamentDataByMail":
 				send_email_start_tournament() #TODO to change and link to a tournament
 				successSend = "Les mails ont bien été envoyé"
+		elif request.POST['action'] == "enregister2":
+			successSend = "groupes crées !"
 	if request.method == "GET":
 		if request.GET.get('action') == 'enregistrer':
 			# tous les commentaires avec ****
@@ -433,9 +436,10 @@ def staffTournoi(request):
 					group_pair = Pair.objects.get(id=group_pair_id)
 					group_pair.group = group
 					group_pair.save()
-				
+			tournoi = Tournoi.objects.get(nom=tournament_dict['tournoi'])
+			tournoi.status = 'groupes crees'
+			tournoi.save()
 	if request.user.is_authenticated():
-	
 		allTournois = Tournoi.objects.all()
 		allPairs = Pair.objects.all()
 		allCourts = Court.objects.all()

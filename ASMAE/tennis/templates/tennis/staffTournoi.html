@@ -101,21 +101,33 @@ text-align:left;
     <button id="register" style="float:right" class="btn btn-default">Enregistrer les groupes</button>
     </div>
 </div>
-
 {% endblock %}
 
     {% block commande %}
     <script>
 
-    {% if errorAdd %}
+    $('html, body').animate({
+    	scrollTop: 0
+    }, 'slow');
 
     var errorModule = document.getElementById("errorModule");
+    errorModule.style.display = "none";
+    var successModule = document.getElementById("successModule");
+    successModule.style.display = "none";    
+
+    {% if errorAdd %}
+
     errorModule.style.display = "block";
+    $('html, body').animate({
+    	scrollTop: $("#errorModule").offset().top
+    }, 'slow');
 
     {% elif successSend %}
 
-    var successModule = document.getElementById("successModule");
     successModule.style.display = "block";
+    $('html, body').animate({
+    	scrollTop: $("#successModule").offset().top
+    }, 'slow');
 
     {% endif %}
 
