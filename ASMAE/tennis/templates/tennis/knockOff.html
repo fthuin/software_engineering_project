@@ -40,11 +40,23 @@
 {% block commande %}
 
 <script type="text/javascript">
-function setArbre(data){
+function setArbre(data,label){
     (function(win, doc, $){
 
-      // Fake Data
-      win.TestData = [
+      $("#my_gracket").gracket({ 
+        src : data,
+        canvasLineWidth : 2,      // adjusts the thickness of a line
+        canvasLineGap : 10,        // adjusts the gap between element and line
+        canvasLineCap : "round",  // or "square"
+        canvasLineColor : "#D4542D", // or #HEX
+        //roundLabels : label
+      });
+
+    })(window, document, jQuery);
+}
+
+// Fake Data
+var data = [
         [
           [ {"name" : "Erik Zettersten <br>&nbsp;Gean Luc", "id" : "erik-zettersten", "score" : 2 }, {"name" : "Andrew Miller<br>&nbsp;Gean Luc", "id" : "andrew-miller", "score" : 1} ],
           [ {"name" : "James Coutry", "id" : "james-coutry", "seed" : 3}, {"name" : "Sam Merrill", "id" : "sam-merrill", "seed" : 4}],
@@ -73,13 +85,60 @@ function setArbre(data){
         ]
       ];
 
-      // initializer
-      $("#my_gracket").gracket({ src : win.TestData });
+var label = ["1/8 finale","1/4 finale","1/2 finale", "Finale", "Gagnant"];
 
-    })(window, document, jQuery);
+var initialData = [
+        [
+          [ {"name" : "<br />", "id":"pair-1"}, {"name" : "<br />", "id":"pair-2"} ],
+          [ {"name" : "<br />", "id":"pair-3"}, {"name" : "<br />", "id":"pair-4"} ]
+        ],
+        [
+          [ {"name" : "<br />", "id":"round2"}, {"name" : "<br />", "id":"round2"} ]
+        ],
+        [
+          [ {"name" : "<br />", "id":"round3"} ]
+        ]
+      ];
+
+var initialLabel = ["1/2 finale", "Finale", "Gagnant"];
+
+//setArbre(data,label);
+
+function setEmptyTree(size){
+  var jsonArbre = [];
+  var count = 0
+  for (var i = 0; i < size ; i++) {
+    var jsonRound = [];
+    var nbr = Math.pow(2,(size-i));
+    for (var j = 0; j < nbr/2; j++) {
+      var jsonDuel = [];
+      jsonDuel.push({
+        name: "TODO<br />&nbsp;TODO",
+        id: count
+      })
+      count = count + 1;
+      jsonDuel.push({
+        name: "TODO<br />&nbsp;TODO",
+        id: count
+      })
+      jsonRound.push(jsonDuel);
+      count = count + 1;
+    };
+    jsonArbre.push(jsonRound);
+  };
+
+  var jsonLastRound = [];
+  var jsonWinner = [];
+  jsonWinner.push({
+        name: "<br />",
+        id: "todo"
+  })
+  jsonLastRound.push(jsonWinner);
+  jsonArbre.push(jsonLastRound);
+  setArbre(jsonArbre,["1/4 finale", "1/2 finale", "Finale", "Gagnant"])
 }
 
-setArbre();
+setEmptyTree(4);
 
 
   </script>
