@@ -22,6 +22,9 @@ from tennis.pdfdocument import PDFTerrain
 def home(request):
 	return render(request,'tennis/home.html',locals())
 
+def qcq(request):
+	return render(request,'tennis/404.html',locals())
+
 def sponsors(request):
 	return render(request,'tennis/sponsors.html',locals())
 
