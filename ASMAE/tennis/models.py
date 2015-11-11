@@ -28,6 +28,9 @@ class Participant(models.Model):
 	def __unicode__(self):
 		return u'' + self.prenom + self.nom
 	
+	def fullName(self):
+		return u'' + self.titre +  " " + self.prenom + " " + self.nom
+		
 	#def __eq__(self, other):
 	#	return self.username == other.user.username
 		
@@ -201,7 +204,7 @@ class Poule(models.Model):
 	paires = models.ManyToManyField(Pair)
 	leader = models.ForeignKey(User,null=True)
 	court = models.ForeignKey(Court,null=True)
-	score = models.ManyToManyField(Score,null=True)
+	score = models.ManyToManyField(Score)
 
 	def __str__(self):
 		return "Poule n " + str(self.id)

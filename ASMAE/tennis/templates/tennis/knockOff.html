@@ -6,7 +6,7 @@
 {% block bodyStaff %}
 <!-- Gestionnaire des groupes -->
 <div class="content-box" id="gestionTournoi">
-    <h2 class="center">Knock Off : {{tournoi.nom}}</h2>
+    <h2 class="center">Knock Out : {{tournoi.nom}}</h2>
     <hr class="line">
     <div class="panel panel-default">
         <div class="panel-heading">Poules</div>
@@ -25,9 +25,10 @@
         </div>
     </div>
 
-    <div class="row">
-        <div id="test">
+    <div class="table-responsive">
+    <div id="my_gracket"></div>
     </div>
+
     </div>
     
     
@@ -37,45 +38,110 @@
 {% endblock %}
 
 {% block commande %}
-{% load static from staticfiles %}
-<script>
-var saveData = {
-    teams : [
-      ["Team 1", "Team 2"], /* first matchup */
-      ["Team 3", "Team 4"]  /* second matchup */
-    ],
-    results : [[1,0], [2,7]]
-  }
- 
-/* Called whenever bracket is modified
- *
- * data:     changed bracket object in format given to init
- * userData: optional data given when bracket is created.
- */
-function saveFn(data, userData) {
-  var json = jQuery.toJSON(data)
-  $('#saveOutput').text('POST '+userData+' '+json)
-  /* You probably want to do something like this
-  jQuery.ajax("rest/"+userData, {contentType: 'application/json',
-                                dataType: 'json',
-                                type: 'post',
-                                data: json})
-  */
+
+<script type="text/javascript">
+function setArbre(data,label){
+    (function(win, doc, $){
+
+      $("#my_gracket").gracket({ 
+        src : data,
+        canvasLineWidth : 2,      // adjusts the thickness of a line
+        canvasLineGap : 10,        // adjusts the gap between element and line
+        canvasLineCap : "round",  // or "square"
+        canvasLineColor : "#D4542D", // or #HEX
+        //roundLabels : label
+      });
+
+    })(window, document, jQuery);
 }
- 
-$(function() {
-    var container = $('#test')
-    container.bracket({
-      init: saveData,
-      save: saveFn,
-      userData: "http://myapi"})
- 
-    /* You can also inquiry the current data */
-    var data = container.bracket('data')
-    $('#dataOutput').text(jQuery.toJSON(data))
+
+// Fake Data
+var data = [
+        [
+          [ {"name" : "Erik Zettersten <br>&nbsp;Gean Luc", "id" : "erik-zettersten", "score" : 2 }, {"name" : "Andrew Miller<br>&nbsp;Gean Luc", "id" : "andrew-miller", "score" : 1} ],
+          [ {"name" : "James Coutry", "id" : "james-coutry", "seed" : 3}, {"name" : "Sam Merrill", "id" : "sam-merrill", "seed" : 4}],
+          [ {"name" : "Anothy Hopkins", "id" : "anthony-hopkins", "seed" : 5}, {"name" : "Everett Zettersten", "id" : "everett-zettersten", "seed" : 6} ],
+          [ {"name" : "John Scott", "id" : "john-scott", "seed" : 7}, {"name" : "Teddy Koufus", "id" : "teddy-koufus", "seed" : 8}],
+          [ {"name" : "Arnold Palmer", "id" : "arnold-palmer", "seed" : 9}, {"name" : "Ryan Anderson", "id" : "ryan-anderson", "seed" : 10} ],
+          [ {"name" : "Jesse James", "id" : "jesse-james", "seed" : 1}, {"name" : "Scott Anderson", "id" : "scott-anderson", "seed" : 12}],
+          [ {"name" : "Josh Groben", "id" : "josh-groben", "seed" : 13}, {"name" : "Sammy Zettersten", "id" : "sammy-zettersten", "seed" : 14} ],
+          [ {"name" : "Jake Coutry", "id" : "jake-coutry", "seed" : 15}, {"name" : "Spencer Zettersten", "id" : "spencer-zettersten", "seed" : 16}]
+        ], 
+        [
+          [ {"name" : "Erik Zettersten", "id" : "erik-zettersten", "seed" : 1}, {"name" : "James Coutry", "id" : "james-coutry", "seed" : 3} ],
+          [ {"name" : "Anothy Hopkins", "id" : "anthony-hopkins", "seed" : 5}, {"name" : "Teddy Koufus", "id" : "teddy-koufus", "seed" : 8} ],
+          [ {"name" : "Ryan Anderson", "id" : "ryan-anderson", "seed" : 10}, {"name" : "Scott Anderson", "id" : "scott-anderson", "seed" : 12} ],
+          [ {"name" : "Sammy Zettersten", "id" : "sammy-zettersten", "seed" : 14}, {"name" : "Jake Coutry", "id" : "jake-coutry", "seed" : 15} ]
+        ],
+        [
+          [ {"name" : "Erik Zettersten", "id" : "erik-zettersten", "seed" : 1}, {"name" : "Anothy Hopkins", "id" : "anthony-hopkins", "seed" : 5} ],
+          [ {"name" : "Ryan Anderson", "id" : "ryan-anderson", "seed" : 10}, {"name" : "Sammy Zettersten", "id" : "sammy-zettersten", "seed" : 14} ]
+        ],
+        [
+          [ {"name" : "Erik Zettersten", "id" : "erik-zettersten", "seed" : 1}, {"name" : "Ryan Anderson", "id" : "ryan-anderson", "seed" : 10} ]
+        ],
+        [
+          [ {"name" : "Erik Zettersten", "id" : "erik-zettersten", "seed" : 1} ]
+        ]
+      ];
+
+var label = ["1/8 finale","1/4 finale","1/2 finale", "Finale", "Gagnant"];
+
+var initialData = [
+        [
+          [ {"name" : "<br />", "id":"pair-1"}, {"name" : "<br />", "id":"pair-2"} ],
+          [ {"name" : "<br />", "id":"pair-3"}, {"name" : "<br />", "id":"pair-4"} ]
+        ],
+        [
+          [ {"name" : "<br />", "id":"round2"}, {"name" : "<br />", "id":"round2"} ]
+        ],
+        [
+          [ {"name" : "<br />", "id":"round3"} ]
+        ]
+      ];
+
+var initialLabel = ["1/2 finale", "Finale", "Gagnant"];
+
+//setArbre(data,label);
+
+function setEmptyTree(size){
+  var jsonArbre = [];
+  var count = 0
+  for (var i = 0; i < size ; i++) {
+    var jsonRound = [];
+    var nbr = Math.pow(2,(size-i));
+    for (var j = 0; j < nbr/2; j++) {
+      var jsonDuel = [];
+      jsonDuel.push({
+        name: "TODO<br />&nbsp;TODO",
+        id: count
+      })
+      count = count + 1;
+      jsonDuel.push({
+        name: "TODO<br />&nbsp;TODO",
+        id: count
+      })
+      jsonRound.push(jsonDuel);
+      count = count + 1;
+    };
+    jsonArbre.push(jsonRound);
+  };
+
+  var jsonLastRound = [];
+  var jsonWinner = [];
+  jsonWinner.push({
+        name: "<br />",
+        id: "todo"
   })
-</script>
-<script type="text/javascript" src="{% static 'tennis/js/jquery.bracket.min.js' %}"></script>
-<link rel="stylesheet" type="text/css" href="{% static 'tennis/css/jquery.bracket.min.css' %}" />
+  jsonLastRound.push(jsonWinner);
+  jsonArbre.push(jsonLastRound);
+  setArbre(jsonArbre,["1/4 finale", "1/2 finale", "Finale", "Gagnant"])
+}
+
+setEmptyTree(4);
+
+
+  </script>
+
 {% endblock %}
     
