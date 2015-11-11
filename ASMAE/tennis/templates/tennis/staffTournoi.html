@@ -394,7 +394,7 @@ text-align:left;
                 	print_button.addEventListener("click", function(event){
                     	event.stopPropagation();
                     	sessionStorage.setItem("data", this.parentNode.parentNode.parentNode.outerHTML);
-                    	window.location.href = "{% url 'printScoreboard' %}";
+                    	window.open("{% url 'printScoreboard' %}");
                 	}, false);
 
                 	var edit_button = document.createElement("span");
@@ -403,6 +403,14 @@ text-align:left;
                 	edit_button.style.float = "right";
                 	edit_button.style.margin = "3px";
                 	group_name.appendChild(edit_button);
+
+                    edit_button.addEventListener("click", function(event){
+                        event.stopPropagation();
+                        sessionStorage.setItem("tournois", document.getElementById("tournois").selectedIndex);
+                        sessionStorage.setItem("data", this.parentNode.parentNode.parentNode.outerHTML);
+                        window.location.href = "{% url 'staffEditMatch' %}";
+                    }, false);
+
                 }
 
                 var group_display_body = document.createElement("tbody");

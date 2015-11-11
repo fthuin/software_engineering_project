@@ -1,0 +1,123 @@
+{% extends "tennis/staff.html" %}
+
+{% block title %}Gestion des tournois{% endblock %}
+{% block ongTournoi %}class="active"{% endblock %}
+
+{% block bodyStaff %}
+<table id="match_display" class="table table-bordered table-responsive panel panel-default" style="text-align: center;">
+
+</table>
+<button id="register" style="float:right" class="btn btn-default">Enregistrer les matches</button>
+<script>
+
+    function Match(paire_gagnante, paire_perdante, score){
+        this.paire_gagnante = paire_gagnante;
+        this.paire_perdante = paire_perdante;
+        this.score = score;
+        this.status = "pool";
+    }
+
+    Match.prototype.isIn = function(paire1, paire2){
+        return (this.paire_gagnante == paire1 && this.paire_perdante == paire2)
+                || (this.paire_gagnante == paire2 && this.paire_perdante == paire1);
+    };
+    var id = 1;
+    var match_list = [];
+    var match_modif = [];
+    {% for match in allMatches %}
+        match_list.push(['{{ match.id }}}','{{ match.paire_gagnante }}' , '{{ match.paire_perdante }}' , '{{ match.score }}']);
+    {%endfor%}
+
+    var button = document.getElementById('register');
+    button.addEventListener("click", function(event){
+        window.location.href = "{% url 'staffTournoi' %}";
+    }, false);
+
+    var liste_pairs = [];
+
+	var tmp = sessionStorage.getItem("data");
+    var elem = document.createElement("div");
+    elem.innerHTML = tmp;
+    var tmp_list = elem.querySelectorAll("tbody > tr");
+
+    var i;
+    for (i = 0; i < tmp_list.length -1 ; i++){
+        liste_pairs.push([tmp_list[i].childNodes[0].innerHTML,tmp_list[i].childNodes[1].innerHTML]);
+    }
+
+	var match_display = document.getElementById("match_display");
+
+    //creation de la premiere ligne (avec les noms des pairs)
+
+    var row = match_display.insertRow(-1);
+    //case noir en haute à gauche
+    row.insertCell(-1);
+    row.cells[0].innerHTML = "VS";
+    row.cells[0].setAttribute("class", "active");
+    row.cells[0].style.verticalAlign = "middle";
+    row.cells[0].style.fontWeight = "bold";
+    row.cells[0].style.fontStyle = "italic";
+
+    var i;
+    for (i = 0; i < liste_pairs.length; i++){
+        row.insertCell(-1).innerHTML = liste_pairs[i][1].toString();
+        row.cells[i+1].style.verticalAlign = "middle";
+    }
+
+
+    // fonction pour générer une ligne avec une case grisée pour
+    function add_row(index){
+        var row = match_display.insertRow(-1);
+        row.insertCell(-1).innerHTML = liste_pairs[index][1].toString();
+        var i;
+        for(i = 0 ; i < liste_pairs.length; i++){
+            if (i == index){
+                row.insertCell(-1);
+                row.cells[i+1].setAttribute("class", "active");
+            }
+
+            else{
+                var box = document.createElement("input");
+                box.style.height = "100%";
+                box.style.width = "100%";
+                box.style.textAlign = "center";
+                box.style.border = "none";
+                box.setAttribute("id" , id.toString());
+                id++;
+                box.setAttribute("type","text");
+                box.setAttribute("modifie" , "false");
+                box.setAttribute(("paireX"), liste_pairs[index][0]);
+                box.setAttribute(("pairY"), liste_pairs[i][0]);
+                row.insertCell(-1).appendChild(box);
+                box.addEventListener("input", function(){
+                    this.setAttribute("modifie" , "true");
+                    if(match_modif.indexOf(this.getAttribute("id")) == -1) {
+                        match_modif.push(this.getAttribute("id"));
+                    }
+                }, false);
+            }
+        }
+    }
+
+    for (i = 0; i < liste_pairs.length; i++) {
+        add_row(i);
+    }
+
+    document.getElementById("register").addEventListener("click", function(){
+        var match_for_DB = [];
+        for (var i = 0; i < match_modif.length; i++){
+            var tmp = document.getElementById(match_modif[i]);
+            for (var j = 0 ; j < match_list.length; j++){
+                match_list[j].isIn(parseInt(tmp.getAttribute("pairX")), parseInt(tmp.getAttribute("pairY")));
+            }
+            if(){
+                // TO DO
+            }
+            else{
+                // TO DO
+            }
+        }
+    }, false);
+
+</script>
+{% endblock %}
