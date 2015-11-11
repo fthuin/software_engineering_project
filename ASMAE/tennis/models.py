@@ -28,8 +28,8 @@ class Participant(models.Model):
 	def __unicode__(self):
 		return u'' + self.prenom + self.nom
 	
-	def __eq__(self, other):
-		return self.user.username == other.user.username
+	#def __eq__(self, other):
+	#	return self.username == other.user.username
 		
 	class Meta:
 		verbose_name = "Participant"
@@ -183,18 +183,34 @@ class Pair(models.Model):
 			("Pair", "Manage Pair"),
         )
 
+class Score(models.Model):
+	paire1 = models.ForeignKey(Pair, related_name='paire1', verbose_name = "Paire 1")
+	paire2 = models.ForeignKey(Pair, related_name='paire2', verbose_name = "Paire 2")
+	point1 = models.IntegerField(null=True)
+	point2 = models.IntegerField(null=True)
+
+	def __str__(self):
+		return "Score " + str(self.paire1.id) + " vs "+ str(self.paire2.id)
+
+	def __unicode__(self):
+		return u'' + "Score " + str(self.paire1.id) + " vs "+ str(self.paire2.id)
+
 class Poule(models.Model):
 	id = models.AutoField(primary_key=True)
 	tournoi = models.ForeignKey(Tournoi)
 	paires = models.ManyToManyField(Pair)
-	leader = models.ForeignKey(User)
-	court = models.ForeignKey(Court)
+	leader = models.ForeignKey(User,null=True)
+	court = models.ForeignKey(Court,null=True)
+	score = models.ManyToManyField(Score,null=True)
 
 	def __str__(self):
 		return "Poule n " + str(self.id)
 
 	def __unicode__(self):
 		return u'' + "Poule n " + str(self.id)
+
+	class Meta:
+		verbose_name = "Poule"
 
 class LogActivity(models.Model):
 	date = models.DateTimeField(auto_now_add=True)

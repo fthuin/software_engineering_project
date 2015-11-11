@@ -231,12 +231,23 @@ p.textHome{
     color:white !important;
 }
 
+.scrollable-menu {
+    height: auto;
+    max-height: 250px;
+    overflow-x: hidden;
+}
+
 /* break line */
 hr.line {
     border-color: #D4542D;
     border-width: 2px;
 }
 
+hr.line2{
+    margin-top: 0;
+    border-color: #D4542D;
+    border-width: 2px;
+}
 
 .sponsors{
     padding:10px;
@@ -271,6 +282,11 @@ textarea {
 .panel-body{
     /*background-color: rgba(238, 231, 203, 1);*/
     background-color: #FFFFDD;
+}
+
+.panel-footer{
+    /*background-color: rgba(238, 231, 203, 1);*/
+    background-color: #FFFFDD !important;
 }
 
 .panel-heading{
@@ -321,6 +337,11 @@ a.UserLink{
 
 .clickable-row td:hover {
     cursor: pointer;
+}
+
+/* The max width is dependant on the container (more info below) */
+.popover{
+    width: 200px ; /* Max Width of the popover (depending on the container!) */
 }
 
 .zone {

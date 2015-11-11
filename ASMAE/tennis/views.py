@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation
+from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email
 import re, math
 import json
@@ -46,10 +46,10 @@ def inscriptionTournoi(request):
 	Tour = Tournoi.objects.all()
 	Use = User.objects.all().order_by('username')
 
+	today = date.today()
 	for u in Use:
-		bd = u.participant.datenaissance
-		fb = bd.strftime('%d/%m/%Y')
-		u.fb = fb
+		born = u.participant.datenaissance
+		u.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
 	if request.method == "POST":
 		#On recupère les donnée du formualaire
@@ -261,26 +261,22 @@ def payPair(request,id):
 		return redirect(reverse(tournoi))
 	if request.user.is_authenticated():
 		#TODO check si il peut payer cette pair
-		Ex = Extra.objects.all()
+		allExtras = Extra.objects.all()
 		extra1 = pair.extra1.all()
 		extra2 = pair.extra2.all()
-		extraa = extra1 | extra2
-		extraa.order_by('nom')
 		totalprice = 40.00
-		extraList = list()
-		currentItem = extraa[0]
-		count = 0
-		for extra in extraa:
-			if currentItem.id == extra.id:
-				count = count+1
-			else:
-				extraList.append((currentItem.nom,currentItem.prix,count))
-				totalprice = totalprice + float((count*currentItem.prix))
-				currentItem = extra
-				count = 1
-		extraList.append((currentItem.nom,currentItem.prix,count))
-		totalprice = totalprice + float((count*currentItem.prix))
-
+		listUniqueExtra = list(set(list(extra1) + list(extra2)))
+		extraList = []
+		for extra in listUniqueExtra:
+			count = 0
+			for e1 in extra1:
+				if extra.id == e1.id:
+					count += 1
+			for e2 in extra2:
+				if extra.id == e2.id:
+					count += 1
+			extraList.append((extra.nom, extra.prix, count))
+			totalprice += float(count*extra.prix)
 
 		return render(request,'tennis/payPair.html',locals())
 	return redirect(reverse(home))
@@ -410,34 +406,77 @@ def staff(request):
 #TODO permission QUENTIN GUSBIN
 def staffTournoi(request):				
 	if request.user.is_authenticated():
+		allPoules = dict()
 		allTournoi = Tournoi.objects.all()
 		for tourn in allTournoi:
 			nbrPair = len(Pair.objects.filter(tournoi=tourn))
 			tourn.np = nbrPair
+			allPoules[tourn.nom] = Poule.objects.filter(tournoi=tourn);
 		return render(request,'tennis/staffTournoi.html',locals())
+	return redirect(reverse(home))
+
+#TODO permissions QUENTIN GUSBIN
+def knockOff(request,name):
+	if request.user.is_authenticated():
+		tournoi = Tournoi.objects.filter(nom=name)[0]
+		poules = Poule.objects.filter(tournoi=tournoi)
+		return render(request,'tennis/knockOff.html',locals())
+	return redirect(reverse(home))
+
+#TODO permission QUENTIN GUSBIN
+def pouleScore(request,id):
+	poule = Poule.objects.filter(id=id)[0]
+	if request.method == "POST":
+		pass
+		#TODO QUENTIN GUSBIN
+	if request.user.is_authenticated():
+		return render(request,'tennis/pouleScore.html',locals())
 	return redirect(reverse(home))
 
 #TODO permission QUENTIN GUSBIN
 def generatePool(request,name):
 	if request.user.is_authenticated():
 		tournoi = Tournoi.objects.filter(nom=name)[0]
+		allPair = Pair.objects.filter(tournoi=tournoi)
 		pair = Pair.objects.filter(tournoi=tournoi)
-		for elem in pair:
+		terrains = Court.objects.all()
+		poules = Poule.objects.all()
+		dictTerrains = {}
+		for terrain in terrains:
+			dictTerrains[terrain.id] = terrain
+		'''
+		for poule in poules:
+			try:
+				del dictTerrains[poule.court.id]
+			except KeyError, e:
+				pass
+		'''
+		listTerrains = list(dictTerrains.values())
+		nbrTerrains = len(listTerrains)
+		
+		today = date.today()
+		for elem in allPair:
 			u1 = elem.user1
 			born = u1.participant.datenaissance
-			today = date.today()
 			u1.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 			u2 = elem.user2
 			born = u2.participant.datenaissance
-			today = date.today()
 			u2.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+			c1 = ""
+			c2 = ""
+			if elem.comment1:
+				c1 = str(elem.comment1)
+			if elem.comment2:
+				c2 = str(elem.comment2)
+			if c1 != "" or c2 != "":
+				elem.commentaires = c1 + "<hr>" + c2
 		defaultSize = 6.0
-		defaultValue = math.ceil((len(pair)/defaultSize))
+		defaultValue = int(math.ceil((len(allPair)/defaultSize)))
 		poolRange = range(0,defaultValue)
 		pairListAll = dict()
 		for x in range(0,defaultValue):
 			index = int(x*defaultSize)
-			pairListAll[x+1] = (pair[index:index+int(defaultSize)])
+			pairListAll[x+1] = (allPair[index:index+int(defaultSize)])
 			if x==defaultValue-1 :
 				v = int(defaultSize) - len(pairListAll[x+1])
 				complement = range(0,v)
@@ -622,10 +661,10 @@ def staffPerm(request):
 @permission_required('tennis.User')
 def staffUser(request):
 	Use = User.objects.all().order_by('username')
+	today = date.today()
 	for u in Use:
-		bd = u.participant.datenaissance
-		fb = bd.strftime('%d/%m/%Y')
-		u.fb = fb
+		born = u.participant.datenaissance
+		u.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 	if request.user.is_authenticated():
 		return render(request,'tennis/staffUser.html',locals())
 	return redirect(reverse(home))
