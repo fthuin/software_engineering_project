@@ -68,7 +68,7 @@
         
             <ul class="list-inline text-center">
                 <li>
-                    <button type="button" class="btn btn-default" onclick="">oui</button>
+                    <button type="button" class="btn btn-default" onclick="save_and_email()">oui</button>
                 </li>
                 <li>
                     <button type="button" class="btn btn-default" data-dismiss="modal">non</button>
@@ -127,6 +127,32 @@ $('#poulesSize').on('input', function() {
     var poules = Math.ceil(PairList.length/nbr);
     setPoules(poules);
 });
+
+function save_and_email() {
+    var nbr = document.getElementById("poulesNumber").value;
+    var poulesDict = {};
+    for (var i = 0; i < nbr ; i++) {
+        var poule = {}
+        poule['leader'] = document.getElementById("Leader"+(i+1)).value;
+        poule['terrainID'] = document.getElementById("ID"+(i+1)).textContent;
+        poule['pairList'] = [];
+        poulesDict[''+i] = poule;
+        // TODO : Check si le leader et le terrainID sont valides
+    }
+    for (var i = 0; i < PairList.length ; i++) {
+        // On link les paires aux ID des poules
+        id = "" + document.getElementById(""+PairList[i].id).parentNode.parentNode.parentNode.id;
+        id = id.replace("list", "");
+        poulesDict[''+(id-1)]['pairList'].push(PairList[i]);
+    }
+    /*for (var i = 0; i < nbr ; i++) {
+        alert("Poule " + i);
+        alert("Leader : " +poulesDict[''+i]['leader']);
+        alert("Terrain : " + poulesDict[''+i]['terrainID']);
+        alert("Premier joueur " + poulesDict[''+i]['pairList'][0]['user1']);
+    }*/
+    // TODO : Faire les e-mails
+}
 </script>
 {% endblock %}
     
