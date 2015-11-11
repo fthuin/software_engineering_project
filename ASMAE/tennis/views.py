@@ -432,52 +432,132 @@ def pouleScore(request,id):
 
 #TODO permission QUENTIN GUSBIN
 def generatePool(request,name):
+	terrains = Court.objects.all()
+	tournoi = Tournoi.objects.filter(nom=name)[0]
+	allPair = Pair.objects.filter(tournoi=tournoi)
+	poules = Poule.objects.filter(tournoi=tournoi)
+	if request.method == "POST":
+		terrainsList = request.POST['assignTerrains'].split('-')
+		terrainsList.pop()
+		
+		leadersList = request.POST['assignLeaders'].split('/')
+		leadersList.pop()
+		
+		pairspoulesList = request.POST['assignPairPoules'].split('-')
+		pairspoulesList.pop()
+		print(repr(pairspoulesList))
+		i = 0
+		j = -1
+		pouleDict = {}
+		while (i < len(pairspoulesList)):
+			if pairspoulesList[i].startswith('[') and pairspoulesList[i].endswith(']'):
+				j += 1
+				pouleDict[j] = {}
+				pouleDict[j]['pairList'] = []
+				if terrainsList[j] != '':
+					pouleDict[j]['terrain'] = Court.objects.filter(id=terrainsList[j])[0]
+				pouleDict[j]['leaderName'] = leadersList[j]
+			else:
+				pair = Pair.objects.get(id=pairspoulesList[i])
+				pouleDict[j]['pairList'].append(pair)
+				user1fullname = pair.user1.participant.prenom + ' ' +pair.user1.participant.nom
+				user2fullname = pair.user2.participant.prenom + ' ' +pair.user2.participant.nom
+				if user1fullname == pouleDict[j]['leaderName']:
+					pouleDict[j]['leader'] = pair.user1
+				elif user2fullname == pouleDict[j]['leaderName']:
+					pouleDict[j]['leader'] = pair.user2
+				
+			i += 1
+		i = 0
+		Poule.objects.filter(tournoi=tournoi).delete()
+		while (i <= j):
+			p = Poule(tournoi=tournoi)
+			p.save()
+			if 'leader' in pouleDict[i]:
+				p.leader = pouleDict[i]['leader']
+			if 'terrain' in pouleDict[i]:
+				p.court = pouleDict[i]['terrain']
+			for pair in pouleDict[i]['pairList']:
+				p.paires.add(pair)
+			i += 1
+			p.save()
+		print(repr(i) + ' poules saved')
 	if request.user.is_authenticated():
-		tournoi = Tournoi.objects.filter(nom=name)[0]
-		allPair = Pair.objects.filter(tournoi=tournoi)
-		pair = Pair.objects.filter(tournoi=tournoi)
-		terrains = Court.objects.all()
-		poules = Poule.objects.all()
 		dictTerrains = {}
+		# TODO : Indiquer les terrains déjà utilisés le jour du tournoi
 		for terrain in terrains:
 			dictTerrains[terrain.id] = terrain
-		'''
-		for poule in poules:
-			try:
-				del dictTerrains[poule.court.id]
-			except KeyError, e:
-				pass
-		'''
+		
 		listTerrains = list(dictTerrains.values())
+		listTerrainSaved = list()
+		listLeaderSaved = list()
 		nbrTerrains = len(listTerrains)
 		
-		today = date.today()
-		for elem in allPair:
-			u1 = elem.user1
-			born = u1.participant.datenaissance
-			u1.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-			u2 = elem.user2
-			born = u2.participant.datenaissance
-			u2.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-			c1 = ""
-			c2 = ""
-			if elem.comment1:
-				c1 = str(elem.comment1)
-			if elem.comment2:
-				c2 = str(elem.comment2)
-			if c1 != "" or c2 != "":
-				elem.commentaires = c1 + "<hr>" + c2
-		defaultSize = 6.0
-		defaultValue = int(math.ceil((len(allPair)/defaultSize)))
-		poolRange = range(0,defaultValue)
-		pairListAll = dict()
-		for x in range(0,defaultValue):
-			index = int(x*defaultSize)
-			pairListAll[x+1] = (allPair[index:index+int(defaultSize)])
-			if x==defaultValue-1 :
-				v = int(defaultSize) - len(pairListAll[x+1])
-				complement = range(0,v)
-		return render(request,'tennis/generatePool.html',locals())
+		# TODO Restaurer la sauvergarde
+		listPoules = list(poules)
+
+		if len(listPoules) == 0:
+			saved = False
+			print('new tournament')
+			defaultSize = 6.0
+			defaultValue = int(math.ceil((len(allPair)/defaultSize)))
+			poolRange = range(0,defaultValue)
+			pairListAll = dict()
+			for x in range(0,defaultValue):
+				index = int(x*defaultSize)
+				pairListAll[x+1] = (allPair[index:index+int(defaultSize)])
+				if x==defaultValue-1 :
+					v = int(defaultSize) - len(pairListAll[x+1])
+			today = date.today()
+			for elem in allPair:
+				u1 = elem.user1
+				born = u1.participant.datenaissance
+				u1.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+				u2 = elem.user2
+				born = u2.participant.datenaissance
+				u2.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+				c1 = ""
+				c2 = ""
+				if elem.comment1:
+					c1 = str(elem.comment1)
+				if elem.comment2:
+					c2 = str(elem.comment2)
+				if c1 != "" or c2 != "":
+					elem.commentaires = c1 + "<hr>" + c2
+			return render(request,'tennis/generatePool.html',locals())
+		else:
+			saved = True
+			print('from saved data')
+			defaultValue = len(listPoules)
+			defaultSize = 0
+			pairListAll = dict()
+			today = date.today()
+			i = 0
+			for poule in listPoules:
+				pairListAll[i+1] = []
+				listTerrainSaved.append(poule.court)
+				listLeaderSaved.append(poule.leader)
+				if defaultSize < len(poule.paires.all()):
+					defaultSize = len(poule.paires.all())
+				for elem in poule.paires.all():
+					u1 = elem.user1
+					born = u1.participant.datenaissance
+					u1.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+					u2 = elem.user2
+					born = u2.participant.datenaissance
+					u2.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+					c1 = ""
+					c2 = ""
+					if elem.comment1:
+						c1 = str(elem.comment1)
+					if elem.comment2:
+						c2 = str(elem.comment2)
+					if c1 != "" or c2 != "":
+						elem.commentaires = c1 + "<hr>" + c2
+					pairListAll[i+1].append(elem)
+				i += 1
+			poolRange = range(0, defaultValue)
+			return render(request,'tennis/generatePool.html',locals())
 	return redirect(reverse(home))
 
 @permission_required('tennis.Court')

@@ -16,8 +16,8 @@ function drop (ev) {
   srcParent.appendChild(tgt);
 
   //update leader liste
-  updatePanel(targetID);
-  updatePanel(sourceID);
+  updatePanel(targetID, "Choisir un leader");
+  updatePanel(sourceID, "Choisir un leader");
   
 }
 
@@ -31,9 +31,13 @@ $(document).ready(function(){
 });
 
 
-
+var pairDict;
 var pairList;
 var terrainList;
+
+function setPairDict(pairD) {
+    pairDict = pairD;
+}
 
 function setPairList(pairL,terrainL){
 	pairList = pairL;
@@ -50,8 +54,49 @@ function setTerrains(nbrPoules) {
     }
 }
 
+function mySetPoules(nbrPoules, sizePoules) {
+	document.getElementById("poulesSize").value = sizePoules;
+	document.getElementById("poulesNumber").value = nbrPoules;
+	//On flush le contenant de nous poules
+	document.getElementById("poulesDiv").innerHTML = "";
+	//On recupere le nombre de paires
+	for (var i = 0; i < nbrPoules; i++) {
+	    var panel = createPanel(i+1);
+	    document.getElementById("poulesDiv").appendChild(panel);
+	    var listPair = pairDict[(i+1)]
+	    var j;
+	    for (j=0 ; j < listPair.length ; j++) {
+	        var p = createPair(listPair[j])
+	        document.getElementById("list"+(i+1)).appendChild(p);
+	        
+			var nom1 = listPair[j].user1;
+			var nom2 = listPair[j].user2;
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1));
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2));
+			document.getElementById("Leader"+(i+1)).appendChild(getSpaceOption());	        
+	    }
+	    while (j < sizePoules) {
+			var p = createEmptyPair(i);
+			document.getElementById("list"+(i+1)).appendChild(p);
+			j++;   
+	    }
+	    document.getElementById("Leader"+(i+1)).removeChild(document.getElementById("Leader"+(i+1)).childNodes[document.getElementById("Leader"+(i+1)).childNodes.length-1]);
+	}
 
-//Fonction utilsié pour set les poules en fonction du nombre de poules
+	setTerrains(nbrPoules);
+	for (var i = 0 ; i < terrainSaved.length ; i++) {
+	    if (terrainSaved[i].id != '') {
+	        setInfoTerrain(terrainSaved[i].user,terrainSaved[i].matiere,terrainSaved[i].addr,terrainSaved[i].id,i+1)
+	    }
+	}
+	for (var i = 0 ; i < leaderSaved.length ; i++) {
+	    if (leaderSaved[i].fullname != '') {
+	        document.getElementById("Leader"+(i+1)).value = leaderSaved[i].fullname
+	    }
+	}
+}
+
+//Fonction utilisée pour set les poules en fonction du nombre de poules
 function setPoules(nbrPoules){
 	//On flush le contenant de nous poules
 	document.getElementById("poulesDiv").innerHTML = "";
@@ -99,7 +144,6 @@ function setPoules(nbrPoules){
 			var p = createEmptyPair(i);
 			document.getElementById("list"+(i+1)).appendChild(p);
 		}
-		
 	}
 
 	setTerrains(nbrPoules);
@@ -165,7 +209,7 @@ function setPoules2(taillePoule){
 
 
 //Update the list of user in the leader list of a panel
-function updatePanel(numero){
+function updatePanel(numero, contenu){
 	//Panel et liste
 	var panel = document.getElementById("list"+numero);
 	var list = document.getElementById("Leader"+numero);
@@ -231,7 +275,7 @@ function getSpaceOption() {
 function createPanel(number){
 	var panel = document.createElement("div");
 	panel.className = 'col-lg-4';
-	panel.innerHTML = '<div class="panel panel-default" id="'+number+'">'+
+	panel.innerHTML = '<div class="panel panel-default" id="panel'+number+'">'+
 						'<div class="panel-heading">'+
 							'<div class="row">'+
 								'<label class="control-label col-xs-4">Poule '+number+'</label>'+
