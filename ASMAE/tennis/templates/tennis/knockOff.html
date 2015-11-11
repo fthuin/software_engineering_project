@@ -65,11 +65,13 @@
 
 <script type="text/javascript">
 
+//Function utilisé pour set un score sur un match
 function setScore(id){
 
    document.getElementById("infoModal").innerHTML = id+" ";
   
-  //Function test A refaire
+  //Function test A refaire et utilisé pour set les score et avancer les paires
+  //Idée => changer l'arbre directement dans l'html et update le JSON mais pas re-draw l'arbre.
   /*
 
   var emplacement ;
@@ -98,6 +100,7 @@ function setScore(id){
   $('#scoreModal').modal('show');
 }
 
+//Permet de dessiner l'arbre avec les infos reprises dans data et les labels dans label
 function setArbre(data,label){
   document.getElementById("my_gracket").innerHTML = "";
     (function(win, doc, $){
@@ -116,12 +119,15 @@ function setArbre(data,label){
 }
 
 //&nbsp;
+
+
 //Donnée de notre arbre
 var TreeData;
 
 //label
 var TreeLabel;
 
+//utilisé pour dessiner un premier arbre vide
 function setEmptyTree(size){
   //liste des labels
   var l = [];
@@ -187,7 +193,110 @@ function setEmptyTree(size){
 }
 
 //Afficher un arbre vide de taille 4
-setEmptyTree(4);
+//setEmptyTree(4);
+
+var listPair = [];
+
+for (var i = 0; i < 13; i++) {
+  var p = i%2
+  var Pair = {user1:"Jean Michel"+i, user2:"Jean Pierre"+i,pos:p, pool:};
+  listPair.push(Pair);
+};
+
+function setTree(listPair){
+  var length = listPair.length;
+  var size = 0;
+
+  listPair.sort(function(a, b) { 
+    return a.pos - b.pos;
+  })
+  
+  //Length limit is 16 => if more error and tree is set to 0
+  if(length>16){
+    size = 0;
+  }else if(length > 8){
+    size = 4
+  }else if(length > 4){
+    size = 3
+  }else if(length > 2){
+    size = 2
+  }else if(length > 0){
+    size = 1
+  }
+
+  //liste des labels
+  var l = [];
+  //Data contenant notre arbre
+  var jsonArbre = [];
+  //utilise pour donner des id uniques
+  var count = 0
+
+  //Parcours de la taille de l'arbre
+  for (var i = 0; i < size ; i++) {
+    //Json du round
+    var jsonRound = [];
+    //Nombre d'entrée par rounds
+    var nbr = Math.pow(2,(size-i));
+
+    //Mise à jours des labels
+    if(nbr==2){
+      l.push("Finale");
+    }else{
+      l.push("1/"+nbr/2+" finale");
+    };
+    
+    //Ajouts des paires vide
+    for (var j = 0; j < nbr/2; j++) {
+      var jsonDuel = [];
+      jsonDuel.push({
+        name: "<br />",
+        id: ""+count+" "+count
+      })
+      count = count + 1;
+      jsonDuel.push({
+        name: "<br />",
+        id: ""+count+" "+count
+      })
+      jsonRound.push(jsonDuel);
+      count = count + 1;
+    };
+
+    jsonArbre.push(jsonRound);
+  };
+
+  //Dernier round (gagnant)
+  var jsonLastRound = [];
+  var jsonWinner = [];
+  jsonWinner.push({
+        name: "<br />",
+        id: "gagnant"
+  })
+  jsonLastRound.push(jsonWinner);
+  jsonArbre.push(jsonLastRound);
+
+  //Update label
+  l.push("Gagnant");
+
+  //Enregistremetn des labels
+  TreeLabel = l;
+
+  //Enregistrement de l'arbre
+  TreeData = jsonArbre;
+
+  //On afficher l'arbre 
+  setArbre(jsonArbre,l)
+
+
+
+  for (var i = 0; i < listPair.length; i++) {
+    document.getElementById("infoModal").innerHTML += listPair[i].user1 + " "+listPair[i].user2+" ["+listPair[i].pos+"] ";
+  };
+  $('#scoreModal').modal('show');
+}
+
+setTree(listPair);
+
+
 
 
   </script>
