@@ -89,7 +89,7 @@ text-align:left;
             <div class="col-sm-3"><input class="form-control" type="number" id="group_size" min="1" value="1" ></div>
             </div>  
        <br>
-       <button id="fill" style="float:right" class="btn btn-default">Générer</button>
+       <button id="fill" style="float:right" class="btn btn-default">Remplir auto.</button>
     </div>
 </div>
 
@@ -137,6 +137,7 @@ text-align:left;
          **********************************************************************/
         var tournament;
         var selected_item = 0;
+        var selection_mode = 'none';
         
         //Recuperation des tournois et stockage dans un tableau
         var tournoiList = [];
@@ -317,7 +318,7 @@ text-align:left;
             });
         }, false);
 
-        var apply_swap = function() {
+        var apply_pair_swap = function() {
             // check si swap effectuable (par prudence)
             if (is_good_for_swap()){
                 var liste_group = document.querySelectorAll("[selected=true]");
@@ -337,6 +338,30 @@ text-align:left;
 
                 // reset swap selection
                 selected_item = 0;
+                selection_mode = 'none';
+            }
+        };
+
+        var apply_court_swap = function() {
+            // check si swap effectuable (par prudence)
+            if (is_good_for_swap()){
+                var liste_group = document.querySelectorAll("[selected=true]");
+                var group1 = liste_group[0];
+                var group2 = liste_group[1];
+                var group1_id = parseInt(group1.getAttribute("id_group"));
+                var group2_id = parseInt(group2.getAttribute("id_group"));
+                var group1_index = parseInt(group1.getAttribute("index_group"));
+                var group2_index = parseInt(group2.getAttribute("index_group"));
+
+                //Swap logique
+                tournament.try_swap_courts_in_groups(group1_id, group2_id, group1_index, group2_index);
+
+                // Update graphique
+                graphic_update('creation des groupes');
+
+                // reset swap selection
+                selected_item = 0;
+                selection_mode = 'none';
             }
         };
 
@@ -457,22 +482,25 @@ text-align:left;
                    	if (tournament_status === 'creation des groupes') {
                    		pair_row.draggable="true";
                     	pair_row.addEventListener("click", function() {
-                        	if (this.getAttribute("selected") == "false"){
-                            	this.setAttribute("selected", "true");
-                            	this.setAttribute("oldcolor", this.getAttribute("class"));
-                            	this.className ='success';
-                            	selected_item++;
-                            	if (selected_item == 2)
-                                	apply_swap();
-                        	}
-                        	else {
-                            	this.setAttribute('selected', "false");
-                            	this.className = this.getAttribute("oldcolor");
-                            	this.removeAttribute("oldcolor");
-                            	selected_item--;
-                            	if (selected_item == 2)
-                                	apply_swap();
-                        	}
+                    		if (selected_item === 0 || (selected_item === 1 && selection_mode === 'pair')) {
+                    			selection_mode = 'pair';
+                    			if (this.getAttribute("selected") == "false"){
+                            		this.setAttribute("selected", "true");
+                            		this.setAttribute("oldcolor", this.getAttribute("class"));
+                            		this.className ='success';
+                            		selected_item++;
+                            		if (selected_item == 2)
+                                		apply_pair_swap();
+                        		}
+                        		else {
+                            		this.setAttribute('selected', "false");
+                            		this.className = this.getAttribute("oldcolor");
+                            		this.removeAttribute("oldcolor");
+                            		selected_item--;
+                            		if (selected_item == 2)
+                                		apply_pair_swap();
+                        		}
+                    		}
                     	}, false);
                    	}
                     
@@ -483,6 +511,30 @@ text-align:left;
                 }
                     
                 var court_row = group_display_body.insertRow(-1); //-1 appends at the end of the table
+                court_row.setAttribute("id_group", index.toString());
+                court_row.setAttribute("index_group", -1);
+                court_row.setAttribute("selected", "false");
+                court_row.addEventListener("click", function() {
+                    if (selected_item === 0 || (selected_item === 1 && selection_mode === 'court')) {
+                    	selection_mode = 'court';
+                    	if (this.getAttribute("selected") == "false"){
+                    		this.setAttribute("selected", "true");
+                        	this.setAttribute("oldcolor", this.getAttribute("class"));
+                        	this.className ='success';
+                        	selected_item++;
+                            if (selected_item == 2)
+                            	apply_court_swap();
+                        }
+                        else {
+                           	this.setAttribute('selected', "false");
+                           	this.className = this.getAttribute("oldcolor");
+                           	this.removeAttribute("oldcolor");
+                           	selected_item--;
+                           	if (selected_item == 2)
+                               	apply_court_swap();
+                        }
+                   	}
+            	}, false);
                 court_row.insertCell(0).innerHTML = "<b>Terrain n°</b>";
                 if (list[index].court != undefined) 
                     court_row.insertCell(1).innerHTML = list[index].court;
@@ -521,27 +573,79 @@ text-align:left;
                 		pair_row.cells[0].style.width="50%";
                 		pair_row.draggable="true";
                 		pair_row.addEventListener("click", function() {
-                    		if (this.getAttribute("selected") == "false") {
-                        		this.setAttribute("selected", "true");
-                        		this.setAttribute("oldcolor", this.getAttribute("class"));
-                        		this.className ='success';
-                        		selected_item++;
-                        		if (selected_item == 2)
-                            		apply_swap();
-                    		}
-                    		else {
-                        		this.setAttribute('selected', "false");
-                        		this.className = this.getAttribute("oldcolor");
-                        		this.removeAttribute("oldcolor");
-                        		selected_item--;
-                        		if (selected_item == 2)
-                            		apply_swap();
-                    		}
+                			if (selected_item === 0 || (selected_item === 1 && selection_mode === 'pair')) {
+                				selection_mode = 'pair';
+                				if (this.getAttribute("selected") == "false") {
+                        			this.setAttribute("selected", "true");
+                        			this.setAttribute("oldcolor", this.getAttribute("class"));
+                        			this.className ='success';
+                        			selected_item++;
+                        			if (selected_item == 2)
+                            			apply_pair_swap();
+                    			}
+                    			else {
+                        			this.setAttribute('selected', "false");
+                        			this.className = this.getAttribute("oldcolor");
+                        			this.removeAttribute("oldcolor");
+                        			selected_item--;
+                        			if (selected_item == 2)
+                            			apply_pair_swap();
+                    			}
+                			}
                 		}, false);
                 		numRows++;
             		}
+            		container.appendChild(group_display);
             	}
-            	container.appendChild(group_display);
+
+            	// graphic code for uninserted courts
+            	var uninserted_courts = tournament.uninserted_courts;
+            	if(uninserted_courts.length!=0) {
+            		var group_display = document.createElement("table");
+            		group_display.className="table table-hover table-responsive panel panel-default";
+            		var group_name = document.createElement("th");
+            		group_name.colSpan = 2;
+            		group_name.className="panel panel-heading";
+            		group_name.innerHTML = "Terrains non attribuées"; 
+            		group_display.appendChild(group_name);
+            		var numRows = group_display.rows.length;
+            		// insert an entry for each uninserted pairs index
+            		for (var j = 0; j < uninserted_courts.length; j++) {
+                		var court_row = group_display.insertRow(-1); // -1 appends at the end of the table
+                		court_row.setAttribute("id_group", "-1");
+                		court_row.setAttribute("index_group", j.toString());
+                		// insert pair info if there is a pair in the given index of the group
+                		// otherwise put empty entry
+                		court_row.setAttribute("selected", "false");
+                		court_row.insertCell(0).innerHTML = "<b>Terrain n°</b>";
+                		court_row.insertCell(1).innerHTML = uninserted_courts[j];
+                		court_row.cells[0].style.width="50%";
+                		court_row.draggable="true";
+                		court_row.addEventListener("click", function() {
+                			if (selected_item === 0 || (selected_item === 1 && selection_mode === 'court')) {
+                				selection_mode = 'court';
+                				if (this.getAttribute("selected") == "false") {
+                        			this.setAttribute("selected", "true");
+                        			this.setAttribute("oldcolor", this.getAttribute("class"));
+                        			this.className ='success';
+                        			selected_item++;
+                        			if (selected_item == 2)
+                            			apply_court_swap();
+                    			}
+                    			else {
+                        			this.setAttribute('selected', "false");
+                        			this.className = this.getAttribute("oldcolor");
+                        			this.removeAttribute("oldcolor");
+                        			selected_item--;
+                        			if (selected_item == 2)
+                            			apply_court_swap();
+                    			}
+                			}
+                		}, false);
+                		numRows++;
+            		}
+            		container.appendChild(group_display);
+            	}
             }
             document.getElementById("geneGroup").style.display = "block";
         };

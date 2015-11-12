@@ -27,6 +27,9 @@ function Tournament(tournoi, pairs, courts, groups) {
     // uninserted_pairs
     this.uninserted_pairs = [];
 
+    // uninserted_courts
+    this.uninserted_courts = [];
+
 }
 
 /***********************************************
@@ -36,6 +39,7 @@ Tournament.prototype.create_empty_groups = function(group_num, group_size) {
 
     // create groups
     this.groups = [];
+    var courts = this.courts;
     var pairs = this.pairs;
     var groups = this.groups;
     for (var group_i = 0; group_i < group_num; group_i++) {
@@ -47,6 +51,12 @@ Tournament.prototype.create_empty_groups = function(group_num, group_size) {
     for (var pair_i in pairs) {
         var pair = pairs[pair_i];
         this.uninserted_pairs.push(pair);
+    }
+
+    // create uninserted courts
+    for (var court_i in courts) {
+    	var court = courts[court_i];
+    	this.uninserted_courts.push(court);
     }
 }
 
@@ -97,6 +107,8 @@ Tournament.prototype.adapt_groups = function(group_num, group_size) {
                     var pair = group.pairs[pair_i];
                     this.uninserted_pairs.push(pair);
                 }
+                var court = group.court;
+                this.uninserted_courts.push(court);
             }
             // remove the exceeding groups
             var group_to_remove = groups.length - group_num;
@@ -117,8 +129,9 @@ Tournament.prototype.try_naively_fill_groups = function() {
     var group_size = group1.gsize;
     var group_num = this.groups.length;
     var groups = this.groups;
-    // reset uninserted pairs
+    // reset uninserted pairs and courts
     this.uninserted_pairs = [];
+    this.uninserted_courts = [];
     // reset groups
     for (var group_i in groups) {
         var group = groups[group_i];
@@ -154,6 +167,13 @@ Tournament.prototype.try_naively_fill_groups = function() {
     	this.uninserted_pairs.push(pair);
     	current_pair_index++;
     }
+
+    // insert next courts to uninserted courts
+    while(current_court_index < courts_num) {
+    	var court = this.courts[current_court_index];
+    	this.uninserted_courts.push(court);
+    	current_court_index++;
+    }
 }
 
 /************************************************************
@@ -177,7 +197,6 @@ Tournament.prototype.try_naively_select_group_leaders = function() {
 * Tournament class: try_swap_pairs_in_groups method *
 ****************************************************/
 Tournament.prototype.try_swap_pairs_in_groups = function(group1_id, group2_id, group1_index, group2_index) {
-    // uninserted pairs "=" group with id -1
     var groups = this.groups;
     var group_num = groups.length;
     if (group1_id < group_num && group2_id < group_num) {
@@ -232,6 +251,83 @@ Tournament.prototype.try_swap_pairs_in_groups = function(group1_id, group2_id, g
     }
 };
 
+/****************************************************
+* Tournament class: try_swap_courts_in_groups method *
+****************************************************/
+Tournament.prototype.try_swap_courts_in_groups = function(group1_id, group2_id, group1_index, group2_index) {
+	var group_num = this.groups.length;
+
+	// check that arguments are valids
+	if (group1_id > group_num || group2_id > group_num) {
+		return;
+	}
+	if (group1_id === -1) {
+		var uninserted_courts_num = this.uninserted_courts.length;
+		if (group1_index === undefined) {
+			return;
+		}
+		else if (group1_index >= uninserted_courts_num) {
+			return;
+		}
+	}
+	if (group2_id === -1) {
+		var uninserted_courts_num = this.uninserted_courts.length;
+		if (group2_index === undefined) {
+			return;
+		}
+		else if (group2_index >= uninserted_courts_num) {
+			return;
+		}
+	}
+
+	// prepare swap
+	var court1 = undefined;
+	var court2 = undefined;
+		
+	// swap courts
+	// step 1: store court1 in tmp
+	var tmp = undefined;
+	if (group1_id === -1) {
+		court1 = this.uninserted_courts[group1_index];
+		tmp = this.uninserted_courts[group1_index];
+	}
+	else {
+		court1 = this.groups[group1_id].court;
+		tmp = this.groups[group1_id].court;
+	}
+	// step2 : replace court1 by court2
+	if (group2_id === -1) {
+		court2 = this.uninserted_courts[group2_index];
+	}
+	else {
+		court2 = this.groups[group2_id].court;
+	}
+	if (group1_id === -1) {
+		this.uninserted_courts[group1_index] = court2;
+	}
+	else {
+		this.groups[group1_id].court = court2;
+	}
+	// step 3: replace court2 by tmp
+	if (group2_id === -1) {
+		this.uninserted_courts[group2_index] = tmp;
+	}
+	else {
+		this.groups[group2_id].court = tmp;
+	}
+
+	// remove undefined courts in uninserted courts
+	if (group1_id === -1) {
+		if (this.uninserted_courts[group1_index] === undefined) {
+			this.uninserted_courts.splice(group1_index, 1);
+		}
+	}
+	if (group2_id === -1) {
+		if (this.uninserted_courts[group2_index] === undefined) {
+			this.uninserted_courts.splice(group2_index, 1);
+		}
+	}
+};
 
 /**************************************
 * Tournament class: str_groups method *
@@ -254,6 +350,16 @@ Tournament.prototype.str_groups = function() {
         str_groups += " These are the uninserted pairs: " + this.uninserted_pairs[0];
         for (var pair_i = 1; pair_i < this.uninserted_pairs.length; pair_i++) {
             str_groups += ", " + this.uninserted_pairs[pair_i];
+        }
+        str_groups += "."
+    }
+    if (this.uninserted_courts.length == 0) {
+        str_groups += " It has no uninserted courts."
+    }
+    else {
+        str_groups += " These are the uninserted courts: " + this.uninserted_courts[0];
+        for (var court_i = 1; court_i < this.uninserted_courts.length; court_i++) {
+            str_groups += ", " + this.uninserted_courts[court_i];
         }
         str_groups += "."
     }
