@@ -6,33 +6,90 @@
 {% block bodyStaff %}
 <!-- Gestionnaire des groupes -->
 <div class="content-box" id="gestionTournoi">
-    <h2 class="center">Knock Out : {{tournoi.nom}}</h2>
+    <h2 class="center" id="pageTitle">Choix des paires : {{tournoi.nom}}</h2>
     <hr class="line">
-    <div class="panel panel-default">
-        <div class="panel-heading">Poules</div>
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                  <tr>
-                    {% for p in poules %}
-                    <th>Poule {{p.id}}</th>
-                    {% endfor %}
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </div>
 
+    <!-- Première étape selection des paires -->
+    <div id="firstStep">
+      <div class="row">
+      {% for p in poules %}
+      <div class="col-sm-4 panel-poule">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            Poule {{p.id}}
+          </div>
+          <div class="list-group" id="{{p.id}}">
+            {% for paire in p.paires.all %}
+            <a href="javascript:void(0)" onclick="checkBox('ID{{paire.id}}')" class="list-group-item">
+              <div class="row">
+                <div class="col-xs-10">
+                  {{paire.user1.participant.smallName}}
+                 &#38;
+                  {{paire.user2.participant.smallName}}
+                </div>
+                <div class="col-xs-2">
+                  <input class="pull-right allBox {{p.id}}Box" type="checkbox" name="{{paire.id}}" id="ID{{paire.id}}">
+                </div>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      </div>
+      <button type="button" class="btn btn-default center-block" onClick="firstModal()">Prochaine étape</button>
+    </div>
+    
+
+    <!-- Deuxième étape set up de l'arbre -->
+    <div id="secondStep" style="display:none">
+      <div class="panel panel-default center-block" style="max-width:600px">
+        <div class="panel-heading">Premier Round</div>
+        <div class="panel-body" id="firstRoundBody">
+          
+        </div>
+      </div>
+      <button type="button" class="btn btn-default center-block" onClick="startTree()">Créer l'arbre du tournoi</button>
+    </div>
+  
+
+    <!-- Div qui va contenir notre arbre -->
     <div class="table-responsive">
-    <div class="center-block" id="my_gracket"></div>
+      <div class="center-block" id="my_gracket"></div>
     </div>
 
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal première étape -->
+  <div class="modal fade" id="firstModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title center">Etape 1</h4>
+        </div>
+        <div class="modal-body">
+          <p>Continuer avec ces <number id="nombrePaire"></number> paires selectionnées?</p>
+        
+        <ul class="list-inline text-center">
+        <li>
+          <button type="button" class="btn btn-default" onclick="secondStep()">Confirmer</button>
+        </li>
+        <li>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+        </li>
+      </ul>
+    </div>
+      </div>
+      
+    </div>
+  </div>
+
+<!-- Modal set score arbre de tournoi -->
   <div class="modal fade" id="scoreModal" role="dialog">
     <div class="modal-dialog">
     
@@ -43,14 +100,34 @@
           <h4 class="modal-title center">Score</h4>
         </div>
         <div class="modal-body">
-          <p id="infoModal"></p>
+          <form class="form-horizontal" action="">
+            <p class="hint center" id="hintScore"></p>
+            <!-- Equipe 1 -->
+            <div class="form-group">
+              <label class="control-label col-sm-7" for="team1" id="formteam1">Team 1</label>
+              <div class="col-sm-2">
+                <input type="number" class="form-control" id="inputTeam1" name="team1" style="text-align:center;" >
+              </div>
+            </div>
+
+            <!-- Equipe 2 -->
+            <div class="form-group">
+              <label class="control-label col-sm-7" for="team2" id="formteam2">Team 2</label>
+              <div class="col-sm-2">
+                <input type="number" class="form-control" id="inputTeam2" name="team2" style="text-align:center;">
+              </div>
+            </div>
+
+            <!-- Emplacement du match -->
+            <input type="text" id="emplacement" style="display:none;">
+          </form>
         
         <ul class="list-inline text-center">
         <li>
-          <button type="button" class="btn btn-default" onclick="">oui</button>
+          <button type="button" class="btn btn-default" onclick="setScore()">Confirmer</button>
         </li>
         <li>
-          <button type="button" class="btn btn-default" data-dismiss="modal">non</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
         </li>
       </ul>
     </div>
@@ -62,244 +139,228 @@
 {% endblock %}
 
 {% block commande %}
+{% load static from staticfiles %}
+<script src="{% static 'tennis/js/knockOut.js' %}" type="text/javascript"></script>
 
 <script type="text/javascript">
+//Create an array with all paires
+var allPaires = new Array();
+{% for paire in allPaires %}
+var Paire = {id:'pair{{paire.id}}',user1:'{{paire.user1.participant.smallName}}',user2:'{{paire.user2.participant.smallName}}',pos:'{{paire.position}}',poule:'{{paire.poule}}'}
+allPaires[{{paire.id}}] = Paire;
+{% endfor %}
 
-//Function utilisé pour set un score sur un match
-function setScore(id){
-
-   document.getElementById("infoModal").innerHTML = id+" ";
-  
-  //Function test A refaire et utilisé pour set les score et avancer les paires
-  //Idée => changer l'arbre directement dans l'html et update le JSON mais pas re-draw l'arbre.
-  /*
-
-  var emplacement ;
-  //round
-  for (var i = 0; i < TreeData.length; i++) {
-    var round = TreeData[TreeData.length-(i+1)];
-    for (var j = 0; j < round.length; j++) {
-      var match = round[j];
-      for (var k = 0; k < match.length; k++) {
-        if(parseInt(match[k].id) == id){
-          emplacement = match[k];
-          document.getElementById("infoModal").innerHTML = JSON.stringify(match[k]) ;
-          break;
-        }
-      };
-      //document.getElementById("infoModal").innerHTML += JSON.stringify(jso[j])+" ";
+function checkBox(id){
+  //pour decheck => c'est bon
+  if(document.getElementById(id).checked){
+    document.getElementById(id).checked = !document.getElementById(id).checked;
+  }else{
+    //Check if we don't exceed 16
+    var allBoxes = document.getElementsByClassName("allBox");
+    var count = 0;
+    for (var i = 0; i < allBoxes.length; i++) {
+      if(allBoxes[i].checked){
+        count += 1;
+      }
     };
-  };
-
-  emplacement.name="LOLL <br>&nbsp;LOOAJ";
-  emplacement.id=id+" pair";
-  emplacement.score=5;
-  setArbre(TreeData,TreeLabel);
-  */
-  
-  $('#scoreModal').modal('show');
-}
-
-//Permet de dessiner l'arbre avec les infos reprises dans data et les labels dans label
-function setArbre(data,label){
-  document.getElementById("my_gracket").innerHTML = "";
-    (function(win, doc, $){
-
-      $("#my_gracket").gracket({ 
-        src : data,
-        canvasLineWidth : 2,      // adjusts the thickness of a line
-        canvasLineGap : 10,        // adjusts the gap between element and line
-        canvasLineCap : "round",  // or "square"
-        canvasLineColor : "#D4542D", // or #HEX
-        roundLabels : label,
-        funct: setScore
-      });
-
-    })(window, document, jQuery);
-}
-
-//&nbsp;
-
-
-//Donnée de notre arbre
-var TreeData;
-
-//label
-var TreeLabel;
-
-//utilisé pour dessiner un premier arbre vide
-function setEmptyTree(size){
-  //liste des labels
-  var l = [];
-  //Data contenant notre arbre
-  var jsonArbre = [];
-  //utilise pour donner des id uniques
-  var count = 0
-
-  //Parcours de la taille de l'arbre
-  for (var i = 0; i < size ; i++) {
-    //Json du round
-    var jsonRound = [];
-    //Nombre d'entrée par rounds
-    var nbr = Math.pow(2,(size-i));
-
-    //Mise à jours des labels
-    if(nbr==2){
-      l.push("Finale");
+    if (count > 15){
+      //Error
+      //TODO afficher qu'on ne peut avoir que maximum 16 paires selectionner sur autre chose que alert
+      alert("Vous ne pouvez selectionner que 16 paires maximum.")
     }else{
-      l.push("1/"+nbr/2+" finale");
-    };
-    
-    //Ajouts des paires vide
-    for (var j = 0; j < nbr/2; j++) {
-      var jsonDuel = [];
-      jsonDuel.push({
-        name: "<br />",
-        id: ""+count+" "+count
-      })
-      count = count + 1;
-      jsonDuel.push({
-        name: "<br />",
-        id: ""+count+" "+count
-      })
-      jsonRound.push(jsonDuel);
-      count = count + 1;
-    };
-
-    jsonArbre.push(jsonRound);
-  };
-
-  //Dernier round (gagnant)
-  var jsonLastRound = [];
-  var jsonWinner = [];
-  jsonWinner.push({
-        name: "<br />",
-        id: "gagnant"
-  })
-  jsonLastRound.push(jsonWinner);
-  jsonArbre.push(jsonLastRound);
-
-  //Update label
-  l.push("Gagnant");
-
-  //Enregistremetn des labels
-  TreeLabel = l;
-
-  //Enregistrement de l'arbre
-  TreeData = jsonArbre;
-
-  //On afficher l'arbre 
-  setArbre(jsonArbre,l)
+      document.getElementById(id).checked = !document.getElementById(id).checked;
+    }
+  }
 }
 
-//Afficher un arbre vide de taille 4
-//setEmptyTree(4);
+function firstModal(){
+  //On compte le nombre de paires selectionnées
+  var allBoxes = document.getElementsByClassName("allBox");
+    var count = 0;
+    for (var i = 0; i < allBoxes.length; i++) {
+      if(allBoxes[i].checked){
+        count += 1;
+      }
+    };
 
-var listPair = [];
+  //On affiche le nombre de paires selectionnées
+  document.getElementById("nombrePaire").innerHTML = count;
 
-for (var i = 0; i < 13; i++) {
-  var p = i%2
-  var Pair = {user1:"Jean Michel"+i, user2:"Jean Pierre"+i,pos:p, pool:};
-  listPair.push(Pair);
-};
+  //On montre le modal
+  $('#firstModal').modal('show');
+}
 
-function setTree(listPair){
-  var length = listPair.length;
-  var size = 0;
+//TODO removes ces listes?
+var leftList = [];
+var righList = [];
 
-  listPair.sort(function(a, b) { 
-    return a.pos - b.pos;
-  })
-  
-  //Length limit is 16 => if more error and tree is set to 0
+function secondStep(){
+  //On retire l'affichage du premier step
+  document.getElementById("firstStep").style.display = "none";
+  //On affiche le deuxieme step
+  document.getElementById("secondStep").style.display = "inherit";
+  //on change le titre de la page
+  document.getElementById("pageTitle").innerHTML = "Ordre des paires : {{tournoi.nom}}";
+
+  //On stock les paires dans le panel du deuxieme step
+  var allBoxes = document.getElementsByClassName("allBox");
+  var challengers = [];
+  for (var i = 0; i < allBoxes.length; i++) {
+    if(allBoxes[i].checked){
+      var ID = parseInt(allBoxes[i].name);
+      var paire = allPaires[ID];
+      challengers.push(paire);
+    }
+  };
+
+  var length = challengers.length;
+
   if(length>16){
     size = 0;
   }else if(length > 8){
-    size = 4
+    size = 4;
   }else if(length > 4){
-    size = 3
+    size = 3;
   }else if(length > 2){
-    size = 2
+    size = 2;
   }else if(length > 0){
-    size = 1
+    size = 1;
   }
 
-  //liste des labels
-  var l = [];
-  //Data contenant notre arbre
-  var jsonArbre = [];
-  //utilise pour donner des id uniques
-  var count = 0
+  challengers.sort(function(a, b) { 
+  var r = a.pos - b.pos;
+  return r;
+});
 
-  //Parcours de la taille de l'arbre
-  for (var i = 0; i < size ; i++) {
-    //Json du round
-    var jsonRound = [];
-    //Nombre d'entrée par rounds
-    var nbr = Math.pow(2,(size-i));
+  var RoundSize = Math.pow(2,size)/2;
+  var leftSide = challengers.splice(0,RoundSize);
 
-    //Mise à jours des labels
-    if(nbr==2){
-      l.push("Finale");
+  var offset = Math.floor(challengers.length/2);
+
+  var initial = Math.floor((RoundSize/2) - offset);
+
+  leftList = leftSide;
+  righList = challengers;
+
+
+  for (var i = 0; i < leftSide.length; i++) {
+    var nom = leftSide[i].user1 +'<p class="pull-right" style="margin:0">Position : '+leftSide[i].pos+'</p>'+ "<br>" + leftSide[i].user2 +'<p class="pull-right" style="margin:0">Poule : '+leftSide[i].poule+'</p>';
+
+    if(i>= initial && i-initial<challengers.length){
+      var nom2 = challengers[i-initial].user1 +'<p class="pull-right" style="margin:0">Position : '+challengers[i-initial].pos+'</p>'+ "<br>" + challengers[i-initial].user2 +'<p class="pull-right" style="margin:0">Poule : '+challengers[i-initial].poule+'</p>';
+      document.getElementById("firstRoundBody").innerHTML += getVersus(nom,nom2,leftSide[i].id,challengers[i-initial].id);
     }else{
-      l.push("1/"+nbr/2+" finale");
-    };
-    
-    //Ajouts des paires vide
-    for (var j = 0; j < nbr/2; j++) {
-      var jsonDuel = [];
-      jsonDuel.push({
-        name: "<br />",
-        id: ""+count+" "+count
-      })
-      count = count + 1;
-      jsonDuel.push({
-        name: "<br />",
-        id: ""+count+" "+count
-      })
-      jsonRound.push(jsonDuel);
-      count = count + 1;
-    };
-
-    jsonArbre.push(jsonRound);
-  };
-
-  //Dernier round (gagnant)
-  var jsonLastRound = [];
-  var jsonWinner = [];
-  jsonWinner.push({
-        name: "<br />",
-        id: "gagnant"
-  })
-  jsonLastRound.push(jsonWinner);
-  jsonArbre.push(jsonLastRound);
-
-  //Update label
-  l.push("Gagnant");
-
-  //Enregistremetn des labels
-  TreeLabel = l;
-
-  //Enregistrement de l'arbre
-  TreeData = jsonArbre;
-
-  //On afficher l'arbre 
-  setArbre(jsonArbre,l)
+      document.getElementById("firstRoundBody").innerHTML += getSingle(nom,leftSide[i].id);
+    }
+  }
 
 
-
-  for (var i = 0; i < listPair.length; i++) {
-    document.getElementById("infoModal").innerHTML += listPair[i].user1 + " "+listPair[i].user2+" ["+listPair[i].pos+"] ";
-  };
-  $('#scoreModal').modal('show');
+  //On retire le modal de l'ecran
+  $('#firstModal').modal('hide');
 }
 
-setTree(listPair);
+//Return an html composant used in the first round panel
+function getVersus(name1,name2,ID1,ID2){
+  var versus = '<div class="row">'+
+                  '<div class="col-sm-6">'+
+                    '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">'+
+                      '<div id="'+ID1+'" draggable="true" ondragstart="drag(event)">'+
+                        '<div class="zone">'+
+                          name1+
+                        '</div>'+
+                      '</div>'+
+                    '</div>'+
+                  '</div>'+
+                  '<div class="col-sm-6">'+
+                    '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">'+
+                      '<div id="'+ID2+'" draggable="true" ondragstart="drag(event)">'+
+                        '<div class="zone">'+
+                          name2+
+                        '</div>'+
+                      '</div>'+
+                    '</div>'+
+                  '</div>'+
+                '</div>';
+  return versus;
+}
+
+function getSingle(name,ID){
+  var single = '<div class="row">'+
+                  '<div class="col-sm-3"></div>'+
+                  '<div class="col-sm-6">'+
+                    '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">'+
+                      '<div id="'+ID+'" draggable="true" ondragstart="drag(event)">'+
+                        '<div class="zone">'+
+                          name+
+                        '</div>'+
+                      '</div>'+
+                    '</div>'+
+                  '</div>'+
+                  '<div class="col-sm-3"></div>'+
+                '</div>';
+  return single;
+}
+
+
+function startTree(){
+  //TODO récupérer les deux nouvelles listes en fonction de l'html
+  document.getElementById("secondStep").style.display = "none";
+  setTree(leftList,righList);
+}
 
 
 
+//Set height of panel to have a nice display
+var mesPanel = document.getElementsByClassName("panel-poule");
+var height = mesPanel[0].offsetHeight;
+for (var i = 0; i < mesPanel.length; i++) {
+  mesPanel[i].style.minHeight = height+"px";
 
-  </script>
+};
+
+//Check the two first box of each panel if it doesn't exceed 16
+var nombrePanel = mesPanel.length;
+if(nombrePanel<17){
+  {% for p in poules %}
+  var pouleBoxes = document.getElementsByClassName({{p.id}}+"Box");
+  if(nombrePanel>8 || pouleBoxes.length<2){
+    pouleBoxes[0].checked = true;
+  }else{
+    pouleBoxes[0].checked = true;
+    pouleBoxes[1].checked = true;
+  }
+  {% endfor %}
+}
+
+
+//-----------------------------------------------------------------------------------------------------------------------------
+//TEST SECTION
+//-----------------------------------------------------------------------------------------------------------------------------
+//Creation d'une liste de pair
+var listPair = [];
+
+for (var i = 0; i < 8; i++) {
+  var p = i%2
+  var po = i%5
+  var Pair = {user1:"Jean Michel"+i, user2:"Jean Pierre"+i,pos:p, pool:po, id:100+i};
+  listPair.push(Pair);
+};
+
+//sort de la liste en fonction du rang
+listPair.sort(function(a, b) { 
+  var r = a.pos - b.pos;
+  if(r==0){
+    r = a.pool - b.pool;
+  }
+  return r;
+});
+
+//Les joueurs 1 (taille 8)
+var leftSide = listPair.splice(0,4);
+
+//setTree(leftSide,listPair);
+
+</script>
 
 {% endblock %}
     

@@ -50,9 +50,11 @@ def inscriptionTournoi(request):
 	Use = User.objects.all().order_by('username')
 
 	today = date.today()
+	
 	for u in Use:
 		born = u.participant.datenaissance
 		u.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
 
 	if request.method == "POST":
 		#On recupère les donnée du formualaire
@@ -423,6 +425,12 @@ def knockOff(request,name):
 	if request.user.is_authenticated():
 		tournoi = Tournoi.objects.filter(nom=name)[0]
 		poules = Poule.objects.filter(tournoi=tournoi)
+		allPaires = list()
+		for p in poules:
+			for paire in p.paires.all():
+				paire.position = 1
+				paire.poule = p.id
+				allPaires.append(paire)		
 		return render(request,'tennis/knockOff.html',locals())
 	return redirect(reverse(home))
 
