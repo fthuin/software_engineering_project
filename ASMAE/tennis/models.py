@@ -124,7 +124,7 @@ class Match(models.Model):
 	id = models.AutoField(primary_key=True)
 	paire_gagnante = models.ForeignKey(Pair, related_name='paire_gagnante')
 	paire_perdante = models.ForeignKey(Pair, related_name='paire_perdante')
-	court = models.ForeignKey(Court, default=None)
+	#court = models.ForeignKey(Court, default=None)
 	score = models.CharField(max_length=50)
 
 	def __str__(self):

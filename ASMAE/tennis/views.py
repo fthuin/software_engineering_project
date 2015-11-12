@@ -1008,4 +1008,15 @@ def printScoreboard(request):
 
 def staffEditMatch(request):
 	allMatches = Match.objects.all()
+	if request.method == "GET":
+		if request.GET.get('action') == 'enregistrer':
+			matchJSON = request.GET.get('match')
+			matchs_dict = json.loads(matchJSON)
+			for m in matchs_dict:
+				match_winner = m[1]
+				match_loser = m[2]
+				match_score = m[0]
+				match_final = Match(paire_gagnante=Pair.objects.get(id=match_winner), paire_perdante=Pair.objects.get(id=match_loser), score=match_score)
+				match_final.save()
+				
 	return render(request,'tennis/staffEditMatch.html', locals())

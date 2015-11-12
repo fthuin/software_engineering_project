@@ -4,6 +4,7 @@
 {% block ongTournoi %}class="active"{% endblock %}
 
 {% block bodyStaff %}
+
 <table id="match_display" class="table table-bordered table-responsive panel panel-default" style="text-align: center;">
 
 </table>
@@ -87,7 +88,7 @@
                 box.setAttribute("type","text");
                 box.setAttribute("modifie" , "false");
                 box.setAttribute(("paireX"), liste_pairs[index][0]);
-                box.setAttribute(("pairY"), liste_pairs[i][0]);
+                box.setAttribute(("paireY"), liste_pairs[i][0]);
                 row.insertCell(-1).appendChild(box);
                 box.addEventListener("input", function(){
                     this.setAttribute("modifie" , "true");
@@ -104,19 +105,37 @@
     }
 
     document.getElementById("register").addEventListener("click", function(){
-        var match_for_DB = [];
+        var matchDB = [];
         for (var i = 0; i < match_modif.length; i++){
             var tmp = document.getElementById(match_modif[i]);
-            for (var j = 0 ; j < match_list.length; j++){
-                match_list[j].isIn(parseInt(tmp.getAttribute("pairX")), parseInt(tmp.getAttribute("pairY")));
-            }
-            if(){
-                // TO DO
-            }
-            else{
-                // TO DO
-            }
+            var tmp_tab = tmp.value.split("-");
+            var tmp_one = tmp_tab[0]; //Score de la premiere paire
+            var tmp_two = tmp_tab[1]; //Score de la deuxieme paire
+            var winner; //Gagnant du match
+            var loser; //Perdant du match
+            
+            if(parseInt(tmp_one) > parseInt(tmp_two)){
+				winner = tmp.getAttribute("paireX");
+				loser = tmp.getAttribute("paireY");
+			}
+			else{
+				winner = tmp.getAttribute("paireY");
+				loser = tmp.getAttribute("paireX");
+			}
+            
+            matchDB.push([tmp_one+"-"+tmp_two, winner, loser]);
         }
+        var matchJSON = JSON.stringify(matchDB);
+		$.ajax({
+			url: '',
+			data: { 'action':'enregistrer', 'match':matchJSON},
+			type: 'get',
+			cache: false,
+			success: function (data) {
+				window.location.reload(true);
+			}
+		});
+        
     }, false);
 
 </script>
