@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 import datetime
 
 class Participant(models.Model):
@@ -30,6 +31,9 @@ class Participant(models.Model):
 	
 	def fullName(self):
 		return u'' + self.titre +  " " + self.prenom + " " + self.nom
+
+	def smallName(self):
+		return u'' + self.nom+" "+self.prenom[0:1].upper()+"."
 		
 	#def __eq__(self, other):
 	#	return self.username == other.user.username
