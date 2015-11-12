@@ -33,7 +33,7 @@ class Participant(models.Model):
 		return u'' + self.titre +  " " + self.prenom + " " + self.nom
 
 	def smallName(self):
-		return u'' + self.nom+" "+self.prenom[0:1].upper()+"."
+		return u'' +self.prenom[0:1].upper()+". "+self.nom
 		
 	#def __eq__(self, other):
 	#	return self.username == other.user.username

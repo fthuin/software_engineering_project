@@ -194,6 +194,59 @@ function firstModal(){
 var leftList = [];
 var righList = [];
 
+function swapPair(id1,id2){
+  var Pair1;
+  var Pair2;
+
+  var list1 = 0;
+  var emplacement1 = -1;
+
+  var list2 = 0;
+  var emplacement2 = -1;
+
+
+
+  for (var i = 0; i < leftList.length; i++) {
+    if(leftList[i].id == id1){
+      Pair1 = leftList[i];
+      list1 = 1;
+      emplacement1 = i;
+    }
+    if(leftList[i].id == id2){
+      Pair2 = leftList[i];
+      list2 = 1;
+      emplacement2 = i;
+    }
+  };
+  for (var i = 0; i < righList.length; i++) {
+    if(righList[i].id == id1){
+      Pair1 = righList[i];
+      list1 = 2;
+      emplacement1 = i;
+    }
+    if(righList[i].id == id2){
+      Pair2 = righList[i];
+      list2 = 2;
+      emplacement2 = i;
+    }
+  };
+
+  if(list1 == 1){
+    leftList[emplacement1] = Pair2;
+  }else{
+    righList[emplacement1] = Pair2;
+  }
+
+  if(list2 == 1){
+    leftList[emplacement2] = Pair1;
+  }else{
+    righList[emplacement2] = Pair1;
+  }
+
+
+
+}
+
 function secondStep(){
   //On retire l'affichage du premier step
   document.getElementById("firstStep").style.display = "none";
@@ -303,7 +356,6 @@ function getSingle(name,ID){
 
 
 function startTree(){
-  //TODO récupérer les deux nouvelles listes en fonction de l'html
   document.getElementById("secondStep").style.display = "none";
   setTree(leftList,righList);
 }

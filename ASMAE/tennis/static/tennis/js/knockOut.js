@@ -11,6 +11,15 @@ function drop (ev) {
 
   ev.currentTarget.replaceChild(src, tgt);
   srcParent.appendChild(tgt);  
+
+  var ID1 = src.id;
+  var ID2 = tgt.id;
+
+  if(ID1 != ID2){
+    swapPair(ID1,ID2);
+  }
+
+  //TODO update list leftList et rightList a chaque drop
 }
 
 function allowDrop(ev) {
