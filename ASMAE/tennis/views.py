@@ -421,12 +421,28 @@ def staffTournoi(request):
 	return redirect(reverse(home))
 
 def pouleTournoi(request,name):
+	def getKey(item):
+		return item[1]
 	if request.user.is_authenticated():
 		tournoi = Tournoi.objects.get(nom=name)
 		poules = Poule.objects.filter(tournoi=tournoi)
+		dictionnaire = dict()
 		for poule in poules:
-			for paire in poule.paires.all():
-				paire.position = 0
+			if poule.status == PouleStatus.objects.get(id=2):
+				scores = poule.score.all()
+				dico = dict()
+				for paire in poule.paires.all():
+					dico[paire.id] = 0
+				for score in scores:
+					dico[score.paire1.id] = dico[score.paire1.id]+score.point1
+					dico[score.paire2.id] = dico[score.paire2.id]+score.point2
+				liste = list()
+				for key,value in dico.iteritems():
+					liste.append((key,value))
+				liste = sorted(liste,key=getKey,reverse=True)
+				dictionnaire[poule.id] = liste
+				print(dictionnaire)
+					
 		return render(request,'tennis/pouleTournoi.html',locals())
 	return redirect(reverse(home))
 
