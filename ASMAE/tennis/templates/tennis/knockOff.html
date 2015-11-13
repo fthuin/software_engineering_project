@@ -19,13 +19,13 @@
             Poule {{p.id}}
           </div>
           <div class="list-group" id="{{p.id}}">
-            {% for paire in p.paires.all %}
+            {% for paire in p.SortedPair %}
             <a href="javascript:void(0)" onclick="checkBox('ID{{paire.id}}')" class="list-group-item">
               <div class="row">
                 <div class="col-xs-10">
                   {{paire.user1.participant.smallName}}
                  &#38;
-                  {{paire.user2.participant.smallName}}
+                  {{paire.user2.participant.smallName}} ({{paire.score}})
                 </div>
                 <div class="col-xs-2">
                   <input class="pull-right allBox {{p.id}}Box" type="checkbox" name="{{paire.id}}" id="ID{{paire.id}}">

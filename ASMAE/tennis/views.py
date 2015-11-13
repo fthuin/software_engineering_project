@@ -458,6 +458,7 @@ def knockOff(request,name):
 		tournoi = Tournoi.objects.filter(nom=name)[0]
 		poules = Poule.objects.filter(tournoi=tournoi)
 		dictionnaire = dict()
+		allPaires = list()
 		for poule in poules:
 			if poule.status == PouleStatus.objects.get(id=2):
 				scores = poule.score.all()
@@ -480,16 +481,9 @@ def knockOff(request,name):
 					pai.poule = poule.id
 					pai.position = x
 					poule.SortedPair.append(pai)
+					allPaires.append(pai)
 					x = x +1
-				print(poule.SortedPair[2].position)
-		
-		
-		allPaires = list()
-		for p in poules:
-			for paire in p.paires.all():
-				paire.position = 1
-				paire.poule = p.id
-				allPaires.append(paire)		
+			
 		return render(request,'tennis/knockOff.html',locals())
 	return redirect(reverse(home))
 
