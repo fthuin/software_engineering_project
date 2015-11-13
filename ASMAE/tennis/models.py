@@ -205,7 +205,7 @@ class Pair(models.Model):
 	valid = models.BooleanField(default=False, verbose_name = "Validation")
 	pay = models.BooleanField(default=False, verbose_name="Paiement")
 	gagnant = models.BooleanField(default=False)
-	perdant = models.BooleanField(default=False)
+	finaliste = models.BooleanField(default=False)
 
 
 	def __str__(self):

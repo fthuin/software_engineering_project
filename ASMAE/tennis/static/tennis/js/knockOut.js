@@ -3,6 +3,8 @@ function sendTree()
 {
 document.getElementById("treeData").value = JSON.stringify(TreeData);
 document.getElementById("treeLabel").value = JSON.stringify(TreeLabel);
+document.getElementById("gagnant").value = getGagnant();
+document.getElementById("finaliste").value = getFinaliste();
 
 }
 function drag (ev) {

@@ -463,6 +463,23 @@ def knockOff(request,name):
 		if request.POST['action'] == "save":
 			treeData = request.POST['treeData']
 			treeLabel = request.POST['treeLabel']
+			gagnant = request.POST['gagnant']
+			finaliste = request.POST['finaliste']
+			if(gagnant != ""):
+				pairgagnante = Pair.objects.get(id=int(gagnant))
+				pairgagnante.gagnant = True
+				pairgagnante.save()
+			if(finaliste != ""):
+				finalistes = finaliste.split("-")
+
+				finaliste1 = Pair.objects.get(id=int(finalistes[0]))
+				finaliste2 = Pair.objects.get(id=int(finalistes[1]))
+				finaliste1.finaliste = True
+				finaliste1.save()
+				finaliste2.finaliste = True
+				finaliste2.save()
+			
+
 			if tournoi.arbre is None:
 				arbre = Arbre(data = treeData,label = treeLabel)
 				arbre.save()
@@ -478,6 +495,7 @@ def knockOff(request,name):
 			tournoi.arbre = None
 			tournoi.save()
 			arbre.delete()
+			return redirect(reverse(staffTournoi))
 						
 		
 		
