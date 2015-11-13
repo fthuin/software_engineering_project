@@ -491,7 +491,13 @@ def knockOff(request,name):
 				arbre.label= treeLabel
 				arbre.save()
 		elif request.POST['action'] == "deleteTree":
+			
 			if tournoi.arbre is not None:
+				for poule in tournoi.poule_set.all():
+					for pair in poule.paires.all():
+						pair.gagnant = False
+						pair.finaliste = False
+						pair.save()
 				arbre = tournoi.arbre
 				tournoi.arbre = None
 				tournoi.save()
