@@ -140,6 +140,20 @@ class Court(models.Model):
 			("Court", "Manage Court"),
 		)
 
+class Arbre(models.Model):
+	id = models.AutoField(primary_key=True)
+	data = models.TextField(null=True)
+	label = models.TextField(null=True)
+
+	def __str__(self):
+		return "Arbre n " + str(self.id)
+
+	def __unicode__(self):
+		return u'' + "Arbre n " + str(self.id)
+
+	class Meta:
+		verbose_name = "Arbre"
+
 class TournoiStatus(models.Model):
 	id = models.IntegerField(primary_key=True, verbose_name='ID')
 	nom = models.CharField(max_length=25, verbose_name="Nom")
@@ -158,6 +172,7 @@ class Tournoi(models.Model):
 	description = models.TextField(null=True)
 	jour = models.CharField(max_length=50)
 	status = models.ForeignKey(TournoiStatus,null=True,blank=True)
+	arbre = models.OneToOneField(Arbre, null=True, blank=True)
 	def __str__(self):
 		return self.nom
 
@@ -245,20 +260,6 @@ class Poule(models.Model):
 
 	class Meta:
 		verbose_name = "Poule"
-
-class Arbre(models.Model):
-	id = models.AutoField(primary_key=True)
-	data = models.TextField(null=True)
-	label = models.TextField(null=True)
-
-	def __str__(self):
-		return "Arbre n " + str(self.id)
-
-	def __unicode__(self):
-		return u'' + "Arbre n " + str(self.id)
-
-	class Meta:
-		verbose_name = "Arbre"
 
 class LogActivity(models.Model):
 	date = models.DateTimeField(auto_now_add=True)
