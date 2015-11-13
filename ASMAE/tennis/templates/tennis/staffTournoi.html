@@ -26,7 +26,7 @@
                 <tbody>
                     {% for tournoi in allTournoi %}
                     {% if tournoi.status.id == 2 %}
-                    <tr class="clickable-row" onclick="location.href='{% url "tennis.views.pouleTournoi" tournoi.nom %}';">
+                    <tr style="background-color:red;" class="clickable-row" onclick="location.href='{% url "tennis.views.pouleTournoi" tournoi.nom %}';">
                         <td style="width:18%;vertical-align: middle;">{{ tournoi.nom }}</td>
                         <td style="text-align:center;vertical-align: middle;">{{ tournoi.jour }}</td>
                         <td>{{ tournoi.description }}</td>
@@ -41,7 +41,7 @@
                         <td>{{ tournoi.description }}</td>
                         <td style="text-align:center;vertical-align: middle;">{{ tournoi.np }}</td>
                         <td style="text-align:center;vertical-align: middle;">{{ tournoi.pl }}</td>
-                        <td style="text-align:center;vertical-align: middle;">{{ tournoi.status.nom }}</td>
+                        <td style="text-align:center;vertical-align: middle;">{{ tournoi.status }}</td>
                     </tr>
                     {% endif %}
 
@@ -51,6 +51,7 @@
         </div>
     </div>
 
+<!--
     <div class="row">
         {% for tournoi in allTournoi %}
         <div class="col-sm-6">
@@ -63,6 +64,7 @@
         </div>
         {% endfor %}
     </div>
+-->
 </div>
 
 {% endblock %}

@@ -142,7 +142,7 @@ class Court(models.Model):
 
 class TournoiStatus(models.Model):
 	id = models.IntegerField(primary_key=True, verbose_name='ID')
-	nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
+	nom = models.CharField(max_length=25, verbose_name="Nom")
 	
 	def __str__(self):
 		return self.nom
@@ -203,6 +203,19 @@ class Pair(models.Model):
 			("Pair", "Manage Pair"),
         )
 
+class PouleStatus(models.Model):
+	id = models.IntegerField(primary_key=True, verbose_name='ID')
+	nom = models.CharField(max_length=25, verbose_name="Nom")
+	
+	def __str__(self):
+		return self.nom
+	
+	def __unicode__(self):
+		return u'' + self.nom
+	
+	class Meta:
+		verbose_name = "Status de la poule"
+
 class Score(models.Model):
 	paire1 = models.ForeignKey(Pair, related_name='paire1', verbose_name = "Paire 1")
 	paire2 = models.ForeignKey(Pair, related_name='paire2', verbose_name = "Paire 2")
@@ -222,6 +235,7 @@ class Poule(models.Model):
 	leader = models.ForeignKey(User, null=True, blank=True)
 	court = models.ForeignKey(Court, null=True, blank=True)
 	score = models.ManyToManyField(Score, blank=True)
+	status = models.ForeignKey(PouleStatus,null=True,blank=True)
 
 	def __str__(self):
 		return "Poule n " + str(self.id)
@@ -231,6 +245,20 @@ class Poule(models.Model):
 
 	class Meta:
 		verbose_name = "Poule"
+
+class Arbre(models.Model):
+	id = models.AutoField(primary_key=True)
+	data = models.TextField(null=True)
+	winner = models.ForeignKey(Pair, null=True, blank=True)
+
+	def __str__(self):
+		return "Arbre n " + str(self.id)
+
+	def __unicode__(self):
+		return u'' + "Arbre n " + str(self.id)
+
+	class Meta:
+		verbose_name = "Arbre"
 
 class LogActivity(models.Model):
 	date = models.DateTimeField(auto_now_add=True)
