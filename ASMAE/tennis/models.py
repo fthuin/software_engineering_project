@@ -122,6 +122,10 @@ class Pair(models.Model):
 
 class Match(models.Model):
 	id = models.AutoField(primary_key=True)
+	group_id = models.CharField(max_length=50)
+	status = models.CharField(max_length=100)
+	pair1 = models.ForeignKey(Pair, related_name='pair1')
+	pair2 = models.ForeignKey(Pair, related_name='pair2')
 	paire_gagnante = models.ForeignKey(Pair, related_name='paire_gagnante')
 	paire_perdante = models.ForeignKey(Pair, related_name='paire_perdante')
 	#court = models.ForeignKey(Court, default=None)

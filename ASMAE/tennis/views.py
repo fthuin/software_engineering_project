@@ -1007,16 +1007,47 @@ def printScoreboard(request):
         return render(request,'tennus/prinScoreboard.html', request.GET.get('data'))
 
 def staffEditMatch(request):
-	allMatches = Match.objects.all()
 	if request.method == "GET":
 		if request.GET.get('action') == 'enregistrer':
 			matchJSON = request.GET.get('match')
 			matchs_dict = json.loads(matchJSON)
 			for m in matchs_dict:
-				match_winner = m[1]
-				match_loser = m[2]
-				match_score = m[0]
-				match_final = Match(paire_gagnante=Pair.objects.get(id=match_winner), paire_perdante=Pair.objects.get(id=match_loser), score=match_score)
-				match_final.save()
-				
+				group_id = m[0]
+				pair1_id = m[1]
+				pair2_id = m[2]
+				pair_gagnante_id = m[3]
+				pair_perdante_id = m[4]
+				score = m[5]
+
+				pair1 = Pair.objects.get(id=pair1_id)
+				pair2 = Pair.objects.get(id=pair2_id)
+				paire_gagnante = Pair.objects.get(id=pair_gagnante_id)
+				paire_perdante = Pair.objects.get(id=pair_perdante_id)
+
+				status = "termine"
+
+				# check if there is already such a match
+				prev_match1 = Match.objects.filter(group_id=group_id, pair1=pair1, pair2=pair2)
+				prev_match2 = Match.objects.filter(group_id=group_id, pair1=pair2, pair2=pair1)
+
+				if len(prev_match1) != 0:
+					# update this match
+					prev_match1[0].status = "termine"
+					prev_match1[0].paire_gagnante = paire_gagnante
+					prev_match1[0].paire_perdante = paire_perdante
+					prev_match1[0].score = score
+					prev_match1[0].save()
+
+				elif len(prev_match2) != 0:
+					# update this match
+					prev_match2[0].status = "termine"
+					prev_match2[0].paire_gagnante = paire_gagnante
+					prev_match2[0].paire_perdante = paire_perdante
+					prev_match2[0].score = score
+					prev_match2[0].save()				
+				else:
+					match_final = Match(group_id=group_id, status=status, pair1=pair1, pair2=pair2, paire_gagnante=paire_gagnante, paire_perdante=paire_perdante, score=score)
+					match_final.save()
+
+	allMatches = Match.objects.all()
 	return render(request,'tennis/staffEditMatch.html', locals())

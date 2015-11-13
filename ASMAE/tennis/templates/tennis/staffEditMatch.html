@@ -63,7 +63,8 @@
             loser = elem.getAttribute("paireY");
         }
         elem.innerHTML = document.getElementsByName("input_score")[0].value.toString();
-        matchDB.push([elem.innerHTML, winner, loser]);
+        matchDB.push([ grp_db_id.toString(), winner, loser, winner, loser, elem.innerHTML ]);
+        //matchDB.push([elem.innerHTML, winner, loser]);
         sessionStorage.removeItem("posX");
         sessionStorage.removeItem("posY");
         sessionStorage.removeItem("id");
@@ -106,6 +107,53 @@
             document.getElementById("modal_ok").disabled = false;
         },false);
 
+
+    var insertCellContent = function(current_cell, row_pair, col_pair, group_id) {
+    	var m = undefined;
+
+    	{% for match in allMatches %}
+    		if ("{{ match.status }}" === "termine" && "{{ match.group_id }}" === group_id) {
+    			if ("{{ match.pair1.id }}" === row_pair[0]) {
+    				if ("{{ match.pair2.id }}" === col_pair[0]) {
+    					// pair_id1 = row_pair
+    					// pair_id2 = col_pair
+    					if ("{{ match.paire_gagnante.id }}" === row_pair[0]) {
+    						m = [ "{{ match.score }}", 'green' ];
+    					}
+    					else {
+    						m = [ "{{ match.score }}", 'red' ];
+    					}
+    				}
+    			}
+    			else if ("{{ match.pair2.id }}" === row_pair[0]) {
+    				if ("{{ match.pair1.id }}" === col_pair[0]) {
+    					// pair_id1 = col_pair
+    					// pair_id2 = row_pair
+    					if ("{{ match.paire_gagnante.id }}" === row_pair[0]) {
+    						m = [ "{{ match.score }}", 'green' ];
+    					}
+    					else {
+    						m = [ "{{ match.score }}", 'red' ];
+    					}
+    				}
+    			}
+    		}
+    	{% endfor %}
+
+    	if (m != undefined) {
+    		var score = m[0];
+    		var color = m[1];
+
+    		if (color === 'green') {
+    			current_cell.className = "success";
+    		}
+    		else {
+    			current_cell.className = "danger";
+    		}
+    		current_cell.innerHTML = score;
+    	}
+    };
+
     /********************
     * Fin des listeners *
     *********************/
@@ -114,7 +162,7 @@
     var match_list = [];
     var match_modif = [];
     {% for match in allMatches %}
-        match_list.push(['{{ match.id }}}','{{ match.paire_gagnante }}' , '{{ match.paire_perdante }}' , '{{ match.score }}']);
+    	match_list.push(['{{ match.id }}','{{ match.paire_gagnante.id }}' , '{{ match.paire_perdante.id }}' , '{{ match.score }}']);
     {%endfor%}
 
     var button = document.getElementById('register');
@@ -124,6 +172,7 @@
 
     var liste_pairs = [];
 
+    var grp_db_id = sessionStorage.getItem("grp_db_id");
 	var tmp = sessionStorage.getItem("data");
     var elem = document.createElement("div");
     elem.innerHTML = tmp;
@@ -174,6 +223,13 @@
                 row.cells[i+1].setAttribute("posY",index+1);
                 row.cells[i+1].setAttribute("paireX", liste_pairs[index][0]);
                 row.cells[i+1].setAttribute("paireY", liste_pairs[i][0]);
+
+                var current_cell = row.cells[i+1];
+                var row_pair = liste_pairs[index];
+                var col_pair = liste_pairs[i];
+                var group_id = grp_db_id.toString();
+
+                insertCellContent(current_cell, row_pair, col_pair, group_id);
 
                 row.cells[i+1].addEventListener('click', function(){
 

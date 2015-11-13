@@ -138,6 +138,7 @@ text-align:left;
         var tournament;
         var selected_item = 0;
         var selection_mode = 'none';
+        var grp_db_id = [];
         
         //Recuperation des tournois et stockage dans un tableau
         var tournoiList = [];
@@ -212,6 +213,7 @@ text-align:left;
     	           	gestionGroupModule.style.display = "none";
 
                 	var groupList = [];
+                    var grp_index = 0;
                 	{% for groupe in allGroupes %}
                 		if ('{{ groupe.tournoi.nom }}' === selected_tournament) {
                 			// find pairs of the group
@@ -232,6 +234,8 @@ text-align:left;
                 					}
                 				{% endif %}
                 			{% endfor %}
+                            grp_db_id[grp_index] = '{{ groupe.id }}';
+                            grp_index++;
                 			groupList.push(new Group({{ groupe.gsize }}, pairList, {{ groupe.court.id }}, leader));
                 		}
                 	{% endfor %}
@@ -431,6 +435,8 @@ text-align:left;
 
                     edit_button.addEventListener("click", function(event){
                         event.stopPropagation();
+                        var id_group = parseInt(this.parentNode.getAttribute("id_group"));
+                        sessionStorage.setItem("grp_db_id", grp_db_id[id_group].toString());
                         sessionStorage.setItem("tournois", document.getElementById("tournois").selectedIndex);
                         sessionStorage.setItem("data", this.parentNode.parentNode.parentNode.outerHTML);
                         window.location.href = "{% url 'staffEditMatch' %}";
