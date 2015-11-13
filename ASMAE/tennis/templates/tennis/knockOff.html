@@ -193,7 +193,13 @@
 document.getElementById("firstStep").style.display = "none";
 document.getElementById("TableArbre").style.display = "inherit";
 document.getElementById("pageTitle").innerHTML = "Arbre du tournoi";
-setArbre('{{arbre.data}}','{{arbre.label}}');
+//Donnée de notre arbre
+TreeData = JSON.parse('{{arbre.data|escapejs}}');
+
+//label
+TreeLabel = JSON.parse('{{arbre.label|escapejs}}');
+
+setArbre(TreeData,TreeLabel);
 
 {% endif %}
 //Create an array with all paires
