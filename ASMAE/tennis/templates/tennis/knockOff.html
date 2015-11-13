@@ -19,13 +19,13 @@
             Poule {{p.id}}
           </div>
           <div class="list-group" id="{{p.id}}">
-            {% for paire in p.paires.all %}
+            {% for paire in p.SortedPair %}
             <a href="javascript:void(0)" onclick="checkBox('ID{{paire.id}}')" class="list-group-item">
               <div class="row">
                 <div class="col-xs-10">
                   {{paire.user1.participant.smallName}}
                  &#38;
-                  {{paire.user2.participant.smallName}}
+                  {{paire.user2.participant.smallName}} ({{paire.score}})
                 </div>
                 <div class="col-xs-2">
                   <input class="pull-right allBox {{p.id}}Box" type="checkbox" name="{{paire.id}}" id="ID{{paire.id}}">
@@ -55,8 +55,20 @@
   
 
     <!-- Div qui va contenir notre arbre -->
-    <div class="table-responsive">
-      <div class="center-block" id="my_gracket"></div>
+    <div id="TableArbre" style="display:none;">
+      <div class="table-responsive">
+        <div class="center-block" id="my_gracket"></div>
+      </div>
+
+      <ul class="list-inline text-center">
+        <li>
+          <button class="btn btn-default">Enregistrer</button>
+        </li>
+        <li>
+          <button class="btn btn-default" data-toggle="modal" data-target="#deleteArbre" type="button">Supprimer</button>
+        </li>
+      </ul>
+      
     </div>
 
     </div>
@@ -136,6 +148,33 @@
     </div>
   </div>
 
+<!-- Modal suppression arbre -->
+  <div class="modal fade" id="deleteArbre" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title center">Confirmation de suppression</h4>
+        </div>
+        <div class="modal-body">
+          <p>Etes vous sur de vouloir supprimer cet arbre de tournoi ?</p>
+        
+        <ul class="list-inline text-center">
+        <li>
+          <button type="button" class="btn btn-default">Confirmer</button>
+        </li>
+        <li>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+        </li>
+      </ul>
+    </div>
+      </div>
+      
+    </div>
+  </div>
+
 {% endblock %}
 
 {% block commande %}
@@ -143,6 +182,15 @@
 <script src="{% static 'tennis/js/knockOut.js' %}" type="text/javascript"></script>
 
 <script type="text/javascript">
+
+{% if Arbre %}
+//on hide la première étape et on passe directement à l'arbre de tournoi
+document.getElementById("firstStep").style.display = "none";
+document.getElementById("TableArbre").style.display = "inherit";
+document.getElementById("pageTitle").innerHTML = "Arbre du tournoi";
+setArbre('{{Arbre.data}}','{{Arbre.label}}');
+
+{% endif %}
 //Create an array with all paires
 var allPaires = new Array();
 {% for paire in allPaires %}

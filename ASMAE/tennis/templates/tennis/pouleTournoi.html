@@ -20,10 +20,11 @@
                     <b>Leader : </b>{{p.leader.participant.prenom}} {{p.leader.participant.nom}}
                     <br>
                     <b>Status : </b> {{p.status.nom}}<br>
-                    {% for pair in p.paires.all %}
+                    {% for pair in p.SortedPair %}
                     <b>{{ pair.id }}</b> - 
                     {{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} &#38; 
-                    {{ pair.user2.participant.prenom }} {{ pair.user2.participant.nom }}
+                    {{ pair.user2.participant.prenom }} {{ pair.user2.participant.nom }} -
+                    <b>Score : </b>{{pair.score}}
                     <br>
                     {% endfor %}
 

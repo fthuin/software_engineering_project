@@ -31,6 +31,9 @@ def qcq(request):
 def sponsors(request):
 	return render(request,'tennis/sponsors.html',locals())
 
+def resultat(request):
+	return render(request,'tennis/resultat.html',locals())
+
 def contact(request):
 	return render(request,'tennis/contact.html',locals())
 
@@ -155,7 +158,7 @@ def confirmPair(request,id):
 		if request.POST['action'] == "validate":
 			remarque = request.POST['remarque']
 			extra = request.POST.getlist('extra')
-			print(extra)
+
 
 
 			pair.confirm = True
@@ -421,23 +424,69 @@ def staffTournoi(request):
 	return redirect(reverse(home))
 
 def pouleTournoi(request,name):
+	def getKey(item):
+		return item[1]
 	if request.user.is_authenticated():
-		tournoi = Tournoi.objects.filter(nom=name)[0]
+		tournoi = Tournoi.objects.get(nom=name)
 		poules = Poule.objects.filter(tournoi=tournoi)
+		dictionnaire = dict()
+		for poule in poules:
+			if poule.status == PouleStatus.objects.get(id=2):
+				scores = poule.score.all()
+				dico = dict()
+				for paire in poule.paires.all():
+					dico[paire.id] = 0
+				for score in scores:
+					dico[score.paire1.id] = dico[score.paire1.id]+score.point1
+					dico[score.paire2.id] = dico[score.paire2.id]+score.point2
+				liste = list()
+				for key,value in dico.items():
+					liste.append((key,value))
+				liste = sorted(liste,key=getKey,reverse=True)
+				dictionnaire[poule.id] = liste
+				poule.SortedPair = list()
+				for pairID, sc in liste:
+					pai = Pair.objects.get(id=pairID)
+					pai.score = sc
+					poule.SortedPair.append(pai)
+
 		return render(request,'tennis/pouleTournoi.html',locals())
 	return redirect(reverse(home))
 
 #TODO permissions QUENTIN GUSBIN
 def knockOff(request,name):
+	def getKey(item):
+		return item[1]
 	if request.user.is_authenticated():
 		tournoi = Tournoi.objects.filter(nom=name)[0]
 		poules = Poule.objects.filter(tournoi=tournoi)
+		dictionnaire = dict()
 		allPaires = list()
-		for p in poules:
-			for paire in p.paires.all():
-				paire.position = 1
-				paire.poule = p.id
-				allPaires.append(paire)
+		for poule in poules:
+			if poule.status == PouleStatus.objects.get(id=2):
+				scores = poule.score.all()
+				dico = dict()
+				for paire in poule.paires.all():
+					dico[paire.id] = 0
+				for score in scores:
+					dico[score.paire1.id] = dico[score.paire1.id]+score.point1
+					dico[score.paire2.id] = dico[score.paire2.id]+score.point2
+				liste = list()
+				for key,value in dico.items():
+					liste.append((key,value))
+				liste = sorted(liste,key=getKey,reverse=True)
+				dictionnaire[poule.id] = liste
+				poule.SortedPair = list()
+				x = 1
+				for pairID, sc in liste:
+					pai = Pair.objects.get(id=pairID)
+					pai.score = sc
+					pai.poule = poule.id
+					pai.position = x
+					poule.SortedPair.append(pai)
+					allPaires.append(pai)
+					x = x +1
+
 		return render(request,'tennis/knockOff.html',locals())
 	return redirect(reverse(home))
 
@@ -445,6 +494,12 @@ def knockOff(request,name):
 def pouleScore(request,id):
 	poule = Poule.objects.get(id=id)
 	if request.method == "POST":
+		if request.POST['action'] == 'save':
+			poule.status = PouleStatus.objects.get(id=1)
+			poule.save()
+		elif request.POST['action'] == 'saveFinite':
+			poule.status = PouleStatus.objects.get(id=2)
+			poule.save()
 		poule.score.all().delete()
 		pairList = poule.paires.all()
 		dictionnaire = dict()
@@ -455,12 +510,12 @@ def pouleScore(request,id):
 				else:
 					dictionnaire[str(id1.id)+"-"+str(id2.id)] = True
 					dictionnaire[str(id2.id)+"-"+str(id1.id)] = True
-					print(dictionnaire)
+
 					if (is_number(request.POST[str(id1.id)+"-"+str(id2.id)]) and is_number(request.POST[str(id2.id)+"-"+str(id1.id)])):
 						score = Score(paire1 = id1,paire2=id2,point1=int(request.POST[str(id1.id)+"-"+str(id2.id)]),point2=int(request.POST[str(id2.id)+"-"+str(id1.id)]))
 						score.save()
 						poule.score.add(score)
-
+		return redirect(reverse(staffTournoi))
 	if request.user.is_authenticated():
 		scoreList = poule.score.all()
 		scoreValues = ""
@@ -491,7 +546,7 @@ def generatePool(request,name):
 
 		pairspoulesList = request.POST['assignPairPoules'].split('-')
 		pairspoulesList.pop()
-		print(repr(pairspoulesList))
+
 		i = 0
 		j = -1
 		pouleDict = {}
@@ -528,7 +583,7 @@ def generatePool(request,name):
 				p.paires.add(pair)
 			i += 1
 			p.save()
-		print(repr(i) + ' poules saved')
+
 		return redirect(reverse(staffTournoi))
 	if request.user.is_authenticated():
 		dictTerrains = {}
@@ -546,7 +601,7 @@ def generatePool(request,name):
 
 		if len(listPoules) == 0:
 			saved = False
-			print('new tournament')
+
 			defaultSize = 6.0
 			defaultValue = int(math.ceil((len(allPair)/defaultSize)))
 			poolRange = range(0,defaultValue)
@@ -575,7 +630,7 @@ def generatePool(request,name):
 			return render(request,'tennis/generatePool.html',locals())
 		else:
 			saved = True
-			print('from saved data')
+
 			defaultValue = len(listPoules)
 			defaultSize = 0
 			pairListAll = dict()

@@ -48,12 +48,15 @@
                 </tbody>
             </table>
         </div>
-        <ul class="list-inline text-center">
+        <ul class="list-inline text-center" style="margin-top:20px;">
             <li>
-                <button class="btn btn-default center-block" style="margin-top:20px;" >Enregistrer</button>
+
+                <button class="btn btn-default"  value="save" name="action">Enregistrer</button>
+
             </li>
             <li>
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal" type="button">Valider</button>
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal" type="button" onclick="checkValues()">Valider</button>
+				<button id="saveFinite" class="btn btn-default center-block" type="submit" onclick="save()" style="display:none" value="saveFinite" name="action"></button>
             </li>
         </ul>
         
@@ -71,11 +74,13 @@
           <h4 class="modal-title center">Confirmation validation</h4>
         </div>
         <div class="modal-body">
-          <p>Etes-vous sûr de valider les scores de cette poules?</p>
+			<p id="textModalScoreNotNumber" >Les scores doivent etre des chiffres</p>
+			<p id="textModalEmptyScore" >Veuillez remplir tous les scores pour valider la poule</p>
+          <p id="textModalConfirm">Etes-vous sûr de valider les scores de cette poules?</p>
         
             <ul class="list-inline text-center">
                 <li>
-                    <button type="button" class="btn btn-default">oui</button>
+                    <button type="button" class="btn btn-default" id="yesModal" onclick="document.getElementById('saveFinite').click()">oui</button>
                 </li>
                 <li>
                     <button type="button" class="btn btn-default" data-dismiss="modal">non</button>
@@ -130,10 +135,44 @@ function checkPouleScoreInput()
 			 for (var i = 0; i < x.length; i++) {
 				var value = x[i].value
 				if(isNaN(value))
-				{;
+				{
 					document.getElementById("hint-poule").innerHTML = " Veuillez entrer des chiffres pour les résultats";
 					return false;
 				}
+		        
+		    };
+
+		   
+		
+		{% endfor %}
+{% endfor %}
+}
+function checkValues(){
+	document.getElementById("textModalScoreNotNumber").style.display = "none";
+	document.getElementById("textModalEmptyScore").style.display = "none";
+	document.getElementById("textModalConfirm").style.display = "inherit";
+	document.getElementById("yesModal").disabled = false;
+
+
+	{% for pair in poule.paires.all %}
+		{% for p in poule.paires.all %}
+
+		    var x = document.getElementsByClassName('{{pair.id}}-{{p.id}}');
+			 for (var i = 0; i < x.length; i++) {
+				var value = x[i].value
+				if(value == "")
+				{
+					document.getElementById("textModalEmptyScore").style.display = "inherit";
+					document.getElementById("textModalConfirm").style.display = "none";
+					document.getElementById("yesModal").disabled = true;
+				}
+				if(isNaN(value))
+				{
+					document.getElementById("textModalScoreNotNumber").style.display = "inherit";
+					document.getElementById("textModalConfirm").style.display = "none";
+					document.getElementById("yesModal").disabled = true;
+				}
+
 		        
 		    };
 
