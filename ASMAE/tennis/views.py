@@ -491,11 +491,12 @@ def knockOff(request,name):
 				arbre.label= treeLabel
 				arbre.save()
 		elif request.POST['action'] == "deleteTree":
-			arbre = tournoi.arbre
-			tournoi.arbre = None
-			tournoi.save()
-			arbre.delete()
-			return redirect(reverse(staffTournoi))
+			if tournoi.arbre is not None:
+				arbre = tournoi.arbre
+				tournoi.arbre = None
+				tournoi.save()
+				arbre.delete()
+				return redirect(reverse(staffTournoi))
 						
 		
 		
