@@ -16,7 +16,7 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Permission,Group
 from django.utils.crypto import get_random_string
 from django.http import HttpResponse
-from tennis.pdfdocument import PDFTerrain
+from tennis.pdfdocument import PDFTerrain, PDFPair
 from django.template.defaulttags import register
 
 
@@ -50,7 +50,7 @@ def inscriptionTournoi(request):
 	Use = User.objects.all().order_by('username')
 
 	today = date.today()
-	
+
 	for u in Use:
 		born = u.participant.datenaissance
 		u.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
@@ -221,7 +221,7 @@ def cancelPair(request,id):
 
 		return render(request,'tennis/cancelPair.html',locals())
 	return redirect(reverse(home))
-	
+
 def viewPair(request,id):
 	pair = Pair.objects.filter(id=id)
 	if len(pair) <1:
@@ -409,7 +409,7 @@ def staff(request):
 '''
 
 #TODO permission QUENTIN GUSBIN
-def staffTournoi(request):				
+def staffTournoi(request):
 	if request.user.is_authenticated():
 		allTournoi = Tournoi.objects.all()
 		for tourn in allTournoi:
@@ -437,7 +437,7 @@ def knockOff(request,name):
 			for paire in p.paires.all():
 				paire.position = 1
 				paire.poule = p.id
-				allPaires.append(paire)		
+				allPaires.append(paire)
 		return render(request,'tennis/knockOff.html',locals())
 	return redirect(reverse(home))
 
@@ -460,7 +460,7 @@ def pouleScore(request,id):
 						score = Score(paire1 = id1,paire2=id2,point1=int(request.POST[str(id1.id)+"-"+str(id2.id)]),point2=int(request.POST[str(id2.id)+"-"+str(id1.id)]))
 						score.save()
 						poule.score.add(score)
-						
+
 	if request.user.is_authenticated():
 		scoreList = poule.score.all()
 		scoreValues = ""
@@ -485,10 +485,10 @@ def generatePool(request,name):
 			tournoi.save()
 		terrainsList = request.POST['assignTerrains'].split('-')
 		terrainsList.pop()
-		
+
 		leadersList = request.POST['assignLeaders'].split('/')
 		leadersList.pop()
-		
+
 		pairspoulesList = request.POST['assignPairPoules'].split('-')
 		pairspoulesList.pop()
 		print(repr(pairspoulesList))
@@ -512,7 +512,7 @@ def generatePool(request,name):
 					pouleDict[j]['leader'] = pair.user1
 				elif user2fullname == pouleDict[j]['leaderName']:
 					pouleDict[j]['leader'] = pair.user2
-				
+
 			i += 1
 		i = 0
 		Poule.objects.filter(tournoi=tournoi).delete()
@@ -535,12 +535,12 @@ def generatePool(request,name):
 		# TODO : Indiquer les terrains déjà utilisés le jour du tournoi
 		for terrain in terrains:
 			dictTerrains[terrain.id] = terrain
-		
+
 		listTerrains = list(dictTerrains.values())
 		listTerrainSaved = list()
 		listLeaderSaved = list()
 		nbrTerrains = len(listTerrains)
-		
+
 		# TODO Restaurer la sauvergarde
 		listPoules = list(poules)
 
@@ -699,9 +699,9 @@ def staffLog(request):
 @permission_required('tennis.Droit')
 #TODO permission droit
 def staffPerm(request):
-	
+
 	if request.method == "POST":
-		
+
 		usernamefield = request.POST['username']
 		utilisateur = User.objects.filter(username=usernamefield)[0]
 		if request.POST.__contains__("Tournoi des familles"):
@@ -768,13 +768,13 @@ def staffPerm(request):
 			utilisateur.groups.remove(group)
 
 		LogActivity(user=request.user,section="Permissions",details="Changed permission of user "+utilisateur.username).save()
-	   
-		
-		
+
+
+
 
 	Use = User.objects.all().order_by('username')
 	tournoiAll = Tournoi.objects.all()
-	
+
 	for u in Use:
 		bd = u.participant.datenaissance
 		fb = bd.strftime('%d/%m/%Y')
@@ -826,12 +826,12 @@ def validateTerrain(request, id):
 		else:
 			valide = False
 			LogActivity(user=request.user,section="Terrain",details="Terrain "+id+ " non valide").save()
-	
+
 		court.commentaireStaff = message
 		court.valide = valide
 		court.save()
 		successEdit = "Terrain bien édité!"
-		
+
 
 	if request.user.is_authenticated():
 		return render(request,'tennis/validateTerrain.html',locals())
@@ -839,15 +839,25 @@ def validateTerrain(request, id):
 
 @permission_required('tennis.Court')
 def terrainPDF(request, id):
-    court = Court.objects.filter(id=id)[0]
+    court = Court.objects.get(id=id)
     proprietaire = Participant.objects.filter(user=court.user)[0]
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment;filename="terrain'+id+'.pdf"'
-    
-    PDFTerrain(response, court, proprietaire)
-    
+
+    PDFTerrain(response, court, proprietaire, request.user.participant)
+
     return response
-    
+
+def pairPDF(request, id):
+	pair = Pair.objects.get(id=id)
+	response = HttpResponse(content_type='application/pdf')
+	response['Content-Disposition'] = 'attachment;filename="paire'+id+'"'
+
+	PDFPair(response, pair, request.user.participant)
+
+	return response
+
+
 @permission_required('tennis.Court')
 def editTerrainStaff(request, id):
 	allCourtSurface = CourtSurface.objects.all()
@@ -1041,7 +1051,7 @@ def profil(request):
 			birthdate2 = birthdate.split("/")
 			datenaissance = datetime.datetime(int(birthdate2[2]),int(birthdate2[1]),int(birthdate2[0]))
 
-			formatedBirthdate = birthdate 
+			formatedBirthdate = birthdate
 			participant = request.user.participant
 			participant.titre = title
 			participant.nom = lastname
@@ -1140,7 +1150,7 @@ def emailValidation(request, key):
 		#Print succes
 		successValidate = "Votre adresse mail est désormais validée, merci de votre coopération."
 	return render(request,'tennis/emailValidation.html',locals())
-	
+
 def register(request):
 	yearLoop = range(1900,2015)
 	if request.method == "POST":
@@ -1219,10 +1229,10 @@ def register(request):
 		activationObject = UserInWaitOfActivation(participant = participant, dayOfRegistration = today, confirmation_key= key)
 		activationObject.save()
 		link = "http://" + request.get_host() + "/tennis/emailValidation/"
-		
+
 		# Send email with code to finish registration and validate account
 		send_register_confirmation_email(activationObject, participant, link)
-		
+
 		#On connecte l'utilisateur
 		user2 = authenticate(username=username, password=password)
 		login(request, user2)
@@ -1245,7 +1255,3 @@ def is_number(s):
 		return True
 	except ValueError:
 		return False
-
-
-
-
