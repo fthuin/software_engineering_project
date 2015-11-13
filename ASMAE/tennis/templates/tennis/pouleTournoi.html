@@ -1,0 +1,57 @@
+{% extends "tennis/staff.html" %}
+
+{% block title %}Score : {{ tournoi.nom }}{% endblock %}
+{% block ongTournoi %}class="active"{% endblock %}
+
+{% block bodyStaff %}
+<!-- Gestionnaire des groupes -->
+<div class="content-box">
+    <h2 class="center">Gestion des scores : {{tournoi.nom}}</h2>
+    <hr class="line">
+
+    <div class="row">
+        {% for p in poules %}
+        <div class="col-sm-6 resizePanel">
+            <div class="panel panel-default">
+                <div class="panel-heading">Poule {{p.id}}</div>
+                <div class="panel-body">
+                    <b>Leader : </b>{{p.leader.participant.prenom}} {{p.leader.participant.nom}}
+                    <br>
+                    <b>Participant : </b> (TODO afficher les scores ? )<br>
+                    {% for pair in p.paires.all %}
+                    <b>{{ pair.id }}</b> - 
+                    {{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} &#38; 
+                    {{ pair.user2.participant.prenom }} {{ pair.user2.participant.nom }}
+                    <br>
+                    {% endfor %}
+                    <button onClick="location.href='{% url "tennis.views.pouleScore" p.id %}';" class="btn btn-default center-block" style="margin-top:20px;">Entrer les scores</button>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="info center">Il n'y a pas encore de poules enregistrées pour ce tournoi</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block commande %}
+
+<script>
+    var mesPanel = document.getElementsByClassName("resizePanel");
+    var size = 0;
+    for (var i = 0; i < mesPanel.length; i++) {
+        var s = mesPanel[i].offsetHeight;
+        if(size < s){
+            size = s;
+        }
+    };
+    for (var i = 1; i < mesPanel.length; i++) {
+        mesPanel[i].style.height = size + "px";
+    };
+</script>
+
+{% endblock %}
+    

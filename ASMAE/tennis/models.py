@@ -140,11 +140,23 @@ class Court(models.Model):
 			("Court", "Manage Court"),
 		)
 
+class TournoiStatus(models.Model):
+	nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
+	
+	def __str__(self):
+		return self.nom
+	
+	def __unicode__(self):
+		return u'' + self.nom
+	
+	class Meta:
+		verbose_name = "Status du tournoi"
+
 class Tournoi(models.Model):
 	nom = models.CharField(max_length=50,primary_key=True)
 	description = models.TextField(null=True)
 	jour = models.CharField(max_length=50)
-	status = models.CharField(max_length=50,null=True)
+	status = models.ForeignKey(TournoiStatus,null=True,blank=True)
 	def __str__(self):
 		return self.nom
 

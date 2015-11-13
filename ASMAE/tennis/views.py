@@ -411,13 +411,18 @@ def staff(request):
 #TODO permission QUENTIN GUSBIN
 def staffTournoi(request):				
 	if request.user.is_authenticated():
-		allPoules = dict()
 		allTournoi = Tournoi.objects.all()
 		for tourn in allTournoi:
 			nbrPair = len(Pair.objects.filter(tournoi=tourn))
 			tourn.np = nbrPair
-			allPoules[tourn.nom] = Poule.objects.filter(tournoi=tourn);
 		return render(request,'tennis/staffTournoi.html',locals())
+	return redirect(reverse(home))
+
+def pouleTournoi(request,name):
+	if request.user.is_authenticated():
+		tournoi = Tournoi.objects.filter(nom=name)[0]
+		poules = Poule.objects.filter(tournoi=tournoi)
+		return render(request,'tennis/pouleTournoi.html',locals())
 	return redirect(reverse(home))
 
 #TODO permissions QUENTIN GUSBIN

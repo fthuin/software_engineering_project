@@ -18,7 +18,7 @@
                   <tr>
                     <th></th>
                     {% for pair in poule.paires.all %}
-                    <th style="text-align:center">{{pair.user1.participant.prenom}} {{pair.user1.participant.nom}} <br> {{pair.user2.participant.prenom}} {{pair.user2.participant.nom}}</th>
+                    <th style="text-align:center;min-width:120px;">{{pair.user1.participant.prenom}} {{pair.user1.participant.nom}} <br> {{pair.user2.participant.prenom}} {{pair.user2.participant.nom}}</th>
                     {% endfor %}
                   </tr>
                 </thead>
