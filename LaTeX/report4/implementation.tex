@@ -1,1 +1,51 @@
 \section{Current implementation}
+
+Our website has three page that are accessible by everyone : \enquote{Accueil} (shows information about Le Charles de Lorraine), \enquote{Sponsors} (shows logos and video of the sponsors) and \enquote{Contact} (allows everybody to fill a form to contact the staff by mail).
+
+\subsection{Player part}
+
+\subsubsection{Player registration}
+
+Every player can create a personal user account (and later edit related data) and access the \enquote{Tournois} page on the website. On this page, he can see every people he asked to play with in a table and every people that asked to play with him in another table. Every player can register alone but must ask another player if he wants to join him for a pair (we implemented a search module to find other users).
+
+Once the other user accepts the pair request, the pair is created and is shown on the \enquote{Tournois} page in another table.
+
+\subsection{Court owner part}
+
+\subsubsection{Court registration}
+
+Every court owner can create a personal user account (as a player can do) and access the \enquote{Terrains} page of the website. He can manage his already registered courts and register a new court on this page.
+
+\subsection{Staff part}
+
+\subsubsection{Managing tournament}
+
+Staff members with specific permissions can see tournaments and create the \enquote{Poules}, encode results of each pair and later create the Knock-Off Tournament from the \enquote{Tournoi} page.
+
+\subsubsection{Managing courts}
+
+On the \enquote{Terrains} page, staff members with specific permission can see every registered courts, search for courts, display courts by criteria and click on each one to see more information on another page (for example to print them or to edit them).
+
+\subsubsection{Managing pairs}
+
+Staff members with specific permission can see all the pairs on the \enquote{Paires} page, they can search for pairs, display them following different criteria and click on each one to see more information and change the payment or validation status.
+
+\subsubsection{Managing extras}
+
+Staff members with specific permission can edit, add or delete extras on the \enquote{Extra} page, modifications are saved in the database and the modifications will automatically apply on every other page of the website.
+
+\subsubsection{Managing users}
+
+Staff members with specific permission can search for users on the \enquote{Users} page, they can click on each result to see more information about a specific user.
+
+\subsubsection{History}
+
+Staff members can watch every actions done by any staff members on the \enquote{Historique} page. It shows when, by whom, where and some details about every action done on the staff part.
+
+\subsubsection{Managing permissions}
+
+Staff members can see what are the permissions of each user on the website by searching them on \enquote{Permissions} page, they can select a result and modify the user permissions.
+
+\subsection{Admin part}
+
+For very specific modifications of the website (create new tournaments, allow a new court surface,...), there is an Admin module that is accessible on asmae.herokuapp.com/admin.
