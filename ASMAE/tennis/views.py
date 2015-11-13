@@ -511,6 +511,8 @@ def knockOff(request,name):
 					poule.SortedPair.append(pai)
 					allPaires.append(pai)
 					x = x +1
+		if tournoi.arbre is not None:
+			arbre = tournoi.arbre
 
 		return render(request,'tennis/knockOff.html',locals())
 	return redirect(reverse(home))

@@ -140,20 +140,6 @@ class Court(models.Model):
 			("Court", "Manage Court"),
 		)
 
-class Arbre(models.Model):
-	id = models.AutoField(primary_key=True)
-	data = models.TextField(null=True)
-	label = models.TextField(null=True)
-
-	def __str__(self):
-		return "Arbre n " + str(self.id)
-
-	def __unicode__(self):
-		return u'' + "Arbre n " + str(self.id)
-
-	class Meta:
-		verbose_name = "Arbre"
-
 class TournoiStatus(models.Model):
 	id = models.IntegerField(primary_key=True, verbose_name='ID')
 	nom = models.CharField(max_length=25, verbose_name="Nom")
@@ -167,12 +153,31 @@ class TournoiStatus(models.Model):
 	class Meta:
 		verbose_name = "Status du tournoi"
 
+class Arbre(models.Model):
+	id = models.AutoField(primary_key=True)
+	data = models.TextField(null=True)
+	label = models.TextField(null=True)
+
+
+	def __str__(self):
+		return "Arbre n " + str(self.id)
+
+	def __unicode__(self):
+		return u'' + "Arbre n " + str(self.id)
+
+	class Meta:
+		verbose_name = "Arbre"
+
+
+
 class Tournoi(models.Model):
 	nom = models.CharField(max_length=50,primary_key=True)
 	description = models.TextField(null=True)
 	jour = models.CharField(max_length=50)
 	status = models.ForeignKey(TournoiStatus,null=True,blank=True)
 	arbre = models.ForeignKey(Arbre, null=True, blank=True)
+
+
 	def __str__(self):
 		return self.nom
 
@@ -185,6 +190,39 @@ class Tournoi(models.Model):
 			("DoubleMixte", "Manage double mixte"),
 		)
 
+
+
+class Pair(models.Model):
+	id = models.AutoField(primary_key=True, verbose_name="ID")
+	tournoi = models.ForeignKey(Tournoi)
+	user1 = models.ForeignKey(User, related_name='user1', verbose_name = "Utilisateur 1")
+	user2 = models.ForeignKey(User, related_name='user2', verbose_name = "Utilisateur 2")
+	extra1 = models.ManyToManyField(Extra, related_name='extra1')
+	extra2 = models.ManyToManyField(Extra, related_name='extra2')
+	comment1 = models.TextField(null=True, blank=True)
+	comment2 = models.TextField(null=True, blank=True)
+	confirm = models.BooleanField(default=False, verbose_name = "Confirmation")
+	valid = models.BooleanField(default=False, verbose_name = "Validation")
+	pay = models.BooleanField(default=False, verbose_name="Paiement")
+	gagnant = models.BooleanField(default=False)
+	perdant = models.BooleanField(default=False)
+
+
+	def __str__(self):
+		return str(self.id) +" "+ self.tournoi.nom+" : "+self.user1.username+" et "+self.user2.username
+
+	class Meta:
+		verbose_name = 'Paire'
+		permissions = (
+			("Pair", "Manage Pair"),
+        )
+
+
+
+
+
+
+
 class Groupe(models.Model):
 	id = models.AutoField(primary_key=True)
 	tournoi = models.ForeignKey(Tournoi, default=None)
@@ -195,28 +233,6 @@ class Groupe(models.Model):
 	def __str__(self):
 		return "Groupe n " + str(self.id)
 
-class Pair(models.Model):
-	id = models.AutoField(primary_key=True, verbose_name="ID")
-	tournoi = models.ForeignKey(Tournoi)
-	group = models.ForeignKey(Groupe, null=True, default=None)
-	user1 = models.ForeignKey(User, related_name='user1', verbose_name = "Utilisateur 1")
-	user2 = models.ForeignKey(User, related_name='user2', verbose_name = "Utilisateur 2")
-	extra1 = models.ManyToManyField(Extra, related_name='extra1')
-	extra2 = models.ManyToManyField(Extra, related_name='extra2')
-	comment1 = models.TextField(null=True, blank=True)
-	comment2 = models.TextField(null=True, blank=True)
-	confirm = models.BooleanField(default=False, verbose_name = "Confirmation")
-	valid = models.BooleanField(default=False, verbose_name = "Validation")
-	pay = models.BooleanField(default=False, verbose_name="Paiement")
-
-	def __str__(self):
-		return str(self.id) +" "+ self.tournoi.nom+" : "+self.user1.username+" et "+self.user2.username
-
-	class Meta:
-		verbose_name = 'Paire'
-		permissions = (
-			("Pair", "Manage Pair"),
-        )
 
 class PouleStatus(models.Model):
 	id = models.IntegerField(primary_key=True, verbose_name='ID')
@@ -251,6 +267,7 @@ class Poule(models.Model):
 	court = models.ForeignKey(Court, null=True, blank=True)
 	score = models.ManyToManyField(Score, blank=True)
 	status = models.ForeignKey(PouleStatus,null=True,blank=True)
+
 
 	def __str__(self):
 		return "Poule n " + str(self.id)

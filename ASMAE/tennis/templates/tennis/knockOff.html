@@ -188,12 +188,12 @@
 
 <script type="text/javascript">
 
-{% if Arbre %}
+{% if arbre %}
 //on hide la première étape et on passe directement à l'arbre de tournoi
 document.getElementById("firstStep").style.display = "none";
 document.getElementById("TableArbre").style.display = "inherit";
 document.getElementById("pageTitle").innerHTML = "Arbre du tournoi";
-setArbre('{{Arbre.data}}','{{Arbre.label}}');
+setArbre('{{arbre.data}}','{{arbre.label}}');
 
 {% endif %}
 //Create an array with all paires
