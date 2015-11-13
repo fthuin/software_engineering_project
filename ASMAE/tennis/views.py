@@ -139,7 +139,7 @@ def inscriptionTournoi(request):
 			pair.extra1.add(ext)
 
 		# Send mail
-		#send_confirmation_email_pair_registered(Participant.objects.get(user=pair.user1), Participant.objects.get(user=pair.user2))
+		send_confirmation_email_pair_registered(Participant.objects.get(user=pair.user1), Participant.objects.get(user=pair.user2))
 
 		pair.save()
 		return redirect(reverse(tournoi))
@@ -333,7 +333,7 @@ def registerTerrain(request):
 		court = Court(rue = rue,numero=numero,boite=boite,codepostal=postalcode,localite=locality,acces=acces,matiere=CourtSurface.objects.filter(nom=matiere)[0],type=CourtType.objects.filter(nom=type)[0],dispoDimanche=dispoDimanche,dispoSamedi=dispoSamedi,etat=CourtState.objects.filter(nom=etat)[0],commentaire=commentaire,user = request.user)
 
 		# Send confirmation mail
-		##send_confirmation_email_court_registered(Participant.objects.get(user=request.user), court)
+		send_confirmation_email_court_registered(Participant.objects.get(user=request.user), court)
 
 		court.save()
 

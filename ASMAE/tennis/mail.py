@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*- 
 import datetime
+import time
 from django.utils.crypto import get_random_string
 import threading
 from django.core.mail import send_mail
-from tennis.models import Extra, Participant,Court, Tournoi, Pair, UserInWaitOfActivation
+from tennis.models import Extra, Participant,Court, Tournoi, Pair, UserInWaitOfActivation, Poule
 
 #send_mail('Subject here', 'Here is the message.', 'from@example.com', ['to@example.com'], fail_silently=False)
 # From : noreply@leCharleDeLorraine.com
@@ -99,13 +100,14 @@ L'équipe 'Le Charles de Lorraine'
     #Send
     send_mail_via_thread(subject, message, "", [mail])
 
-# TODO methode qui envoie les message des court adresse ou les payment issue selon la situation du client
+
 # A tout les joueurs (excepte les iregularité de payment et les groups leader), envoyé le court sur lequels ils va jouer
-def send_email_court_adress(participant):
+def send_email_court_adress(participant, court, staff):
     fullName = participant.fullName()
-    mail = participant.user.email
-    #mail = "pokcyril@hotmail.com" # For tests
-    courtAdresse = "'TODO link court adress to pair or player in database'"
+    staffName = staff.fullName()
+    #mail = participant.user.email
+    mail = "cyril.devogelaere@student.uclouvain.be" # For tests
+    courtAdresse = court.getAdresse()
     subject = u"Le Charles de Lorraine : emplacement de votre premier match"
     message =  u"Bonjour " + fullName + u""",
 
@@ -118,19 +120,22 @@ l'adresse suivante :
 En cas de problème, nous restons disponible via l'onglet contact du site internet.
 
 Merci encore de votre soutien et bons matchs,
-L'équipe 'Le Charles de Lorraine'
+""" + staffName + " " + """ de l'équipe 'Le charle de Lorraine'
 """
 
-    send_mail_via_thread(subject, message, "", [mail])
+    send_mail(subject, message, "", [mail], fail_silently=False)
 
 
 # Envoye a tout les player en irregularite de payment
-def send_email_payment_issue(participant):
+def send_email_payment_issue(participant, extras, staff):
     fullName = participant.fullName()
-    montant = "'TODO Calculate price'"
-    adresseHQ = "PutAdresseHQ Here"
-    mail = participant.user.email
-    #mail = "pokcyril@hotmail.com" # For tests
+    staffName = staff.fullName()
+    montant = 20
+    for extra in extras:
+        montant += extra.prix
+    adresseHQ = "5 Place des Carabiniers, 1030 Bruxelles"
+    #mail = participant.user.email
+    mail = "cyril.devogelaere@student.uclouvain.be" # For tests
     subject = u"Le Charles de Lorraine : Problème de payment"
 
     message =  u"Bonjour " + fullName + u""",
@@ -141,16 +146,16 @@ d'obtenier l'adresse a laquelle vous pourrez jouer. L'adresse du quartier géné
 a laquelle vous devez vous présenter ainsi que le montant a fournir peuvent etre
 trouver ci-dessous :
 
-Montant : """ + montant + u""" euros
+Montant : """ + str(montant) + u""" euros
 Adresse : """ + adresseHQ + u"""
 
 En cas de problème, nous restons disponible via l'onglet contact du site internet.
 
 Merci encore de votre soutien
-L'équipe 'Le Charles de Lorraine'
+""" + staffName + " " + """ de l'équipe 'Le charle de Lorraine'
 """
 
-    send_mail_via_thread(subject, message, "", [mail])
+    send_mail(subject, message, "", [mail], fail_silently=False)
 	
 def send_register_confirmation_email(activationObject, participant, link): 
 	fullName = participant.fullName()
@@ -170,11 +175,12 @@ L'équipe 'Le Charles de Lorraine'
 	send_mail_via_thread(subject, message, "", [mail])
 
 # Envoye a tout les groupes leader TODO
-def send_email_score_board(participant):
+def send_email_score_board(participant, staff):
     fullName = participant.fullName()
-    adresseHQ = "PutAdresseHQ Here"
-    mail = participant.user.email
-    #mail = "pokcyril@hotmail.com" # For tests
+    staffName = staff.fullName()
+    adresseHQ = "5 Place des Carabiniers, 1030 Bruxelles"
+    #mail = participant.user.email
+    mail = "cyril.devogelaere@student.uclouvain.be" # For tests
     subject = u"Le Charles de lorraine : récuperation de la feuille de résultats"
 
     message =  u"Bonjour " + fullName + u""",
@@ -189,44 +195,40 @@ Adresse : """ + adresseHQ + u"""
 En cas de problème, nous restons disponible via l'onglet contact du site internet.
 
 Merci encore de votre soutien
-L'équipe 'Le charle de Lorraine'
+""" + staffName + " " + """ de l'équipe 'Le charle de Lorraine'
 """
 
-    send_mail_via_thread(subject, message, "", [mail])
+    send_mail(subject, message, "", [mail], fail_silently=False)
 
-def choose_mail_start_tournament(pair, participant):
+def choose_mail_start_tournament(pair, participant, extras, staff):
     if(not pair.pay):
         # Payment issue
-        send_email_payment_issue(participant)
+        send_email_payment_issue(participant, extras, staff)
     elif(participant.isGroupLeader):
         # Group leader (people with payement issue are not chosen as group leader as their participation is not guaranteed)
-        send_email_score_board(participant)
+        send_email_score_board(participant, staff)
     else:
         #Default
-        send_email_court_adress(participant)
+        court = None
+        for poule in Poule.objects.all():
+            if pair in poule.paires.all():
+                court = poule.court
+                break
+        if not court == None:
+            send_email_court_adress(participant, court, staff)
 
-def send_email_start_tournament():
-    #Work on all user in tournament TODO : Le staff qui clique sur le bouton a son nom dans le mail + modal comme dans validatePair.html
+def thread_send_email_start_tournament(staff):
     for pair in Pair.objects.all():
-        choose_mail_start_tournament(pair, Participant.objects.get(user=pair.user1))
-        choose_mail_start_tournament(pair, Participant.objects.get(user=pair.user2))
-		
+        choose_mail_start_tournament(pair, Participant.objects.get(user=pair.user1), pair.extra1.all(), staff)
+        choose_mail_start_tournament(pair, Participant.objects.get(user=pair.user2), pair.extra2.all(), staff)
+        time.sleep(5)
+
+def send_email_start_tournament(staff):
+    threading.Thread(target=thread_send_email_start_tournament, args=(staff, )).start()
 
 def test_send_mail():
-	participant = Participant.objects.all()[0]
-	participant.user.email = "pokcyril@hotmail.com"
-	court = Court.objects.all()[0]
-	link = "/"
-	today = datetime.datetime.now()
-	key = get_random_string(20, allowed_chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
-	activationObject = UserInWaitOfActivation(participant = participant, dayOfRegistration = today, confirmation_key= key)
-	#Send
-	send_confirmation_email_pair_registered(participant, participant)
-	send_confirmation_email_court_registered(participant, court)
-	send_email_court_adress(participant)
-	send_email_payment_issue(participant)
-	send_register_confirmation_email(activationObject, participant, link)
-	send_email_score_board(participant)
+	staff = Participant.objects.get(nom="istrateur", prenom="Admin")
+	thread_send_email_start_tournament(staff)
     
 def send_prospectus_by_mail(participant):
 	#TODO Envoye un mail contenant les pdf devant etre envoyer. Ne pas créer de pdf dupliquer pour les adresses equivalentes
