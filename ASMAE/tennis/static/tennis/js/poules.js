@@ -76,7 +76,7 @@ function mySetPoules(nbrPoules, sizePoules) {
 			document.getElementById("Leader"+(i+1)).appendChild(getSpaceOption());
 	    }
 	    while (j < sizePoules) {
-			var p = createEmptyPair(i);
+			var p = createEmptyPair(i+"-"+j);
 			document.getElementById("list"+(i+1)).appendChild(p);
 			j++;
 	    }
@@ -141,7 +141,7 @@ function setPoules(nbrPoules){
 		document.getElementById("Leader"+(i+1)).removeChild(document.getElementById("Leader"+(i+1)).childNodes[document.getElementById("Leader"+(i+1)).childNodes.length-1]);
 		//Si c'est plutot que le nombre max on rajotue des espaces vides
 		for (var j = 0; j < max - nbr; j++) {
-			var p = createEmptyPair(i);
+			var p = createEmptyPair(i+"-"+j);
 			document.getElementById("list"+(i+1)).appendChild(p);
 		}
 	}
@@ -197,7 +197,7 @@ function setPoules2(taillePoule){
 		document.getElementById("Leader"+(i+1)).removeChild(document.getElementById("Leader"+(i+1)).childNodes[document.getElementById("Leader"+(i+1)).childNodes.length-1]);
 		//Si c'est plutot que le nombre max on rajotue des espaces vides
 		for (var j = 0; j < max - nbr; j++) {
-			var p = createEmptyPair(i);
+			var p = createEmptyPair(i+"-"+j);
 			document.getElementById("list"+(i+1)).appendChild(p);
 		}
 
