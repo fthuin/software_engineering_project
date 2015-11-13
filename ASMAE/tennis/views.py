@@ -437,12 +437,16 @@ def pouleTournoi(request,name):
 					dico[score.paire1.id] = dico[score.paire1.id]+score.point1
 					dico[score.paire2.id] = dico[score.paire2.id]+score.point2
 				liste = list()
-				for key,value in dico.iteritems():
+				for key,value in dico.items():
 					liste.append((key,value))
 				liste = sorted(liste,key=getKey,reverse=True)
 				dictionnaire[poule.id] = liste
-				print(dictionnaire)
-					
+				poule.SortedPair = list()
+				for pairID, sc in liste:
+					pai = Pair.objects.get(id=pairID)
+					pai.score = sc
+					poule.SortedPair.append(pai)
+
 		return render(request,'tennis/pouleTournoi.html',locals())
 	return redirect(reverse(home))
 
