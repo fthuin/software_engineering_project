@@ -863,7 +863,7 @@ function initialize() {
     position: {lat: 50.8539717, lng: 4.4002427},
     animation: google.maps.Animation.DROP,
     map: map,
-    title: 'Cogefis'
+    title: 'Asmae'
   });
  }
 //fin de la section contact
