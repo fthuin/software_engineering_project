@@ -6,14 +6,10 @@
 {% block body %}
 {% load static from staticfiles %}
 <div class="container">
-	<div class="row">
-<div class="col-lg-12">
-				<img class="img-responsive sponsors" src="{% static 'tennis/img/404.png' %}" alt="404">
-			</div>
-</div>
-	<div class="row">
-<div class="col-lg-12">
-La page que vous recherchez n'a pas été trouvée!
+	<div class="content-box">
+		<h2 class="center">Oups, cette page n'a pas pu être trouvée</h2>
+		<hr class="line">
+		<img class="img-responsive center-block" src="{% static 'tennis/img/404.png' %}" alt="404">
 	</div>
 </div>
 </div>
