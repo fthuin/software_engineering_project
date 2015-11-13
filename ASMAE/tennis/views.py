@@ -155,7 +155,7 @@ def confirmPair(request,id):
 		if request.POST['action'] == "validate":
 			remarque = request.POST['remarque']
 			extra = request.POST.getlist('extra')
-			print(extra)
+
 
 
 			pair.confirm = True
@@ -445,6 +445,12 @@ def knockOff(request,name):
 def pouleScore(request,id):
 	poule = Poule.objects.get(id=id)
 	if request.method == "POST":
+		if request.POST['action'] == 'save':
+			poule.status = PouleStatus.objects.get(id=1)
+			poule.save()
+		elif request.POST['action'] == 'saveFinite':
+			poule.status = PouleStatus.objects.get(id=2)
+			poule.save()
 		poule.score.all().delete()
 		pairList = poule.paires.all()
 		dictionnaire = dict()
@@ -455,11 +461,14 @@ def pouleScore(request,id):
 				else:
 					dictionnaire[str(id1.id)+"-"+str(id2.id)] = True
 					dictionnaire[str(id2.id)+"-"+str(id1.id)] = True
-					print(dictionnaire)
+
 					if (is_number(request.POST[str(id1.id)+"-"+str(id2.id)]) and is_number(request.POST[str(id2.id)+"-"+str(id1.id)])):
 						score = Score(paire1 = id1,paire2=id2,point1=int(request.POST[str(id1.id)+"-"+str(id2.id)]),point2=int(request.POST[str(id2.id)+"-"+str(id1.id)]))
 						score.save()
 						poule.score.add(score)
+		return redirect(reverse(staffTournoi))
+	
+		
 						
 	if request.user.is_authenticated():
 		scoreList = poule.score.all()
@@ -491,7 +500,7 @@ def generatePool(request,name):
 		
 		pairspoulesList = request.POST['assignPairPoules'].split('-')
 		pairspoulesList.pop()
-		print(repr(pairspoulesList))
+
 		i = 0
 		j = -1
 		pouleDict = {}
@@ -528,7 +537,7 @@ def generatePool(request,name):
 				p.paires.add(pair)
 			i += 1
 			p.save()
-		print(repr(i) + ' poules saved')
+
 		return redirect(reverse(staffTournoi))
 	if request.user.is_authenticated():
 		dictTerrains = {}
@@ -546,7 +555,7 @@ def generatePool(request,name):
 
 		if len(listPoules) == 0:
 			saved = False
-			print('new tournament')
+
 			defaultSize = 6.0
 			defaultValue = int(math.ceil((len(allPair)/defaultSize)))
 			poolRange = range(0,defaultValue)
@@ -575,7 +584,7 @@ def generatePool(request,name):
 			return render(request,'tennis/generatePool.html',locals())
 		else:
 			saved = True
-			print('from saved data')
+
 			defaultValue = len(listPoules)
 			defaultSize = 0
 			pairListAll = dict()
