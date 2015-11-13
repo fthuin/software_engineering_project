@@ -18,7 +18,7 @@ function drop (ev) {
   //update leader liste
   updatePanel(targetID, "Choisir un leader");
   updatePanel(sourceID, "Choisir un leader");
-  
+
 }
 
 function allowDrop(ev) {
@@ -27,7 +27,7 @@ function allowDrop(ev) {
 
 //Listener pour le popover
 $(document).ready(function(){
-    $('[data-toggle="popover"]').popover();   
+    $('[data-toggle="popover"]').popover();
 });
 
 
@@ -68,17 +68,17 @@ function mySetPoules(nbrPoules, sizePoules) {
 	    for (j=0 ; j < listPair.length ; j++) {
 	        var p = createPair(listPair[j])
 	        document.getElementById("list"+(i+1)).appendChild(p);
-	        
+
 			var nom1 = listPair[j].user1;
 			var nom2 = listPair[j].user2;
 			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1));
 			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2));
-			document.getElementById("Leader"+(i+1)).appendChild(getSpaceOption());	        
+			document.getElementById("Leader"+(i+1)).appendChild(getSpaceOption());
 	    }
 	    while (j < sizePoules) {
 			var p = createEmptyPair(i);
 			document.getElementById("list"+(i+1)).appendChild(p);
-			j++;   
+			j++;
 	    }
 	    document.getElementById("Leader"+(i+1)).removeChild(document.getElementById("Leader"+(i+1)).childNodes[document.getElementById("Leader"+(i+1)).childNodes.length-1]);
 	}
@@ -90,8 +90,8 @@ function mySetPoules(nbrPoules, sizePoules) {
 	    }
 	}
 	for (var i = 0 ; i < leaderSaved.length ; i++) {
-	    if (leaderSaved[i].fullname != '') {
-	        document.getElementById("Leader"+(i+1)).value = leaderSaved[i].fullname
+	    if (leaderSaved[i].fullname != ' ') {
+	        document.getElementById("Leader"+(i+1)).value = leaderSaved[i].fullname;
 	    }
 	}
 }
@@ -200,7 +200,7 @@ function setPoules2(taillePoule){
 			var p = createEmptyPair(i);
 			document.getElementById("list"+(i+1)).appendChild(p);
 		}
-		
+
 	}
 
 	setTerrains(nbrPoules);
@@ -213,7 +213,7 @@ function updatePanel(numero, contenu){
 	//Panel et liste
 	var panel = document.getElementById("list"+numero);
 	var list = document.getElementById("Leader"+numero);
-	list.innerHTML = "<option disabled selected>Choisir un leader</option>";
+	list.innerHTML = "<option disabled selected>"+contenu+"</option>";
 	var c = panel.childNodes
 	//Update des noms
 	for (var i = 0; i < c.length; i++) {
@@ -315,7 +315,7 @@ function createPanel(number){
 								'<label class="control-label col-xs-4">Adresse</label>'+
 								'<div class="col-xs-8"><p class="info" id="addr'+number+'">-<br><br></p></div>'+
 							'</div>'+
-							
+
 							'<div class="row">'+
 								'<label class="control-label col-xs-7">Empreinte Carbone</label>'+
 								'<div class="col-xs-5"><p class="info" id="empreinte'+number+'"> - </p></div>'+
@@ -328,7 +328,7 @@ function createPanel(number){
 //Return une pair
 function createPair(pair){
 	var p = document.createElement("div");
-	
+
 	var gender1 = "";
 	var gender2 = "";
 	if(pair.titre1=="Mr"){
@@ -342,12 +342,12 @@ function createPair(pair){
 		gender2 = "fa fa-female";
 	}
 
-	
+
 	var comm = "" ;
 	if(pair.comment != ""){
 		comm = '<a href="javascript:void(0);" data-toggle="popover" data-html="true" data-placement="left" data-content="'+pair.comment+'"><b style="color:#222;"><i class="fa fa-file-text-o fa-2x"></i></b></a>';
 	}
-	
+
 	p.innerHTML = '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;"><div id="'+pair.id+'" draggable="true" ondragstart="drag(event)"><div class="zone"><div class="row"><div class="col-xs-10"><b style="color:#222"><i class="'+gender1+'"></i></b> '+pair.user1+' ('+pair.age1+' ans)'+'<br><b style="color:#222"><i class="'+gender2+'"></i></b> '+pair.user2+' ('+pair.age2+' ans)'+'</div><div class="col-xs-2">'+comm+'</div></div></div></div></div>';
 
 	return p;
@@ -359,4 +359,3 @@ function createEmptyPair(i){
 	p.innerHTML='<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;"><div id="bidon'+i+'" draggable="true" ondragstart="drag(event)"><div class="zone"><div class="row"><div class="col-xs-10"><br><br></div><div class="col-xs-2"></div></div></div></div></div>';
 	return p;
 }
-
