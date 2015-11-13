@@ -17,10 +17,10 @@
                     <div class="row">
                         <div class="col-xs-10">Poule {{p.id}}</div>
                         <div class="col-xs-2">
-                            <a href="javascript:void(0)" onclick="TODOFLORIAN" class="pull-right" style="cursor:pointer;color:white;padding:0;margin:0;"><span class="glyphicon glyphicon-print"></span></a>
+                            <a href="javascript:void(0)" onclick="window.document.location='{% url 'tennis.views.printScoreBoard' p.id %}';" class="pull-right" style="cursor:pointer;color:white;padding:0;margin:0;"><span class="glyphicon glyphicon-print"></span></a>
                         </div>
                     </div>
-                    
+
                 </div>
                 <div class="panel-body">
                     {% if p.status.id == 2 %}
@@ -29,8 +29,8 @@
                     <br>
                     <b>Status : </b> {{p.status.nom}}<br>
                     {% for pair in p.SortedPair %}
-                    <b>{{ pair.id }}</b> - 
-                    {{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} &#38; 
+                    <b>{{ pair.id }}</b> -
+                    {{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} &#38;
                     {{ pair.user2.participant.prenom }} {{ pair.user2.participant.nom }} -
                     <b>Score : </b>{{pair.score}}
                     <br>
@@ -42,8 +42,8 @@
                     <br>
                     <b>Status : </b> {{p.status.nom}}<br>
                     {% for pair in p.paires.all %}
-                    <b>{{ pair.id }}</b> - 
-                    {{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} &#38; 
+                    <b>{{ pair.id }}</b> -
+                    {{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} &#38;
                     {{ pair.user2.participant.prenom }} {{ pair.user2.participant.nom }}
                     <br>
                     {% endfor %}
@@ -95,4 +95,3 @@ if(valid){
 </script>
 
 {% endblock %}
-    
