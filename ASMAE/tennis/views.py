@@ -422,8 +422,11 @@ def staffTournoi(request):
 
 def pouleTournoi(request,name):
 	if request.user.is_authenticated():
-		tournoi = Tournoi.objects.filter(nom=name)[0]
+		tournoi = Tournoi.objects.get(nom=name)
 		poules = Poule.objects.filter(tournoi=tournoi)
+		for poule in poules:
+			for paire in poule.paires.all():
+				paire.position = 0
 		return render(request,'tennis/pouleTournoi.html',locals())
 	return redirect(reverse(home))
 
