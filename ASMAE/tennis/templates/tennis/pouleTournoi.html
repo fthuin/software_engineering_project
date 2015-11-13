@@ -32,6 +32,8 @@
         <p class="info center">Il n'y a pas encore de poules enregistrées pour ce tournoi</p>
         {% endfor %}
     </div>
+
+    <button class="btn btn-default center-block" onClick="location.href='{% url "tennis.views.knockOff" tournoi.nom %}';">Arbre de Tournoi</button>
 </div>
 
 {% endblock %}

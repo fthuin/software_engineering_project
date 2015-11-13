@@ -415,6 +415,8 @@ def staffTournoi(request):
 		for tourn in allTournoi:
 			nbrPair = len(Pair.objects.filter(tournoi=tourn))
 			tourn.np = nbrPair
+			pouleLength = len(Poule.objects.filter(tournoi=tourn))
+			tourn.pl = pouleLength
 		return render(request,'tennis/staffTournoi.html',locals())
 	return redirect(reverse(home))
 

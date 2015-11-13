@@ -141,6 +141,7 @@ class Court(models.Model):
 		)
 
 class TournoiStatus(models.Model):
+	id = models.IntegerField(primary_key=True, verbose_name='ID')
 	nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
 	
 	def __str__(self):
