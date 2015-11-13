@@ -5,23 +5,111 @@
 
 {% block bodyStaff %}
 
-<table id="match_display" class="table table-bordered table-responsive panel panel-default" style="text-align: center;">
+<table id="match_display" class="table table-bordered table-responsive panel panel-default" style="text-align: center; vertical-align: middle">
 
 </table>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Enregistrement du match</h4>
+      </div>
+      <div class="modal-body">
+        <div>Veuillez sélectionner la paire gagnante</div>
+        <div class="radio">
+            <label id="pair1"><input type="radio" name="optradio">Option 1</label>
+        </div>
+        <div class="radio">
+            <label id="pair2"><input type="radio" name="optradio">Option 2</label>
+        </div>
+        <hr>
+          <label>Score: </label> <input name="input_score" type="text" disabled>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+        <button id="modal_ok" type="button" class="btn btn-primary" data-dismiss="modal" disabled>Sauvegarder résultat</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <button id="register" style="float:right" class="btn btn-default">Enregistrer les matches</button>
+
 <script>
 
-    function Match(paire_gagnante, paire_perdante, score){
-        this.paire_gagnante = paire_gagnante;
-        this.paire_perdante = paire_perdante;
-        this.score = score;
-        this.status = "pool";
-    }
+    /************************************
+    *Ensemble de listeners pour la page *
+    *************************************/
+    var matchDB = [];
+    //Listener pour le bouton valider
+    document.getElementById("modal_ok").addEventListener('click', function (e) {
+        document.getElementById(sessionStorage.getItem("id")).innerHTML = document.getElementsByName("input_score")[0].value.toString();
+        var elem = document.getElementById("match_display").rows[sessionStorage.getItem("posX")].cells[sessionStorage.getItem("posY")];
+        var winner = elem.getAttribute("paireY"); //gagnant gauche
+        var loser = elem.getAttribute("paireX"); // perdant haut
+        if (document.getElementsByName("optradio")[0].checked){
+            document.getElementById(sessionStorage.getItem("id")).className = "success";
+            elem.className = "danger";
+            //gagnant gauche
+        }
+        else{
+            document.getElementById(sessionStorage.getItem("id")).className = "danger";
+            elem.className = "success";
+            //gagnant droit
+            winner = elem.getAttribute("paireX");
+            loser = elem.getAttribute("paireY");
+        }
+        elem.innerHTML = document.getElementsByName("input_score")[0].value.toString();
+        matchDB.push([elem.innerHTML, winner, loser]);
+        sessionStorage.removeItem("posX");
+        sessionStorage.removeItem("posY");
+        sessionStorage.removeItem("id");
+        sessionStorage.removeItem("class");
+    });
 
-    Match.prototype.isIn = function(paire1, paire2){
-        return (this.paire_gagnante == paire1 && this.paire_perdante == paire2)
-                || (this.paire_gagnante == paire2 && this.paire_perdante == paire1);
-    };
+    //listener quand le modal apparait
+    $('#myModal').on('show.bs.modal', function (e) {
+        var elem = sessionStorage.getItem("content");
+        if (elem != ""){
+            document.getElementsByName("input_score")[0].value = elem;
+            if (sessionStorage.getItem("class") == "success"){
+                document.getElementsByName("optradio")[0].checked = true;
+            }
+            else{
+                document.getElementsByName("optradio")[1].checked = true;
+            }
+            document.getElementsByName("input_score")[0].disabled = false;
+            document.getElementById("modal_ok").disabled = false;
+            sessionStorage.removeItem("content");
+        }
+    });
+
+    //listener quand le modal disparait
+    $('#myModal').on('hidden.bs.modal', function (e) {
+        document.getElementsByName("input_score")[0].value = "";
+        document.getElementsByName("input_score")[0].disabled = true;
+        document.getElementById("modal_ok").disabled = true;
+    });
+
+    //listener sur le premier radio button
+    document.getElementById("pair1").addEventListener("change", function(){
+            document.getElementsByName("input_score")[0].disabled = false;
+            document.getElementById("modal_ok").disabled = false;
+        },false);
+
+    //listener sur le deuxieme radio button
+    document.getElementById("pair2").addEventListener("change", function(){
+            document.getElementsByName("input_score")[0].disabled = false;
+            document.getElementById("modal_ok").disabled = false;
+        },false);
+
+    /********************
+    * Fin des listeners *
+    *********************/
+
     var id = 1;
     var match_list = [];
     var match_modif = [];
@@ -41,8 +129,7 @@
     elem.innerHTML = tmp;
     var tmp_list = elem.querySelectorAll("tbody > tr");
 
-    var i;
-    for (i = 0; i < tmp_list.length -1 ; i++){
+    for (var i = 0; i < tmp_list.length -1 ; i++){
         liste_pairs.push([tmp_list[i].childNodes[0].innerHTML,tmp_list[i].childNodes[1].innerHTML]);
     }
 
@@ -59,8 +146,7 @@
     row.cells[0].style.fontWeight = "bold";
     row.cells[0].style.fontStyle = "italic";
 
-    var i;
-    for (i = 0; i < liste_pairs.length; i++){
+    for (var i = 0; i < liste_pairs.length; i++){
         row.insertCell(-1).innerHTML = liste_pairs[i][1].toString();
         row.cells[i+1].style.verticalAlign = "middle";
     }
@@ -70,61 +156,54 @@
     function add_row(index){
         var row = match_display.insertRow(-1);
         row.insertCell(-1).innerHTML = liste_pairs[index][1].toString();
-        var i;
-        for(i = 0 ; i < liste_pairs.length; i++){
+        for(var i = 0 ; i < liste_pairs.length; i++){
             if (i == index){
                 row.insertCell(-1);
                 row.cells[i+1].setAttribute("class", "active");
             }
 
             else{
-                var box = document.createElement("input");
-                box.style.height = "100%";
-                box.style.width = "100%";
-                box.style.textAlign = "center";
-                box.style.border = "none";
-                box.setAttribute("id" , id.toString());
+                row.insertCell(-1);
+
+                row.cells[i+1].style.verticalAlign = "middle";
+                row.cells[i+1].className = "neutre";
+                row.cells[i+1].setAttribute("id" , id.toString());
                 id++;
-                box.setAttribute("type","text");
-                box.setAttribute("modifie" , "false");
-                box.setAttribute(("paireX"), liste_pairs[index][0]);
-                box.setAttribute(("paireY"), liste_pairs[i][0]);
-                row.insertCell(-1).appendChild(box);
-                box.addEventListener("input", function(){
-                    this.setAttribute("modifie" , "true");
-                    if(match_modif.indexOf(this.getAttribute("id")) == -1) {
-                        match_modif.push(this.getAttribute("id"));
-                    }
+                row.cells[i+1].setAttribute("modifie" , "false");
+                row.cells[i+1].setAttribute("posX", i+1);
+                row.cells[i+1].setAttribute("posY",index+1);
+                row.cells[i+1].setAttribute("paireX", liste_pairs[index][0]);
+                row.cells[i+1].setAttribute("paireY", liste_pairs[i][0]);
+
+                row.cells[i+1].addEventListener('click', function(){
+
+                    var paire1 = this.parentNode.childNodes[0].innerHTML;
+                    paire1 = paire1.replace("\<br>", " & ");
+                    var tmp = parseInt(this.getAttribute("posX"));
+                    var paire2 = this.parentNode.parentNode.childNodes[0].childNodes[tmp].innerHTML;
+                    paire2 = paire2.replace("\<br>", " & ");
+
+                    document.getElementById("pair1").innerHTML = "\<input type=\"radio\" name=\"optradio\">"+paire1;
+                    document.getElementById("pair2").innerHTML = "\<input type=\"radio\" name=\"optradio\">"+paire2;
+
+                    sessionStorage.setItem("id",this.getAttribute("id"));
+                    sessionStorage.setItem("posX", this.getAttribute("posX"));
+                    sessionStorage.setItem("posY",this.getAttribute("posY"));
+                    sessionStorage.setItem("content", this.innerHTML);
+                    sessionStorage.setItem("class", this.className);
+
+                    var $modal = $('#myModal');
+                    $modal.modal('show');
                 }, false);
             }
         }
     }
 
-    for (i = 0; i < liste_pairs.length; i++) {
+    for (var i = 0; i < liste_pairs.length; i++) {
         add_row(i);
     }
 
     document.getElementById("register").addEventListener("click", function(){
-        var matchDB = [];
-        for (var i = 0; i < match_modif.length; i++){
-            var tmp = document.getElementById(match_modif[i]);
-            var tmp_tab = tmp.value.split("-");
-            var tmp_one = tmp_tab[0]; //Score de la premiere paire
-            var tmp_two = tmp_tab[1]; //Score de la deuxieme paire
-            var winner; //Gagnant du match
-            var loser; //Perdant du match
-            
-            if(parseInt(tmp_one) > parseInt(tmp_two)){
-				winner = tmp.getAttribute("paireX");
-				loser = tmp.getAttribute("paireY");
-			}
-			else{
-				winner = tmp.getAttribute("paireY");
-				loser = tmp.getAttribute("paireX");
-			}
-            
-            matchDB.push([tmp_one+"-"+tmp_two, winner, loser]);
-        }
         var matchJSON = JSON.stringify(matchDB);
 		$.ajax({
 			url: '',
