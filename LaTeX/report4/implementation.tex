@@ -1,6 +1,8 @@
 \section{Current implementation}
 
-Our website has three page that are accessible by everyone : \enquote{Accueil} (shows information about Le Charles de Lorraine), \enquote{Sponsors} (shows logos and video of the sponsors) and \enquote{Contact} (allows everybody to fill a form to contact the staff by mail).
+The code source of the current implementation is as always available on our GitHub repository at \url{https://github.com/fthuin/software_engineering_project} (you have to be logged in to see the content) and an online version is available on \url{asmae.herokuapp.com}. As there thousands lines of code, we will describe the main features in this section.\newline
+
+Our website has four pages that are accessible by everyone : \enquote{Accueil} (shows information about Le Charles de Lorraine), \enquote{Sponsors} (shows logos and video of the sponsors), \enquote{Résultats} (that shows results of the previous tournaments) and \enquote{Contact} (allows everybody to fill a form to contact the staff by mail).
 
 \subsection{Player part}
 
@@ -20,7 +22,14 @@ Every court owner can create a personal user account (as a player can do) and ac
 
 \subsubsection{Managing tournament}
 
-Staff members with specific permissions can see tournaments and create the \enquote{Poules}, encode results of each pair and later create the Knock-Off Tournament from the \enquote{Tournoi} page.
+Staff members with specific permissions can see tournaments and create the \enquote{Poules}, encode results of each pair and later create the Knock-Off Tournament from the \enquote{Tournoi} page. The tournament management is separated in multiple parts :
+
+\begin{enumerate}
+    \item A staff member choose a tournament and the website will gives pre-fill poules from which he can drag and drop pairs to another poule, choose a leader and a court. He can save as much as he wants partial creation (and come back later to it) and then finish the creation (after that he can't modify his choices).
+    \item A staff member can see the choices made and print the poules (to allow the players to fill their scores on a paper). He can access a page where he can encode the results.
+    \item When the results for the morning are encoded, a staff member choices which pairs can go to the knock-off tournament.
+    \item Staff members can print the tree of the knock-off tournament and fill it everytime a match is finished. When the tree is complete, the winner is known.
+\end{enumerate}
 
 \subsubsection{Managing courts}
 
