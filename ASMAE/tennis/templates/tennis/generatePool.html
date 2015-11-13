@@ -45,15 +45,16 @@
     </div>
         <ul class="list-inline text-center" style="padding-top:10px">
             <li>
-                <button class="btn btn-default center-block" type="submit" onclick="save()">Sauvegarder</button>
+                <button class="btn btn-default center-block" type="submit" onclick="save()" value="save" name="action">Sauvegarder</button>
             </li>
             <li>
-                <button class="btn btn-default center-block" data-toggle="modal" data-target="#myModal" type="button">Valider et envoyer les mails</button>
+                <button class="btn btn-default center-block" data-toggle="modal" data-target="#myModal" type="button" onclick="checkValues()">Valider et envoyer les mails</button>
             </li>
         </ul>
     <input id="assignTerrains" name="assignTerrains" value="" style="display:none;">
     <input id="assignPairPoules" name="assignPairPoules" value="" style="display:none;">
     <input id="assignLeaders" name="assignLeaders" value="" style="display:none;">
+	 <button id="saveFinite" class="btn btn-default center-block" type="submit" onclick="save()" style="display:none" value="saveFinite" name="action"></button>
     </form>
 </div>
 
@@ -68,11 +69,14 @@
           <h4 class="modal-title center">Confirmation validation</h4>
         </div>
         <div class="modal-body">
-          <p>Etes-vous sûr de valider la formations des groupes de ce tournoi et envoyer les mails aux utilisateurs concernés?</p>
+			<p id="textModalSameTerrain" >ATTENTION: Certains poules ont utilisent le même terrain!</p>
+			<p id="textModalTerrain" >Veuillez mettre un terrain pour chaques poules</p>
+			<p id="textModalLeader" >Veuillez mettre un leader pour chaques poules</p>
+          <p id="textModalConfirm">Etes-vous sûr de valider la formations des groupes de ce tournoi et envoyer les mails aux utilisateurs concernés?</p>
         
             <ul class="list-inline text-center">
                 <li>
-                    <button type="button" class="btn btn-default">oui</button>
+                    <button type="button" class="btn btn-default" id="yesModel" onclick="document.getElementById('saveFinite').click()">oui</button>
                 </li>
                 <li>
                     <button type="button" class="btn btn-default" data-dismiss="modal">non</button>
@@ -184,6 +188,50 @@ function save() {
         alert("Premier joueur " + poulesDict[''+i]['pairList'][0]['user1']);
     }*/
     // TODO : Faire les e-mails
+}
+function checkValues()
+{
+	document.getElementById("textModalSameTerrain").style.display = "none";
+	document.getElementById("textModalTerrain").style.display = "none";
+	document.getElementById("textModalLeader").style.display = "none";
+	document.getElementById("textModalConfirm").style.display = "inherit";
+	document.getElementById("yesModel").disabled = false;
+
+	 var nbr = document.getElementById("poulesNumber").value;
+    var poulesDict = {};
+	var pouleID = new Array();
+    for (var i = 0; i < nbr ; i++) {
+        var poule = {}
+        poule['leader'] = document.getElementById("Leader"+(i+1)).value;
+        poule['terrainID'] = document.getElementById("ID"+(i+1)).textContent;
+        poule['pairList'] = [];
+        poulesDict[''+i] = poule;
+		if(poule['terrainID'] == '-')
+		{
+			document.getElementById("textModalTerrain").style.display = "inherit";
+			document.getElementById("textModalConfirm").style.display = "none";
+			document.getElementById("yesModel").disabled = true;
+		}
+		else
+		{
+			for(var j=0;j<pouleID.length;j++)
+			{
+				if(pouleID[j] == poule['terrainID'])
+				{
+					document.getElementById("textModalSameTerrain").style.display = "inherit";
+				}
+			}
+
+			pouleID.push(document.getElementById("ID"+(i+1)).textContent);
+		}
+		if(poule['leader'] == "Choisir un leader" || poule['leader'] == "")
+		{
+			document.getElementById("textModalLeader").style.display = "inherit";
+			document.getElementById("textModalConfirm").style.display = "none";
+			document.getElementById("yesModel").disabled = true;
+		}
+		
+    }
 }
 </script>
 {% endblock %}

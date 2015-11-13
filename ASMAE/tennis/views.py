@@ -475,6 +475,10 @@ def generatePool(request,name):
 	allPair = Pair.objects.filter(tournoi=tournoi)
 	poules = Poule.objects.filter(tournoi=tournoi)
 	if request.method == "POST":
+		if request.POST['action'] == 'save':
+			print("ssds")
+		elif request.POST['action'] == 'saveFinite':
+			print("saveFinite")
 		terrainsList = request.POST['assignTerrains'].split('-')
 		terrainsList.pop()
 		
