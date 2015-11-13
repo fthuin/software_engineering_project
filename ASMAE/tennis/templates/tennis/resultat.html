@@ -1,0 +1,137 @@
+{% extends "tennis/base.html" %}
+
+{% block title %}Résultats{% endblock %}
+{% block nav-resultat %}class="active"{% endblock %}
+
+{% block body %}
+
+<div class="container">
+	<div class="content-box center">
+		<h2 class="center">Résultats de l'année précédente</h2>
+		<hr class="line">
+			<h3>Double Mixte :</h3>
+			<h4>PREMINIME/MINIME</h4>
+			<p>
+				<b>Gagnants</b> : Julie RYELANDT et Evrard THIJSSEN
+				<br>
+				<b>Finalistes</b> : Lou Courbiau et Alaric KALISH
+			</p>
+
+			<h4>CADET</h4>
+			<p>
+				<b>Gagnants</b> : Amandine PRIOUX et Antoine BOONE
+				<br>
+				<b>Finalistes</b> : Chloe OLESEN et Maxime de RIBAUCOURT
+			</p>
+
+			<h4>SCOLAIRE</h4>
+			<p>
+				<b>Gagnants</b> : Eleonore BOONEN et Guillaume-Constant CLAES
+				<br>
+				<b>Finalistes</b> : Maroussia Cattoir et Amaury Cattoir
+			</p>
+
+			<h4>JUNIOR</h4>
+			<p>
+				<b>Gagnants</b> : Anouchka LAURENT JOSI et Antoine de BORREKENS
+				<br>
+				<b>Finalistes</b> : Ségolène GOFFINET et Antoine REGINSTER
+			</p>
+
+			<h4>SENIOR/ELITE</h4>
+			<p>
+				<b>Gagnants</b> : Alizé REYPENS et Gregory VERHOOSEL
+				<br>
+				<b>Finalistes</b> : Sabine de VILLENFAGNE et Christophe WAUCQUEZ
+			</p>
+
+			<h3>Double Dames :</h3>
+
+			<h4>PREMINIME/MINIME</h4>
+			<p>
+				<b>Gagnants</b> : Julie RYELANDT et Lola SCHMID
+				<br>
+				<b>Finalistes</b> : Zoe VERHOOSEL et Alexia JACOB
+			</p>
+
+			<h4>CADET</h4>
+			<p>
+				<b>Gagnants</b> : Antoinette ADAM et Victorine ADAM
+				<br>
+				<b>Finalistes</b> : Agathe DE MOL et Louise-Marie DUPREZ
+			</p>
+
+			<h4>SCOLAIRE</h4>
+			<p>
+				<b>Gagnants</b> : Delphine SPRUYTTE et Ludivine D'YDEWALLE
+				<br>
+				<b>Finalistes</b> : Juliette DAVIGNON et Charlotte-Lucie DELBECQUE
+			</p>
+
+			<h4>JUNIOR</h4>
+			<p>
+				<b>Gagnants</b> : Laura DECLETY et Sophie GOFFAU
+				<br>
+				<b>Finalistes</b> : Alexia KASTEEL et Louise MONVILLE
+			</p>
+
+			<h3>Double Messieurs :</h3>
+
+			<h4>PREMINIME/MINIME</h4>
+			<p>
+				<b>Gagnants</b> : Arnaud DAVIGNON et Hidde DOMS
+				<br>
+				<b>Finalistes</b> : Alexis MENCIK et Jules RAEMDONCK
+			</p>
+
+			<h4>CADET</h4>
+			<p>
+				<b>Gagnants</b> : Quentin DAVIGNON et Alexandre VERHULST
+				<br>
+				<b>Finalistes</b> : Diego TIELENS et Alexandre de STAERCKE
+			</p>
+
+			<h4>SCOLAIRE</h4>
+			<p>
+				<b>Gagnants</b> : Charles le GRELLE et Martin van der MEERSCHEN
+				<br>
+				<b>Finalistes</b> : François DAVID et Antoine LEGRAND
+			</p>
+
+			<h4>JUNIOR</h4>
+			<p>
+				<b>Gagnants</b> : Augustin BOSSAERT DERACHE et Diego MOMMAERTS
+				<br>
+				<b>Finalistes</b> :  Felix de PATOUL et Nicolas van HAVRE
+			</p>
+
+			<h4>SENIOR/ELITE</h4>
+			<p>
+				<b>Gagnants</b> : Olivier MARTINOT et Didier PERWEZ
+				<br>
+				<b>Finalistes</b> : Philippe DE BRUYNE et Alain VERGAUWEN
+			</p>
+
+			<h3>Tournoi des familles :</h3>
+			<p>
+				<b>Gagnants</b> : Guillaume van LINT et Eric van LINT
+				<br>
+				<b>Finalistes</b> : Briac LOHEST et Emmanuel LOHEST
+			</p>
+
+			<h3>Tournoi de réconciliation :</h3>
+			<p>
+				<b>Gagnants</b> : Mahaut LOHEST et Harold van CUTSEM
+			</p>
+		</p>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block commande %}
+<script>
+	//Initialisation de la google map
+	google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+{% endblock %}

@@ -1,3 +1,9 @@
+
+
+
+
+
+
 /*
  * Fonction pour mettre des Strings en majuscules (ignorant les
  * accents)
@@ -75,10 +81,7 @@ function setUser(page){
 
 	//Ajout des users
 	for (var i = debut; i < UserList.length && i<fin; i++) {
-		var year = UserList[i][4].split('/')[2];
-		var now = new Date().getFullYear();
-		var age = now-year;
-		var p = '<a onClick="selectUser('+"'"+UserList[i][0]+"',"+"'"+UserList[i][2]+"',"+"'"+UserList[i][1]+"'"+');" href="javascript:void(0)" class="list-group-item">'+UserList[i][0]+' - '+UserList[i][3]+' '+UserList[i][1]+' '+UserList[i][2]+' - '+age+' ans</a>';
+		var p = '<a onClick="selectUser('+"'"+UserList[i][0]+"',"+"'"+UserList[i][2]+"',"+"'"+UserList[i][1]+"'"+');" href="javascript:void(0)" class="list-group-item">'+UserList[i][0]+' - '+UserList[i][3]+' '+UserList[i][1]+' '+UserList[i][2]+' - '+UserList[i][4]+' ans</a>';
 		panneau.innerHTML += p;
 	};
 
@@ -288,6 +291,15 @@ function setTournoi(TournoiList){
 	};
 }
 
+function setPlusMoins(){
+	if(document.getElementById("plusmoins").className.indexOf("chevron-up")>-1){
+		document.getElementById("plusmoins").className  = "glyphicon glyphicon-chevron-down pull-right"
+	}else{
+		document.getElementById("plusmoins").className  = "glyphicon glyphicon-chevron-up pull-right"
+	}
+	
+}
+
 
 //TERRAIN
 //Lite des terrains
@@ -386,10 +398,7 @@ function setUserStaff(page){
 
 	//Ajout des users
 	for (var i = debut; i < UserList.length && i<fin; i++) {
-		var year = UserList[i][4].split('/')[2];
-		var now = new Date().getFullYear();
-		var age = now-year;
-		var p = '<tr onclick="window.document.location='+"'utilisateurs/"+UserList[i][0]+"'"+';" class="clickable-row"><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td>'+age+' ans</td></tr>';
+		var p = '<tr onclick="window.document.location='+"'utilisateurs/"+UserList[i][0]+"'"+';" class="clickable-row"><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td>'+UserList[i][4]+' ans</td></tr>';
 		panneau.innerHTML += p;
 	};
 
@@ -854,7 +863,7 @@ function initialize() {
     position: {lat: 50.8539717, lng: 4.4002427},
     animation: google.maps.Animation.DROP,
     map: map,
-    title: 'Cogefis'
+    title: 'Asmae'
   });
  }
 //fin de la section contact

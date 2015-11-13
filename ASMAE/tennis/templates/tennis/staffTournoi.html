@@ -5,399 +5,76 @@
 
 {% block bodyStaff %}
 <!-- Gestionnaire des groupes -->
-<head>
-<style>tr td {
-  background-color: #FFFFFF;
-  text-align: center;
-}
-
-tr:hover td {
-    background-color: #cecece;
-}
-
-th {
-  padding:5px;
-  text-align: center;
-}
-
-.table {
-  float:left;
-  margin: 0 0 10px 10px;
-  width:32%;
-  <!-- display: inline-block; -->
-}   
-
-.group-box {
-  overflow:auto;
-}
-
-.form-horizontal .control-label{
-text-align:left;
-}
-</style>
-</head>
 <div class="content-box" id="gestionTournoi">
     <h2 class="center">Gestionnaire des tournois</h2>
     <hr class="line">
     
     <div class="panel panel-default center-block" style="max-width:90%;">
         <div class="panel-heading">Tournois</div>
-        <div class="list-group" id="ListTournoi"></div>
-    </div>
-    
-    {% if errorAdd %}
-    <div class="alert alert-danger">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Error!</strong> {{ errorAdd }}
-    </div>
-    {% elif successSend %}
-    <div class="alert alert-success">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <strong>Succès!</strong> {{ successSend }}
-    </div>
-    {% endif %}
-    <form name="sendTournamentDataByMail" id="sendTournamentDataByMail" role="form" method="post" action="">
-        {% csrf_token %}
-        <input type="text" class="form-control" name="id" id="sendTournamentDataByMailID" value="{{ Ex.0.id }}" style="display:none;">
-        <button class="btn-default btn center-block" name="action" value="sendTournamentDataByMail">Envoyer les informations du tournois par mail</button>
-    </form>
-</div>
-
-<div class="content-box" id="tournoiSelection">
-       <h4>Selection du tournoi</h4>
-       <hr class="line">
-       <div class="form-horizontal">
-            <div class="form-group">
-            <label for="tournoi" class="control-label col-sm-3">Tournoi:</label>
-            <div class="col-sm-3"><select class="form-control" id="tournois" name="type_tournoi"></select></div>
-            </div>
-            
-            <div class="form-group">
-            <label for="tournoi" class="control-label col-sm-3">Status du tournoi:</label>
-            <div class="col-sm-3" id="tournament-status">N/A</div>
-            </div>
-    </div>
-</div>
-
-<div class="content-box" id="gestionGroup" style="visibility:hidden">
-       <h4>Configuration des groupes</h4>
-       <hr class="line">
-       <div class="form-horizontal">
-            
-            <div class="form-group">
-            <label for="tournoi" class="control-label col-sm-3">Nombre de poule(s):</label>
-            <div class="col-sm-3"><input class="form-control" type="number" id="group_num" min="1" value="1" name="group num"></div>
-            </div>
-            
-            <div class="form-group">
-            <label for="tournoi" class="control-label col-sm-3">Nombre de paires par poule:</label>
-            <div class="col-sm-3"><input class="form-control" type="number" id="group_size" min="1" value="1" ></div>
-            </div>  
-       <br>
-       <button id="fill" style="float:right" class="btn btn-default">Générer</button>
-    </div>
-</div>
-
-<div class="content-box" id="geneGroup" style="visibility:hidden">
-    <div id="group-box">
-    <h4>Groupes du tournoi</h4>
-    <hr class="line">
-    <div class="group-box" id="liste_groupes"></div>
-    <button id="register" style="float:right" class="btn btn-default">Enregistrer les groupes</button>
-</div>
-{% endblock %}
-
-    {% block commande %}
-    <script>
-        /**********************************************************************
-         * Ensemble de variables et fonction pour le swap. Attention, les     *
-         * listeners sont mis plus bas                                        *
-         **********************************************************************/
-        var tournament;
-        var selected_item = 0;
-        
-        //Recuperation des tournois et stockage dans un tableau
-        var tournoiList = [];
-        var tournament_selection = document.getElementById("tournois");
-        var default_option = document.createElement("option");
-        default_option.text = 'Sélectionner un tournoi...';
-        default_option.selected = true;
-        default_option.disabled = true;
-        var option_id = 0;
-        tournament_selection.add(default_option);
-        {% for tournoi in allTournois %}
-            var option = document.createElement("option");
-            option.text = '{{tournoi.nom}}'
-            tournament_selection.add(option)
-            tournoiList.push(['{{ tournoi.nom }}','{{ tournoi.description }}','{{ tournoi.jour }}']);
-        {% endfor %}
-        // affiche les tournois et leur description
-        setTournoi(tournoiList);
-        tournament_selection.onchange = function() {
-            var old_selected_tournament = selected_tournament;
-            var new_selected_tournament = document.getElementById("tournois").value;
-            if (new_selected_tournament != selected_tournament) {
-                selected_tournament = new_selected_tournament;
-
-                // remove specific tournament modules
-                // TODO
-
-                // detect which modules to load
-                // TODO
-                var tournament_status = document.getElementById("tournament-status");
-                tournament_status.innerHTML = "<em> Création des poules. </em>"
-                tournament_status.style.color = "green";
-
-                // deal with modules
-                // TODO
-
-                // load data from given tournament
-                // Recuperation des paires confirmees du tournoi
-                var pairList = [];
-                {% for pair in allPairs %}
-                    {% if pair.confirm %}
-                        if('{{ pair.tournoi.nom }}' === selected_tournament) {
-                            pairList.push(['{{ pair.id }}','{{ pair.user1.participant.nom }}','{{ pair.user1.participant.prenom }}','{{ pair.user2.participant.nom }}','{{ pair.user2.participant.prenom }}']);
-                    }
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th style="text-align:center">Jour</th>
+                    <th>Descriptions</th>
+                    <th style="text-align:center">Paires</th>
+                    <th style="text-align:center">Poules</th>
+                    <th style="text-align:center">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for tournoi in allTournoi %}
+                    {% if tournoi.status.id == 2 %}
+                    <tr style="background-color:#EEEECC;" class="clickable-row" onclick="location.href='{% url "tennis.views.pouleTournoi" tournoi.nom %}';">
+                        <td style="width:18%;vertical-align: middle;">{{ tournoi.nom }}</td>
+                        <td style="text-align:center;vertical-align: middle;">{{ tournoi.jour }}</td>
+                        <td>{{ tournoi.description }}</td>
+                        <td style="text-align:center;vertical-align: middle;">{{ tournoi.np }}</td>
+                        <td style="text-align:center;vertical-align: middle;">{{ tournoi.pl }}</td>
+                        <td style="text-align:center;vertical-align: middle;">{{ tournoi.status.nom }}</td>
+                    </tr>
+                    {% elif tournoi.status.id == 1  %}
+                    <tr style="background-color:#FFFFDD;" class="clickable-row" onclick="location.href='{% url "tennis.views.generatePool" tournoi.nom %}';">
+                        <td style="width:18%;vertical-align: middle;">{{ tournoi.nom }}</td>
+                        <td style="text-align:center;vertical-align: middle;">{{ tournoi.jour }}</td>
+                        <td>{{ tournoi.description }}</td>
+                        <td style="text-align:center;vertical-align: middle;">{{ tournoi.np }}</td>
+                        <td style="text-align:center;vertical-align: middle;">{{ tournoi.pl }}</td>
+                        <td style="text-align:center;vertical-align: middle;">{{ tournoi.status }}</td>
+                    </tr>
+                    {% else %}
+                    <tr class="clickable-row" onclick="location.href='{% url "tennis.views.generatePool" tournoi.nom %}';">
+                        <td style="width:18%;vertical-align: middle;">{{ tournoi.nom }}</td>
+                        <td style="text-align:center;vertical-align: middle;">{{ tournoi.jour }}</td>
+                        <td>{{ tournoi.description }}</td>
+                        <td style="text-align:center;vertical-align: middle;">{{ tournoi.np }}</td>
+                        <td style="text-align:center;vertical-align: middle;">{{ tournoi.pl }}</td>
+                        <td style="text-align:center;vertical-align: middle;">{{ tournoi.status }}</td>
+                    </tr>
                     {% endif %}
-                {% endfor %}
-                 
-                //Recuperation des court et stockage dans un tableau
-                var courtList = [];
-                {% for court in allCourts %}
-                    courtList.push('{{ court.id }}');
-                {% endfor %}
-                tournament = new Tournament(document.getElementById("tournois").value, pairList, courtList);
 
-                // display group module
-                var gestionGroupModule = document.getElementById("gestionGroup");
-                gestionGroupModule.style.visibility = "visible";
-                adapt_tournament_groups();
-            }
-            // ignore if same tournament selected
-        };
-        var selected_tournament = document.getElementById("tournois").value;
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-        document.getElementById("group_size").onchange = function() {
-            adapt_tournament_groups();
-        }
-
-        document.getElementById("group_num").onchange = function() {
-            adapt_tournament_groups();
-        }
-
-        var adapt_tournament_groups = function() {
-            var sel_tournoi = document.getElementById("tournois").value;
-            var group_num = document.getElementById("group_num").value;
-            var group_size = document.getElementById("group_size").value;
-                 
-            if (group_num != undefined && group_size != undefined)
-                tournament.adapt_groups(group_num, group_size);
-
-            // change group layout accordingly
-            graphic_update();
-
-        };
-
-        document.getElementById("fill").addEventListener('click', function() {
-                tournament.try_naively_fill_groups();
-                tournament.try_naively_select_group_leaders();
-                graphic_update();
-        }, false);
-        
-        document.getElementById("register").addEventListener('click', function() {
-            if(tournament.uninserted_pairs.length != 0) {
-                alert("Des paires n'ont pas de groupe(s) d'attribué(s)");
-                return;
-            }
-            var list = tournament.groups;
-            var new_list = []
-            for(var i = 0; i < list.length; i++) {
-                if(list[i].pairs.length != 0) {
-                    new_list.push(list[i]);
-                }
-            }
-            tournament.groups = new_list;
-            var test = JSON.stringify(tournament);
-            $.ajax({
-                url: '',
-                data: { 'action':'enregistrer', 'groups':test},
-                type: 'get',
-                cache: false,
-                success: function (data) {
-                    window.location.reload(true);
-                }
-            });
-        }, false);
-
-        var apply_swap = function() {
-            // check si swap effectuable (par prudence)
-            if (is_good_for_swap()){
-                var liste_group = document.querySelectorAll("[selected=true]");
-                var group1 = liste_group[0];
-                var group2 = liste_group[1];
-                var group1_id = parseInt(group1.getAttribute("id_group"));
-                var group2_id = parseInt(group2.getAttribute("id_group"));
-                var group1_index = parseInt(group1.getAttribute("index_group"));
-                var group2_index = parseInt(group2.getAttribute("index_group"));
-
-                //Swap logique
-                tournament.try_swap_pairs_in_groups(group1_id, group2_id, group1_index, group2_index);
-                tournament.try_naively_select_group_leaders();
-
-                // Update graphique
-                graphic_update();
-
-                // reset swap selection
-                selected_item = 0;
-            }
-        };
-
-        var is_good_for_swap = function() {
-            if (selected_item == 2){
-                return true;
-            }
-            else if(selected_item > 2){
-                alert("trop d'élements sélectionnés pour effectuer l'échange. Veuillez réduire le nombre d'élements sélectionnés à 2");
-                return false;
-            }
-            else{
-                alert("trop peu d'élements sélectionnés pour effectuer l'échange. Veuillez augmenter le nombre d'élements sélectionnés à 2");
-                return false;
-            }
-        };
-
-        var graphic_update = function() {
-            var list = tournament.groups;
-            var container = document.getElementById("liste_groupes");
-            
-            while (container.firstChild) {
-                container.removeChild(container.firstChild);
-            }
-
-            // graphic code for groups
-            for (var index = 0; index < list.length; index++) {
-                var group_display = document.createElement("table");
-                group_display.className="table table-hover table-responsive panel panel-default";
-                var group_name = document.createElement("th");
-                group_name.colSpan = 2;
-                group_name.className="panel panel-heading";
-                group_name.innerHTML = "Groupe n° " + (index+1);
-                group_display.appendChild(group_name);
-                var numRows = group_display.rows.length;
-                // insert an entry for each group index
-                for (var j = 0; j < list[index].gsize; j++) {
-                    var pair_row = group_display.insertRow(-1); // -1 appends at the end of the table
-                    pair_row.setAttribute("id_group", index.toString());
-                    pair_row.setAttribute("index_group", j.toString());
-                    // insert pair info if there is a pair in the given index of the group
-                    // otherwise put empty entry
-                    if (j < list[index].pairs.length)
-                        pair_row.setAttribute("id_pair", list[index].pairs[j][0].toString());   
-                    else
-                        pair_row.setAttribute("id_pair", " ");
-                       
-                    pair_row.setAttribute("selected", "false");
-                    if (j < list[index].pairs.length) {
-                        pair_row.insertCell(0).innerHTML = list[index].pairs[j][0];
-                        pair_row.insertCell(1).innerHTML = 
-                            list[index].pairs[j][1] + " " + list[index].pairs[j][2] + "</br>" 
-                                + list[index].pairs[j][3] + " " + list[index].pairs[j][4];
-                    }
-                    else {
-                        pair_row.insertCell(0).innerHTML = "";
-                        pair_row.insertCell(1).innerHTML = "<br>";
-                    }
-                       
-                    pair_row.cells[0].style.width="50%";
-                    pair_row.draggable="true";
-                    pair_row.addEventListener("click", function() {
-                        if (this.getAttribute("selected") == "false"){
-                            this.setAttribute("selected", "true");
-                            this.setAttribute("oldcolor", this.getAttribute("class"));
-                            this.className ='success';
-                            selected_item++;
-                            if (selected_item == 2)
-                                apply_swap();
-                        }
-                        else {
-                            this.setAttribute('selected', "false");
-                            this.className = this.getAttribute("oldcolor");
-                            this.removeAttribute("oldcolor");
-                            selected_item--;
-                            if (selected_item == 2)
-                                apply_swap();
-                        }
-                    }, false);
-                    
-                    if(j < list[index].pairs.length && (list[index].pairs[j] == list[index].leader)) {
-                        pair_row.className="danger";
-                        numRows++;
-                    }
-                }
-                    
-                var court_row = group_display.insertRow(-1); //-1 appends at the end of the table
-                court_row.insertCell(0).innerHTML = "<b>Terrain n°</b>";
-                if (list[index].court != undefined) 
-                    court_row.insertCell(1).innerHTML = list[index].court;
-                else 
-                    court_row.insertCell(1).innerHTML = "Pas de terrain";
-                
-                container.appendChild(group_display);
-            }
-
-            // graphic code for uninserted pairs
-            var uninserted_pairs = tournament.uninserted_pairs;
-            if(uninserted_pairs.length!=0) {
-            var group_display = document.createElement("table");
-            group_display.className="table table-hover table-responsive panel panel-default";
-            var group_name = document.createElement("th");
-            group_name.colSpan = 2;
-            group_name.className="panel panel-heading";
-            group_name.innerHTML = "Groupe des paires non attribuées"; 
-            group_display.appendChild(group_name);
-            var numRows = group_display.rows.length;
-            // insert an entry for each uninserted pairs index
-            for (var j = 0; j < uninserted_pairs.length; j++) {
-                var pair_row = group_display.insertRow(-1); // -1 appends at the end of the table
-                pair_row.setAttribute("id_group", "-1");
-                pair_row.setAttribute("index_group", j.toString());
-                // insert pair info if there is a pair in the given index of the group
-                // otherwise put empty entry
-                pair_row.setAttribute("id_pair", uninserted_pairs[j][0].toString());
-                pair_row.setAttribute("selected", "false");
-                pair_row.insertCell(0).innerHTML = uninserted_pairs[j][0];
-                pair_row.insertCell(1).innerHTML = 
-                    uninserted_pairs[j][1] + " " + uninserted_pairs[j][2] + "</br>" 
-                    + uninserted_pairs[j][3] + " " + uninserted_pairs[j][4];
-                       
-                pair_row.cells[0].style.width="50%";
-                pair_row.draggable="true";
-                pair_row.addEventListener("click", function() {
-                    if (this.getAttribute("selected") == "false"){
-                        this.setAttribute("selected", "true");
-                        this.setAttribute("oldcolor", this.getAttribute("class"));
-                        this.className ='success';
-                        selected_item++;
-                        if (selected_item == 2)
-                            apply_swap();
-                    }
-                    else{
-                        this.setAttribute('selected', "false");
-                        this.className = this.getAttribute("oldcolor");
-                        this.removeAttribute("oldcolor");
-                        selected_item--;
-                        if (selected_item == 2)
-                            apply_swap();
-                    }
-                }, false);
-                numRows++;
-            }
-            }
-            container.appendChild(group_display);
-            document.getElementById("geneGroup").style.visibility = "visible";
-        };
-
-    </script>
-    {% endblock %}
+<!--
+    <div class="row">
+        {% for tournoi in allTournoi %}
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">{{ tournoi.nom }} ({{tournoi.jour}})</div>
+                <div class="panel-body">
+                    <button class="btn btn-default center-block" type="button" onClick="location.href='{% url "tennis.views.pouleTournoi" tournoi.nom %}';">Score</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+-->
 </div>
+
+{% endblock %}
+    
