@@ -426,7 +426,7 @@ def staffTournoi(request):
 def pouleTournoi(request,name):
 	def getKey(item):
 		return item[1]
-	
+
 	if request.user.is_authenticated():
 		tournoi = Tournoi.objects.get(nom=name)
 		poules = Poule.objects.filter(tournoi=tournoi)
@@ -478,7 +478,7 @@ def knockOff(request,name):
 				finaliste1.save()
 				finaliste2.finaliste = True
 				finaliste2.save()
-			
+
 
 			if tournoi.arbre is None:
 				arbre = Arbre(data = treeData,label = treeLabel)
@@ -496,12 +496,12 @@ def knockOff(request,name):
 			tournoi.save()
 			arbre.delete()
 			return redirect(reverse(staffTournoi))
-						
-		
-		
+
+
+
 
 	if request.user.is_authenticated():
-		
+
 		poules = Poule.objects.filter(tournoi=tournoi)
 		dictionnaire = dict()
 		allPaires = list()
@@ -1354,3 +1354,11 @@ def is_number(s):
 		return True
 	except ValueError:
 		return False
+
+def printScoreBoard(request, pouleId):
+	poule = Poule.objects.get(id=pouleId)
+	allPairs = poule.paires.all()
+	strPairs = list()
+	for pair in allPairs:
+		strPairs.append(u'' + pair.user1.participant.prenom + u' <b>' + pair.user1.participant.nom + u'</b><br>' + pair.user2.participant.prenom + u' <b>' + pair.user2.participant.nom + u'</b>')
+	return render(request, 'tennis/printScoreBoard.html', {'strPairs':strPairs})
