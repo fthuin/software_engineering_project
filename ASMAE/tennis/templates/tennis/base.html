@@ -73,6 +73,7 @@
               <li {% block nav-terrain %}{% endblock %}><a href="{% url "tennis.views.terrain" %}"><i class="fa fa-th-large fa-lg"></i> Terrains</a></li>
               {% endif %}
               <li {% block nav-sponsors %}{% endblock %}><a href="{% url "tennis.views.sponsors" %}"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> Sponsors</a></li>
+              <li {% block nav-resultat %}{% endblock %}><a href="{% url "tennis.views.resultat" %}"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Résultats</a></li>
               <li {% block nav-contact %}{% endblock %}><a href="{% url "tennis.views.contact" %}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Contact</a></li>
               <!-- TODO if staff only -->
               {% if perms.auth.Pair or perms.tennis.Extra or perms.auth.User or perms.tennis.Court or perms.tennis.DoubleHommes or perms.tennis.DoubleFemmes or perms.tennis.DoubleMixte or perms.tennis.TournoiDesFamilles or  perms.auth.Droit %}
