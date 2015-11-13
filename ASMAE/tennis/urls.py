@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.conf.urls import include, url, patterns
 from django.contrib import admin
 
@@ -10,7 +11,7 @@ urlpatterns = patterns('tennis.views',
 	url(r'^profil$','profil'),
 	url(r'^sponsors$','sponsors'),
 	url(r'^contact$','contact'),
-	url(r'^résultats$','resultat'),
+	url(r'^resultats$','resultat'),
 	url(r'^tournoi$','tournoi'),
 	url(r'^emailValidation/(\w+)$', 'emailValidation'),
 	url(r'^tournoi/inscriptionTournoi$','inscriptionTournoi'),
