@@ -1,0 +1,238 @@
+{% extends "tennis/staff.html" %}
+
+{% block title %}{{ tournoi.nom }}{% endblock %}
+{% block ongTournoi %}class="active"{% endblock %}
+
+{% block bodyStaff %}
+<!-- Gestionnaire des groupes -->
+<div class="content-box" id="gestionTournoi">
+    <h2 class="center">{{ tournoi.nom }}</h2>
+    <hr class="line">
+    <form class="form-horizontal" action="{% url 'tennis.views.generatePool' tournoi.nom %}" method="post">
+{% csrf_token %}
+        <div class="panel panel-default">
+            <div class="panel-heading">Configuration</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label class="control-label col-sm-10">Nombre de paires</label>
+                        <div class="col-sm-2">
+                            <p class="info">{{ allPair|length }}</p>
+                        </div>
+                        <label class="control-label col-sm-10">Nombre de terrains disponible</label>
+                        <div class="col-sm-2">
+                            <p class="info">{{ nbrTerrains }}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="control-label col-sm-8">Nombre de poules</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" style="min-width:50px;max-width:100px;" type="number" value="{{ defaultValue }}" name="poulesNumber" id="poulesNumber">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="control-label col-sm-8">Taille des poules</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" style="min-width:50px;max-width:100px;" type="number" value="6" id="poulesSize">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+
+    <div class="row" style="margin-top:20px;" id="poulesDiv">
+    </div>
+        <ul class="list-inline text-center" style="padding-top:10px">
+            <li>
+                <button class="btn btn-default center-block" type="submit" onclick="save()" value="save" name="action">Sauvegarder</button>
+            </li>
+            <li>
+                <button class="btn btn-default center-block" data-toggle="modal" data-target="#myModal" type="button" onclick="checkValues()">Valider</button>
+            </li>
+        </ul>
+    <input id="assignTerrains" name="assignTerrains" value="" style="display:none;">
+    <input id="assignPairPoules" name="assignPairPoules" value="" style="display:none;">
+    <input id="assignLeaders" name="assignLeaders" value="" style="display:none;">
+	 <button id="saveFinite" class="btn btn-default center-block" type="submit" onclick="save()" style="display:none" value="saveFinite" name="action"></button>
+    </form>
+</div>
+
+<!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title center">Confirmation validation</h4>
+        </div>
+        <div class="modal-body">
+			<p id="textModalSameTerrain" >ATTENTION: Certains poules ont utilisent le même terrain!</p>
+			<p id="textModalTerrain" >Veuillez mettre un terrain pour chaques poules</p>
+			<p id="textModalLeader" >Veuillez mettre un leader pour chaques poules</p>
+          <p id="textModalConfirm">Etes-vous sûr de valider la formations des groupes de ce tournoi ?</p>
+        
+            <ul class="list-inline text-center">
+                <li>
+                    <button type="button" class="btn btn-default" id="yesModel" onclick="document.getElementById('saveFinite').click()">oui</button>
+                </li>
+                <li>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">non</button>
+                </li>
+            </ul>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+{% endblock %}
+
+
+{% block commande %}
+{% load static from staticfiles %}
+<script src="{% static 'tennis/js/poules.js' %}" type="text/javascript"></script>
+
+<script>
+
+//Creation de la liste des paires
+var PairList = [] ;
+var TerrainList = [];
+var PairDict = {};
+{% for key, value in pairListAll.items %}
+    PairDict[{{key}}] = []
+    {% for elem in value %}
+        var nom1 = '{{ elem.user1.participant.prenom }}' +" "+'{{ elem.user1.participant.nom }}';
+        var nom2 = '{{ elem.user2.participant.prenom }}'+" "+'{{ elem.user2.participant.nom }}';
+
+        var p = {id:'{{elem.id}}', user1:nom1,user2:nom2, age1:'{{elem.user1.age}}', age2:'{{elem.user2.age}}', comment:'{{elem.commentaires}}', titre1:'{{elem.user1.participant.titre}}', titre2:'{{elem.user2.participant.titre}}'};
+        PairDict[{{key}}].push(p);
+        PairList.push(p);
+    {% endfor %}
+{% endfor %}
+
+{% for elem in listTerrains %}
+var addr = '{{elem.rue}}'+ ", "+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
+TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr})
+
+{% endfor %}
+
+var terrainSaved = []
+{% for elem in listTerrainSaved %}
+var addr = '{{elem.rue}}'+ ", "+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
+terrainSaved.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr})
+{% endfor %}
+var leaderSaved = []
+{% for elem in listLeaderSaved %}
+var fullname = '{{ elem.participant.prenom }}' + ' ' + '{{ elem.participant.nom }}'
+leaderSaved.push({fullname:fullname})
+{% endfor %}
+
+//on ajout la liste des pair dans le cache
+setPairList(PairList,TerrainList);
+setPairDict(PairDict);
+//On set les poules pour en avoir max 6 par poules
+{% if saved %}
+mySetPoules({{defaultValue}}, {{defaultSize}});
+{% else %}
+setPoules({{defaultValue}});
+{% endif %}
+//updatePanel(1);
+
+//Listener sur le nombre de pair
+$('#poulesNumber').on('input', function() { 
+    var nbr = document.getElementById("poulesNumber").value;
+    setPoules(nbr);
+});
+
+//Listener sur le size des poules
+$('#poulesSize').on('input', function() { 
+    var nbr = document.getElementById("poulesSize").value;
+    setPoules2(nbr);
+});
+
+function save() {
+    document.getElementById("assignTerrains").value = ""
+    document.getElementById("assignPairPoules").value = ""
+    document.getElementById("assignLeaders").value = ""
+    var nbr = document.getElementById("poulesNumber").value;
+    var poulesDict = {};
+    for (var i = 0; i < nbr ; i++) {
+        var poule = {}
+        poule['leader'] = document.getElementById("Leader"+(i+1)).value;
+        poule['terrainID'] = document.getElementById("ID"+(i+1)).textContent;
+        poule['pairList'] = [];
+        poulesDict[''+i] = poule;
+        // TODO : Check si le leader et le terrainID sont valides
+    }
+    for (var i = 0; i < PairList.length ; i++) {
+        // On link les paires aux ID des poules
+        var id = "" + document.getElementById(""+PairList[i].id).parentNode.parentNode.parentNode.id;
+        id = id.replace("list", "");
+        poulesDict[''+(id-1)]['pairList'].push(PairList[i]);
+    }
+    for (var i = 0; i < nbr ; i++) {
+         document.getElementById("assignTerrains").value += poulesDict[''+i]['terrainID'] + '-';
+         document.getElementById("assignPairPoules").value += '[' + i + ']-'
+         for (var j = 0 ; j < poulesDict[''+i]['pairList'].length ; j++) {
+            document.getElementById("assignPairPoules").value += poulesDict[''+i]['pairList'][j].id + '-';
+         }
+         document.getElementById("assignLeaders").value += poulesDict[''+i]['leader'] + '/';
+    }
+    /*for (var i = 0; i < nbr ; i++) {
+        alert("Poule " + i);
+        alert("Leader : " +poulesDict[''+i]['leader']);
+        alert("Terrain : " + poulesDict[''+i]['terrainID']);
+        alert("Premier joueur " + poulesDict[''+i]['pairList'][0]['user1']);
+    }*/
+    // TODO : Faire les e-mails
+}
+function checkValues()
+{
+	document.getElementById("textModalSameTerrain").style.display = "none";
+	document.getElementById("textModalTerrain").style.display = "none";
+	document.getElementById("textModalLeader").style.display = "none";
+	document.getElementById("textModalConfirm").style.display = "inherit";
+	document.getElementById("yesModel").disabled = false;
+
+	 var nbr = document.getElementById("poulesNumber").value;
+    var poulesDict = {};
+	var pouleID = new Array();
+    for (var i = 0; i < nbr ; i++) {
+        var poule = {}
+        poule['leader'] = document.getElementById("Leader"+(i+1)).value;
+        poule['terrainID'] = document.getElementById("ID"+(i+1)).textContent;
+        poule['pairList'] = [];
+        poulesDict[''+i] = poule;
+		if(poule['terrainID'] == '-')
+		{
+			document.getElementById("textModalTerrain").style.display = "inherit";
+			document.getElementById("textModalConfirm").style.display = "none";
+			document.getElementById("yesModel").disabled = true;
+		}
+		else
+		{
+			for(var j=0;j<pouleID.length;j++)
+			{
+				if(pouleID[j] == poule['terrainID'])
+				{
+					document.getElementById("textModalSameTerrain").style.display = "inherit";
+				}
+			}
+
+			pouleID.push(document.getElementById("ID"+(i+1)).textContent);
+		}
+		if(poule['leader'] == "Choisir un leader" || poule['leader'] == "")
+		{
+			document.getElementById("textModalLeader").style.display = "inherit";
+			document.getElementById("textModalConfirm").style.display = "none";
+			document.getElementById("yesModel").disabled = true;
+		}
+		
+    }
+}
+</script>
+{% endblock %}
+    

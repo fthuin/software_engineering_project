@@ -6,17 +6,19 @@
   <!-- permet de recuperer les fichiers locaux tel que css javascript images -->
     {% load static from staticfiles %}
 
-  <!-- Titre de la page courange -->  
-  <title>ASMAE &raquo; {% block title %}{% endblock %}</title>
-  <!-- Import des differents css js etc... -->  
+  <!-- Titre de la page courange -->
+  <title class="no-print">ASMAE &raquo; {% block title %}{% endblock %}</title>
+  <!-- Import des differents css js etc... -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="{% static 'tennis/css/tennis.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'tennis/css/gracket.css' %}">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <script src="{% static 'tennis/js/countdown.js' %}" type="text/javascript"></script>
+  <script type="text/javascript" src="{% static 'tennis/js/jquery.gracket.js' %}"></script>
   <!-- Google Map API-->
   <script src="https://maps.googleapis.com/maps/api/js"></script>
   <script src="{% static 'tennis/js/jquery.twbsPagination.js' %}" type="text/javascript"></script>
@@ -40,7 +42,7 @@
             <a class="navbar-brand navbar-title" href="{% url "tennis.views.home" %}">Le Charles de Lorraine</a>
 
 
-                      
+
             <!-- Boutton utilisateur avec dropdown menu -->
             <div class="username btn-group pull-right navbar-btn">
               {% if user.is_authenticated %}
@@ -56,8 +58,8 @@
                 <button type="button" onClick="location.href='{% url "tennis.views.register" %}';" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> Inscription</button>
               </div>
               {% endif %}
-              
-              
+
+
             </div>
           </div>
 
@@ -126,7 +128,7 @@
      {% endblock %}
     </div>
     <!-- Page footer cooperight link etc -->
-    <div class="footer" id="foot01"></div>
+    <div class="footer no-print" id="foot01"></div>
 
     <script src="{% static 'tennis/js/tennis.js' %}" type="text/javascript"></script>
 
@@ -138,4 +140,4 @@
 
 
 </body>
-</html
+</html>

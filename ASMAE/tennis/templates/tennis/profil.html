@@ -304,9 +304,9 @@
 						      <div class="col-sm-8">
 						      	<div class="row">
 						      		<div class="col-xs-3" style="padding-right:0">
-						      			<select class="form-control" name="jour" id="select_jour" style="padding-right:0">
+						      			<select class="form-control" name="jour" id="select_jour" style="padding-right:0" onchange="onChangeDayOfBirth()">
 											<option selected disabled>Jour</option>
-											{% for i in "12356789" %}
+											{% for i in "123456789" %}
 										    <option value="0{{ i }}">0{{ i }}</option>
 										    {% endfor %}
 										    {% for i in "0123456789" %}
@@ -320,7 +320,7 @@
 										</select>
 						      		</div>
 						      		<div class="col-xs-5">
-						      			<select class="form-control" id="select_mois" name="jour">
+						      			<select class="form-control" id="select_mois" name="mois" onchange="onChangeMonthOfBirth()">
 											<option selected disabled>Mois</option>
 											<option value="01">Janvier</option>
 										    <option value="02">Février</option>
@@ -337,7 +337,7 @@
 										</select>
 						      		</div>
 						      		<div class="col-xs-4" style="padding-left:0">
-						      			<select class="form-control" id="select_an" name="jour">
+						      			<select class="form-control" id="select_an" name="an" onchange="onChangeYearOfBirth()">
 											<option selected disabled>Année</option>
 											{% for i in yearLoop %}
 										    <option value="{{ i }}">{{ i }}</option>
@@ -469,23 +469,35 @@ setSelectedIndex(document.getElementById("select_mois"),date_mois);
 setSelectedIndex(document.getElementById("select_an"),date_an);
 
 
-	$('#select_jour').on('input', function() { 
-	var select_jour = document.getElementById("select_jour");
+function onChangeDayOfBirth() {
+    var select_jour = document.getElementById("select_jour");
     var jour = select_jour.options[select_jour.selectedIndex].value
 	date = dateNaissance.value
 	dateNaissance.value = jour+date.substring(2,date.length);
-});
-	$('#select_mois').on('input', function() { 
+}
+
+function onChangeMonthOfBirth() {
     var select_mois = document.getElementById("select_mois");
     var mois = select_mois.options[select_mois.selectedIndex].value
 	date = dateNaissance.value
 	dateNaissance.value = date.substring(0,3)+mois+date.substring(5,date.length);
-});
-	$('#select_an').on('input', function() { 
+}
+
+function onChangeYearOfBirth() {
     var select_an = document.getElementById("select_an");
     var an = select_an.options[select_an.selectedIndex].value
 	date = dateNaissance.value
 	dateNaissance.value = date.substring(0,6)+an
+}
+
+	$('#select_jour').on('input', function() { 
+	    onChangeDayOfBirth();
+});
+	$('#select_mois').on('input', function() { 
+        onChangeMonthOfBirth();
+});
+	$('#select_an').on('input', function() { 
+        onChangeYearOfBirth();
 });
 </script>
 {% endblock %}

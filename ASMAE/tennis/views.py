@@ -5,27 +5,34 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation
-from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email
+from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, TournoiStatus, PouleStatus,Arbre
+from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail
 import re, math
 import json
 import datetime
+from datetime import date
 from itertools import chain
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Permission,Group
 from django.utils.crypto import get_random_string
 from django.http import HttpResponse
-from reportlab.pdfgen import canvas
-from reportlab.lib.units import inch
-from io import BytesIO
+from tennis.pdfdocument import PDFTerrain, PDFPair
+from django.template.defaulttags import register
+
 
 
 # Create your views here.
 def home(request):
 	return render(request,'tennis/home.html',locals())
 
+def qcq(request):
+	return render(request,'tennis/404.html',locals())
+
 def sponsors(request):
 	return render(request,'tennis/sponsors.html',locals())
+
+def resultat(request):
+	return render(request,'tennis/resultat.html',locals())
 
 def contact(request):
 	return render(request,'tennis/contact.html',locals())
@@ -45,10 +52,12 @@ def inscriptionTournoi(request):
 	Tour = Tournoi.objects.all()
 	Use = User.objects.all().order_by('username')
 
+	today = date.today()
+
 	for u in Use:
-		bd = u.participant.datenaissance
-		fb = bd.strftime('%d/%m/%Y')
-		u.fb = fb
+		born = u.participant.datenaissance
+		u.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
 
 	if request.method == "POST":
 		#On recupère les donnée du formualaire
@@ -149,7 +158,7 @@ def confirmPair(request,id):
 		if request.POST['action'] == "validate":
 			remarque = request.POST['remarque']
 			extra = request.POST.getlist('extra')
-			print(extra)
+
 
 
 			pair.confirm = True
@@ -215,7 +224,7 @@ def cancelPair(request,id):
 
 		return render(request,'tennis/cancelPair.html',locals())
 	return redirect(reverse(home))
-	
+
 def viewPair(request,id):
 	pair = Pair.objects.filter(id=id)
 	if len(pair) <1:
@@ -260,26 +269,22 @@ def payPair(request,id):
 		return redirect(reverse(tournoi))
 	if request.user.is_authenticated():
 		#TODO check si il peut payer cette pair
-		Ex = Extra.objects.all()
+		allExtras = Extra.objects.all()
 		extra1 = pair.extra1.all()
 		extra2 = pair.extra2.all()
-		extraa = extra1 | extra2
-		extraa.order_by('nom')
 		totalprice = 40.00
-		extraList = list()
-		currentItem = extraa[0]
-		count = 0
-		for extra in extraa:
-			if currentItem.id == extra.id:
-				count = count+1
-			else:
-				extraList.append((currentItem.nom,currentItem.prix,count))
-				totalprice = totalprice + float((count*currentItem.prix))
-				currentItem = extra
-				count = 1
-		extraList.append((currentItem.nom,currentItem.prix,count))
-		totalprice = totalprice + float((count*currentItem.prix))
-
+		listUniqueExtra = list(set(list(extra1) + list(extra2)))
+		extraList = []
+		for extra in listUniqueExtra:
+			count = 0
+			for e1 in extra1:
+				if extra.id == e1.id:
+					count += 1
+			for e2 in extra2:
+				if extra.id == e2.id:
+					count += 1
+			extraList.append((extra.nom, extra.prix, count))
+			totalprice += float(count*extra.prix)
 
 		return render(request,'tennis/payPair.html',locals())
 	return redirect(reverse(home))
@@ -406,52 +411,307 @@ def staff(request):
 	return redirect(reverse(home))
 '''
 
+#TODO permission QUENTIN GUSBIN
 def staffTournoi(request):
-	if request.method == "POST":
-		if request.POST['action'] == "sendTournamentDataByMail":
-				send_email_start_tournament() #TODO to change and link to a tournament
-				successSend = "Les mails ont bien été envoyé"
-	if request.method == "GET":
-		if request.GET.get('action') == 'enregistrer':
-			# tous les commentaires avec ****
-			# indiquent ce qui doit y avoir
-			# apres avoir mis le nom du tournoi dans le json
-			# **** tournamentJSON = request.GET.get('tournament')
-			tournamentJSON = request.GET.get('groups')
-			tournament_dict = json.loads(tournamentJSON)
-			# **** groups_dict = tournament_dict['groups']
-			groups_dict = tournament_dict['groups']
-			for group_dict in groups_dict:
-				# creation du groupe
-				# insertion du gsize
-				group_gsize = group_dict['gsize']
-				
-				# insertion du leader
-				group_leader_dict = group_dict['leader']
-				group_leader_id = group_leader_dict[0]
-				#group_leader = Pair.objects.get(id=group_leader_id)
-				
-				# insertion du court
-				group_court_id = group_dict['court']
-				# insertion du tournoi
-				group_tournoi_nom = tournament_dict['tournoi']
-				group = Groupe(tournoi=Tournoi.objects.get(nom=group_tournoi_nom), leader=Pair.objects.get(id=group_leader_id), court=Court.objects.get(id=group_court_id), gsize=group_gsize)
-				group.save()
-				# insertion des pairs
-				# find pairs with given id
-				group_pairs_dict = group_dict['pairs']
-				for group_pair_dict in group_pairs_dict:
-					group_pair_id = group_pair_dict[0]
-					group_pair = Pair.objects.get(id=group_pair_id)
-					group_pair.group = group
-					group_pair.save()
-				
 	if request.user.is_authenticated():
-	
-		allTournois = Tournoi.objects.all()
-		allPairs = Pair.objects.all()
-		allCourts = Court.objects.all()
+		allTournoi = Tournoi.objects.all()
+		for tourn in allTournoi:
+			nbrPair = len(Pair.objects.filter(tournoi=tourn))
+			tourn.np = nbrPair
+			pouleLength = len(Poule.objects.filter(tournoi=tourn))
+			tourn.pl = pouleLength
 		return render(request,'tennis/staffTournoi.html',locals())
+	return redirect(reverse(home))
+
+def pouleTournoi(request,name):
+	def getKey(item):
+		return item[1]
+	
+	if request.user.is_authenticated():
+		tournoi = Tournoi.objects.get(nom=name)
+		poules = Poule.objects.filter(tournoi=tournoi)
+		dictionnaire = dict()
+		for poule in poules:
+			if poule.status == PouleStatus.objects.get(id=2):
+				scores = poule.score.all()
+				dico = dict()
+				for paire in poule.paires.all():
+					dico[paire.id] = 0
+				for score in scores:
+					dico[score.paire1.id] = dico[score.paire1.id]+score.point1
+					dico[score.paire2.id] = dico[score.paire2.id]+score.point2
+				liste = list()
+				for key,value in dico.items():
+					liste.append((key,value))
+				liste = sorted(liste,key=getKey,reverse=True)
+				dictionnaire[poule.id] = liste
+				poule.SortedPair = list()
+				for pairID, sc in liste:
+					pai = Pair.objects.get(id=pairID)
+					pai.score = sc
+					poule.SortedPair.append(pai)
+
+		return render(request,'tennis/pouleTournoi.html',locals())
+	return redirect(reverse(home))
+
+#TODO permissions QUENTIN GUSBIN
+def knockOff(request,name):
+	tournoi = Tournoi.objects.get(nom=name)
+	def getKey(item):
+		return item[1]
+	if request.method == "POST":
+		if request.POST['action'] == "save":
+			treeData = request.POST['treeData']
+			treeLabel = request.POST['treeLabel']
+			gagnant = request.POST['gagnant']
+			finaliste = request.POST['finaliste']
+			if(gagnant != ""):
+				pairgagnante = Pair.objects.get(id=int(gagnant))
+				pairgagnante.gagnant = True
+				pairgagnante.save()
+			if(finaliste != ""):
+				finalistes = finaliste.split("-")
+
+				finaliste1 = Pair.objects.get(id=int(finalistes[0]))
+				finaliste2 = Pair.objects.get(id=int(finalistes[1]))
+				finaliste1.finaliste = True
+				finaliste1.save()
+				finaliste2.finaliste = True
+				finaliste2.save()
+			
+
+			if tournoi.arbre is None:
+				arbre = Arbre(data = treeData,label = treeLabel)
+				arbre.save()
+				tournoi.arbre = arbre
+				tournoi.save()
+			else:
+				arbre = tournoi.arbre
+				arbre.data = treeData
+				arbre.label= treeLabel
+				arbre.save()
+		elif request.POST['action'] == "deleteTree":
+			
+			if tournoi.arbre is not None:
+				for poule in tournoi.poule_set.all():
+					for pair in poule.paires.all():
+						pair.gagnant = False
+						pair.finaliste = False
+						pair.save()
+				arbre = tournoi.arbre
+				tournoi.arbre = None
+				tournoi.save()
+				arbre.delete()
+				return redirect(reverse(staffTournoi))
+						
+		
+		
+
+	if request.user.is_authenticated():
+		
+		poules = Poule.objects.filter(tournoi=tournoi)
+		dictionnaire = dict()
+		allPaires = list()
+		for poule in poules:
+			if poule.status == PouleStatus.objects.get(id=2):
+				scores = poule.score.all()
+				dico = dict()
+				for paire in poule.paires.all():
+					dico[paire.id] = 0
+				for score in scores:
+					dico[score.paire1.id] = dico[score.paire1.id]+score.point1
+					dico[score.paire2.id] = dico[score.paire2.id]+score.point2
+				liste = list()
+				for key,value in dico.items():
+					liste.append((key,value))
+				liste = sorted(liste,key=getKey,reverse=True)
+				dictionnaire[poule.id] = liste
+				poule.SortedPair = list()
+				x = 1
+				for pairID, sc in liste:
+					pai = Pair.objects.get(id=pairID)
+					pai.score = sc
+					pai.poule = poule.id
+					pai.position = x
+					poule.SortedPair.append(pai)
+					allPaires.append(pai)
+					x = x +1
+		if tournoi.arbre is not None:
+			arbre = tournoi.arbre
+		return render(request,'tennis/knockOff.html',locals())
+	return redirect(reverse(home))
+
+#TODO permission QUENTIN GUSBIN
+def pouleScore(request,id):
+	poule = Poule.objects.get(id=id)
+	if request.method == "POST":
+		if request.POST['action'] == 'save':
+			poule.status = PouleStatus.objects.get(id=1)
+			poule.save()
+		elif request.POST['action'] == 'saveFinite':
+			poule.status = PouleStatus.objects.get(id=2)
+			poule.save()
+		poule.score.all().delete()
+		pairList = poule.paires.all()
+		dictionnaire = dict()
+		for id1 in pairList:
+			for id2 in pairList:
+				if((str(id1.id)+"-"+str(id2.id) in dictionnaire) or (str(id2.id)+"-"+str(id1.id) in dictionnaire) or (id1==id2)):
+					pass
+				else:
+					dictionnaire[str(id1.id)+"-"+str(id2.id)] = True
+					dictionnaire[str(id2.id)+"-"+str(id1.id)] = True
+
+					if (is_number(request.POST[str(id1.id)+"-"+str(id2.id)]) and is_number(request.POST[str(id2.id)+"-"+str(id1.id)])):
+						score = Score(paire1 = id1,paire2=id2,point1=int(request.POST[str(id1.id)+"-"+str(id2.id)]),point2=int(request.POST[str(id2.id)+"-"+str(id1.id)]))
+						score.save()
+						poule.score.add(score)
+		return redirect(reverse(staffTournoi))
+	if request.user.is_authenticated():
+		scoreList = poule.score.all()
+		scoreValues = ""
+		for sco in scoreList:
+			scoreValues = scoreValues + repr(sco.paire1.id)+"-"+repr(sco.paire2.id)+","+repr(sco.point1)+"."+repr(sco.paire2.id)+"-"+repr(sco.paire1.id)+","+repr(sco.point2)+"."
+		scoreValues = scoreValues[:-1]
+		return render(request,'tennis/pouleScore.html',locals())
+	return redirect(reverse(home))
+
+#TODO permission QUENTIN GUSBIN
+def generatePool(request,name):
+	terrains = Court.objects.all()
+	tournoi = Tournoi.objects.get(nom=name)
+	allPair = Pair.objects.filter(tournoi=tournoi)
+	poules = Poule.objects.filter(tournoi=tournoi)
+	if request.method == "POST":
+		if request.POST['action'] == 'save':
+			tournoi.status = TournoiStatus.objects.get(id=1)
+			tournoi.save()
+		elif request.POST['action'] == 'saveFinite':
+			tournoi.status = TournoiStatus.objects.get(id=2)
+			tournoi.save()
+		terrainsList = request.POST['assignTerrains'].split('-')
+		terrainsList.pop()
+
+		leadersList = request.POST['assignLeaders'].split('/')
+		leadersList.pop()
+
+		pairspoulesList = request.POST['assignPairPoules'].split('-')
+		pairspoulesList.pop()
+
+		i = 0
+		j = -1
+		pouleDict = {}
+		while (i < len(pairspoulesList)):
+			if pairspoulesList[i].startswith('[') and pairspoulesList[i].endswith(']'):
+				j += 1
+				pouleDict[j] = {}
+				pouleDict[j]['pairList'] = []
+				if terrainsList[j] != '':
+					pouleDict[j]['terrain'] = Court.objects.filter(id=terrainsList[j])[0]
+				pouleDict[j]['leaderName'] = leadersList[j]
+			else:
+				pair = Pair.objects.get(id=pairspoulesList[i])
+				pouleDict[j]['pairList'].append(pair)
+				user1fullname = pair.user1.participant.prenom + ' ' +pair.user1.participant.nom
+				user2fullname = pair.user2.participant.prenom + ' ' +pair.user2.participant.nom
+				if user1fullname == pouleDict[j]['leaderName']:
+					pouleDict[j]['leader'] = pair.user1
+				elif user2fullname == pouleDict[j]['leaderName']:
+					pouleDict[j]['leader'] = pair.user2
+
+			i += 1
+		i = 0
+		Poule.objects.filter(tournoi=tournoi).delete()
+		while (i <= j):
+			p = Poule(tournoi=tournoi)
+			p.status = PouleStatus.objects.get(id=0)
+			p.save()
+			if 'leader' in pouleDict[i]:
+				p.leader = pouleDict[i]['leader']
+			if 'terrain' in pouleDict[i]:
+				p.court = pouleDict[i]['terrain']
+			for pair in pouleDict[i]['pairList']:
+				p.paires.add(pair)
+			i += 1
+			p.save()
+
+		return redirect(reverse(staffTournoi))
+	if request.user.is_authenticated():
+		dictTerrains = {}
+		# TODO : Indiquer les terrains déjà utilisés le jour du tournoi
+		for terrain in terrains:
+			dictTerrains[terrain.id] = terrain
+
+		listTerrains = list(dictTerrains.values())
+		listTerrainSaved = list()
+		listLeaderSaved = list()
+		nbrTerrains = len(listTerrains)
+
+		# TODO Restaurer la sauvergarde
+		listPoules = list(poules)
+
+		if len(listPoules) == 0:
+			saved = False
+
+			defaultSize = 6.0
+			defaultValue = int(math.ceil((len(allPair)/defaultSize)))
+			poolRange = range(0,defaultValue)
+			pairListAll = dict()
+			for x in range(0,defaultValue):
+				index = int(x*defaultSize)
+				pairListAll[x+1] = (allPair[index:index+int(defaultSize)])
+				if x==defaultValue-1 :
+					v = int(defaultSize) - len(pairListAll[x+1])
+			today = date.today()
+			for elem in allPair:
+				u1 = elem.user1
+				born = u1.participant.datenaissance
+				u1.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+				u2 = elem.user2
+				born = u2.participant.datenaissance
+				u2.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+				c1 = ""
+				c2 = ""
+				if elem.comment1:
+					c1 = str(elem.comment1)
+				if elem.comment2:
+					c2 = str(elem.comment2)
+				if c1 != "" or c2 != "":
+					elem.commentaires = c1 + "<hr>" + c2
+			return render(request,'tennis/generatePool.html',locals())
+		else:
+			saved = True
+
+			defaultValue = len(listPoules)
+			defaultSize = 0
+			pairListAll = dict()
+			today = date.today()
+			i = 0
+			for poule in listPoules:
+				pairListAll[i+1] = []
+				listTerrainSaved.append(poule.court)
+				listLeaderSaved.append(poule.leader)
+				if defaultSize < len(poule.paires.all()):
+					defaultSize = len(poule.paires.all())
+				for elem in poule.paires.all():
+					u1 = elem.user1
+					born = u1.participant.datenaissance
+					u1.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+					u2 = elem.user2
+					born = u2.participant.datenaissance
+					u2.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+					c1 = ""
+					c2 = ""
+					if elem.comment1:
+						c1 = str(elem.comment1)
+					if elem.comment2:
+						c2 = str(elem.comment2)
+					if c1 != "" or c2 != "":
+						elem.commentaires = c1 + "<hr>" + c2
+					pairListAll[i+1].append(elem)
+				i += 1
+			poolRange = range(0, defaultValue)
+			return render(request,'tennis/generatePool.html',locals())
 	return redirect(reverse(home))
 
 @permission_required('tennis.Court')
@@ -545,9 +805,9 @@ def staffLog(request):
 @permission_required('tennis.Droit')
 #TODO permission droit
 def staffPerm(request):
-	
+
 	if request.method == "POST":
-		
+
 		usernamefield = request.POST['username']
 		utilisateur = User.objects.filter(username=usernamefield)[0]
 		if request.POST.__contains__("Tournoi des familles"):
@@ -614,13 +874,13 @@ def staffPerm(request):
 			utilisateur.groups.remove(group)
 
 		LogActivity(user=request.user,section="Permissions",details="Changed permission of user "+utilisateur.username).save()
-	   
-		
-		
+
+
+
 
 	Use = User.objects.all().order_by('username')
 	tournoiAll = Tournoi.objects.all()
-	
+
 	for u in Use:
 		bd = u.participant.datenaissance
 		fb = bd.strftime('%d/%m/%Y')
@@ -632,10 +892,10 @@ def staffPerm(request):
 @permission_required('tennis.User')
 def staffUser(request):
 	Use = User.objects.all().order_by('username')
+	today = date.today()
 	for u in Use:
-		bd = u.participant.datenaissance
-		fb = bd.strftime('%d/%m/%Y')
-		u.fb = fb
+		born = u.participant.datenaissance
+		u.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 	if request.user.is_authenticated():
 		return render(request,'tennis/staffUser.html',locals())
 	return redirect(reverse(home))
@@ -672,12 +932,12 @@ def validateTerrain(request, id):
 		else:
 			valide = False
 			LogActivity(user=request.user,section="Terrain",details="Terrain "+id+ " non valide").save()
-	
+
 		court.commentaireStaff = message
 		court.valide = valide
 		court.save()
 		successEdit = "Terrain bien édité!"
-		
+
 
 	if request.user.is_authenticated():
 		return render(request,'tennis/validateTerrain.html',locals())
@@ -685,58 +945,25 @@ def validateTerrain(request, id):
 
 @permission_required('tennis.Court')
 def terrainPDF(request, id):
-    court = Court.objects.filter(id=id)[0]
+    court = Court.objects.get(id=id)
     proprietaire = Participant.objects.filter(user=court.user)[0]
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment;filename="terrain'+id+'.pdf"'
-    
-    buffer = BytesIO()
-    
-    p = canvas.Canvas(buffer)
-    #p.translate(inch, inch)
-    p.setLineWidth(.3)
-    p.setFont('Helvetica', 20)
-    p.drawString(50, 750, "Terrain " + repr(court.id))
-    
-    # Informations à propos du propriétaire
-    p.setFont('Helvetica', 18)
-    p.drawString(50, 700, "Propriétaire")
-    p.setFont('Helvetica', 12)
-    p.drawString(50, 680, ""+ proprietaire.titre + " " + proprietaire.prenom + " " + proprietaire.nom)
-    p.drawString(50, 660, ""+ proprietaire.rue + ", " + proprietaire.numero + " boite " + proprietaire.boite)
-    p.drawString(50, 640, ""+ proprietaire.codepostal + " " + proprietaire.localite)
-    p.drawString(50, 620, u"Téléphone : "+ proprietaire.telephone)
-    p.drawString(50, 600, "GSM : " + proprietaire.gsm)
-    p.drawString(50, 580, "Fax : " + proprietaire.fax)
-    
-    # Informations permanentes à propos du terrain
-    p.setFont('Helvetica', 18)
-    p.drawString(50, 540, "Terrain")
-    p.setFont('Helvetica', 12)
-    p.drawString(50, 520, court.rue + ", " + court.numero +" boite " + court.boite)
-    
-    p.drawString(50, 480, u"Informations d'accès : " + court.acces)
-    
-    if (court.dispoSamedi and court.dispoDimanche):
-        p.drawString(50, 440, u"Disponibilité : Samedi et dimanche")
-    elif (court.dispoSamedi):
-        p.drawString(50, 440, u"Disponibilité : Samedi")
-    elif (court.dispoDimanche):
-        p.drawString(50, 440, u"Disponibilité : Dimanche")
-    
-    p.drawString(50, 400, "Etat du terrain : " + court.etat.nom)
-    p.drawString(50, 380, "Type de surface : " + court.matiere.nom)
-    p.drawString(50, 360, "Type d'infrastructure : " + court.type.nom)
-    
-    p.showPage()
-    p.save()
-    
-    pdf = buffer.getvalue()
-    buffer.close()
-    response.write(pdf)
-    
+
+    PDFTerrain(response, court, proprietaire, request.user.participant)
+
     return response
-    
+
+def pairPDF(request, id):
+	pair = Pair.objects.get(id=id)
+	response = HttpResponse(content_type='application/pdf')
+	response['Content-Disposition'] = 'attachment;filename="paire'+id+'"'
+
+	PDFPair(response, pair, request.user.participant)
+
+	return response
+
+
 @permission_required('tennis.Court')
 def editTerrainStaff(request, id):
 	allCourtSurface = CourtSurface.objects.all()
@@ -930,7 +1157,7 @@ def profil(request):
 			birthdate2 = birthdate.split("/")
 			datenaissance = datetime.datetime(int(birthdate2[2]),int(birthdate2[1]),int(birthdate2[0]))
 
-			formatedBirthdate = birthdate 
+			formatedBirthdate = birthdate
 			participant = request.user.participant
 			participant.titre = title
 			participant.nom = lastname
@@ -1029,7 +1256,7 @@ def emailValidation(request, key):
 		#Print succes
 		successValidate = "Votre adresse mail est désormais validée, merci de votre coopération."
 	return render(request,'tennis/emailValidation.html',locals())
-	
+
 def register(request):
 	yearLoop = range(1900,2015)
 	if request.method == "POST":
@@ -1108,10 +1335,10 @@ def register(request):
 		activationObject = UserInWaitOfActivation(participant = participant, dayOfRegistration = today, confirmation_key= key)
 		activationObject.save()
 		link = "http://" + request.get_host() + "/tennis/emailValidation/"
-		
+
 		# Send email with code to finish registration and validate account
 		send_register_confirmation_email(activationObject, participant, link)
-		
+
 		#On connecte l'utilisateur
 		user2 = authenticate(username=username, password=password)
 		login(request, user2)
@@ -1134,5 +1361,3 @@ def is_number(s):
 		return True
 	except ValueError:
 		return False
-
-

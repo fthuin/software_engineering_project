@@ -17,7 +17,7 @@
 				<p class="info">{{ pair.tournoi.description }}</p>
 			</div>
 		</div>
-	
+
 		<div class="row">
 
 			<div class="col-lg-6">
@@ -25,28 +25,6 @@
 					<div class="panel-heading">Joueur 1</div>
 					<div class="panel-body">
 						<a class="UserLink" style="text-align:center" href="{% url "tennis.views.viewUser" pair.user1.username %}">{{ pair.user1.participant.titre }} {{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} ({{ pair.user1.username }})</a>
-						<!--
-						<div class="row">
-							<div class="col-sm-6">
-								<address>
-									
-									{{ pair.user1.participant.rue }}, {{ pair.user1.participant.numero }} {% if pair.user1.participant.boite %}
-									bte {{ pair.user1.participant.boite }} {% endif %}<br>
-									{{ pair.user1.participant.codepostal }} {{ pair.user1.participant.localite }}<br>
-									{{ formatedBirthdate1 }} <br>
-							
-							
-         				 </address>
-							</div>
-							<div class="col-sm-6">
-								<address>
-									Tél : {% if pair.user1.participant.telephone %}{{ pair.user1.participant.telephone }}{% else %} - {% endif %}<br> 
-									GSM : {% if pair.user1.participant.gsm %}{{ pair.user1.participant.gsm }}{% else %} - {% endif %} <br>
-									Fax : {% if pair.user1.participant.fax %}{{ pair.user1.participant.fax }}{% else %} - {% endif %}<br>
-								</address>
-							</div>
-						</div>
-					-->
 					    <!-- Extra -->
 						<div class="form-group">
 					      <label class="info control-label col-sm-4" for="username">Extras : </label>
@@ -79,25 +57,6 @@
 					<div class="panel-heading">Joueur 2</div>
 					<div class="panel-body">
 						<a class="UserLink" style="text-align:center" href="{% url "tennis.views.viewUser" pair.user2.username %}">{{ pair.user2.participant.titre }} {{ pair.user2.participant.prenom }} {{ pair.user2.participant.nom }} ({{ pair.user2.username }})</a>
-						<!--
-						<div class="row">
-							<div class="col-sm-6">
-								<address>		
-									{{ pair.user2.participant.rue }}, {{ pair.user2.participant.numero }} {% if pair.user2.participant.boite %}
-									bte {{ pair.user2.participant.boite }} {% endif %}<br>
-									{{ pair.user2.participant.codepostal }} {{ pair.user2.participant.localite }}<br>
-									{{ formatedBirthdate2 }} <br>
-         				 </address>
-							</div>
-							<div class="col-sm-6">
-								<address>
-									Tél : {% if pair.user2.participant.telephone %}{{ pair.user2.participant.telephone }}{% else %} - {% endif %}<br> 
-									GSM : {% if pair.user2.participant.gsm %}{{ pair.user2.participant.gsm }}{% else %} - {% endif %} <br>
-									Fax : {% if pair.user2.participant.fax %}{{ pair.user2.participant.fax }}{% else %} - {% endif %}<br>
-								</address>
-							</div>
-						</div>
-					-->
 					    <!-- Extra -->
 						<div class="form-group">
 					      <label class="info control-label col-sm-4" for="username">Extras : </label>
@@ -166,6 +125,9 @@
 
 		    <ul class="list-inline text-center" style="margin-top:20px;">
 				<li>
+					<button onclick="location.href='{% url "tennis.views.pairPDF" pair.id %}';" type="button" class="btn btn-default no-print">Version PDF</button>
+				</li>
+				<li>
 					<button class="btn-default btn" name="action" value="editPair">Editer</button>
 				</li>
 				<li>
@@ -175,8 +137,8 @@
 			</ul>
 			</form>
 		</div>
-		
-			
+
+
 
 	</div>
 </div>
@@ -185,7 +147,7 @@
 <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-    
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -194,7 +156,7 @@
         </div>
         <div class="modal-body">
           <p>Etes-vous sûr de vouloir supprimer cette paire?</p>
-        
+
 	    	<ul class="list-inline text-center">
 				<li>
 					<button type="button" class="btn btn-default" onclick="document.getElementById('deletePair').click();">oui</button>
@@ -205,7 +167,7 @@
 			</ul>
 		</div>
       </div>
-      
+
     </div>
   </div>
 
