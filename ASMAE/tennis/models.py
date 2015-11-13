@@ -172,7 +172,7 @@ class Tournoi(models.Model):
 	description = models.TextField(null=True)
 	jour = models.CharField(max_length=50)
 	status = models.ForeignKey(TournoiStatus,null=True,blank=True)
-	arbre = models.OneToOneField(Arbre, null=True, blank=True)
+	arbre = models.ForeignKey(Arbre, null=True, blank=True)
 	def __str__(self):
 		return self.nom
 

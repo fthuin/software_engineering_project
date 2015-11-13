@@ -59,15 +59,20 @@
       <div class="table-responsive">
         <div class="center-block" id="my_gracket"></div>
       </div>
-
+		<form action="{% url "tennis.views.knockOff" tournoi.nom %}" method="post">
+		{% csrf_token %}
       <ul class="list-inline text-center">
         <li>
-          <button class="btn btn-default">Enregistrer</button>
+          <button class="btn btn-default" onclick="sendTree()" value="save" name="action">Enregistrer</button>
         </li>
         <li>
           <button class="btn btn-default" data-toggle="modal" data-target="#deleteArbre" type="button">Supprimer</button>
         </li>
+		 <input id="treeData" name="treeData" value="" style="display:none;">
+		<input id="treeLabel" name="treeLabel" value="" style="display:none;">
+		<button id="deleteTree" class="btn btn-default center-block" type="submit" style="display:none" value="deleteTree" name="action"></button>
       </ul>
+		</form>
       
     </div>
 
@@ -163,7 +168,7 @@
         
         <ul class="list-inline text-center">
         <li>
-          <button type="button" class="btn btn-default">Confirmer</button>
+          <button type="button" class="btn btn-default" onclick="document.getElementById('deleteTree').click()">Confirmer</button>
         </li>
         <li>
           <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>

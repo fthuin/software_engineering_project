@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, TournoiStatus, PouleStatus
+from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, TournoiStatus, PouleStatus,Arbre
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail
 import re, math
 import json
@@ -423,6 +423,7 @@ def staffTournoi(request):
 def pouleTournoi(request,name):
 	def getKey(item):
 		return item[1]
+	
 	if request.user.is_authenticated():
 		tournoi = Tournoi.objects.get(nom=name)
 		poules = Poule.objects.filter(tournoi=tournoi)
@@ -452,10 +453,34 @@ def pouleTournoi(request,name):
 
 #TODO permissions QUENTIN GUSBIN
 def knockOff(request,name):
+	tournoi = Tournoi.objects.get(nom=name)
 	def getKey(item):
 		return item[1]
+	if request.method == "POST":
+		if request.POST['action'] == "save":
+			treeData = request.POST['treeData']
+			treeLabel = request.POST['treeLabel']
+			if tournoi.arbre is None:
+				arbre = Arbre(data = treeData,label = treeLabel)
+				arbre.save()
+				tournoi.arbre = arbre
+				tournoi.save()
+			else:
+				arbre = tournoi.arbre
+				arbre.data = treeData
+				arbre.label= treeLabel
+				arbre.save()
+		elif request.POST['action'] == "deleteTree":
+			arbre = tournoi.arbre
+			tournoi.arbre = None
+			tournoi.save()
+			arbre.delete()
+						
+		
+		
+
 	if request.user.is_authenticated():
-		tournoi = Tournoi.objects.filter(nom=name)[0]
+		
 		poules = Poule.objects.filter(tournoi=tournoi)
 		dictionnaire = dict()
 		allPaires = list()

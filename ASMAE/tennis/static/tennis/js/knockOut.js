@@ -1,4 +1,10 @@
 //utilisé pour le drag and drop
+function sendTree()
+{
+document.getElementById("treeData").value = JSON.stringify(TreeData);
+document.getElementById("treeLabel").value = JSON.stringify(TreeLabel);
+
+}
 function drag (ev) {
   ev.dataTransfer.setData("src", ev.target.id);
 }
