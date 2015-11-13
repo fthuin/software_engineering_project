@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score
+from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, TournoiStatus
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail
 import re, math
 import json
@@ -473,14 +473,16 @@ def pouleScore(request,id):
 #TODO permission QUENTIN GUSBIN
 def generatePool(request,name):
 	terrains = Court.objects.all()
-	tournoi = Tournoi.objects.filter(nom=name)[0]
+	tournoi = Tournoi.objects.get(nom=name)
 	allPair = Pair.objects.filter(tournoi=tournoi)
 	poules = Poule.objects.filter(tournoi=tournoi)
 	if request.method == "POST":
 		if request.POST['action'] == 'save':
-			print("ssds")
+			tournoi.status = TournoiStatus.objects.get(id=1)
+			tournoi.save()
 		elif request.POST['action'] == 'saveFinite':
-			print("saveFinite")
+			tournoi.status = TournoiStatus.objects.get(id=2)
+			tournoi.save()
 		terrainsList = request.POST['assignTerrains'].split('-')
 		terrainsList.pop()
 		
