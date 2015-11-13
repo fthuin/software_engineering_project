@@ -452,9 +452,38 @@ def pouleTournoi(request,name):
 
 #TODO permissions QUENTIN GUSBIN
 def knockOff(request,name):
+	def getKey(item):
+		return item[1]
 	if request.user.is_authenticated():
 		tournoi = Tournoi.objects.filter(nom=name)[0]
 		poules = Poule.objects.filter(tournoi=tournoi)
+		dictionnaire = dict()
+		for poule in poules:
+			if poule.status == PouleStatus.objects.get(id=2):
+				scores = poule.score.all()
+				dico = dict()
+				for paire in poule.paires.all():
+					dico[paire.id] = 0
+				for score in scores:
+					dico[score.paire1.id] = dico[score.paire1.id]+score.point1
+					dico[score.paire2.id] = dico[score.paire2.id]+score.point2
+				liste = list()
+				for key,value in dico.items():
+					liste.append((key,value))
+				liste = sorted(liste,key=getKey,reverse=True)
+				dictionnaire[poule.id] = liste
+				poule.SortedPair = list()
+				x = 1
+				for pairID, sc in liste:
+					pai = Pair.objects.get(id=pairID)
+					pai.score = sc
+					pai.poule = poule.id
+					pai.position = x
+					poule.SortedPair.append(pai)
+					x = x +1
+				print(poule.SortedPair[2].position)
+		
+		
 		allPaires = list()
 		for p in poules:
 			for paire in p.paires.all():
