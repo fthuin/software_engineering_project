@@ -487,6 +487,7 @@ function getSingle(name,ID){
 
 function startTree(){
   document.getElementById("secondStep").style.display = "none";
+  document.getElementById("TableArbre").style.display = "inherit";
   document.getElementById("pageTitle").innerHTML = "Arbre du tournoi";
   setTree(leftList,righList);
 }
