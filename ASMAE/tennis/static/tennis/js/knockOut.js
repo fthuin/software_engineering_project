@@ -491,3 +491,23 @@ function startTree(){
   document.getElementById("pageTitle").innerHTML = "Arbre du tournoi";
   setTree(leftList,righList);
 }
+
+//Return l'id de la pair Gagnante si il y en a une
+function getGagnant(){
+  var length = TreeData.length
+  var Gagnant = "";
+  if(TreeData[length-1][0][0].id.indexOf("pair")>-1){
+    Gagnant = TreeData[length-1][0][0].id.split("pair")[1]
+  }
+  return Gagnant;
+}
+
+//Return l'id des finaliste de facon ID1-ID2
+function getFinaliste(){
+  var length = TreeData.length
+  var Finaliste = "";
+  if(TreeData[length-2][0][0].id.indexOf("pair")>-1 && TreeData[length-2][0][1].id.indexOf("pair")>-1){
+    Finaliste = TreeData[length-2][0][0].id.split("pair")[1]+"-"+TreeData[length-2][0][1].id.split("pair")[1];
+  }
+  return Finaliste;
+}
