@@ -15,9 +15,23 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Poule {{p.id}}</div>
                 <div class="panel-body">
+                    {% if p.status.id == 2 %}
+
                     <b>Leader : </b>{{p.leader.participant.prenom}} {{p.leader.participant.nom}}
                     <br>
-                    <b>Participant : </b> (TODO afficher les scores ? )<br>
+                    <b>Status : </b> {{p.status.nom}}<br>
+                    {% for pair in p.paires.all %}
+                    <b>{{ pair.id }}</b> - 
+                    {{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} &#38; 
+                    {{ pair.user2.participant.prenom }} {{ pair.user2.participant.nom }}
+                    <br>
+                    {% endfor %}
+
+                    {% else %}
+
+                    <b>Leader : </b>{{p.leader.participant.prenom}} {{p.leader.participant.nom}}
+                    <br>
+                    <b>Status : </b> {{p.status.nom}}<br>
                     {% for pair in p.paires.all %}
                     <b>{{ pair.id }}</b> - 
                     {{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} &#38; 
@@ -25,6 +39,8 @@
                     <br>
                     {% endfor %}
                     <button onClick="location.href='{% url "tennis.views.pouleScore" p.id %}';" class="btn btn-default center-block" style="margin-top:20px;">Entrer les scores</button>
+
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -32,6 +48,8 @@
         <p class="info center">Il n'y a pas encore de poules enregistrées pour ce tournoi</p>
         {% endfor %}
     </div>
+
+    <button id="treeButton" class="btn btn-default center-block" onClick="location.href='{% url "tennis.views.knockOff" tournoi.nom %}';" disabled>Arbre de Tournoi</button>
 </div>
 
 {% endblock %}
@@ -39,18 +57,32 @@
 
 {% block commande %}
 
+
 <script>
-    var mesPanel = document.getElementsByClassName("resizePanel");
-    var size = 0;
-    for (var i = 0; i < mesPanel.length; i++) {
-        var s = mesPanel[i].offsetHeight;
-        if(size < s){
-            size = s;
-        }
-    };
-    for (var i = 1; i < mesPanel.length; i++) {
-        mesPanel[i].style.height = size + "px";
-    };
+//Resize des panels
+var mesPanel = document.getElementsByClassName("resizePanel");
+var size = 0;
+for (var i = 0; i < mesPanel.length; i++) {
+    var s = mesPanel[i].offsetHeight;
+    if(size < s){
+        size = s;
+    }
+};
+for (var i = 1; i < mesPanel.length; i++) {
+    mesPanel[i].style.height = size + "px";
+};
+
+//Enable tree button if all status are ok
+var valid = true;
+{% for p in poules %}
+if('{{p.status.id}}' != 2){
+    valid = false;
+}
+{% endfor %}
+
+if(valid){
+    document.getElementById("treeButton").disabled = false;
+}
 </script>
 
 {% endblock %}

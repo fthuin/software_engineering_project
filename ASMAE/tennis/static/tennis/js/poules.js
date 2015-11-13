@@ -265,8 +265,7 @@ function getOption(name){
 function getSpaceOption() {
 	var o = document.createElement("option");
 	o.disabled = true;
-	o.value = "";
-	o.innerHTML = '';
+	o.innerHTML = '-';
 
 	return o;
 }
