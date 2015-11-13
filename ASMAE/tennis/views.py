@@ -528,6 +528,7 @@ def generatePool(request,name):
 			i += 1
 			p.save()
 		print(repr(i) + ' poules saved')
+		return redirect(reverse(staffTournoi))
 	if request.user.is_authenticated():
 		dictTerrains = {}
 		# TODO : Indiquer les terrains déjà utilisés le jour du tournoi
