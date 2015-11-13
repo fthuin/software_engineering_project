@@ -13,7 +13,15 @@
         {% for p in poules %}
         <div class="col-sm-6 resizePanel">
             <div class="panel panel-default">
-                <div class="panel-heading">Poule {{p.id}}</div>
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-10">Poule {{p.id}}</div>
+                        <div class="col-xs-2">
+                            <a href="javascript:void(0)" onclick="TODOFLORIAN" class="pull-right" style="cursor:pointer;color:white;padding:0;margin:0;"><span class="glyphicon glyphicon-print"></span></a>
+                        </div>
+                    </div>
+                    
+                </div>
                 <div class="panel-body">
                     {% if p.status.id == 2 %}
 
