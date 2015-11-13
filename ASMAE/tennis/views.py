@@ -31,6 +31,9 @@ def qcq(request):
 def sponsors(request):
 	return render(request,'tennis/sponsors.html',locals())
 
+def resultat(request):
+	return render(request,'tennis/resultat.html',locals())
+
 def contact(request):
 	return render(request,'tennis/contact.html',locals())
 
