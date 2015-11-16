@@ -496,6 +496,8 @@ def knockOff(request,name):
 				arbre.data = treeData
 				arbre.label= treeLabel
 				arbre.save()
+				LogActivity(user=request.user,section="Tournoi",details="Mise a jour de l'abre du tournoi : "+tournoi.nom).save()
+
 		elif request.POST['action'] == "deleteTree":
 			if tournoi.arbre is not None:
 				for poule in tournoi.poule_set.all():
@@ -545,6 +547,12 @@ def knockOff(request,name):
 
 #TODO permission QUENTIN GUSBIN
 def pouleScore(request,id):
+	def is_number(s):
+		try:
+			float(s)
+			return True
+		except ValueError:
+			return False
 	poule = Poule.objects.get(id=id)
 	if request.method == "POST":
 		if request.POST['action'] == 'save':
@@ -553,6 +561,7 @@ def pouleScore(request,id):
 		elif request.POST['action'] == 'saveFinite':
 			poule.status = PouleStatus.objects.get(id=2)
 			poule.save()
+			LogActivity(user=request.user,section="Tournoi",details="Mise a jour des point de la poule "+id+" dans le tournoi ").save()
 		poule.score.all().delete()
 		pairList = poule.paires.all()
 		dictionnaire = dict()
@@ -591,6 +600,7 @@ def generatePool(request,name):
 		elif request.POST['action'] == 'saveFinite':
 			tournoi.status = TournoiStatus.objects.get(id=2)
 			tournoi.save()
+			LogActivity(user=request.user,section="Tournoi",details="Generation des poules du tournoi : "+tournoi.nom).save()
 		terrainsList = request.POST['assignTerrains'].split('-')
 		terrainsList.pop()
 
@@ -636,6 +646,7 @@ def generatePool(request,name):
 				p.paires.add(pair)
 			i += 1
 			p.save()
+		
 
 		return redirect(reverse(staffTournoi))
 	if request.user.is_authenticated():
@@ -738,6 +749,12 @@ def staffPaire(request):
 
 @permission_required('tennis.Extra')
 def staffExtra(request):
+	def is_number(s):
+		try:
+			float(s)
+			return True
+		except ValueError:
+			return False
 
 	Ex = Extra.objects.all()
 	if request.method == "POST":
@@ -1357,12 +1374,7 @@ def group(request):
 def recover(request):
 	return render(request,'tennis/recover.html',locals())
 
-def is_number(s):
-	try:
-		float(s)
-		return True
-	except ValueError:
-		return False
+
 
 def printScoreBoard(request, pouleId):
 	poule = Poule.objects.get(id=pouleId)
