@@ -133,6 +133,9 @@ class Court(models.Model):
 		
 	def __unicode__(self):
 		return u'' + repr(self.id) + ' '+ self.rue
+		
+	def getAdresse(self):
+		return u"" + numero + " " + rue + ", " + codepostal + " " + localite
 
 	class Meta:
 		verbose_name = "Terrain"
