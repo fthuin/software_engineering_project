@@ -289,9 +289,12 @@ function resolveSingle(jsonArbre){
 }
 
 function checkBox(id){
+  var input = "ID"+id;
+  var check = "check"+id;
   //pour decheck => c'est bon
-  if(document.getElementById(id).checked){
-    document.getElementById(id).checked = !document.getElementById(id).checked;
+  if(document.getElementById(input).checked){
+    document.getElementById(input).checked = !document.getElementById(input).checked;
+    document.getElementById(check).className = "glyphicon glyphicon-unchecked";
   }else{
     //Check if we don't exceed 16
     var allBoxes = document.getElementsByClassName("allBox");
@@ -306,7 +309,8 @@ function checkBox(id){
       //TODO afficher qu'on ne peut avoir que maximum 16 paires selectionner sur autre chose que alert
       alert("Vous ne pouvez selectionner que 16 paires maximum.")
     }else{
-      document.getElementById(id).checked = !document.getElementById(id).checked;
+      document.getElementById(input).checked = !document.getElementById(input).checked;
+      document.getElementById(check).className = "glyphicon glyphicon-check";
     }
   }
 }

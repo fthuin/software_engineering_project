@@ -20,7 +20,7 @@
           </div>
           <div class="list-group" id="{{p.id}}">
             {% for paire in p.SortedPair %}
-            <a href="javascript:void(0)" onclick="checkBox('ID{{paire.id}}')" class="list-group-item">
+            <a href="javascript:void(0)" onclick="checkBox('{{paire.id}}')" class="list-group-item">
               <div class="row">
                 <div class="col-xs-10">
                   {{paire.user1.participant.smallName}}
@@ -28,7 +28,8 @@
                   {{paire.user2.participant.smallName}} ({{paire.score}})
                 </div>
                 <div class="col-xs-2">
-                  <input class="pull-right allBox {{p.id}}Box" type="checkbox" name="{{paire.id}}" id="ID{{paire.id}}">
+                  <input class="pull-right allBox {{p.id}}Box" type="checkbox" name="{{paire.id}}" id="ID{{paire.id}}" style="display:none">
+                  <span class="{{p.id}}Check glyphicon glyphicon-unchecked" id="check{{paire.id}}" style="color:black"></span>
                 </div>
               </div>
             </a>
@@ -230,11 +231,15 @@ var nombrePanel = mesPanel.length;
 if(nombrePanel<17){
   {% for p in poules %}
   var pouleBoxes = document.getElementsByClassName({{p.id}}+"Box");
+  var pouleCheck = document.getElementsByClassName({{p.id}}+"Check");
   if(nombrePanel>8 || pouleBoxes.length<2){
     pouleBoxes[0].checked = true;
+    pouleCheck[0].className = "glyphicon glyphicon-check"
   }else{
     pouleBoxes[0].checked = true;
     pouleBoxes[1].checked = true;
+    pouleCheck[0].className = "glyphicon glyphicon-check"
+    pouleCheck[1].className = "glyphicon glyphicon-check"
   }
   {% endfor %}
 }
