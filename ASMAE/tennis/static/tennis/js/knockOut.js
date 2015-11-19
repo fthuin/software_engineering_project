@@ -466,7 +466,7 @@ function secondStep(){
 //Return an html composant used in the first round panel
 function getVersus(name1,name2,ID1,ID2){
   var versus = '<div class="row">'+
-                  '<div class="col-sm-6">'+
+                  '<div class="col-xs-6">'+
                     '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">'+
                       '<div id="'+ID1+'" draggable="true" ondragstart="drag(event)">'+
                         '<div class="zone">'+
@@ -475,7 +475,7 @@ function getVersus(name1,name2,ID1,ID2){
                       '</div>'+
                     '</div>'+
                   '</div>'+
-                  '<div class="col-sm-6">'+
+                  '<div class="col-xs-6">'+
                     '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">'+
                       '<div id="'+ID2+'" draggable="true" ondragstart="drag(event)">'+
                         '<div class="zone">'+
@@ -490,8 +490,8 @@ function getVersus(name1,name2,ID1,ID2){
 
 function getSingle(name,ID){
   var single = '<div class="row">'+
-                  '<div class="col-sm-3"></div>'+
-                  '<div class="col-sm-6">'+
+                  '<div class="col-xs-3"></div>'+
+                  '<div class="col-xs-6">'+
                     '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">'+
                       '<div id="'+ID+'" draggable="true" ondragstart="drag(event)">'+
                         '<div class="zone">'+
@@ -500,7 +500,7 @@ function getSingle(name,ID){
                       '</div>'+
                     '</div>'+
                   '</div>'+
-                  '<div class="col-sm-3"></div>'+
+                  '<div class="col-xs-3"></div>'+
                 '</div>';
   return single;
 }
