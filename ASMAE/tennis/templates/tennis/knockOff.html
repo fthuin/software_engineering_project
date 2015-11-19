@@ -6,7 +6,7 @@
 {% block bodyStaff %}
 <!-- Gestionnaire des groupes -->
 <div class="content-box" id="gestionTournoi">
-    <h2 class="center" id="pageTitle">Choix des paires : {{tournoi.nom}}</h2>
+    <h2 class="center" id="pageTitle">Choix des paires</h2>
     <hr class="line">
 
     <!-- Première étape selection des paires -->
@@ -94,11 +94,11 @@
           <h4 class="modal-title center">Etape 1</h4>
         </div>
         <div class="modal-body">
-          <p>Continuer avec ces <number id="nombrePaire"></number> paires selectionnées?</p>
+          <p id="msgFirstModal"></p>
         
         <ul class="list-inline text-center">
         <li>
-          <button type="button" class="btn btn-default" onclick="secondStep()">Confirmer</button>
+          <button type="button" class="btn btn-default" id="buttonFirstModal" onclick="secondStep()">Confirmer</button>
         </li>
         <li>
           <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>

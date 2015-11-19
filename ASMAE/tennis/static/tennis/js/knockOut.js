@@ -318,15 +318,24 @@ function checkBox(id){
 function firstModal(){
   //On compte le nombre de paires selectionnées
   var allBoxes = document.getElementsByClassName("allBox");
-    var count = 0;
+    var count = 0;""
     for (var i = 0; i < allBoxes.length; i++) {
       if(allBoxes[i].checked){
         count += 1;
       }
     };
 
-  //On affiche le nombre de paires selectionnées
-  document.getElementById("nombrePaire").innerHTML = count;
+  //Si il y a moins que deux paires on affiche
+  if(count < 2){
+    document.getElementById("msgFirstModal").innerHTML = "Veuillez selectionner au moins 2 paires."
+    document.getElementById("buttonFirstModal").disabled = true;
+  }else{
+    //On affiche le nombre de paires selectionnées
+    document.getElementById("msgFirstModal").innerHTML = "Continuer avec ces "+count+" paires selectionnées?"
+    document.getElementById("buttonFirstModal").disabled = false;
+  }
+
+  
 
   //On montre le modal
   $('#firstModal').modal('show');
