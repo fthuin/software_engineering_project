@@ -4,125 +4,137 @@
 {% block ongTerrain %}class="active"{% endblock %}
 
 {% block bodyStaff %}
+
 <!-- Gestionnaire des terrains -->
 <div class="content-box" id="gestionTerrain">
 	<h2 class="center">Gestionnaire des terrains</h2>
 	<hr class="line">	
-	<!-- Rechercher -->
-	<div class="row" style="margin-bottom:15px;">
-		<div class="col-sm-4 col-sm-offset-4">
-			<div class="input-group">
-		      <input type="text" class="form-control" placeholder="Rechercher" id="search_value" >
-		      <span class="input-group-btn">
-		        <button class="btn btn-default" type="button" onclick="search_court()"><span class="glyphicon glyphicon-search"></span></button>
-		      </span>
-		    </div>
+
+	<div class="row">
+		<div class="col-lg-4">
+			<!-- Rechercher -->
+			<div class="row" style="margin-bottom:15px;">
+				<div class="col-sm-4 col-sm-offset-4 col-lg-10 col-lg-offset-1">
+					<div class="input-group">
+				      <input type="text" class="form-control" placeholder="Rechercher" id="search_value" >
+				      <span class="input-group-btn">
+				        <button class="btn btn-default" type="button" onclick="search_court()"><span class="glyphicon glyphicon-search"></span></button>
+				      </span>
+				    </div>
+				</div>
+			</div>
+			<!-- Paramètres de recherche avancée -->
+			<form action="" class="form-horizontal">
+				<div class="panel panel-default center-block" style="max-width:300px;">
+				    <div class="panel-heading" onclick="setPlusMoins()" data-toggle="collapse" data-target="#list_criteria" style="cursor:pointer;" href="#list_criteria">Critères d'affichage <span id="plusmoins" class="glyphicon glyphicon-chevron-up pull-right"></span></div>
+				    <div class="list-group panel-collapse collapse in" id="list_criteria">
+
+					    <li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-4">Validation</label>
+							    <div class="col-sm-8">
+								    <select id="validation_selector" class="form-control" onchange="search_court()">
+								        <option value="" selected>Tous</option>
+								        <option value="oui">Valide</option>
+								        <option value="non">Non validé</option>
+								    </select>
+								</div>
+							</div>
+					    </li>
+
+					    <li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-4">Disponibilité</label>
+							    <div class="col-sm-8">
+								    <select id="availability_selector" class="form-control" onchange="search_court()">
+								        <option value="" selected>Tous</option>
+								        <option value="saturday">Samedi</option>
+								        <option value="sunday">Dimanche</option>
+								        <option value="saturday_sunday">Samedi et dimanche</option>
+								    </select>
+								</div>
+							</div>
+					    </li>
+
+					    <li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-4">Matière</label>
+							    <div class="col-sm-8">
+								    <select id="material_selector" class="form-control" onchange="search_court()">
+								        <option value="" selected>Tous</option>
+								        {% for courtSurface in allCourtSurface %}
+									  	<option value="{{ courtSurface.nom }}">{{ courtSurface.nom }}</option>
+									  	{% endfor %}
+								    </select>
+								</div>
+							</div>
+					    </li>
+					    <li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-4">Etat du terrain</label>
+							    <div class="col-sm-8">
+								    <select id="state_selector" class="form-control" onchange="search_court()">
+								        <option value="" selected>Tous</option>
+								        {% for courtState in allCourtState %}
+									  	<option value="{{ courtState.nom }}">{{ courtState.nom }}</option>
+									   	{% endfor %}
+								    </select>
+								</div>
+							</div>
+					    </li>
+					    <li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-4">Type</label>
+							    <div class="col-sm-8">
+								    <select id="type_selector" class="form-control" onchange="search_court()">
+								        <option value="" selected>Tous</option>
+							      	{% for courtType in allCourtType %}
+							      		<option value="{{ courtType.nom }}">{{ courtType.nom }}</option>
+									{% endfor %}
+								    </select>
+								</div>
+							</div>
+					    </li>
+				    </div>
+				</div>
+			</form>
+		</div>
+
+		<div class="col-lg-8">
+			<!-- Liste des terrains -->
+			<div class="panel panel-default center-block" style="max-width:750px;">
+				<div class="panel-heading">Terrains</div>
+				<div class="table-responsive">
+				<table class="table table-hover">
+				<thead>
+		          <tr>
+		            <th>ID</th>
+		            <th>Matière</th>
+		            <th>Valide</th>
+		            <th>Disponibilité</th>
+		            <th>Nom d'utilisateur</th>
+		            <th>Adresse</th>
+		          </tr>
+		          </thead>
+		          <tbody id="CourtList">
+		          </tbody>
+				</table>
+				</div>
+			</div>
+
+			<!-- Info -->
+			<p class="center" id="CourtInfo"></p>
+
+			<!-- Bottom pagination -->
+			<div class="text-center">
+				<div id="paginationholder">
+				</div>
+			</div>
 		</div>
 	</div>
-	<!-- Paramètres de recherche avancée -->
-	<form action="" class="form-horizontal">
-		<div class="panel panel-default center-block" style="max-width:300px;">
-		    <div class="panel-heading" onclick="setPlusMoins()" data-toggle="collapse" data-target="#list_criteria" style="cursor:pointer;" href="#list_criteria">Critères d'affichage <span id="plusmoins" class="glyphicon glyphicon-chevron-up pull-right"></span></div>
-		    <div class="list-group panel-collapse collapse in" id="list_criteria">
+	
 
-			    <li class="list-group-item">
-				    <div class="row">
-					    <label class="control-label col-sm-4">Validation</label>
-					    <div class="col-sm-8">
-						    <select id="validation_selector" class="form-control" onchange="search_court()">
-						        <option value="" selected>Tous</option>
-						        <option value="oui">Valide</option>
-						        <option value="non">Non validé</option>
-						    </select>
-						</div>
-					</div>
-			    </li>
-
-			    <li class="list-group-item">
-				    <div class="row">
-					    <label class="control-label col-sm-4">Disponibilité</label>
-					    <div class="col-sm-8">
-						    <select id="availability_selector" class="form-control" onchange="search_court()">
-						        <option value="" selected>Tous</option>
-						        <option value="saturday">Samedi</option>
-						        <option value="sunday">Dimanche</option>
-						        <option value="saturday_sunday">Samedi et dimanche</option>
-						    </select>
-						</div>
-					</div>
-			    </li>
-
-			    <li class="list-group-item">
-				    <div class="row">
-					    <label class="control-label col-sm-4">Matière</label>
-					    <div class="col-sm-8">
-						    <select id="material_selector" class="form-control" onchange="search_court()">
-						        <option value="" selected>Tous</option>
-						        {% for courtSurface in allCourtSurface %}
-							  	<option value="{{ courtSurface.nom }}">{{ courtSurface.nom }}</option>
-							  	{% endfor %}
-						    </select>
-						</div>
-					</div>
-			    </li>
-			    <li class="list-group-item">
-				    <div class="row">
-					    <label class="control-label col-sm-4">Etat du terrain</label>
-					    <div class="col-sm-8">
-						    <select id="state_selector" class="form-control" onchange="search_court()">
-						        <option value="" selected>Tous</option>
-						        {% for courtState in allCourtState %}
-							  	<option value="{{ courtState.nom }}">{{ courtState.nom }}</option>
-							   	{% endfor %}
-						    </select>
-						</div>
-					</div>
-			    </li>
-			    <li class="list-group-item">
-				    <div class="row">
-					    <label class="control-label col-sm-4">Type</label>
-					    <div class="col-sm-8">
-						    <select id="type_selector" class="form-control" onchange="search_court()">
-						        <option value="" selected>Tous</option>
-					      	{% for courtType in allCourtType %}
-					      		<option value="{{ courtType.nom }}">{{ courtType.nom }}</option>
-							{% endfor %}
-						    </select>
-						</div>
-					</div>
-			    </li>
-		    </div>
-		</div>
-	</form>
-	<!-- Liste des terrains -->
-	<div class="panel panel-default center-block" style="max-width:750px;">
-		<div class="panel-heading">Terrains</div>
-		<div class="table-responsive">
-		<table class="table table-hover">
-		<thead>
-          <tr>
-            <th>ID</th>
-            <th>Matière</th>
-            <th>Valide</th>
-            <th>Disponibilité</th>
-            <th>Nom d'utilisateur</th>
-            <th>Adresse</th>
-          </tr>
-          </thead>
-          <tbody id="CourtList">
-          </tbody>
-		</table>
-		</div>
-	</div>
-
-	<!-- Info -->
-	<p class="center" id="CourtInfo"></p>
-
-	<!-- Bottom pagination -->
-	<div class="text-center">
-		<div id="paginationholder">
-		</div>
-	</div>
+	
 
 </div>
 {% endblock %}
