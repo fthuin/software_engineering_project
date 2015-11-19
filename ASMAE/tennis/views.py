@@ -15,7 +15,7 @@ from itertools import chain
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Permission,Group
 from django.utils.crypto import get_random_string
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from tennis.pdfdocument import PDFTerrain, PDFPair
 from django.template.defaulttags import register
 
@@ -507,7 +507,7 @@ def knockOff(request,name):
 				tournoi.arbre = None
 				tournoi.save()
 				arbre.delete()
-				return redirect(reverse(staffTournoi))
+				return redirect(reverse(knockOff,args={name}))
 
 	if request.user.is_authenticated():
 
@@ -568,6 +568,12 @@ def pouleScore(request,id):
 						score = Score(paire1 = id1,paire2=id2,point1=int(request.POST[str(id1.id)+"-"+str(id2.id)]),point2=int(request.POST[str(id2.id)+"-"+str(id1.id)]))
 						score.save()
 						poule.score.add(score)
+
+		if request.POST['action'] == 'save':
+			return redirect(reverse(pouleScore,args={id}))
+		elif request.POST['action'] == 'saveFinite':
+			return redirect(reverse(pouleTournoi,args={poule.tournoi.nom}))
+
 		return redirect(reverse(staffTournoi))
 	if request.user.is_authenticated():
 		scoreList = poule.score.all()
@@ -637,7 +643,13 @@ def generatePool(request,name):
 			i += 1
 			p.save()
 
-		return redirect(reverse(staffTournoi))
+		if request.POST['action'] == 'save':
+			return redirect(reverse(generatePool,args={tournoi.nom}))
+			#request.method = "GET"
+			#return generatePool(request,tournoi.nom)
+			#return HttpResponseRedirect('/tennis/staff/tournois/%s'%tournoi.nom)
+		else:
+			return redirect(reverse(staffTournoi))
 	if request.user.is_authenticated():
 		dictTerrains = {}
 		# TODO : Indiquer les terrains déjà utilisés le jour du tournoi
