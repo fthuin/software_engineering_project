@@ -279,6 +279,10 @@ textarea {
 }
 
 /* Panel */
+div.panel{
+    box-shadow: 10px 10px 5px #888888;
+}
+
 .panel-body{
     /*background-color: rgba(238, 231, 203, 1);*/
     background-color: #FFFFDD;
