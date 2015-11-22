@@ -39,7 +39,7 @@
 
 	<div class="row">
 		<!-- selection des extras -->
-		<div class="col-md-4">
+		<div class="col-sm-4">
 			<div class="panel panel-default">
 				<div class="panel-heading">Liste des extras</div>
 				<div class="list-group" id="listExtra">
@@ -48,11 +48,11 @@
 					{% endfor %}
 				</div>
 			</div>
-		    <a onclick="addExtra()" href="javascript:void(0);" class="center center-block">Ajouter un extra</a>
+		    <a onclick="addExtra()" href="javascript:void(0);" class="center center-block" style="padding-bottom:15px;">Ajouter un extra</a>
 		</div>
 
 		<!-- Modification des extras -->
-		<div class="col-md-8">
+		<div class="col-sm-8">
 			<form class="form-horizontal" name="editExtra" id="editExtra" role="form" method="post" action="{% url "tennis.views.staffExtra" %}">
 				{% csrf_token %}
 				<div class="panel panel-default">
