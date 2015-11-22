@@ -8,7 +8,7 @@
 <!-- Gestionnaire des utilisateurs -->
 <div class="content-box" id="gestionTerrain">
 	<h2 class="center">Gestionnaire des utilisateurs</h2>
-	<hr class="line">	
+	<hr class="line">
 	<!-- Rechercher -->
 	<div class="row" style="margin-bottom:15px;">
 		<div class="col-sm-4 col-sm-offset-4">
@@ -20,6 +20,37 @@
 		    </div>
 		</div>
 	</div>
+
+	<!-- Paramètres de recherche avancée -->
+	<form action="" class="form-horizontal">
+		<div class="panel panel-default center-block" style="max-width:300px;">
+			<div class="panel-heading" onclick="setPlusMoins()" data-toggle="collapse" data-target="#list_criteria" style="cursor:pointer;" href="#list_criteria">Critères d'affichage <span id="plusmoins" class="glyphicon glyphicon-chevron-up pull-right"></span></div>
+			<div class="list-group panel-collapse collapse in" id="list_criteria">
+
+				<li class="list-group-item">
+					<div class="row">
+						<label class="control-label col-sm-4">Sexe</label>
+						<div class="col-sm-8">
+							<select id="sex_selector" class="form-control" onchange="search_user();">
+								<option value="Tous" selected>Tous</option>
+								<option value="Hommes">Hommes</option>
+								<option value="Femmes">Femmes</option>
+							</select>
+						</div>
+					</div>
+				</li>
+				<li class="list-group-item">
+					<div class="row">
+						<label class="control-label col-sm-4">Age : </label>
+						<div class="col-sm-8">
+							  <input type="text" id="amount" readonly style="text-align:center; border:0; color:#f6931f; font-weight:bold;">
+							<div id="slider-range"></div>
+						</div>
+					</div>
+				</li>
+			</div>
+		</div>
+	</form>
 
 	<!-- Liste des users -->
 	<div class="panel panel-default center-block" style="max-width:600px;">
@@ -54,6 +85,19 @@
 
 {% block commande %}
 <script>
+$(function() {
+  $( "#slider-range" ).slider({
+    range: true,
+    min: 0,
+    max: 100,
+    values: [ 0, 100 ],
+    slide: function( event, ui ) {
+      $( "#amount" ).val( "" + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+    }
+  });
+  $( "#amount" ).val( "" + $( "#slider-range" ).slider( "values", 0 ) +
+    " - " + $( "#slider-range" ).slider( "values", 1 ) );
+});
 function pagination(list) {
     //Nombre d'entrée par page
     var pageLength = 10;
@@ -88,6 +132,22 @@ pagination(userList);
 
 function search_user() {
     var retour = document.getElementById("search_value").value.sansAccent().toLocaleUpperCase();
+	var slidedValues = $('#slider-range').slider("values");
+	var minAgeSearch = slidedValues[0];
+	var maxAgeSearch = slidedValues[1];
+	var sex_selector = document.getElementById("sex_selector");
+	var sex_choice = sex_selector.options[sex_selector.selectedIndex].text.sansAccent().toLocaleUpperCase();
+	if ( sex_choice == "Tous".sansAccent().toLocaleUpperCase()) {
+		sex_choice = "";
+	}
+	if ( sex_choice == "Hommes".sansAccent().toLocaleUpperCase()) {
+		sex_choice = "Mr".sansAccent().toLocaleUpperCase();
+	}
+	if ( sex_choice == "Femmes".sansAccent().toLocaleUpperCase()) {
+		sex_choice = "Mme".sansAccent().toLocaleUpperCase();
+	}
+	//alert(sex_choice.indexOf(''));
+	//alert(sex_choice.indexOf(''));
     // Copie du tableau pour garder l'original
     var resultList = userList.slice();
     var nbr = resultList.length;
@@ -96,14 +156,24 @@ function search_user() {
         var username = myUser[0].sansAccent().toLocaleUpperCase();
         var prenom = myUser[1].sansAccent().toLocaleUpperCase();
         var nom = myUser[2].sansAccent().toLocaleUpperCase();
-        if (! (username.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1)) {
+		var titre = myUser[3].sansAccent().toLocaleUpperCase();
+		var age = parseInt(myUser[4]);
+        if (! (username.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1) || titre.indexOf(sex_choice) == -1 || age < minAgeSearch || age > maxAgeSearch) {
             resultList.splice(i, 1);
         }
     }
     pagination(resultList);
 }
 
-$('#search_value').on('input', function() { 
+$('#search_value').on('input', function() {
+    search_user();
+});
+$( "#slider-range").slider({
+  change: function( event, ui ) {
+	  search_user();
+  }
+});
+$('#sex_selector').on('input', function() {
     search_user();
 });
 </script>
