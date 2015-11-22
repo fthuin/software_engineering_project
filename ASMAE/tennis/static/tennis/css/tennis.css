@@ -24,6 +24,12 @@ html{
     background-image: url("../img/bg.jpg");
 }
 
+thead{
+    background-color: #EEEECC;
+    color:black;
+    font-weight: bold;
+}
+
 h1,
 h2,
 h3,
