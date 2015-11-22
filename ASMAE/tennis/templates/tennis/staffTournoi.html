@@ -25,7 +25,7 @@
                 </thead>
                 <tbody>
                     {% for tournoi in allTournoi %}
-                    {% if tournoi.status.id == 2 %}
+                    {% if tournoi.status.numero == 2 %}
                     <tr style="background-color:#EEEECC;" class="clickable-row" onclick="location.href='{% url "tennis.views.pouleTournoi" tournoi.nom %}';">
                         <td style="width:18%;vertical-align: middle;">{{ tournoi.nom }}</td>
                         <td style="text-align:center;vertical-align: middle;">{{ tournoi.jour }}</td>
@@ -34,7 +34,7 @@
                         <td style="text-align:center;vertical-align: middle;">{{ tournoi.pl }}</td>
                         <td style="text-align:center;vertical-align: middle;">{{ tournoi.status.nom }}</td>
                     </tr>
-                    {% elif tournoi.status.id == 1  %}
+                    {% elif tournoi.status.numero == 1  %}
                     <tr style="background-color:#FFFFDD;" class="clickable-row" onclick="location.href='{% url "tennis.views.generatePool" tournoi.nom %}';">
                         <td style="width:18%;vertical-align: middle;">{{ tournoi.nom }}</td>
                         <td style="text-align:center;vertical-align: middle;">{{ tournoi.jour }}</td>
