@@ -56,7 +56,7 @@
 			</ul>
 
 
-				<h3 >Google Map (TODO)</h3>
+				<h3 >Google Map <span id="statusMap" style="color:red;"></span></h3>
 				<div id="map" style="height:225px;"></div>
 
 			</div>
@@ -99,4 +99,28 @@
 {% endblock %}
 
 {% block commande %}
+<script>
+var geocoder = new google.maps.Geocoder();
+var address = "{{ court.rue }}, {{ court.numero }} + {{ court.codepostal }} {{ court.localite }}, Belgium";
+
+geocoder.geocode( { 'address': address}, function(results, status) {
+
+if (status == google.maps.GeocoderStatus.OK) {
+    var latitude = results[0].geometry.location.lat();
+    var longitude = results[0].geometry.location.lng();
+    setMap(latitude,longitude,16)
+    }else{
+    	geocoder.geocode( { 'address': '{{ court.codepostal }} {{ court.localite }}, Belgium'}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+		    var latitude = results[0].geometry.location.lat();
+		    var longitude = results[0].geometry.location.lng();
+		    setMap(latitude,longitude,10)
+		    document.getElementById("statusMap").innerHTML = "(rue non trouvée)"
+		    }else{
+		    	document.getElementById("statusMap").innerHTML = "(adresse non trouvée)"
+		    }
+		});
+    }
+}); 
+</script>
 {% endblock %}

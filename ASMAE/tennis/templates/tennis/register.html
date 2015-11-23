@@ -15,7 +15,7 @@
 				<div class="content-box">
 				<h2 class="center">Inscription</h2>
 				<hr class="line">
-				<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.register" %}" onsubmit="return validateRegister()" >
+				<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.register" %}" >
 					{% csrf_token %}
 					<!-- Information du compte -->
 						<div class="panel panel-default">
@@ -228,8 +228,18 @@
 					</div><!-- Pannel -->
 
 					<!-- Bottom button -->
-				    <button type="submit" class="btn btn-default pull-right" style="margin-top:20px;">Inscription</button>
-				    <button type="button" class="btn btn-default" onClick="location.href='{% url "tennis.views.connect" %}';" style="margin-top:20px;">Déjà membre?</button>
+					<input type="text" id="latitude" name="lat" value="" style="display:none">
+					<input type="text" id="longitude" name="lng" value="" style="display:none">
+					<ul class="list-inline text-center">
+						<li>
+							<button type="button" class="btn btn-default" onClick="location.href='{% url "tennis.views.connect" %}';" style="margin-top:20px;">Déjà membre?</button>
+						</li>
+						<li>
+							<button type="submit" class="btn btn-default" id="registerButton" style="display:none;margin-top:20px;">Inscription</button>
+				    		<button type="button" class="btn btn-default" onclick="validateRegister()" style="margin-top:20px;">Inscription</button>
+						</li>
+					</ul>
+
 				  </form>
 			</div>
 </div>
