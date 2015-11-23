@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, TournoiStatus, PouleStatus,Arbre
+from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, PouleStatus,Arbre, TournoiStatus
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail
 import re, math
 import json
@@ -15,7 +15,7 @@ from itertools import chain
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Permission,Group
 from django.utils.crypto import get_random_string
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from tennis.pdfdocument import PDFTerrain, PDFPair
 from django.template.defaulttags import register
 
@@ -509,7 +509,7 @@ def knockOff(request,name):
 				tournoi.arbre = None
 				tournoi.save()
 				arbre.delete()
-				return redirect(reverse(staffTournoi))
+				return redirect(reverse(knockOff,args={name}))
 
 	if request.user.is_authenticated():
 
@@ -577,6 +577,12 @@ def pouleScore(request,id):
 						score = Score(paire1 = id1,paire2=id2,point1=int(request.POST[str(id1.id)+"-"+str(id2.id)]),point2=int(request.POST[str(id2.id)+"-"+str(id1.id)]))
 						score.save()
 						poule.score.add(score)
+
+		if request.POST['action'] == 'save':
+			return redirect(reverse(pouleScore,args={id}))
+		elif request.POST['action'] == 'saveFinite':
+			return redirect(reverse(pouleTournoi,args={poule.tournoi.nom}))
+
 		return redirect(reverse(staffTournoi))
 	if request.user.is_authenticated():
 		scoreList = poule.score.all()
@@ -595,10 +601,10 @@ def generatePool(request,name):
 	poules = Poule.objects.filter(tournoi=tournoi)
 	if request.method == "POST":
 		if request.POST['action'] == 'save':
-			tournoi.status = TournoiStatus.objects.get(id=1)
+			tournoi.status = TournoiStatus.objects.get(numero=1)
 			tournoi.save()
 		elif request.POST['action'] == 'saveFinite':
-			tournoi.status = TournoiStatus.objects.get(id=2)
+			tournoi.status = TournoiStatus.objects.get(numero=2)
 			tournoi.save()
 			LogActivity(user=request.user,section="Tournoi",details="Generation des poules du tournoi : "+tournoi.nom).save()
 		terrainsList = request.POST['assignTerrains'].split('-')
@@ -648,7 +654,13 @@ def generatePool(request,name):
 			p.save()
 		
 
-		return redirect(reverse(staffTournoi))
+		if request.POST['action'] == 'save':
+			return redirect(reverse(generatePool,args={tournoi.nom}))
+			#request.method = "GET"
+			#return generatePool(request,tournoi.nom)
+			#return HttpResponseRedirect('/tennis/staff/tournois/%s'%tournoi.nom)
+		else:
+			return redirect(reverse(staffTournoi))
 	if request.user.is_authenticated():
 		dictTerrains = {}
 		# TODO : Indiquer les terrains déjà utilisés le jour du tournoi

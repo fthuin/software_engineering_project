@@ -24,6 +24,12 @@ html{
     background-image: url("../img/bg.jpg");
 }
 
+thead{
+    background-color: #EEEECC;
+    color:black;
+    font-weight: bold;
+}
+
 h1,
 h2,
 h3,
@@ -279,6 +285,10 @@ textarea {
 }
 
 /* Panel */
+div.panel{
+    box-shadow: 10px 10px 5px #888888;
+}
+
 .panel-body{
     /*background-color: rgba(238, 231, 203, 1);*/
     background-color: #FFFFDD;

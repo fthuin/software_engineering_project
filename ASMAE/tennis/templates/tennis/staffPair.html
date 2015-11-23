@@ -8,94 +8,102 @@
 <div class="content-box" id="gestionPaire">
 	<h2 class="center">Gestionnaire des paires</h2>
 	<hr class="line">	
-	<!-- Rechercher -->
-	<div class="row" style="margin-bottom:15px;">
-		<div class="col-sm-4 col-sm-offset-4">
-			<div class="input-group">
-		      <input type="text" class="form-control" placeholder="Rechercher" id="search_value">
-		      <span class="input-group-btn">
-		        <button class="btn btn-default" type="button" onclick="search_pair()"><span class="glyphicon glyphicon-search"></span></button>
-		      </span>
-		    </div>
+
+	<div class="row">
+		<div class="col-lg-4">
+			<!-- Rechercher -->
+			<div class="row" style="margin-bottom:15px;">
+				<div class="col-lg-10 col-lg-offset-1 col-sm-4 col-sm-offset-4">
+					<div class="input-group">
+				      <input type="text" class="form-control" placeholder="Rechercher" id="search_value">
+				      <span class="input-group-btn">
+				        <button class="btn btn-default" type="button" onclick="search_pair()"><span class="glyphicon glyphicon-search"></span></button>
+				      </span>
+				    </div>
+				</div>
+			</div>
+			<!-- Paramètres de recherche avancée -->
+			<form action="" class="form-horizontal">
+				<div class="panel panel-default center-block" style="max-width:300px;">
+				    <div class="panel-heading" onclick="setPlusMoins()" data-toggle="collapse" data-target="#list_criteria" style="cursor:pointer;" href="#list_criteria">Critères d'affichage <span id="plusmoins" class="glyphicon glyphicon-chevron-up pull-right"></span></div>
+				    <div class="list-group panel-collapse collapse in" id="list_criteria">
+					    <li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-4">Validation</label>
+							    <div class="col-sm-8">
+								    <select id="validation_selector" class="form-control" onchange="search_pair()">
+								        <option value="" selected>Tous</option>
+								        <option value="oui">Valide</option>
+								        <option value="non">Non validée</option>
+								    </select>
+								</div>
+							</div>
+					    </li>
+
+					    <li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-4">Paiement</label>
+							    <div class="col-sm-8">
+								    <select id="payment_selector" class="form-control" onchange="search_pair()">
+								        <option value="" selected>Tous</option>
+								        <option value="oui">Valide</option>
+								        <option value="non">Non validée</option>
+								    </select>
+								</div>
+							</div>
+					    </li>
+
+					    <li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-4">Tournoi</label>
+							    <div class="col-sm-8">
+								    <select id="tournament_selector" class="form-control" onchange="search_pair()">
+								        <option value="" selected>Tous</option>
+									    {% for elem in Tour %}
+									    <option value="{{ elem.nom }}">{{ elem.nom }}</option>
+									    {% endfor %}
+								    </select>
+								</div>
+							</div>
+					    </li>
+				    </div>
+				</div>
+			</form>
+		</div>
+
+		<div class="col-lg-8">
+			<!-- Liste des terrains -->
+			<div class="panel panel-default center-block">
+				<div class="panel-heading">Paires</div>
+				    <div class="table-responsive">
+				        <table class="table table-hover">
+				            <thead>
+		                      <tr>
+		                        <th>ID</th>
+		                        <th>Tournoi</th>
+		                        <th>Validé</th>
+		                        <th>Payé</th>
+		                        <th>Joueur 1</th>
+		                        <th>Joueur 2</th>
+		                      </tr>
+		                    </thead>
+		                    <tbody id="PairList">
+		                    </tbody>
+				        </table>
+				    </div>
+			</div>
+
+			<!-- Info -->
+			<p class="center" id="PairInfo"></p>
+
+			<!-- Bottom pagination -->
+			<div class="text-center">
+		        <div id="paginationholder">
+		        </div>
+			</div>
 		</div>
 	</div>
-	<!-- Paramètres de recherche avancée -->
-	<form action="" class="form-horizontal">
-		<div class="panel panel-default center-block" style="max-width:300px;">
-		    <div class="panel-heading" onclick="setPlusMoins()" data-toggle="collapse" data-target="#list_criteria" style="cursor:pointer;" href="#list_criteria">Critères d'affichage <span id="plusmoins" class="glyphicon glyphicon-chevron-up pull-right"></span></div>
-		    <div class="list-group panel-collapse collapse in" id="list_criteria">
-			    <li class="list-group-item">
-				    <div class="row">
-					    <label class="control-label col-sm-4">Validation</label>
-					    <div class="col-sm-8">
-						    <select id="validation_selector" class="form-control" onchange="search_pair()">
-						        <option value="" selected>Tous</option>
-						        <option value="oui">Valide</option>
-						        <option value="non">Non validée</option>
-						    </select>
-						</div>
-					</div>
-			    </li>
-
-			    <li class="list-group-item">
-				    <div class="row">
-					    <label class="control-label col-sm-4">Paiement</label>
-					    <div class="col-sm-8">
-						    <select id="payment_selector" class="form-control" onchange="search_pair()">
-						        <option value="" selected>Tous</option>
-						        <option value="oui">Valide</option>
-						        <option value="non">Non validée</option>
-						    </select>
-						</div>
-					</div>
-			    </li>
-
-			    <li class="list-group-item">
-				    <div class="row">
-					    <label class="control-label col-sm-4">Tournoi</label>
-					    <div class="col-sm-8">
-						    <select id="tournament_selector" class="form-control" onchange="search_pair()">
-						        <option value="" selected>Tous</option>
-							    {% for elem in Tour %}
-							    <option value="{{ elem.nom }}">{{ elem.nom }}</option>
-							    {% endfor %}
-						    </select>
-						</div>
-					</div>
-			    </li>
-		    </div>
-		</div>
-	</form>
-	<!-- Liste des terrains -->
-	<div class="panel panel-default center-block">
-		<div class="panel-heading">Paires</div>
-		    <div class="table-responsive">
-		        <table class="table table-hover">
-		            <thead>
-                      <tr>
-                        <th>ID</th>
-                        <th>Tournoi</th>
-                        <th>Validé</th>
-                        <th>Payé</th>
-                        <th>Joueur 1</th>
-                        <th>Joueur 2</th>
-                      </tr>
-                    </thead>
-                    <tbody id="PairList">
-                    </tbody>
-		        </table>
-		    </div>
-	</div>
-
-	<!-- Info -->
-	<p class="center" id="PairInfo"></p>
-
-	<!-- Bottom pagination -->
-	<div class="text-center">
-        <div id="paginationholder">
-        </div>
-	</div>
-
+	
 </div>
 {% endblock %}
 

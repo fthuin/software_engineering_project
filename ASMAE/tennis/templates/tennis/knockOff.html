@@ -6,7 +6,7 @@
 {% block bodyStaff %}
 <!-- Gestionnaire des groupes -->
 <div class="content-box" id="gestionTournoi">
-    <h2 class="center" id="pageTitle">Choix des paires : {{tournoi.nom}}</h2>
+    <h2 class="center" id="pageTitle">Choix des paires</h2>
     <hr class="line">
 
     <!-- Première étape selection des paires -->
@@ -20,7 +20,7 @@
           </div>
           <div class="list-group" id="{{p.id}}">
             {% for paire in p.SortedPair %}
-            <a href="javascript:void(0)" onclick="checkBox('ID{{paire.id}}')" class="list-group-item">
+            <a href="javascript:void(0)" onclick="checkBox('{{paire.id}}')" class="list-group-item">
               <div class="row">
                 <div class="col-xs-10">
                   {{paire.user1.participant.smallName}}
@@ -28,7 +28,8 @@
                   {{paire.user2.participant.smallName}} ({{paire.score}})
                 </div>
                 <div class="col-xs-2">
-                  <input class="pull-right allBox {{p.id}}Box" type="checkbox" name="{{paire.id}}" id="ID{{paire.id}}">
+                  <input class="pull-right allBox {{p.id}}Box" type="checkbox" name="{{paire.id}}" id="ID{{paire.id}}" style="display:none">
+                  <span class="{{p.id}}Check glyphicon glyphicon-unchecked" id="check{{paire.id}}" style="color:black"></span>
                 </div>
               </div>
             </a>
@@ -44,12 +45,14 @@
 
     <!-- Deuxième étape set up de l'arbre -->
     <div id="secondStep" style="display:none">
-      <div class="panel panel-default center-block" style="max-width:600px">
-        <div class="panel-heading">Premier Round</div>
-        <div class="panel-body" id="firstRoundBody">
-          
+      <div class="table-responsive">
+        <div class="panel panel-default center-block" style="max-width:600px;min-width:600px;">
+          <div class="panel-heading">Premier Round</div>
+          <div class="panel-body" id="firstRoundBody">
+          </div>
         </div>
       </div>
+      
       <button type="button" class="btn btn-default center-block" onClick="startTree()">Créer l'arbre du tournoi</button>
     </div>
   
@@ -93,11 +96,11 @@
           <h4 class="modal-title center">Etape 1</h4>
         </div>
         <div class="modal-body">
-          <p>Continuer avec ces <number id="nombrePaire"></number> paires selectionnées?</p>
+          <p id="msgFirstModal"></p>
         
         <ul class="list-inline text-center">
         <li>
-          <button type="button" class="btn btn-default" onclick="secondStep()">Confirmer</button>
+          <button type="button" class="btn btn-default" id="buttonFirstModal" onclick="secondStep()">Confirmer</button>
         </li>
         <li>
           <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
@@ -230,11 +233,15 @@ var nombrePanel = mesPanel.length;
 if(nombrePanel<17){
   {% for p in poules %}
   var pouleBoxes = document.getElementsByClassName({{p.id}}+"Box");
+  var pouleCheck = document.getElementsByClassName({{p.id}}+"Check");
   if(nombrePanel>8 || pouleBoxes.length<2){
     pouleBoxes[0].checked = true;
+    pouleCheck[0].className = "glyphicon glyphicon-check"
   }else{
     pouleBoxes[0].checked = true;
     pouleBoxes[1].checked = true;
+    pouleCheck[0].className = "glyphicon glyphicon-check"
+    pouleCheck[1].className = "glyphicon glyphicon-check"
   }
   {% endfor %}
 }

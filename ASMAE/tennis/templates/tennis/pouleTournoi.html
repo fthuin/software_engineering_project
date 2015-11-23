@@ -17,7 +17,15 @@
                     <div class="row">
                         <div class="col-xs-10">Poule {{p.id}}</div>
                         <div class="col-xs-2">
-                            <a href="javascript:void(0)" onclick="window.document.location='{% url 'tennis.views.printScoreBoard' p.id %}';" class="pull-right" style="cursor:pointer;color:white;padding:0;margin:0;"><span class="glyphicon glyphicon-print"></span></a>
+                            <ul class="list-inline pull-right" style="margin:0;">
+                                <li>
+                                    <a href="#" style="cursor:pointer;color:white;padding:0;margin:0;"><span class="glyphicon glyphicon-info-sign"></span></a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'tennis.views.printScoreBoard' p.id %}" target="_blank" style="cursor:pointer;color:white;padding:0;margin:0;"><span class="glyphicon glyphicon-print"></span></a>
+                                </li>
+                            </ul>
+                            
                         </div>
                     </div>
 

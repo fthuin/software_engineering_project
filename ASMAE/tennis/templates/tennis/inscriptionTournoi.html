@@ -24,7 +24,7 @@
 				      <label class="control-label col-sm-4" for="tournoi">Tournoi : </label>
 				      <div class="col-sm-8">
 				      	<select class="form-control" name="tournoi" id="selector" value=" " onChange="setDescription('{{user.participant.titre}}','{{ user.participant.datenaissance }}');">
-				      		<option value="" selected></option>
+				      		<option value="" selected disabled>Choisir un tournoi</option>
 						
 				      		{% for elem in Tour %}
 				      		<option id="{{ elem.description }}" value="{{ elem.nom }}">{{ elem.nom }}</option>

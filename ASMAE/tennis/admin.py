@@ -43,11 +43,14 @@ class LogActivityAdmin(admin.ModelAdmin):
 class PouleAdmin(admin.ModelAdmin):
     list_display = ('id', 'tournoi', 'leader', 'court')
     ordering = ('id',)
+    
+class TournoiAdmin(admin.ModelAdmin):
+    list_display = ('nom', 'description', 'jour', 'status')
 
 admin.site.register(Participant, ParticipantAdmin)
 admin.site.register(Extra, ExtraAdmin)
 admin.site.register(Court, CourtAdmin)
-admin.site.register(Tournoi)
+admin.site.register(Tournoi, TournoiAdmin)
 admin.site.register(Pair, PairAdmin)
 admin.site.register(Groupe)
 admin.site.register(Poule, PouleAdmin)

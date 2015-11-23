@@ -289,9 +289,12 @@ function resolveSingle(jsonArbre){
 }
 
 function checkBox(id){
+  var input = "ID"+id;
+  var check = "check"+id;
   //pour decheck => c'est bon
-  if(document.getElementById(id).checked){
-    document.getElementById(id).checked = !document.getElementById(id).checked;
+  if(document.getElementById(input).checked){
+    document.getElementById(input).checked = !document.getElementById(input).checked;
+    document.getElementById(check).className = "glyphicon glyphicon-unchecked";
   }else{
     //Check if we don't exceed 16
     var allBoxes = document.getElementsByClassName("allBox");
@@ -306,7 +309,8 @@ function checkBox(id){
       //TODO afficher qu'on ne peut avoir que maximum 16 paires selectionner sur autre chose que alert
       alert("Vous ne pouvez selectionner que 16 paires maximum.")
     }else{
-      document.getElementById(id).checked = !document.getElementById(id).checked;
+      document.getElementById(input).checked = !document.getElementById(input).checked;
+      document.getElementById(check).className = "glyphicon glyphicon-check";
     }
   }
 }
@@ -314,15 +318,24 @@ function checkBox(id){
 function firstModal(){
   //On compte le nombre de paires selectionnées
   var allBoxes = document.getElementsByClassName("allBox");
-    var count = 0;
+    var count = 0;""
     for (var i = 0; i < allBoxes.length; i++) {
       if(allBoxes[i].checked){
         count += 1;
       }
     };
 
-  //On affiche le nombre de paires selectionnées
-  document.getElementById("nombrePaire").innerHTML = count;
+  //Si il y a moins que deux paires on affiche
+  if(count < 2){
+    document.getElementById("msgFirstModal").innerHTML = "Veuillez selectionner au moins 2 paires."
+    document.getElementById("buttonFirstModal").disabled = true;
+  }else{
+    //On affiche le nombre de paires selectionnées
+    document.getElementById("msgFirstModal").innerHTML = "Continuer avec ces "+count+" paires selectionnées?"
+    document.getElementById("buttonFirstModal").disabled = false;
+  }
+
+  
 
   //On montre le modal
   $('#firstModal').modal('show');
@@ -453,7 +466,7 @@ function secondStep(){
 //Return an html composant used in the first round panel
 function getVersus(name1,name2,ID1,ID2){
   var versus = '<div class="row">'+
-                  '<div class="col-sm-6">'+
+                  '<div class="col-xs-6">'+
                     '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">'+
                       '<div id="'+ID1+'" draggable="true" ondragstart="drag(event)">'+
                         '<div class="zone">'+
@@ -462,7 +475,7 @@ function getVersus(name1,name2,ID1,ID2){
                       '</div>'+
                     '</div>'+
                   '</div>'+
-                  '<div class="col-sm-6">'+
+                  '<div class="col-xs-6">'+
                     '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">'+
                       '<div id="'+ID2+'" draggable="true" ondragstart="drag(event)">'+
                         '<div class="zone">'+
@@ -477,8 +490,8 @@ function getVersus(name1,name2,ID1,ID2){
 
 function getSingle(name,ID){
   var single = '<div class="row">'+
-                  '<div class="col-sm-3"></div>'+
-                  '<div class="col-sm-6">'+
+                  '<div class="col-xs-3"></div>'+
+                  '<div class="col-xs-6">'+
                     '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">'+
                       '<div id="'+ID+'" draggable="true" ondragstart="drag(event)">'+
                         '<div class="zone">'+
@@ -487,7 +500,7 @@ function getSingle(name,ID){
                       '</div>'+
                     '</div>'+
                   '</div>'+
-                  '<div class="col-sm-3"></div>'+
+                  '<div class="col-xs-3"></div>'+
                 '</div>';
   return single;
 }
