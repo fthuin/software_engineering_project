@@ -25,7 +25,12 @@
                 </thead>
                 <tbody>
                     {% for tournoi in allTournoi %}
+
+					{% if perms.tennis.DoubleMixte and tournoi.nom == "Double mixte" or perms.tennis.DoubleHommes and tournoi.nom == "Double hommes" or perms.tennis.DoubleFemmes and tournoi.nom == "Double femmes" or perms.tennis.TournoiDesFamilles and tournoi.nom == "Tournoi des familles"%}
+                    {% if tournoi.status.id == 2 %}
+
                     {% if tournoi.status.numero == 2 %}
+
                     <tr style="background-color:#EEEECC;" class="clickable-row" onclick="location.href='{% url "tennis.views.pouleTournoi" tournoi.nom %}';">
                         <td style="width:18%;vertical-align: middle;">{{ tournoi.nom }}</td>
                         <td style="text-align:center;vertical-align: middle;">{{ tournoi.jour }}</td>
@@ -53,6 +58,7 @@
                         <td style="text-align:center;vertical-align: middle;">{{ tournoi.status }}</td>
                     </tr>
                     {% endif %}
+{% endif %}
 
                     {% endfor %}
                 </tbody>
