@@ -31,8 +31,15 @@
 				    <div class="checkbox">
 					  <label><input type="checkbox"> Se souvenir de moi</label>
 					</div>
-				    <button type="submit" class="btn btn-default pull-right" style="margin-top:20px;">Connexion</button>
-					<button type="button" class="btn btn-default" onClick="location.href='{% url "tennis.views.recover" %}';" style="margin-top:20px;">Mot de passe oublié ?</button>
+
+					<ul class="list-inline text-center">
+						<li>
+							<button type="button" class="btn btn-default" onClick="location.href='{% url "tennis.views.recover" %}';" style="margin-top:20px;">Mot de passe oublié ?</button>
+						</li>
+						<li>
+							<button type="submit" class="btn btn-default" style="margin-top:20px;">Connexion</button>
+						</li>
+					</ul>
 				    
 				  </form>
 			</div>
