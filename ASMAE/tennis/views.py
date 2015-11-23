@@ -1045,7 +1045,6 @@ def editTerrainStaff(request, id):
 			court.dispoSamedi=dispoSamedi
 			court.etat=CourtState.objects.filter(nom=etat)[0]
 			court.commentaire=commentaire
-			court.user = request.user
 			court.longitude = lng
 			court.latitude = lat
 			court.save()
