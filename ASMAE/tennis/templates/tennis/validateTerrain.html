@@ -101,7 +101,7 @@
 {% block commande %}
 <script>
 var geocoder = new google.maps.Geocoder();
-var address = "{{ court.user.participant.rue }}, {{ court.user.participant.numero }} + {{ court.user.participant.codepostal }} {{ court.user.participant.localite }}, Belgium";
+var address = "{{ court.rue }}, {{ court.numero }} + {{ court.codepostal }} {{ court.localite }}, Belgium";
 
 geocoder.geocode( { 'address': address}, function(results, status) {
 
@@ -110,7 +110,7 @@ if (status == google.maps.GeocoderStatus.OK) {
     var longitude = results[0].geometry.location.lng();
     setMap(latitude,longitude,16)
     }else{
-    	geocoder.geocode( { 'address': '{{ court.user.participant.codepostal }} {{ court.user.participant.localite }}, Belgium'}, function(results, status) {
+    	geocoder.geocode( { 'address': '{{ court.codepostal }} {{ court.localite }}, Belgium'}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
 		    var latitude = results[0].geometry.location.lat();
 		    var longitude = results[0].geometry.location.lng();

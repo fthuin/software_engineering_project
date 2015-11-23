@@ -258,7 +258,7 @@
 
 		<!-- Information personnelle Edit-->
 		<!-- TODO set info du mec connecté -->
-		<form class="form-horizontal" name="registerForm" id="editInfo" role="form" method="post" action="" onsubmit="return validateEditInfo()" {% if errorEdit %}{% else %}style="display:none"{% endif %}>
+		<form class="form-horizontal" name="registerForm" id="editInfo" role="form" method="post" action="" onsubmit="" {% if errorEdit %}{% else %}style="display:none"{% endif %}>
 			{% csrf_token %}
 			<!-- Information personnelle-->
 			<div class="panel panel-default">
@@ -433,7 +433,10 @@
 				</div><!-- Pannel-content -->
 			</div><!-- Pannel -->
 			<!-- Bottom button -->
-		    <button type="submit" class="btn btn-default b-center" style="margin-top:20px;" name="action" value="editProfil">Sauver</button>
+			<input type="text" id="latitude" name="lat" value="" style="display:none">
+			<input type="text" id="longitude" name="lng" value="" style="display:none">
+			<button type="button" class="btn btn-default b-center" style="margin-top:20px;" onclick="validateEditInfo()">Sauver</button>
+		    <button type="submit" class="btn btn-default" style="display:none;margin-top:20px;" name="action" value="editProfil" id="saveinfo"></button>
 		  </form>
 	</div>
 </div>

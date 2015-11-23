@@ -13,7 +13,7 @@
 		<strong>Error!</strong> {{ errorAdd }}
 		</div>
 		{% endif %}
-		<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.registerTerrain" %}" onsubmit="return validateRegister()" >
+		<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.registerTerrain" %}" >
 		{% csrf_token %}
 			<div class="row">
 				<div class="panel panel-default">
@@ -25,16 +25,16 @@
 								<div class="form-group">
 							      <label class="control-label col-sm-4" for="rue">Rue *</label>
 							      <div class="col-sm-8" style="max-width:600px;">
-							      	<input type="text" class="form-control" name="rue" id="rue" placeholder="Nom de rue" value="{{ rue }}">
-							      	<p class="hint" id="hint-rue"></p>
+							      	<input type="text" class="form-control" name="street" id="street" placeholder="Nom de rue" value="{{ rue }}">
+							      	<p class="hint" id="hint-street"></p>
 							      </div>
 							    </div>
 							    <!-- Numero -->
 								<div class="form-group">
 							      <label class="control-label col-sm-4" for="numero">Numero *</label>
 							      <div class="col-sm-8" style="max-width:600px;">
-							      	<input type="text" class="form-control" name="numero" id="numero" placeholder="Numero" value="{{ numero }}">
-							      	<p class="hint" id="hint-numero"></p>
+							      	<input type="text" class="form-control" name="number" id="number" placeholder="Numero" value="{{ numero }}">
+							      	<p class="hint" id="hint-number"></p>
 							      </div>
 							    </div>
 							    <!-- Boite -->
@@ -55,10 +55,10 @@
 							    </div>
 							    <!-- Localité -->
 								<div class="form-group">
-							      <label class="control-label col-sm-4" for="loclity">Localité *</label>
+							      <label class="control-label col-sm-4" for="locality">Localité *</label>
 							      <div class="col-sm-8" style="max-width:600px;">
-							      	<input type="text" class="form-control" name="loclity" id="loclity" placeholder="Localité" value="{{ loclity }}">
-							      	<p class="hint" id="hint-loclity"></p>
+							      	<input type="text" class="form-control" name="locality" id="locality" placeholder="Localité" value="{{ loclity }}">
+							      	<p class="hint" id="hint-locality"></p>
 							      </div>
 							    </div>
 							</div>
@@ -67,7 +67,7 @@
 								<div class="form-group">
 							      <label class="control-label col-sm-4" for="acces">Accès</label>
 							      <div class="col-sm-8" style="max-width:600px;">
-							      	<textarea class="form-control" rows="3" name="acces" id="acces" placeholder="Acces au terrain"></textarea>
+							      	<textarea class="form-control" rows="5" name="acces" id="acces" placeholder="Acces au terrain"></textarea>
 							      	<p class="hint" id="hint-loclity"></p>
 							      </div>
 							    </div>
@@ -136,7 +136,10 @@
 					</div>
 				</div>
 			</div>
-			<button class="btn btn-default center-block">Ajouter</button>
+			<input type="text" id="latitude" name="lat" value="" style="display:none">
+			<input type="text" id="longitude" name="lng" value="" style="display:none">
+			<button type="button" onclick="validateRegisterCourt()" class="btn btn-default center-block">Ajouter</button>
+			<button class="btn btn-default" id="registerButton" style="display:none">Ajouter</button>
 		</form>
 	</div>
 </div>

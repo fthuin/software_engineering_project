@@ -628,7 +628,8 @@ function changeMDP(){
 
 //Fonction utilisé pour validé le formulaire d'édition du profil
 function validateEditInfo() {
-	var valid = true;
+
+	valid = true;
 
 	//Verification nom présent
 	var lastname = document.getElementById("lastname").value;
@@ -658,6 +659,7 @@ function validateEditInfo() {
 		//Verify number validity TODO
 		document.getElementById("hint-tel").innerHTML = "";
 	}
+
 	//Verification rue présent
 	var street = document.getElementById("street").value;
 	if(street==null || street == ""){
@@ -670,7 +672,7 @@ function validateEditInfo() {
 	//Verification numero présent
 	var number = document.getElementById("number").value;
 	if(number==null || number == ""){
-		document.getElementById("hint-number").innerHTML = " ! Entrer votre numéro/boite";
+		document.getElementById("hint-number").innerHTML = " ! Entrer votre numéro";
 		valid = false;
 	}else{
 		document.getElementById("hint-number").innerHTML = "";
@@ -694,19 +696,36 @@ function validateEditInfo() {
 		document.getElementById("hint-locality").innerHTML = "";
 	}
 
+
 	//TODO vérification addresse correcte
 
 	//Verification date de naissance présent
-	var birthdate = document.getElementById("birthdate").value;
+	var birthdate = document.getElementById("birthdateID").value;
 	if(birthdate==null || birthdate == ""){
 		document.getElementById("hint-birthdate").innerHTML = " ! Entrer votre date de naissance";
 		valid = false;
 	}else{
 		document.getElementById("hint-birthdate").innerHTML = "";
 	}
-	
 
-	return valid;
+	if(valid){
+
+		var geocoder = new google.maps.Geocoder();
+		var address = street+", "+number+" "+postalcode+" "+locality+" Belgium";
+
+		geocoder.geocode( { 'address': address}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			var latitude = results[0].geometry.location.lat();
+		    var longitude = results[0].geometry.location.lng();
+			document.getElementById("latitude").value = latitude;
+			document.getElementById("longitude").value = longitude;
+			document.getElementById("saveinfo").click();
+		    }else{
+		    	document.getElementById("hint-locality").innerHTML = "Adresse non reconnue";
+		    }
+		}); 
+	}
+
 }
 //fin de la section profil
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -801,7 +820,7 @@ function validateRegister() {
 	//Verification numero présent
 	var number = document.getElementById("number").value;
 	if(number==null || number == ""){
-		document.getElementById("hint-number").innerHTML = " ! Entrer votre numéro/boite";
+		document.getElementById("hint-number").innerHTML = " ! Entrer votre numéro";
 		valid = false;
 	}else{
 		document.getElementById("hint-number").innerHTML = "";
@@ -836,8 +855,82 @@ function validateRegister() {
 		document.getElementById("hint-birthdate").innerHTML = "";
 	}
 	
+	if(valid){
+		var geocoder = new google.maps.Geocoder();
+		var address = street+", "+number+" "+postalcode+" "+locality+" Belgium";
 
-	return valid;
+		geocoder.geocode( { 'address': address}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			alert("k")
+			var latitude = results[0].geometry.location.lat();
+		    var longitude = results[0].geometry.location.lng();
+			document.getElementById("latitude").value = latitude;
+			document.getElementById("longitude").value = longitude;
+			document.getElementById("registerButton").click();
+		    }else{
+		    	alert("nok")
+		    	document.getElementById("hint-locality").innerHTML = "Adresse non reconnue";
+		    }
+		}); 
+	}
+}
+
+function validateRegisterCourt() {
+	var valid = true;
+
+	//Verification rue présent
+	var street = document.getElementById("street").value;
+	if(street==null || street == ""){
+		document.getElementById("hint-street").innerHTML = " ! Entrer votre rue";
+		valid = false;
+	}else{
+		document.getElementById("hint-street").innerHTML = "";
+	}
+
+	//Verification numero présent
+	var number = document.getElementById("number").value;
+	if(number==null || number == ""){
+		document.getElementById("hint-number").innerHTML = " ! Entrer votre numéro";
+		valid = false;
+	}else{
+		document.getElementById("hint-number").innerHTML = "";
+	}
+
+	//Verification code postal présent
+	var postalcode = document.getElementById("postalcode").value;
+	if(postalcode==null || postalcode == ""){
+		document.getElementById("hint-postalcode").innerHTML = " ! Entrer votre code postal";
+		valid = false;
+	}else{
+		document.getElementById("hint-postalcode").innerHTML = "";
+	}
+
+	//Verification localité présent
+	var locality = document.getElementById("locality").value;
+	if(locality==null || locality == ""){
+		document.getElementById("hint-locality").innerHTML = " ! Entrer votre localité";
+		valid = false;
+	}else{
+		document.getElementById("hint-locality").innerHTML = "";
+	}
+
+	
+	if(valid){
+		var geocoder = new google.maps.Geocoder();
+		var address = street+", "+number+" "+postalcode+" "+locality+" Belgium";
+
+		geocoder.geocode( { 'address': address}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			var latitude = results[0].geometry.location.lat();
+		    var longitude = results[0].geometry.location.lng();
+			document.getElementById("latitude").value = latitude;
+			document.getElementById("longitude").value = longitude;
+			document.getElementById("registerButton").click();
+		    }else{
+		    	document.getElementById("hint-locality").innerHTML = "Adresse non reconnue";
+		    }
+		}); 
+	}
 }
 //Fin de la section inscription
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

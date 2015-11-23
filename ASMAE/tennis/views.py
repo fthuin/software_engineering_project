@@ -306,11 +306,13 @@ def registerTerrain(request):
 	allCourtType = CourtType.objects.all()
 	allCourtState = CourtState.objects.all()
 	if request.method == "POST":
-		rue = request.POST['rue']
-		numero = request.POST['numero']
+		rue = request.POST['street']
+		numero = request.POST['number']
 		boite = request.POST['boite']
 		postalcode = request.POST['postalcode']
-		locality = request.POST['loclity']
+		locality = request.POST['locality']
+		lat = request.POST['lat']
+		lng = request.POST['lng']
 		acces = request.POST['acces']
 		matiere = (u'' + request.POST['matiere']).encode('utf-8')
 		type = (u'' + request.POST['type']).encode('utf-8')
@@ -330,7 +332,7 @@ def registerTerrain(request):
 			return render(request,'tennis/registerTerrain.html',locals())
 
 		# Create court object
-		court = Court(rue = rue,numero=numero,boite=boite,codepostal=postalcode,localite=locality,acces=acces,matiere=CourtSurface.objects.filter(nom=matiere)[0],type=CourtType.objects.filter(nom=type)[0],dispoDimanche=dispoDimanche,dispoSamedi=dispoSamedi,etat=CourtState.objects.filter(nom=etat)[0],commentaire=commentaire,user = request.user)
+		court = Court(rue = rue,numero=numero,boite=boite,codepostal=postalcode,localite=locality,acces=acces,matiere=CourtSurface.objects.filter(nom=matiere)[0],type=CourtType.objects.filter(nom=type)[0],dispoDimanche=dispoDimanche,dispoSamedi=dispoSamedi,etat=CourtState.objects.filter(nom=etat)[0],commentaire=commentaire,user = request.user,latitude=lat,longitude=lng)
 
 		# Send confirmation mail
 		send_confirmation_email_court_registered(Participant.objects.get(user=request.user), court)
@@ -357,11 +359,13 @@ def editTerrain(request,id):
 
 	if request.method == "POST":
 		if request.POST['action'] == "modifyCourt":
-			rue = request.POST['rue']
-			numero = request.POST['numero']
+			rue = request.POST['street']
+			numero = request.POST['number']
 			boite = request.POST['boite']
 			postalcode = request.POST['postalcode']
-			locality = request.POST['loclity']
+			locality = request.POST['locality']
+			lat = request.POST['lat']
+			lng = request.POST['lng']
 			acces = request.POST['acces']
 			matiere = (u'' +request.POST['matiere']).encode('utf-8')
 			type = (u'' + request.POST['type']).encode('utf-8')
@@ -395,6 +399,8 @@ def editTerrain(request,id):
 			court.etat=CourtState.objects.filter(nom=etat)[0]
 			court.commentaire=commentaire
 			court.user = request.user
+			court.latitude = lat
+			court.longitude = lng
 			court.save()
 			successEdit = "Terrain "+str(id)+" bien édité!"
 			return redirect(reverse(terrain))
@@ -1003,11 +1009,13 @@ def editTerrainStaff(request, id):
 	court = Court.objects.filter(id=id)[0]
 	if request.method == "POST":
 		if request.POST['action'] == "modifyCourt":
-			rue = request.POST['rue']
-			numero = request.POST['numero']
+			rue = request.POST['street']
+			numero = request.POST['number']
 			boite = request.POST['boite']
 			postalcode = request.POST['postalcode']
-			locality = request.POST['loclity']
+			locality = request.POST['locality']
+			lat = request.POST['lat']
+			lng = request.POST['lng']
 			acces = request.POST['acces']
 			matiere = (u''+request.POST['matiere']).encode('utf-8')
 			type = request.POST['type']
@@ -1040,6 +1048,8 @@ def editTerrainStaff(request, id):
 			court.etat=CourtState.objects.filter(nom=etat)[0]
 			court.commentaire=commentaire
 			court.user = request.user
+			court.longitude = lng
+			court.latitude = lat
 			court.save()
 			LogActivity(user=request.user,section="Terrain",details="Terrain "+id+ " edite").save()
 			#successEdit = "Terrain "+str(id)+" bien édité!"
@@ -1166,6 +1176,8 @@ def profil(request):
 			postalcode = request.POST['postalcode']
 			birthdate = request.POST['birthdate']
 			classement = request.POST['classement']
+			lat = request.POST['lat']
+			lng = request.POST['lng']
 
 			if request.POST.__contains__("participated"):
 				oldparticipant = True
@@ -1203,6 +1215,8 @@ def profil(request):
 			participant.datenaissance = datenaissance
 			participant.classement = classement
 			participant.oldparticipant = oldparticipant
+			participant.latitude = lat
+			participant.longitude = lng
 			participant.save()
 			successEdit = "Le profil a bien été changé"
 			return render(request,'tennis/profil.html',locals())
@@ -1307,6 +1321,8 @@ def register(request):
 		postalcode = request.POST['postalcode']
 		birthdate = request.POST['birthdate']
 		classement = request.POST['classement']
+		lat = request.POST['lat']
+		lng = request.POST['lng']
 
 		if request.POST.__contains__("participated"):
 			oldparticipant = True
@@ -1353,7 +1369,7 @@ def register(request):
 		#Account creation & redirect
 		user = User.objects.create_user(username,email,password)
 		user.save()
-		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement = classement,oldparticipant = oldparticipant,datenaissance = datenaissance, isAccountActivated = False)
+		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement = classement,oldparticipant = oldparticipant,datenaissance = datenaissance, isAccountActivated = False, latitude=lat, longitude=lng)
 		participant.save()
 
 		# Create UserInWaitOfActivation object to keep track of the activation
