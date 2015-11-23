@@ -19,10 +19,6 @@
                         <div class="col-sm-2">
                             <p class="info">{{ allPair|length }}</p>
                         </div>
-                        <label class="control-label col-sm-10">Nombre de terrains disponible</label>
-                        <div class="col-sm-2">
-                            <p class="info">{{ nbrTerrains }}</p>
-                        </div>
                     </div>
                     <div class="col-sm-4">
                         <label class="control-label col-sm-8">Nombre de poules</label>
@@ -31,10 +27,24 @@
                         </div>
                     </div>
                     <div class="col-sm-4">
+                        <button class="btn btn-default center-block">Génération automatique</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label class="control-label col-sm-10">Nombre de terrains disponible</label>
+                        <div class="col-sm-2">
+                            <p class="info">{{ nbrTerrains }}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
                         <label class="control-label col-sm-8">Taille des poules</label>
                         <div class="col-sm-4">
                             <input class="form-control" style="min-width:50px;max-width:100px;" type="number" value="6" id="poulesSize">
                         </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <button class="btn btn-default center-block">Assigner les terrains</button>
                     </div>
                 </div>
             </div>
