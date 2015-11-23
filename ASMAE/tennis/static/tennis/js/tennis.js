@@ -843,6 +843,24 @@ function validateRegister() {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function setMap(latitude,longitude,z) {
+    var mapCanvas = document.getElementById('map');
+    var mapOptions = {
+      scrollwheel: false,
+      navigationControl: false,
+      center: new google.maps.LatLng(latitude, longitude),
+      zoom: z,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+
+    var map = new google.maps.Map(mapCanvas, mapOptions);
+    var marker = new google.maps.Marker({
+    position: {lat: latitude, lng: longitude},
+    animation: google.maps.Animation.DROP,
+    map: map
+  });
+}
+
 /*
  * Section contact
  */

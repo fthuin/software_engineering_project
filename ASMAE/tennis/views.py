@@ -1046,7 +1046,6 @@ def editTerrainStaff(request, id):
 			return redirect(reverse(validateTerrain,args={id}))
 
 		if request.POST['action'] == "deleteCourt":
-			#TODO delete terrain staff
 			court.delete()
 			LogActivity(user=request.user,section="Terrain",details="Terrain "+id+ " delete").save()
 			return redirect(reverse(staffTerrain))

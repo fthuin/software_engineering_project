@@ -114,8 +114,8 @@ var PairDict = {};
 {% for key, value in pairListAll.items %}
     PairDict[{{key}}] = []
     {% for elem in value %}
-        var nom1 = '{{ elem.user1.participant.prenom }}' +" "+'{{ elem.user1.participant.nom }}';
-        var nom2 = '{{ elem.user2.participant.prenom }}'+" "+'{{ elem.user2.participant.nom }}';
+        var nom1 = '{{elem.user1.participant.smallName}}'+" "+'{{elem.user1.participant.classement}}';
+        var nom2 = '{{elem.user2.participant.smallName}}'+" "+'{{elem.user1.participant.classement}}';
 
         var p = {id:'{{elem.id}}', user1:nom1,user2:nom2, age1:'{{elem.user1.age}}', age2:'{{elem.user2.age}}', comment:'{{elem.commentaires}}', titre1:'{{elem.user1.participant.titre}}', titre2:'{{elem.user2.participant.titre}}'};
         PairDict[{{key}}].push(p);
