@@ -18,7 +18,7 @@ from django.utils.crypto import get_random_string
 from django.http import HttpResponse, HttpResponseRedirect
 from tennis.pdfdocument import PDFTerrain, PDFPair
 from django.template.defaulttags import register
-
+import geocoder
 
 
 # Create your views here.

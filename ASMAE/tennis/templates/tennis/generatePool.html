@@ -9,7 +9,7 @@
     <h2 class="center">{{ tournoi.nom }}</h2>
     <hr class="line">
     <form class="form-horizontal" action="{% url 'tennis.views.generatePool' tournoi.nom %}" method="post">
-{% csrf_token %}
+	{% csrf_token %}
         <div class="panel panel-default">
             <div class="panel-heading">Configuration</div>
             <div class="panel-body">
@@ -44,7 +44,7 @@
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <button class="btn btn-default center-block" type="button">Assigner les terrains</button>
+                        <button class="btn btn-default center-block" type="button" onclick="terrainAssignement()">Assigner les terrains</button>
                     </div>
                 </div>
             </div>
@@ -104,8 +104,10 @@
 {% block commande %}
 {% load static from staticfiles %}
 <script src="{% static 'tennis/js/poules.js' %}" type="text/javascript"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5lEleQslU1oemC3rf67mvETJrqOjKrFE&libraries=geometry"></script>
 
 <script>
+
 
 //Creation de la liste des paires
 var PairList = [] ;
@@ -114,10 +116,15 @@ var PairDict = {};
 {% for key, value in pairListAll.items %}
     PairDict[{{key}}] = []
     {% for elem in value %}
-        var nom1 = '{{ elem.user1.participant.prenom }}' +" "+'{{ elem.user1.participant.nom }}';
-        var nom2 = '{{ elem.user2.participant.prenom }}'+" "+'{{ elem.user2.participant.nom }}';
+        var nom1 = '{{elem.user1.participant.smallName}}'+" "+'{{elem.user1.participant.classement}}';
+        var nom2 = '{{elem.user2.participant.smallName}}'+" "+'{{elem.user1.participant.classement}}';
+		var Lat1 = '{{elem.user1.participant.latitude}}'
+		var Lng1 = '{{elem.user1.participant.longitude}}'
+		var Lat2 = '{{elem.user2.participant.latitude}}'
+		var Lng2 = '{{elem.user2.participant.longitude}}'
 
-        var p = {id:'{{elem.id}}', user1:nom1,user2:nom2, age1:'{{elem.user1.age}}', age2:'{{elem.user2.age}}', comment:'{{elem.commentaires}}', titre1:'{{elem.user1.participant.titre}}', titre2:'{{elem.user2.participant.titre}}'};
+
+        var p = {id:'{{elem.id}}', user1:nom1,user2:nom2, age1:'{{elem.user1.age}}', age2:'{{elem.user2.age}}', comment:'{{elem.commentaires}}', titre1:'{{elem.user1.participant.titre}}', titre2:'{{elem.user2.participant.titre}}',lat1:Lat1,lng1:Lng1,lat2:Lat2,lng2:Lng2};
         PairDict[{{key}}].push(p);
         PairList.push(p);
     {% endfor %}
@@ -132,7 +139,9 @@ TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere
 var terrainSaved = []
 {% for elem in listTerrainSaved %}
 var addr = '{{elem.rue}}'+ ", "+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
-terrainSaved.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr})
+var Lat = '{{elem.latitude}}'
+var Lng = '{{elem.longitude}}'
+terrainSaved.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng})
 {% endfor %}
 var leaderSaved = []
 {% for elem in listLeaderSaved %}
@@ -191,7 +200,7 @@ function save() {
          }
          document.getElementById("assignLeaders").value += poulesDict[''+i]['leader'] + '/';
     }
-    /*for (var i = 0; i < nbr ; i++) {
+   /* for (var i = 0; i < nbr ; i++) {
         alert("Poule " + i);
         alert("Leader : " +poulesDict[''+i]['leader']);
         alert("Terrain : " + poulesDict[''+i]['terrainID']);
@@ -243,6 +252,65 @@ function checkValues()
 		
     }
 }
+
+function terrainAssignement()
+{
+	
+	/* DEBUT COPIER COLLER */
+    document.getElementById("assignTerrains").value = ""
+    document.getElementById("assignPairPoules").value = ""
+    document.getElementById("assignLeaders").value = ""
+    var nbr = document.getElementById("poulesNumber").value;
+    var poulesDict = {};
+    for (var i = 0; i < nbr ; i++) {
+        var poule = {}
+        poule['leader'] = document.getElementById("Leader"+(i+1)).value;
+        poule['terrainID'] = document.getElementById("ID"+(i+1)).textContent;
+        poule['pairList'] = [];
+        poulesDict[''+i] = poule;
+        // TODO : Check si le leader et le terrainID sont valides
+    }
+    for (var i = 0; i < PairList.length ; i++) {
+        // On link les paires aux ID des poules
+        var id = "" + document.getElementById(""+PairList[i].id).parentNode.parentNode.parentNode.id;
+        id = id.replace("list", "");
+        poulesDict[''+(id-1)]['pairList'].push(PairList[i]);
+    }
+    for (var i = 0; i < nbr ; i++) {
+         document.getElementById("assignTerrains").value += poulesDict[''+i]['terrainID'] + '-';
+         document.getElementById("assignPairPoules").value += '[' + i + ']-'
+         for (var j = 0 ; j < poulesDict[''+i]['pairList'].length ; j++) {
+            document.getElementById("assignPairPoules").value += poulesDict[''+i]['pairList'][j].id + '-';
+         }
+         document.getElementById("assignLeaders").value += poulesDict[''+i]['leader'] + '/';
+    }
+	/* FIN COPIER COLLER */
+	/* Accéder à la première paire de la première poule */
+	// poulesDict['1']['pairList'][0]
+	/* Fin accéder à la premiere ... */
+	//alert(poulesDict['1']['pairList'][0].u2addr);
+
+	listAddr = [];
+	for(var key in poulesDict){
+		for(var i = 0;i<poulesDict[key]['pairList'].length;i++){
+			listAddr.push(poulesDict[key]['pairList'][i].u1addr);
+			listAddr.push(poulesDict[key]['pairList'][i].u2addr);
+			var latLngA = new google.maps.LatLng(55.930385, -3.118425);
+            var latLngB = new google.maps.LatLng(50.087692, 14.421150);
+			
+            var distance = google.maps.geometry.spherical.computeDistanceBetween(latLngA, latLngB);
+
+		}
+	}
+
+                 
+
+	
+
+
+
+}
+
 </script>
 {% endblock %}
     

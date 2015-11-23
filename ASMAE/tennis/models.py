@@ -36,6 +36,12 @@ class Participant(models.Model):
 
 	def smallName(self):
 		return u'' +self.prenom[0:1].upper()+". "+self.nom
+	
+	def getAdresse(self):
+		return self.rue+","+self.numero+" "+self.localite+" Belgium"
+
+	def shortAdresse(self):
+		return self.localite+" Belgium"
 		
 	#def __eq__(self, other):
 	#	return self.username == other.user.username
@@ -139,7 +145,10 @@ class Court(models.Model):
 		return u'' + repr(self.id) + ' '+ self.rue
 		
 	def getAdresse(self):
-		return u"" + numero + " " + rue + ", " + codepostal + " " + localite
+		return u"" + self.numero + " " + self.rue + ", " + self.codepostal + " " + self.localite
+
+	def shortAdresse(self):
+		return self.localite+" Belgium"
 
 	class Meta:
 		verbose_name = "Terrain"
