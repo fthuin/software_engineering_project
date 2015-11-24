@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
 from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, PouleStatus,Arbre, TournoiStatus
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail
+from tennis.classement import validateClassementOfParticipant
 import re, math
 import json
 import datetime
@@ -1366,7 +1367,7 @@ def register(request):
 		#Account creation & redirect
 		user = User.objects.create_user(username,email,password)
 		user.save()
-		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement = classement,oldparticipant = oldparticipant,datenaissance = datenaissance, isAccountActivated = False, latitude=lat, longitude=lng)
+		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement = classement,oldparticipant = oldparticipant,datenaissance = datenaissance, isClassementVerified=False, isAccountActivated = False, latitude=lat, longitude=lng)
 		participant.save()
 
 		# Create UserInWaitOfActivation object to keep track of the activation

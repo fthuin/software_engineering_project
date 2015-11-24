@@ -209,12 +209,36 @@
 								      	<p class="hint" id="hint-locality"></p>
 								      </div>
 								    </div>
-								    <!-- classement -->
-								    <div class="form-group">
-								      <label class="control-label col-sm-4" for="classement">Classement</label>
+									<!-- NEW classement -->
+									<div class="form-group">
+								      <label class="control-label col-sm-4" for="title">Classement</label>
 								      <div class="col-sm-8">
-								      	<input type="text" class="form-control" name="classement" id="classement" placeholder="Classement" value="{{ classement }}">
-								      	<p class="hint" id="hint-classement"></p>
+								      	<select class="form-control" id="select_classement" name="classement" placeholder="Classement" onchange="onChangeClassement()">
+											<option>N.C.</option>
+										    <option>C30.5</option>
+										    <option>C30.4</option>
+										    <option>C30.3</option>
+										    <option>C30.2</option>
+										    <option>C30.1</option>
+										    <option>C30</option>
+										    <option>C15.5</option>
+										    <option>C15.4</option>
+										    <option>C15.3</option>
+										    <option>C15.2</option>
+										    <option>C15.1</option>
+											<option>C15</option>
+											<option>B+4/6</option>
+											<option>B+2/6</option>
+											<option>B0</option>
+											<option>B-2/6</option>
+											<option>B-4/6</option>
+											<option>B-15</option>
+											<option>B-15.1</option>
+											<option>B-15.2</option>
+											<option>B-15.4</option>
+											<option>A Nat</option>
+											<option>A Int</option>
+										</select>
 								      </div>
 								    </div>
 								    <!-- deja participe -->
@@ -293,6 +317,11 @@ function onChangeYearOfBirth() {
     var an = select_an.options[select_an.selectedIndex].value
 	date = dateNaissance.value
 	dateNaissance.value = date.substring(0,6)+an
+}
+
+function onChangeClassement() {
+    var select_classement = document.getElementById("select_classement");
+    classement = select_classement.options[select_classement.selectedIndex].value
 }
 
 	$('#select_jour').on('input', function() { 

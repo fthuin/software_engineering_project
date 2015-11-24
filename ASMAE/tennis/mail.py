@@ -74,8 +74,8 @@ Merci d'avoir mis à disposition votre terrain de tennis pour le prochain tourno
 'Le Charles de Lorraine'. Veuillez s'il vous plait re-vérifier que les
 informations ci-dessous correspondent bien à votre terrain.
 
-Adresse : """ + adresseCourt + """
-Type : """ + typeCourt + """
+Adresse : """ + adresseCourt + u"""
+Type : """ + typeCourt + u"""
 Disponibilité : """
 
     if disponibleDimanche and disponibleSamedi:
@@ -87,7 +87,7 @@ Disponibilité : """
     else:
         message += "non disponible"
 
-    message += """
+    message += u"""
 
 Si une quelconque erreur reste présente dans l'enregistrement, sachez qu'il reste possible
 de modifier les informations d'inscription sur notre site. Nous sommes également disponible
