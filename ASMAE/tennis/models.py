@@ -22,7 +22,6 @@ class Participant(models.Model):
 	datenaissance = models.DateTimeField(null=True, verbose_name="Date de naissance")
 	classement = models.CharField(max_length=10,null=True, blank=True)
 	oldparticipant = models.BooleanField(default=False)
-	isGroupLeader = models.BooleanField(default=False)
 	isAccountActivated = models.BooleanField(default=True)
 
 	def __str__(self):
@@ -157,8 +156,7 @@ class Court(models.Model):
 		)
 
 class TournoiStatus(models.Model):
-	id = models.AutoField(primary_key=True)
-	numero = models.IntegerField(unique=True, null=True, verbose_name='ID')
+	numero = models.IntegerField(verbose_name='Numero', primary_key=True)
 	nom = models.CharField(max_length=25, verbose_name="Nom")
 	
 	def __str__(self):
@@ -168,7 +166,7 @@ class TournoiStatus(models.Model):
 		return u'' + self.nom
 	
 	class Meta:
-		verbose_name = "Status du tournoi"
+		verbose_name = "Status des tournoi"
 
 class Arbre(models.Model):
 	id = models.AutoField(primary_key=True)
@@ -185,18 +183,51 @@ class Arbre(models.Model):
 	class Meta:
 		verbose_name = "Arbre"
 
-
-
-class Tournoi(models.Model):
+class TournoiTitle(models.Model):
 	nom = models.CharField(max_length=50,primary_key=True)
 	description = models.TextField(null=True)
 	jour = models.CharField(max_length=50)
-	status = models.ForeignKey(TournoiStatus,null=True,blank=True)
-	arbre = models.ForeignKey(Arbre, null=True, blank=True)
-
+	sexe_p1 = models.CharField(max_length=30, null=True)
+	sexe_p2 = models.CharField(max_length=30, null=True)
 
 	def __str__(self):
-		return self.nom
+		return str(self.nom)
+
+	def __unicode__(self):
+		return u'' + str(self.nom)
+
+	class Meta:
+		verbose_name = "Titre Tournoi"
+
+class TournoiCategorie(models.Model):
+	nom = models.CharField(max_length=50,primary_key=True)
+	age_min_p1 = models.IntegerField(null=True)
+	age_min_p2 = models.IntegerField(null=True)
+	age_max_p1 = models.IntegerField(null=True)
+	age_max_p2 = models.IntegerField(null=True)
+
+	def __str__(self):
+		return str(self.nom)
+
+	def __unicode__(self):
+		return u'' + str(self.nom)
+
+	class Meta:
+		verbose_name = "Catégorie Tournoi"
+
+
+class Tournoi(models.Model):
+	id = models.AutoField(primary_key=True)
+	titre = models.ForeignKey(TournoiTitle, null=True)
+	categorie = models.ForeignKey(TournoiCategorie, null=True)
+	status = models.ForeignKey(TournoiStatus, null=True)
+	arbre = models.ForeignKey(Arbre, null=True)
+
+	def __str__(self):
+		return "Tournoi " + str(self.titre) + str(self.categorie)
+
+	def __unicode__(self):
+		return u'' + "Tournoi " + str(self.titre) + str(self.categorie)
 
 	class Meta:
 		verbose_name = 'Tournoi'
@@ -206,8 +237,6 @@ class Tournoi(models.Model):
 			("DoubleFemmes", "Manage double femmes"),
 			("DoubleMixte", "Manage double mixte"),
 		)
-
-
 
 class Pair(models.Model):
 	id = models.AutoField(primary_key=True, verbose_name="ID")
@@ -235,24 +264,8 @@ class Pair(models.Model):
         )
 
 
-
-
-
-
-
-class Groupe(models.Model):
-	id = models.AutoField(primary_key=True)
-	tournoi = models.ForeignKey(Tournoi, default=None)
-	leader = models.ForeignKey('Pair', default=None) #TO CHANGE: ca doit etre un USER et pas une PAIR
-	court = models.ForeignKey(Court, default=None) #TO CHANGE: OneToOneField
-	gsize = models.IntegerField(null=True)
-
-	def __str__(self):
-		return "Groupe n " + str(self.id)
-
-
 class PouleStatus(models.Model):
-	id = models.IntegerField(primary_key=True, verbose_name='ID')
+	numero = models.IntegerField(verbose_name='Numero', primary_key=True)
 	nom = models.CharField(max_length=25, verbose_name="Nom")
 	
 	def __str__(self):
@@ -262,7 +275,7 @@ class PouleStatus(models.Model):
 		return u'' + self.nom
 	
 	class Meta:
-		verbose_name = "Status de la poule"
+		verbose_name = "Status des poule"
 
 class Score(models.Model):
 	paire1 = models.ForeignKey(Pair, related_name='paire1', verbose_name = "Paire 1")
