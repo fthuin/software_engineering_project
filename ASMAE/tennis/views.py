@@ -18,8 +18,6 @@ from django.utils.crypto import get_random_string
 from django.http import HttpResponse, HttpResponseRedirect
 from tennis.pdfdocument import PDFTerrain, PDFPair
 from django.template.defaulttags import register
-import geocoder
-
 
 # Create your views here.
 def home(request):
@@ -1047,7 +1045,6 @@ def editTerrainStaff(request, id):
 			court.dispoSamedi=dispoSamedi
 			court.etat=CourtState.objects.filter(nom=etat)[0]
 			court.commentaire=commentaire
-			court.user = request.user
 			court.longitude = lng
 			court.latitude = lat
 			court.save()

@@ -94,14 +94,37 @@
 			<div class="col-sm-6">
 				<div class="panel panel-default center-block" style="max-width:600px;">
 					<div class="panel-heading">Terrains</div>
-					<div class="list-group">
-						{% for elem in terrain %}
-						<a href="{% url 'tennis.views.validateTerrain' elem.id %}" class="list-group-item"><b>ID : </b>{{ elem.id}} / <b>Matière : </b>{{ elem.matiere }}<br> 
-						<b>Adresse : </b>{{elem.rue }} {{elem.numero}}, {{elem.codepostal}} {{elem.localite}}					
-						</a>
-						{% empty %}
-						<li class="list-group-item center">Cet utilisateur n'a pas enregistré de terrain</li>
-						{% endfor %}
+					<div class="table-responsive">
+					<table class="table table-hover">
+					<thead>
+					    <tr>
+					        <th>ID</th>
+					        <th>Matière</th>
+					        <th>Valide</th>
+					        <th>Disponibilité</th>
+					        <th>Adresse</th>
+					   </tr>
+					</thead>
+					<tbody>
+					    {% for elem in terrain %}
+					    <tr onclick='window.document.location="{% url 'tennis.views.validateTerrain' elem.id %}"' class="clickable-row">
+					        <td>{{ elem.id }}</td>
+					        <td>{{ elem.matiere }}</td>
+					        <td>{% if elem.valid %}oui{% else %}non{% endif %}</td>
+					        <td>{% if elem.dispoSamedi and elem.dispoDimanche %}Samedi et dimanche{% elif elem.dispoSamedi %}Samedi{% elif elem.dispoDimanche %}Dimanche{% else %} - {% endif %}</td>
+					        <td>{{ elem.rue }} {{ elem.numero}},<br> {{ elem.codepostal }} {{ elem.localite }}</td>
+					    </tr>
+					    {% empty %}
+					    <tr>
+					        <td>-</td>
+					        <td>-</td>
+					        <td>-</td>
+					        <td>-</td>
+					        <td>-</td>
+					    </tr>
+					    {% endfor %}
+					</tbody>
+					</table>
 					</div>
 				</div>
 			</div>

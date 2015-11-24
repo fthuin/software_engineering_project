@@ -349,17 +349,14 @@ a.UserLink{
     cursor: pointer;
 }
 
+
+
 /* The max width is dependant on the container (more info below) */
 .popover{
     width: 200px ; /* Max Width of the popover (depending on the container!) */
 }
 
 .zone {
-    /*
-    background-color: rgba(238, 231, 203, 1);
-    background: -webkit-linear-gradient(right, rgba(209, 199, 159, 1) 0%, rgba(238, 231, 203, 1) 100%);
-    background: linear-gradient(to left, rgba(209, 199, 159, 1) 0%, rgba(238, 231, 203, 1) 100%);
-    */
     background-color: #EEEECC;
     border-radius: 15px;
     color:#D4542D;;
@@ -367,6 +364,18 @@ a.UserLink{
     border: solid 1px #aaa;
     padding:12px;
     margin:0;
+    cursor:pointer;
+}
+
+.zone-clicked {
+    background-color: #FFFFBB;
+    border-radius: 15px;
+    color:#BF4C28;;
+    font-weight: bold;
+    border: solid 1px black;
+    padding:12px;
+    margin:0;
+    cursor:pointer;
 }
 
 .dropBox{
