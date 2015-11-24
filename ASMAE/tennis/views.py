@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
 from tennis.models import Extra, Participant,Court, Tournoi,Groupe, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, PouleStatus,Arbre, TournoiStatus
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail
-from tennis.classement import validateClassementOfParticipant
+from tennis.classement import validate_classement_thread
 import re, math
 import json
 import datetime
@@ -1216,6 +1216,10 @@ def profil(request):
 			participant.latitude = lat
 			participant.longitude = lng
 			participant.save()
+			
+			# Validate classement
+			validate_classement_thread(participant)
+			
 			successEdit = "Le profil a bien été changé"
 			return render(request,'tennis/profil.html',locals())
 
@@ -1367,7 +1371,7 @@ def register(request):
 		#Account creation & redirect
 		user = User.objects.create_user(username,email,password)
 		user.save()
-		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement = classement,oldparticipant = oldparticipant,datenaissance = datenaissance, isClassementVerified=False, isAccountActivated = False, latitude=lat, longitude=lng)
+		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement = classement,oldparticipant = oldparticipant,datenaissance = datenaissance, isClassementVerified = False, isAccountActivated = False, latitude=lat, longitude=lng)
 		participant.save()
 
 		# Create UserInWaitOfActivation object to keep track of the activation
@@ -1379,6 +1383,9 @@ def register(request):
 		activationObject = UserInWaitOfActivation(participant = participant, dayOfRegistration = today, confirmation_key= key)
 		activationObject.save()
 		link = "http://" + request.get_host() + "/tennis/emailValidation/"
+		
+		# Verify user classement
+		validate_classement_thread(participant)
 
 		# Send email with code to finish registration and validate account
 		send_register_confirmation_email(activationObject, participant, link)
