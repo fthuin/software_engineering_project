@@ -317,7 +317,7 @@ function createPanel(number){
 							'</div>'+
 
 							'<div class="row">'+
-								'<label class="control-label col-xs-7">Empreinte Carbone</label>'+
+								'<label class="control-label col-xs-7">Kilomètres</label>'+
 								'<div class="col-xs-5"><p class="info" id="empreinte'+number+'"> - </p></div>'+
 							'</div>'+
 						'</div>'+
