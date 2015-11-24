@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <button class="btn btn-default center-block" type="button">Génération automatique</button>
+                        <button class="btn btn-default center-block" type="button" onclick="autogen()">Génération automatique</button>
                     </div>
                 </div>
                 <div class="row">
@@ -132,7 +132,9 @@ var PairDict = {};
 
 {% for elem in listTerrains %}
 var addr = '{{elem.rue}}'+ ", "+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
-TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr})
+var Lat = '{{elem.latitude}}'
+var Lng = '{{elem.longitude}}'
+TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng})
 
 {% endfor %}
 
@@ -291,24 +293,128 @@ function terrainAssignement()
 	//alert(poulesDict['1']['pairList'][0].u2addr);
 
 	listAddr = [];
-	for(var key in poulesDict){
-		for(var i = 0;i<poulesDict[key]['pairList'].length;i++){
-			listAddr.push(poulesDict[key]['pairList'][i].u1addr);
-			listAddr.push(poulesDict[key]['pairList'][i].u2addr);
-			var latLngA = new google.maps.LatLng(55.930385, -3.118425);
-            var latLngB = new google.maps.LatLng(50.087692, 14.421150);
+	dico = {};
+	for(var j=0;j<TerrainList.length;j++){
+				dico[TerrainList[j].id] = {};
+				totalDistanceTerrain = 0;
+				var terrainLat = TerrainList[j].lat;
+				var terrainLng = TerrainList[j].lng;
+				var terrainlatLng = new google.maps.LatLng(parseFloat(terrainLat.replace(",", ".")), parseFloat(terrainLng.replace(",", ".")))
+					for(var key in poulesDict){
+						
+						for(var i = 0;i<poulesDict[key]['pairList'].length;i++){
 			
-            var distance = google.maps.geometry.spherical.computeDistanceBetween(latLngA, latLngB);
+							var user1Lat = poulesDict[key]['pairList'][i].lat1;
+							var user1Lng = poulesDict[key]['pairList'][i].lng1;
+							var user2Lat = poulesDict[key]['pairList'][i].lat2;
+							var user2Lng = poulesDict[key]['pairList'][i].lng2;
+							var latLng1 = new google.maps.LatLng(parseFloat(user1Lat.replace(",", ".")), parseFloat(user1Lng.replace(",", ".")));
+							var latLng2 = new google.maps.LatLng(parseFloat(user2Lat.replace(",", ".")), parseFloat(user2Lng.replace(",", ".")));
 
-		}
+							var distance1 = google.maps.geometry.spherical.computeDistanceBetween(latLng1, terrainlatLng);
+							var distance2 = google.maps.geometry.spherical.computeDistanceBetween(latLng2, terrainlatLng);
+							totalDistanceTerrain = totalDistanceTerrain + distance1 + distance2;
+							//alert(distance1);
+							//alert(distance2);
+						}
+					//alert("total");
+					//alert(totalDistanceTerrain);
+					dico[TerrainList[j].id][key] = totalDistanceTerrain;
+
+					}
+					
+	}
+	
+	//On a toutes les distance des poules au terrainmatieannt on va assigner les terrains
+
+	alreadyTaken = [];
+	for(var key in dico[key]){
+		var minDistance =  Number.MAX_VALUE;
+		var index = -1;
+		for (var key2 in dico){
+			console.log(key2);
+			console.log(dico[key2][key]);
+			if(minDistance > dico[key2][key] && (alreadyTaken.indexOf(key2-1) ==-1 || alreadyTaken.length == TerrainList.length)){
+				
+				minDistance = dico[key2][key];
+				index = key2-1;
+				
+			}
+		}	
+		//Assigner le terrain index a la poule key par html brole
+		console.log(key);
+		console.log("Poule "+key+" with terrain "+index);
+		setInfoTerrain(TerrainList[index].user,TerrainList[index].matiere,TerrainList[index].addr,TerrainList[index].id,parseInt(key)+1);
+		document.getElementById("empreinte"+(parseInt(key)+1)).innerHTML = Math.round(minDistance)/1000;
+		alreadyTaken.push(index);
+
+
 	}
 
-                 
+}
+function autogen(){
 
+	/* DEBUT COPIER COLLER */
+    document.getElementById("assignTerrains").value = ""
+    document.getElementById("assignPairPoules").value = ""
+    document.getElementById("assignLeaders").value = ""
+    var nbr = document.getElementById("poulesNumber").value;
+    var poulesDict = {};
+    for (var i = 0; i < nbr ; i++) {
+        var poule = {}
+        poule['leader'] = document.getElementById("Leader"+(i+1)).value;
+        poule['terrainID'] = document.getElementById("ID"+(i+1)).textContent;
+        poule['pairList'] = [];
+        poulesDict[''+i] = poule;
+        // TODO : Check si le leader et le terrainID sont valides
+    }
+    for (var i = 0; i < PairList.length ; i++) {
+        // On link les paires aux ID des poules
+        var id = "" + document.getElementById(""+PairList[i].id).parentNode.parentNode.parentNode.id;
+        id = id.replace("list", "");
+        poulesDict[''+(id-1)]['pairList'].push(PairList[i]);
+    }
+    for (var i = 0; i < nbr ; i++) {
+         document.getElementById("assignTerrains").value += poulesDict[''+i]['terrainID'] + '-';
+         document.getElementById("assignPairPoules").value += '[' + i + ']-'
+         for (var j = 0 ; j < poulesDict[''+i]['pairList'].length ; j++) {
+            document.getElementById("assignPairPoules").value += poulesDict[''+i]['pairList'][j].id + '-';
+         }
+         document.getElementById("assignLeaders").value += poulesDict[''+i]['leader'] + '/';
+    }
+	/* FIN COPIER COLLER */
+	/* Accéder à la première paire de la première poule */
+	// poulesDict['1']['pairList'][0]
+	/* Fin accéder à la premiere ... */
+	//alert(poulesDict['1']['pairList'][0].u2addr);
+	var distanceMatrix = new Array(PairList.length);
+	for(var i=0;i<PairList.length;i++){
+		distanceMatrix[i] = new Array(TerrainList.length);
+		var user1Lat = PairList[i].lat1;
+		var user1Lng = PairList[i].lng1;
+		var user2Lat = PairList[i].lat2;
+		var user2Lng = PairList[i].lng2;
+		var latLng1 = new google.maps.LatLng(parseFloat(user1Lat.replace(",", ".")), parseFloat(user1Lng.replace(",", ".")));
+		var latLng2 = new google.maps.LatLng(parseFloat(user2Lat.replace(",", ".")), parseFloat(user2Lng.replace(",", ".")));
+		for(var j=0;j<TerrainList.length;j++){
+			var terrainLat = TerrainList[j].lat;
+			var terrainLng = TerrainList[j].lng;
+			var terrainlatLng = new google.maps.LatLng(parseFloat(terrainLat.replace(",", ".")), parseFloat(terrainLng.replace(",", ".")));
+			
+			var distance1 = google.maps.geometry.spherical.computeDistanceBetween(latLng1, terrainlatLng);
+			var distance2 = google.maps.geometry.spherical.computeDistanceBetween(latLng2, terrainlatLng);
+			var totalDistancePair = distance1+distance2;
+
+			distanceMatrix[i][j] = totalDistancePair;
+
+		 }
+			
+	}
+	BranchAndBound();
+
+}
+function BranchAndBound(){
 	
-
-
-
 }
 
 </script>

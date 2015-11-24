@@ -860,15 +860,13 @@ function validateRegister() {
 		var address = street+", "+number+" "+postalcode+" "+locality+" Belgium";
 
 		geocoder.geocode( { 'address': address}, function(results, status) {
-		if (status == google.maps.GeocoderStatus.OK) {
-			alert("k")
+		if (status == google.maps.GeocoderStatus.OK) {			
 			var latitude = results[0].geometry.location.lat();
 		    var longitude = results[0].geometry.location.lng();
 			document.getElementById("latitude").value = latitude;
 			document.getElementById("longitude").value = longitude;
 			document.getElementById("registerButton").click();
-		    }else{
-		    	alert("nok")
+		    }else{	    	
 		    	document.getElementById("hint-locality").innerHTML = "Adresse non reconnue";
 		    }
 		}); 
