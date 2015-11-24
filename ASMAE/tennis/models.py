@@ -23,6 +23,7 @@ class Participant(models.Model):
 	classement = models.CharField(max_length=10,null=True, blank=True)
 	oldparticipant = models.BooleanField(default=False)
 	isGroupLeader = models.BooleanField(default=False)
+	isClassementVerified = models.BooleanField(default=False)
 	isAccountActivated = models.BooleanField(default=True)
 
 	def __str__(self):
