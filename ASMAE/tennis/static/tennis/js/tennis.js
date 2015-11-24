@@ -21,12 +21,12 @@ String.prototype.sansAccent = function(){
         /[\307]/g, /[\347]/g, // C, c
     ];
     var noaccent = ['A','a','E','e','I','i','O','o','U','u','N','n','C','c'];
-     
+
     var str = this;
     for(var i = 0; i < accent.length; i++){
         str = str.replace(accent[i], noaccent[i]);
     }
-     
+
     return str;
 }
 
@@ -195,7 +195,7 @@ function setUserRestriction(sexe,birth,page){
 				panneau.children[i].style.fontWeight ="bold";
 				panneau.children[i].onclick = function() {return false;};
 			}
-			
+
 		}
 
 	}
@@ -297,7 +297,7 @@ function setPlusMoins(){
 	}else{
 		document.getElementById("plusmoins").className  = "glyphicon glyphicon-chevron-up pull-right"
 	}
-	
+
 }
 
 
@@ -333,7 +333,7 @@ function setCourt(page){
 		}
 		var valid = CourtList[i][10];
 		var dispo = CourtList[i][11];
-		
+
 		//var p = '<tr class="clickable-row" data-href="utilisateurs/'+UserList[i][0]+'"><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td>'+age+' ans</td></tr>';
 		var p = '<tr onclick="window.document.location='+"'terrains/"+CourtList[i][3]+"'"+';" class="clickable-row"><td>'+CourtList[i][3]+'</td><td>'+CourtList[i][4]+'</td><td>'+valid+'</td><td>'+dispo+'</td><td>'+CourtList[i][1]+' '+CourtList[i][2]+' ('+CourtList[i][0]+')</td><td>'+adress+'</td></tr>';
 		panneau.innerHTML += p;
@@ -373,9 +373,9 @@ function setPair(page){
 		var valid = PairList[i][1];
 		var pay = PairList[i][2];
 		var info = '<b>ID : </b>'+PairList[i][0]+' / <b> Tournoi : </b>'+PairList[i][9]+' / <b>Valide : </b>'+valid+' / <b>Payé : </b>'+pay;
-		
+
 		var p = '<tr onclick="window.document.location='+"'paires/"+PairList[i][0]+"'"+';" class="clickable-row"><td>'+PairList[i][0]+'</td><td>'+PairList[i][9]+'</td><td>'+valid+'</td><td>'+pay+'</td><td>'+user1+'</td><td>'+user2+'</td></tr>';
-		
+
 		//var p = '<a href="paires/'+PairList[i][0]+'" class="list-group-item">'+info+'<br>'+user1+' - '+user2+'</a>';
 		panneau.innerHTML += p;
 	};
@@ -421,7 +421,7 @@ function setUserPermStaff(page){
 		var year = UserList[i][4].split('/')[2];
 		var now = new Date().getFullYear();
 		var age = now-year;
-		var p = '<a onClick="selectUserStaff('+"'"+UserList[i][0]+"',"+"'"+UserList[i][2]+"',"+"'"+UserList[i][1]+"',"+"'"+UserList[i][5]+"','"+UserList[i][6]+"'"+');" href="javascript:void(0)" class="list-group-item">'+UserList[i][0]+' - '+UserList[i][3]+' '+UserList[i][1]+' '+UserList[i][2]+' - '+age+' ans</a>';
+        var p = '<tr class="clickable-row" onClick="selectUserStaff('+"'"+UserList[i][0]+"',"+"'"+UserList[i][2]+"',"+"'"+UserList[i][1]+"',"+"'"+UserList[i][5]+"','"+UserList[i][6]+"'"+');"><td>'+UserList[i][0]+'</td><td> '+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td></tr>';
 		panneau.innerHTML += p;
 	};
 
@@ -464,7 +464,7 @@ function admin()
         document.getElementById("extraID").disabled = true;
         document.getElementById("userID").disabled = true;
         document.getElementById("pairID").disabled = true;
-        document.getElementById("courtID").disabled = true;      
+        document.getElementById("courtID").disabled = true;
         document.getElementById("Tournoi des famillesID").disabled = true;
         document.getElementById("Double hommesID").disabled = true;
         document.getElementById("Double femmesID").disabled = true;
@@ -475,7 +475,7 @@ function admin()
         document.getElementById("extraID").disabled = false;
         document.getElementById("userID").disabled = false;
         document.getElementById("pairID").disabled = false;
-        document.getElementById("courtID").disabled = false;      
+        document.getElementById("courtID").disabled = false;
         document.getElementById("Tournoi des famillesID").disabled = false;
         document.getElementById("Double hommesID").disabled = false;
         document.getElementById("Double femmesID").disabled = false;
@@ -487,7 +487,7 @@ function selectUserStaff(username,nom,prenom,perm,group){
 	document.getElementById("userInfo").innerHTML = prenom +' '+nom+' ('+username+')';
 	document.getElementById("valider").disabled = false;
 	document.getElementById("userInfo").href = "/tennis/staff/utilisateurs/"+username;
-	
+
 	//TODO set permissions on checkpoint
     if(perm.indexOf("extra") > -1)
     {
@@ -723,7 +723,7 @@ function validateEditInfo() {
 		    }else{
 		    	document.getElementById("hint-locality").innerHTML = "Adresse non reconnue";
 		    }
-		}); 
+		});
 	}
 
 }
@@ -854,7 +854,7 @@ function validateRegister() {
 	}else{
 		document.getElementById("hint-birthdate").innerHTML = "";
 	}
-	
+
 	if(valid){
 		var geocoder = new google.maps.Geocoder();
 		var address = street+", "+number+" "+postalcode+" "+locality+" Belgium";
@@ -871,7 +871,7 @@ function validateRegister() {
 		    	alert("nok")
 		    	document.getElementById("hint-locality").innerHTML = "Adresse non reconnue";
 		    }
-		}); 
+		});
 	}
 }
 
@@ -914,7 +914,7 @@ function validateRegisterCourt() {
 		document.getElementById("hint-locality").innerHTML = "";
 	}
 
-	
+
 	if(valid){
 		var geocoder = new google.maps.Geocoder();
 		var address = street+", "+number+" "+postalcode+" "+locality+" Belgium";
@@ -929,7 +929,7 @@ function validateRegisterCourt() {
 		    }else{
 		    	document.getElementById("hint-locality").innerHTML = "Adresse non reconnue";
 		    }
-		}); 
+		});
 	}
 }
 //Fin de la section inscription

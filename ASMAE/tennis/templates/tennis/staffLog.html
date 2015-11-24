@@ -19,6 +19,29 @@
 		        </div>
 		    </div>
 	    </div>
+		<!-- Paramètres de recherche avancée -->
+		<!--
+		<form action="" class="form-horizontal">
+			<div class="panel panel-default center-block" style="max-width:300px;">
+				<div class="panel-heading" onclick="setPlusMoins()" data-toggle="collapse" data-target="#list_criteria" style="cursor:pointer;" href="#list_criteria">Critères d'affichage <span id="plusmoins" class="glyphicon glyphicon-chevron-up pull-right"></span></div>
+				<div class="list-group panel-collapse collapse in" id="list_criteria">
+
+					<li class="list-group-item">
+						<div class="row">
+							<label class="control-label col-sm-4">Sexe</label>
+							<div class="col-sm-8">
+								<select id="sex_selector" class="form-control" onchange="search_user();">
+									<option value="Tous" selected>Tous</option>
+									<option value="Hommes">Hommes</option>
+									<option value="Femmes">Femmes</option>
+								</select>
+							</div>
+						</div>
+					</li>
+				</div>
+			</div>
+		</form>
+		-->
 		<div class="panel panel-default">
 			<div class="panel-heading">Historique des modifications</div>
 			<div class="table-responsive">
@@ -32,7 +55,7 @@
 			          </tr>
 			      	</thead>
 		         	<tbody id="LogList">
-		          	</tbody>  
+		          	</tbody>
 				</table>
 			</div>
 		</div>
@@ -102,7 +125,7 @@ function search_log() {
     pagination(resultList);
 }
 
-$('#search_value').on('input', function() { 
+$('#search_value').on('input', function() {
     search_log();
 });
 </script>

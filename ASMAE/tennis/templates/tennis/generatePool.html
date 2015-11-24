@@ -49,7 +49,7 @@
                 </div>
             </div>
         </div>
-    
+
 
     <div class="row" style="margin-top:20px;" id="poulesDiv">
     </div>
@@ -71,7 +71,7 @@
 <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-    
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -83,7 +83,7 @@
 			<p id="textModalTerrain" >Veuillez mettre un terrain pour chaques poules</p>
 			<p id="textModalLeader" >Veuillez mettre un leader pour chaques poules</p>
           <p id="textModalConfirm">Etes-vous sûr de valider la formations des groupes de ce tournoi ?</p>
-        
+
             <ul class="list-inline text-center">
                 <li>
                     <button type="button" class="btn btn-default" id="yesModel" onclick="document.getElementById('saveFinite').click()">oui</button>
@@ -94,7 +94,7 @@
             </ul>
         </div>
       </div>
-      
+
     </div>
   </div>
 
@@ -116,8 +116,13 @@ var PairDict = {};
 {% for key, value in pairListAll.items %}
     PairDict[{{key}}] = []
     {% for elem in value %}
+    /*
         var nom1 = '{{elem.user1.participant.smallName}}'+" "+'{{elem.user1.participant.classement}}';
         var nom2 = '{{elem.user2.participant.smallName}}'+" "+'{{elem.user1.participant.classement}}';
+
+    */
+        var nom1 = '{{elem.user1.participant.prenom }}'+" "+'{{elem.user1.participant.nom}}';
+        var nom2 = '{{elem.user2.participant.prenom }}'+" "+'{{elem.user2.participant.nom}}';
 
 		var Lat1 = '{{elem.user1.participant.latitude}}'
 		var Lng1 = '{{elem.user1.participant.longitude}}'
@@ -161,13 +166,13 @@ setPoules({{defaultValue}});
 //updatePanel(1);
 
 //Listener sur le nombre de pair
-$('#poulesNumber').on('input', function() { 
+$('#poulesNumber').on('input', function() {
     var nbr = document.getElementById("poulesNumber").value;
     setPoules(nbr);
 });
 
 //Listener sur le size des poules
-$('#poulesSize').on('input', function() { 
+$('#poulesSize').on('input', function() {
     var nbr = document.getElementById("poulesSize").value;
     setPoules2(nbr);
 });
@@ -249,13 +254,13 @@ function checkValues()
 			document.getElementById("textModalConfirm").style.display = "none";
 			document.getElementById("yesModel").disabled = true;
 		}
-		
+
     }
 }
 
 function terrainAssignement()
 {
-	
+
 	/* DEBUT COPIER COLLER */
     document.getElementById("assignTerrains").value = ""
     document.getElementById("assignPairPoules").value = ""
@@ -297,15 +302,15 @@ function terrainAssignement()
 			listAddr.push(poulesDict[key]['pairList'][i].u2addr);
 			var latLngA = new google.maps.LatLng(55.930385, -3.118425);
             var latLngB = new google.maps.LatLng(50.087692, 14.421150);
-			
+
             var distance = google.maps.geometry.spherical.computeDistanceBetween(latLngA, latLngB);
 
 		}
 	}
 
-                 
 
-	
+
+
 
 
 
@@ -313,4 +318,3 @@ function terrainAssignement()
 
 </script>
 {% endblock %}
-    
