@@ -110,21 +110,26 @@ function selectUser(username,nom,prenom,sexe,age){
 	//Check tournoi et catégorie en fonction de l'user courant
 	tournoi = ""
 	categorie = ""
+	jour = ""
 	//Check age voir si tournoi des familles
 	if((user_age >= 25 && age <= 15) || (user_age <= 15 && age >=25))
 	{
 		tournoi = "Tournoi des familles"
+		jour = "Samedi"
 		categorie = "-"
 	}else{
 		//Sinon check sexe pour voir tournoi homme femme ou mixte
 		if(user_sexe == sexe){
 			if(user_sexe == "Mr"){
 				tournoi = "Double homme"
+				jour = "Dimanche"
 			}else{
 				tournoi = "Double femme"
+				jour = "Dimanche"
 			}
 		}else{
 			tournoi = "Double mixte"
+			jour = "Samedi"
 		}
 		//Check age du plus vieux pour voir la categorie
 		var v
@@ -150,7 +155,9 @@ function selectUser(username,nom,prenom,sexe,age){
 		}
 	}
 	document.getElementById("tournoiLabel").innerHTML = tournoi
+	document.getElementById("jourLabel").innerHTML = jour
 	document.getElementById("categorieLabel").innerHTML = categorie
+	
 }
 
 //Lorsqu'on click sur un tournoi, on met à jours la description ainsi que les différentes restriction par rapport au tournoi
