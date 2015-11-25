@@ -8,7 +8,7 @@
 <!-- Gestionnaire des utilisateurs -->
 <div class="content-box" id="gestionTerrain">
 	<h2 class="center">Gestionnaire des permissions</h2>
-	<hr class="line">	
+	<hr class="line">
     <div class="row">
         <div class="col-sm-6">
             <!-- Rechercher -->
@@ -26,8 +26,19 @@
             <!-- Liste des users -->
             <div class="panel panel-default center-block">
                 <div class="panel-heading">Utilisateurs</div>
-                <div class="list-group" id="UserList">
-                </div>
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead>
+						  <tr>
+							<th>Nom d'utilisateur</th>
+							<th>Prénom</th>
+							<th>Nom</th>
+						  </tr>
+						</thead>
+						<tbody id="UserList">
+						</tbody>
+					</table>
+				</div>
             </div>
 
             <!-- Info -->
@@ -89,7 +100,7 @@
             </form>
         </div>
     </div>
-	
+
 
 </div>
 {% endblock %}
@@ -145,7 +156,7 @@ function search_user() {
     }
     pagination(resultList);
 }
-$('#search_value').on('input', function() { 
+$('#search_value').on('input', function() {
     search_user();
 });
 </script>

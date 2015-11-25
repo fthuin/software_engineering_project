@@ -22,6 +22,7 @@ class Participant(models.Model):
 	datenaissance = models.DateTimeField(null=True, verbose_name="Date de naissance")
 	classement = models.CharField(max_length=10,null=True, blank=True)
 	oldparticipant = models.BooleanField(default=False)
+	isClassementVerified = models.BooleanField(default=False)
 	isAccountActivated = models.BooleanField(default=True)
 
 	def __str__(self):
