@@ -170,13 +170,34 @@ setPoules({{defaultValue}});
 //Listener sur le nombre de pair
 $('#poulesNumber').on('input', function() {
     var nbr = document.getElementById("poulesNumber").value;
-    setPoules(nbr);
+
+    //test if there is to much poules or to few
+    if(nbr > PairList.length){
+        document.getElementById("poulesNumber").value = PairList.length;
+        nbr = PairList.length;
+    }else if (nbr < 1 ){
+        document.getElementById("poulesNumber").value = 1;
+        nbr = 1;
+    }
+
+    setPoules(nbr)
+
+    ;
 });
 
 //Listener sur le size des poules
 $('#poulesSize').on('input', function() {
     var nbr = document.getElementById("poulesSize").value;
-    setPoules2(nbr);
+    //test if there is to much paires by poules or to few
+    if(nbr > PairList.length){
+        document.getElementById("poulesNumber").value = PairList.length;
+        nbr = PairList.length;
+    }else if (nbr < 1 ){
+        document.getElementById("poulesNumber").value = 1
+        nbr = 1;
+    }
+
+    setPoules2(nbr)
 });
 
 function save() {
