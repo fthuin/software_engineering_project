@@ -24,7 +24,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">Joueur 1</div>
 					<div class="panel-body">
-						<a class="UserLink" style="text-align:center" href="{% url "tennis.views.viewUser" pair.user1.username %}">{{ pair.user1.participant.titre }} {{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} ({{ pair.user1.username }})</a>
+						<a class="UserLink" style="text-align:center" href="{% url "tennis.views.viewUser" pair.user1.username %}">{{ pair.user1.participant.titre }} {{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} {{ age1 }} ans ({{ pair.user1.username }})</a>
 					    <!-- Extra -->
 						<div class="form-group">
 					      <label class="info control-label col-sm-4" for="username">Extras : </label>
@@ -56,7 +56,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">Joueur 2</div>
 					<div class="panel-body">
-						<a class="UserLink" style="text-align:center" href="{% url "tennis.views.viewUser" pair.user2.username %}">{{ pair.user2.participant.titre }} {{ pair.user2.participant.prenom }} {{ pair.user2.participant.nom }} ({{ pair.user2.username }})</a>
+						<a class="UserLink" style="text-align:center" href="{% url "tennis.views.viewUser" pair.user2.username %}">{{ pair.user2.participant.titre }} {{ pair.user2.participant.prenom }} {{ pair.user2.participant.nom }} {{ age2 }} ans ({{ pair.user2.username }})</a>
 					    <!-- Extra -->
 						<div class="form-group">
 					      <label class="info control-label col-sm-4" for="username">Extras : </label>

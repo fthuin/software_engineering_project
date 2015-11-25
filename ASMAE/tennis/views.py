@@ -1190,6 +1190,14 @@ def editTerrainStaff(request, id):
 @permission_required('tennis.Pair')
 def validatePair(request, id):
 	pair = Pair.objects.filter(id=id)[0]
+
+	today = infoTournoi.objects.all()[0].date
+	born = pair.user1.participant.datenaissance
+	age1 = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+	born = pair.user2.participant.datenaissance
+	age2 = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
 	if request.method == "POST":
 		if request.POST['action'] == "editPair":
 			valid = request.POST['valid']
