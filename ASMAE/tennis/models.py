@@ -31,22 +31,22 @@ class Participant(models.Model):
 
 	def __unicode__(self):
 		return u'' + self.prenom + self.nom
-	
+
 	def fullName(self):
 		return u'' + self.titre +  " " + self.prenom + " " + self.nom
 
 	def smallName(self):
 		return u'' +self.prenom[0:1].upper()+". "+self.nom
-	
+
 	def getAdresse(self):
 		return self.rue+","+self.numero+" "+self.localite+" Belgium"
 
 	def shortAdresse(self):
 		return self.localite+" Belgium"
-		
+
 	#def __eq__(self, other):
 	#	return self.username == other.user.username
-		
+
 	class Meta:
 		verbose_name = "Participant"
 		permissions = (
@@ -58,10 +58,10 @@ class UserInWaitOfActivation(models.Model):
 	participant = models.OneToOneField(Participant, null=False)
 	dayOfRegistration = models.DateTimeField(null=False)
 	confirmation_key = models.CharField(max_length=100,null=False)
-	
+
 	def isStillValid(self):
 		return self.dayOfRegistration + datetime.timedelta(weeks=1) > datetime.datetime.now()
-		
+
 	def isKeyValid(self, key):
 		return key == self.confirmation_key
 
@@ -73,7 +73,7 @@ class Extra(models.Model):
 
 	def __str__(self):
 		return self.nom
-		
+
 	def __unicode__(self):
 		return u'' + self.nom
 
@@ -85,37 +85,37 @@ class Extra(models.Model):
 
 class CourtSurface(models.Model):
 	nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
-	
+
 	def __str__(self):
 		return self.nom
-	
+
 	def __unicode__(self):
 		return u'' + self.nom
-		
+
 	class Meta:
 		verbose_name = "Surface de court"
 
 class CourtState(models.Model):
 	nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
-	
+
 	def __str__(self):
 		return self.nom
-	
+
 	def __unicode__(self):
 		return u'' + self.nom
-	
+
 	class Meta:
 		verbose_name = "Etat de court"
 
 class CourtType(models.Model):
 	nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
-	
+
 	def __str__(self):
 		return self.nom
-	
+
 	def __unicode__(self):
 		return u'' + self.nom
-	
+
 	class Meta:
 		verbose_name = "Type de court"
 
@@ -141,10 +141,10 @@ class Court(models.Model):
 
 	def __str__(self):
 		return str(self.id) +" "+ self.rue
-		
+
 	def __unicode__(self):
 		return u'' + repr(self.id) + ' '+ self.rue
-		
+
 	def getAdresse(self):
 		return u"" + self.numero + " " + self.rue + ", " + self.codepostal + " " + self.localite
 
@@ -161,13 +161,13 @@ class TournoiStatus(models.Model):
 	id = models.AutoField(primary_key=True)
 	numero = models.IntegerField(unique=True, null=True, verbose_name='ID')
 	nom = models.CharField(max_length=25, verbose_name="Nom")
-	
+
 	def __str__(self):
 		return self.nom
-	
+
 	def __unicode__(self):
 		return u'' + self.nom
-	
+
 	class Meta:
 		verbose_name = "Status du tournoi"
 
@@ -215,8 +215,8 @@ class Pair(models.Model):
 	tournoi = models.ForeignKey(Tournoi)
 	user1 = models.ForeignKey(User, related_name='user1', verbose_name = "Utilisateur 1")
 	user2 = models.ForeignKey(User, related_name='user2', verbose_name = "Utilisateur 2")
-	extra1 = models.ManyToManyField(Extra, related_name='extra1')
-	extra2 = models.ManyToManyField(Extra, related_name='extra2')
+	extra1 = models.ManyToManyField(Extra, related_name='extra1', blank=True)
+	extra2 = models.ManyToManyField(Extra, related_name='extra2', blank=True)
 	comment1 = models.TextField(null=True, blank=True)
 	comment2 = models.TextField(null=True, blank=True)
 	confirm = models.BooleanField(default=False, verbose_name = "Confirmation")
@@ -255,13 +255,13 @@ class Groupe(models.Model):
 class PouleStatus(models.Model):
 	id = models.IntegerField(primary_key=True, verbose_name='ID')
 	nom = models.CharField(max_length=25, verbose_name="Nom")
-	
+
 	def __str__(self):
 		return self.nom
-	
+
 	def __unicode__(self):
 		return u'' + self.nom
-	
+
 	class Meta:
 		verbose_name = "Status de la poule"
 
@@ -304,10 +304,6 @@ class LogActivity(models.Model):
 
 	def __str__(self):
 		return self.user.username + self.section + self.details
-	
+
 	class Meta:
 		verbose_name = "Log"
-
-
-
-
