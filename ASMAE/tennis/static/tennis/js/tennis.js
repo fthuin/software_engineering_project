@@ -64,6 +64,9 @@ var UserList;
 //longueur de la page
 var pageLength;
 
+var user_age;
+var user_sexe;
+
 //On met à jours les infos
 function setUserListInfo(userList,longueur){
 	UserList = userList;
@@ -86,9 +89,9 @@ function setUser(page){
 		if (titre == "Mr"){
 			icon = '<i class="fa fa-male" style="color:blue"></i>';
 		}else{
-			icon = '<i class="fa fa-female" style="color:red"></i>';
+			icon = '<i class="fa fa-female" style="color:#ff0066"></i>';
 		}
-		var p = '<tr class="clickable-row" onClick="selectUser('+"'"+UserList[i][0]+"',"+"'"+UserList[i][2]+"',"+"'"+UserList[i][1]+"'"+');"><td style="text-align:center">'+icon+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td></tr>';
+		var p = '<tr class="clickable-row" onClick="selectUser('+"'"+UserList[i][0]+"',"+"'"+UserList[i][2]+"',"+"'"+UserList[i][1]+"',"+"'"+UserList[i][3]+"',"+"'"+UserList[i][4]+"'"+');"><td style="text-align:center">'+icon+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td></tr>';
 		panneau.innerHTML += p;
 	};
 
@@ -99,12 +102,62 @@ function setUser(page){
 }
 
 //Lorsqu'on selectionne un utilistaeur on met ses valeurs dans le tableaux du dessous
-function selectUser(username,nom,prenom){
+function selectUser(username,nom,prenom,sexe,age){
 	document.getElementById("username2Value").value = username;
-	document.getElementById("user2").innerHTML = prenom +' '+nom+' ('+username+')';
-	if(document.getElementById("hint-tournoi").innerHTML==""){
-		document.getElementById("InscriptionButton").disabled = false;
+	document.getElementById("user2").innerHTML = '['+username+'] '+prenom +' '+nom+' '+age+' ans';
+	document.getElementById("InscriptionButton").disabled = false;
+
+	//Check tournoi et catégorie en fonction de l'user courant
+	tournoi = ""
+	categorie = ""
+	jour = ""
+	//Check age voir si tournoi des familles
+	if((user_age >= 25 && age <= 15) || (user_age <= 15 && age >=25))
+	{
+		tournoi = "Tournoi des familles"
+		jour = "Samedi"
+		categorie = "-"
+	}else{
+		//Sinon check sexe pour voir tournoi homme femme ou mixte
+		if(user_sexe == sexe){
+			if(user_sexe == "Mr"){
+				tournoi = "Double hommes"
+				jour = "Dimanche"
+			}else{
+				tournoi = "Double femmes"
+				jour = "Dimanche"
+			}
+		}else{
+			tournoi = "Double mixte"
+			jour = "Samedi"
+		}
+		//Check age du plus vieux pour voir la categorie
+		var v
+		if(user_age >= age){
+			v = user_age
+		}else{
+			v = age
+		}
+		if(v >= 41){
+			categorie = "Elites"
+		}else if(v >= 20){
+			categorie = "Seniors"
+		}else if(v >=17){
+			categorie = "Juniors"
+		}else if(v >= 15){
+			categorie = "Scolaires"
+		}else if(v >= 13){
+			categorie = "Cadets"
+		}else if(v >= 11){
+			categorie = "Minimes"
+		}else if(v >= 9){
+			categorie = "Pre minimes"
+		}
 	}
+	document.getElementById("tournoiLabel").value = tournoi
+	document.getElementById("jourLabel").value = jour
+	document.getElementById("categorieLabel").value = categorie
+	
 }
 
 //Lorsqu'on click sur un tournoi, on met à jours la description ainsi que les différentes restriction par rapport au tournoi
@@ -300,7 +353,7 @@ function setUserStaff(page){
 		if (titre == "Mr"){
 			icon = '<i class="fa fa-male" style="color:blue"></i>';
 		}else{
-			icon = '<i class="fa fa-female" style="color:red"></i>';
+			icon = '<i class="fa fa-female" style="color:#ff0066"></i>';
 		}
 		var p = '<tr onclick="window.document.location='+"'utilisateurs/"+UserList[i][0]+"'"+';" class="clickable-row"><td style="text-align:center">'+icon+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td></tr>';
 		panneau.innerHTML += p;

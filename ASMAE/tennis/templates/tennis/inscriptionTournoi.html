@@ -12,13 +12,25 @@
 			<div class="row">
 				<div class="col-sm-6">
 					<!-- Tournoi -->
-					<div class="form-group">
-				      <label class="control-label col-sm-4" for="tournoi">Jour : </label>
+					<div class="form-group" style="margin-bottom:0">
+				      <label class="control-label col-sm-4">Tournoi : </label>
 				      <div class="col-sm-8">
-				      	<select class="form-control" name="tournoi" id="selector" onChange="setDescription();">
-				      		<option id="samedi" value="Samedi">Samedi</option>
-				      		<option id="dimanche" value="Dimanche">Dimanche</option>
-						</select>
+				      	<input id="tournoiLabel" value="-" readonly style="font-weight:bold;padding-top:7px;border:0;color:#D4542D; background-color:transparent;">
+				      </div>
+				      
+				    </div>
+
+				    <div class="form-group" style="margin-bottom:0">
+				      <label class="control-label col-sm-4">Jour : </label>
+				      <div class="col-sm-8">
+				      	<input id="jourLabel" value="-" readonly style="font-weight:bold;padding-top:7px;border:0;color:#D4542D; background-color:transparent;">
+				      </div>
+				    </div>
+
+				    <div class="form-group">
+				      <label class="control-label col-sm-4">Catégorie : </label>
+				      <div class="col-sm-8">
+				      	<input id="categorieLabel" value="-" readonly style="font-weight:bold;padding-top:7px;border:0;color:#D4542D; background-color:transparent;">
 				      </div>
 				    </div>
 
@@ -26,7 +38,7 @@
 				    <div class="panel panel-default">
 						<div class="panel-heading">Joueur 1</div>
 						<div class="panel-body">
-							<h4 class="center">{{ user.participant.prenom }} {{ user.participant.nom }} ({{ user.username }})</h4>
+							<h4 class="center">[{{ user.username }}] {{ user.participant.prenom }} {{ user.participant.nom }} {{ user.age}} ans</h4>
 						    <!-- Extra -->
 							<div class="form-group">
 						      <label class="control-label col-sm-4" for="username">Extras : </label>
@@ -153,6 +165,10 @@ function pagination(list) {
     //On met à jour la première page
     setUser(1);
 }
+
+//Recuperation et stockage de l'age et du sexe de l'utilisateur courant
+user_age = '{{ user.age }}'
+user_sexe = '{{ user.participant.titre }}'
 
 //Recuperation des users et stockage dans un tableau
 var userList = [];
