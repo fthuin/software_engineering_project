@@ -317,8 +317,8 @@ function createPanel(number){
 							'</div>'+
 
 							'<div class="row">'+
-								'<label class="control-label col-xs-7">Kilomètres</label>'+
-								'<div class="col-xs-5"><p class="info" id="empreinte'+number+'"> - </p></div>'+
+								'<label class="control-label col-xs-4">Kilomètres</label>'+
+								'<div class="col-xs-8"><p class="info" id="empreinte'+number+'"> - </p></div>'+
 							'</div>'+
 						'</div>'+
 					'</div>';
