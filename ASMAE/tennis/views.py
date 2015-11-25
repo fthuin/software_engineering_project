@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, PouleStatus,Arbre, TournoiStatus, TournoiTitle, TournoiCategorie
+from tennis.models import Extra, Participant,Court, Tournoi, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, PouleStatus,Arbre, TournoiStatus, TournoiTitle, TournoiCategorie, infoTournoi
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail
 from tennis.classement import validate_classement_thread
 import re, math
@@ -587,7 +587,7 @@ def pouleScore(request,id):
 				if elem.status.numero != 2:
 					valid = False
 					break
-			if valid : 
+			if valid :
 				t = poule.tournoi
 				t.status = TournoiStatus.objects.get(numero=3)
 				t.save()
@@ -689,7 +689,7 @@ def generatePool(request,name):
 				p.paires.add(pair)
 			i += 1
 			p.save()
-		
+
 
 		if request.POST['action'] == 'save':
 			return redirect(reverse(generatePool,args={tournoi.nom()}))
@@ -805,26 +805,45 @@ def staffExtra(request):
 		except ValueError:
 			return False
 
-	Ex = Extra.objects.all()
+	extras = Extra.objects.all()
+	pairs = Pair.objects.all()
+	info = infoTournoi.objects.all()[0]
+	prix_inscription = info.prix
+	date_inscription = info.date
+	yearLoop = range(date.today().year,date.today().year+5)
+	# On récupère les extras, on set le nombre de demandes à zéro
+	for extra in extras:
+		extra.commandsCount = 0
+
+	# On compte combien de personnes prennent chaque extra
+	for pair in pairs:
+		for extra in extras:
+			if len(pair.extra1.filter(id=extra.id)) > 0:
+				extra.commandsCount += 1
+			if len(pair.extra2.filter(id=extra.id)) > 0:
+				extra.commandsCount += 1
+
 	if request.method == "POST":
 		if request.POST['action'] == "addExtra":
-			nom = request.POST['name']
-			prix = request.POST['price']
-			message = request.POST['message']
+			nom = request.POST['name'].strip()
+			prix = request.POST['price'].strip()
+			message = request.POST['message'].strip()
 
 			if nom=="":
 				errorAdd = "Veuillez rajouter un nom à l'extra!"
 				return render(request,'tennis/staffExtra.html',locals())
 
 			if not is_number(prix):
-				errorAdd = "Le prix n'a pas le bon format"
-				return render(request,'tennis/staffExtra.html',locals())
+				prix = prix.replace(",",".")
+				if not is_number(prix):
+					errorAdd = "Le prix n'a pas le bon format"
+					return render(request,'tennis/staffExtra.html',locals())
 
 			extra = Extra(nom=nom,prix=prix,commentaires = message)
 			extra.save()
-			LogActivity(user=request.user,section="Extra",details="Extra "+nom+ " ajoute").save()
+			LogActivity(user=request.user,section="Extra",details=u"Extra "+nom+ u" ajouté").save()
 
-			successAdd = "Extra bien ajouté!"
+			successAdd = u"Extra " +nom+ u" bien ajouté!"
 
 
 		if request.POST['action'] == "modifyExtra":
@@ -833,30 +852,31 @@ def staffExtra(request):
 			prix = request.POST['price']
 			message = request.POST['message']
 
-			extra = Extra.objects.filter(id = id)[0]
+			extra = Extra.objects.get(id=id)
 
 			if nom=="":
-				errorEdit = "Veuillez rajouter un nom à l'extra!"
+				errorEdit = u"Veuillez rajouter un nom à l'extra!"
 				return render(request,'tennis/staffExtra.html',locals())
 
-			if not is_number(prix):
-				errorEdit = "Le prix n'a pas le bon format"
-				return render(request,'tennis/staffExtra.html',locals())
-
+			if not is_number(prix) :
+				prix = prix.replace(",",".")
+				if not is_number(prix):
+					errorEdit = u"Le prix n'a pas le bon format"
+					return render(request,'tennis/staffExtra.html',locals())
 
 			extra.nom = nom
 			extra.prix = prix
 			extra.commentaires = message
 			extra.save()
-			LogActivity(user=request.user,section="Extra",details="Extra "+nom+ " modifie").save()
-			successEdit = "Extra bien édité!"
+			LogActivity(user=request.user,section="Extra",details=u"Extra " +nom+ u" modifié").save()
+			successEdit = u"Extra " +nom+ u" bien modifié !"
 
 		if request.POST['action'] == "deleteExtra":
 			id = request.POST['id']
-			extra = Extra.objects.filter(id = id)[0]
+			extra = Extra.objects.get(id=id)
 			extra.delete()
-			LogActivity(user=request.user,section="Extra",details="Extra "+extra.nom+ " delete").save()
-			successDelete = "Extra bien supprimé!"
+			LogActivity(user=request.user,section="Extra",details=u"Extra "+extra.nom+ u" delete").save()
+			successDelete = u"Extra bien supprimé!"
 
 	if request.user.is_authenticated():
 		return render(request,'tennis/staffExtra.html',locals())
@@ -1248,10 +1268,10 @@ def profil(request):
 			participant.latitude = lat
 			participant.longitude = lng
 			participant.save()
-			
+
 			# Validate classement
 			validate_classement_thread(participant)
-			
+
 			successEdit = "Le profil a bien été changé"
 			return render(request,'tennis/profil.html',locals())
 
@@ -1415,7 +1435,7 @@ def register(request):
 		activationObject = UserInWaitOfActivation(participant = participant, dayOfRegistration = today, confirmation_key= key)
 		activationObject.save()
 		link = "http://" + request.get_host() + "/tennis/emailValidation/"
-		
+
 		# Verify user classement
 		validate_classement_thread(participant)
 

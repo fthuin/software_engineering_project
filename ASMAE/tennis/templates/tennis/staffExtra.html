@@ -15,23 +15,66 @@
 			</div>
 			<div class="panel-body">
 				<div class="row">
-					<div class="col-sm-6">
+					<div class="col-sm-4">
 						<!-- Frais d'inscription -->
 						<div class="form-group">
-					      <label class="control-label col-sm-4 col-sm-offset-4" for="username">Frais d'inscription</label>
+					      <label class="control-label col-sm-8" for="username">Frais d'inscription</label>
 					      <div class="col-sm-4">
-					      	<input type="text" class="form-control" maxlength="30" name="name" value="">
+					      	<input type="text" class="form-control" maxlength="30" name="name" value="{{ prix_inscription }}">
 					      </div>
 					    </div>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-8">
 						<!-- Date de tournoi -->
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="username">Date du tournoi</label>
-					      <div class="col-sm-4">
-					      	<input type="date" class="form-control" maxlength="30" name="name" value="">
+					      <div class="col-sm-8">
+					      	<div class="row">
+					      		<div class="col-xs-3" style="padding-right:0">
+					      			<select class="form-control" name="jour" id="select_jour" style="padding-right:0" onchange="onChangeDayOfBirth()">
+										<option selected disabled>Jour</option>
+										{% for i in "123456789" %}
+									    <option value="0{{ i }}">0{{ i }}</option>
+									    {% endfor %}
+									    {% for i in "0123456789" %}
+									    <option value="1{{ i }}">1{{ i }}</option>
+									    {% endfor %}
+									    {% for i in "0123456789" %}
+									    <option value="2{{ i }}">2{{ i }}</option>
+									    {% endfor %}
+									    <option value="30">30</option>
+									    <option value="31">31</option>
+									</select>
+					      		</div>
+					      		<div class="col-xs-5">
+					      			<select class="form-control" id="select_mois" name="mois" onchange="onChangeMonthOfBirth()">
+										<option selected disabled>Mois</option>
+										<option value="01">Janvier</option>
+									    <option value="02">Février</option>
+									    <option value="03">Mars</option>
+									    <option value="04">Avril</option>
+									    <option value="05">Mai</option>
+									    <option value="06">Juin</option>
+									    <option value="07">Juillet</option>
+									    <option value="08">Août</option>
+									    <option value="09">Septembre</option>
+									    <option value="10">Octobre</option>
+									    <option value="11">Novembre</option>
+									    <option value="12">Décembre</option>
+									</select>
+					      		</div>
+					      		<div class="col-xs-4" style="padding-left:0">
+					      			<select class="form-control" id="select_an" name="an" onchange="onChangeYearOfBirth()">
+										<option selected disabled>Année</option>
+										{% for i in yearLoop %}
+									    <option value="{{ i }}">{{ i }}</option>
+									    {% endfor %}
+									</select>
+					      		</div>
+						    </div>
+						    <input type="text" class="form-control" name="birthdate" id="birthdateID" value="{{ formatedBirthdate }}" style="display:none">
 					      </div>
-					    </div>
+					   	</div>
 					</div>
 				</div>
 				<button class="btn btn-default center-block">Editer</button>
@@ -45,29 +88,29 @@
 	{% if errorAdd %}
 	<div class="alert alert-danger">
 	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	<strong>Error!</strong> {{ errorAdd }}
+	<strong>[Erreur lors de l'ajout]</strong> {{ errorAdd }}
 	</div>
 	{% elif successAdd %}
 	<div class="alert alert-success">
 	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	    <strong>Succès!</strong> {{ successAdd }}
+	    <strong>[Réussite de l'ajout]</strong> {{ successAdd }}
 	</div>
 	{% endif %}
 	{% if errorEdit %}
 	<div class="alert alert-danger">
 	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	<strong>Error!</strong> {{ errorEdit }}
+	<strong>[Erreur lors de la modification]</strong> {{ errorEdit }}
 	</div>
 	{% elif successEdit %}
 	<div class="alert alert-success">
 	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	    <strong>Succès!</strong> {{ successEdit }}
+	    <strong>[Modification validée]</strong> {{ successEdit }}
 	</div>
 	{% endif %}
 	{% if successDelete %}
 	<div class="alert alert-success">
 	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	    <strong>Succès!</strong> {{ successDelete }}
+	    <strong>[Suppression effectuée]</strong> {{ successDelete }}
 	</div>
 	{% endif %}
 
@@ -77,8 +120,8 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">Liste des extras</div>
 				<div class="list-group" id="listExtra">
-					{% for extra in Ex %}
-					<a onClick="extra('{{ extra.id }}', '{{ extra.nom }}','{{ extra.prix }}','{{ extra.commentaires }}')" id="{{ extra.id }}" href="javascript:void(0);" class="list-group-item">{{ extra.nom }}</a>
+					{% for extra in extras %}
+					<a onClick="extra('{{ extra.id }}', '{{ extra.nom }}','{{ extra.prix }}','{{ extra.commentaires }}')" id="{{ extra.id }}" href="javascript:void(0);" class="list-group-item">{{ extra.nom }} [{{extra.commandsCount}}]</a>
 					{% endfor %}
 				</div>
 			</div>
@@ -91,17 +134,17 @@
 				{% csrf_token %}
 				<div class="panel panel-default">
 					<div class="panel-heading" id="formTitle">
-						Editer {{ Ex.0.nom }}
+						Editer {{ extras.0.nom }}
 					</div>
 					<div class="panel-body">
 						<!-- ID -->
-					    <input type="text" class="form-control" name="id" id="extraID" value="{{ Ex.0.id }}" style="display:none;">
-					      	
+					    <input type="text" class="form-control" name="id" id="extraID" value="{{ extras.0.id }}" style="display:none;">
+
 						<!-- Nom -->
 						<div class="form-group">
 					      <label class="control-label col-sm-2" for="username">Nom</label>
 					      <div class="col-sm-10">
-					      	<input type="text" class="form-control" maxlength="30" name="name" id="extraName" value="{{ Ex.0.nom }}">
+					      	<input type="text" class="form-control" maxlength="30" name="name" id="extraName" value="{{ extras.0.nom }}">
 					      	<p class="hint" id="hint-username"></p>
 					      </div>
 					    </div>
@@ -110,7 +153,7 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-2" for="username">Prix</label>
 					      <div class="col-sm-10">
-					      	<input type="text" class="form-control" maxlength="30" name="price" id="extraPrice" value="{{ Ex.0.prix }}">
+					      	<input type="text" class="form-control" maxlength="30" name="price" id="extraPrice" value="{{ extras.0.prix }}">
 					      	<p class="hint" id="hint-username"></p>
 					      </div>
 					    </div>
@@ -119,7 +162,7 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-2" for="username">Commentaires</label>
 					      <div class="col-sm-10">
-					      	<textarea class="form-control" rows="5" name="message" id="extracommentaire">{{ Ex.0.commentaires }}</textarea>
+					      	<textarea class="form-control" rows="5" name="message" id="extracommentaire">{{ extras.0.commentaires }}</textarea>
 					      	<p class="hint" id="hint-username"></p>
 					      </div>
 					    </div>
@@ -132,23 +175,23 @@
 								<button class="btn-default btn" type="button" data-toggle="modal" data-target="#myModal">Supprimer</button>
 
 								<form name="deleteExtra" id="deleteExtra" role="form" method="post" action="{% url "tennis.views.staffExtra" %}">
-									<input type="text" class="form-control" name="id" id="deleteID" value="{{ Ex.0.id }}" style="display:none;">
+									<input type="text" class="form-control" name="id" id="deleteID" value="{{ extras.0.id }}" style="display:none;">
 									<button style="display:none" class="btn-default btn" name="action" id="deleteExtra" value="deleteExtra">Supprimer</button>
 								</form>
-								
+
 							</li>
 						</ul>
 					</div>
 				</div>
 
-				
-				
 
-				
-				
-				
+
+
+
+
+
 			  </form>
-			
+
 			<!-- Ajouter un extrat -->
 			  <form class="form-horizontal" name="newExtra" id="newExtra" role="form" method="post" action="{% url "tennis.views.staffExtra" %}" onsubmit="return validateRegister()" style="display:none" >
 				{% csrf_token %}
@@ -193,7 +236,7 @@
 <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-    
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -202,7 +245,7 @@
         </div>
         <div class="modal-body">
           <p>Etes-vous sûr de vouloir supprimer cet extra?</p>
-        
+
 	    	<ul class="list-inline text-center">
 				<li>
 					<button type="button" class="btn btn-default" onclick="document.getElementById('deleteExtra').click();">oui</button>
@@ -213,38 +256,69 @@
 			</ul>
 		</div>
       </div>
-      
+
     </div>
   </div>
 {% endblock %}
 
 {% block commande %}
 <script>
+	function onChangeDayOfBirth() {
+    var select_jour = document.getElementById("select_jour");
+    var jour = select_jour.options[select_jour.selectedIndex].value
+	date = dateNaissance.value
+	dateNaissance.value = jour+date.substring(2,date.length);
+}
+
+function onChangeMonthOfBirth() {
+    var select_mois = document.getElementById("select_mois");
+    var mois = select_mois.options[select_mois.selectedIndex].value
+	date = dateNaissance.value
+	dateNaissance.value = date.substring(0,3)+mois+date.substring(5,date.length);
+}
+
+function onChangeYearOfBirth() {
+    var select_an = document.getElementById("select_an");
+    var an = select_an.options[select_an.selectedIndex].value
+	date = dateNaissance.value
+	dateNaissance.value = date.substring(0,6)+an
+}
+
+	$('#select_jour').on('input', function() { 
+	    onChangeDayOfBirth();
+});
+	$('#select_mois').on('input', function() { 
+        onChangeMonthOfBirth();
+});
+	$('#select_an').on('input', function() { 
+        onChangeYearOfBirth();
+});
+</script>
+<script>
 //On met le premier extra de la liste en "active"
-extra('{{ Ex.0.id }}', '{{ Ex.0.nom }}','{{ Ex.0.prix }}','{{ Ex.0.commentaires }}');
+extra('{{ extras.0.id }}', '{{ extras.0.nom }}','{{ extras.0.prix }}','{{ extras.0.commentaires }}');
 activeExtra();
-
 </script>
 
-{% if successAdd %} 
+{% if successAdd %}
 <script>
 	extra('{{ extra.id }}', '{{ extra.nom }}','{{ extra.prix }}','{{ extra.commentaires }}');
 </script>
 {% endif %}
 
-{% if successEdit %} 
+{% if successEdit %}
 <script>
 	extra('{{ extra.id }}', '{{ extra.nom }}','{{ extra.prix }}','{{ extra.commentaires }}');
 </script>
 {% endif %}
 
-{% if errorEdit %} 
+{% if errorEdit %}
 <script>
 	extra('{{ extra.id }}', '{{ extra.nom }}','{{ extra.prix }}','{{ extra.commentaires }}');
 </script>
 {% endif %}
 
-{% if not Ex.0 %}
+{% if not extras.0 %}
 <script>
 	addExtra();
 </script>
