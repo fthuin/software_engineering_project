@@ -332,14 +332,14 @@ function createPair(pair){
 	var gender1 = "";
 	var gender2 = "";
 	if(pair.titre1=="Mr"){
-		gender1 = "fa fa-male";
+		gender1 = '<i class="fa fa-male" style="color:blue"></i>';
 	}else{
-		gender1 = "fa fa-female";
+		gender1 = '<i class="fa fa-female" style="color:red"></i>';
 	}
 	if(pair.titre2=="Mr"){
-		gender2 = "fa fa-male";
+		gender2 = '<i class="fa fa-male" style="color:blue"></i>';
 	}else{
-		gender2 = "fa fa-female";
+		gender2 = '<i class="fa fa-female" style="color:red"></i>';
 	}
 
 
@@ -348,7 +348,7 @@ function createPair(pair){
 		comm = '<a href="javascript:void(0);" data-toggle="popover" data-html="true" data-placement="left" data-content="'+pair.comment+'"><b style="color:#222;"><i class="fa fa-file-text-o fa-2x"></i></b></a>';
 	}
 
-	p.innerHTML = '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;"><div id="'+pair.id+'" draggable="true" ondragstart="drag(event)"><div onclick="clickEventPair('+pair.id+')" id="zone'+pair.id+'" class="zone"><div class="row"><div class="col-xs-10"><b style="color:#222"><i class="'+gender1+'"></i></b> '+pair.user1+' ('+pair.age1+' ans)'+'<br><b style="color:#222"><i class="'+gender2+'"></i></b> '+pair.user2+' ('+pair.age2+' ans)'+'</div><div class="col-xs-2">'+comm+'</div></div></div></div></div>';
+	p.innerHTML = '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;"><div id="'+pair.id+'" draggable="true" ondragstart="drag(event)"><div onclick="clickEventPair('+pair.id+')" id="zone'+pair.id+'" class="zone"><div class="row"><div class="col-xs-10"><b style="color:#222">'+gender1+'</b> '+pair.user1+' ('+pair.age1+' ans)'+'<br><b style="color:#222">'+gender2+'</b> '+pair.user2+' ('+pair.age2+' ans)'+'</div><div class="col-xs-2">'+comm+'</div></div></div></div></div>';
 
 	return p;
 }
