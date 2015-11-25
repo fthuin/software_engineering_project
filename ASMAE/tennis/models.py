@@ -154,7 +154,7 @@ class Court(models.Model):
 	commentaireStaff = models.TextField(null=True, blank=True)
 	valide = models.BooleanField(default=False, verbose_name='Validé')
 	user = models.ForeignKey(User, verbose_name='Utilisateur')
-	used = models.BooleanField(default=False)
+	used = models.TextField(null=True, blank=True)
 	usedLastYear = models.BooleanField(default=False)
 
 	def __str__(self):
