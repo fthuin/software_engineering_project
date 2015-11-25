@@ -1257,22 +1257,57 @@ def editTerrainStaff(request, id):
 @permission_required('tennis.Pair')
 def validatePair(request, id):
 	pair = Pair.objects.filter(id=id)[0]
+
+	allTournoi = Tournoi.objects.all()
+
+	#Check si la paire fait deja partie d'une poule
+	noPoule = True
+	for elem in Poule.objects.all():
+		if pair in elem.paires.all():
+			noPoule = False
+			break
+
+	today = infoTournoi.objects.all()[0].date
+	born = pair.user1.participant.datenaissance
+	age1 = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+	born = pair.user2.participant.datenaissance
+	age2 = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
 	if request.method == "POST":
 		if request.POST['action'] == "editPair":
 			valid = request.POST['valid']
 			paid = request.POST['pay']
+			tournoi = request.POST['tournoi']
+			title = tournoi
+			cat = tournoi
+			if "_" in tournoi:
+				title = tournoi.split("_")[0]
+				cat = tournoi.split("_")[1]
+
+			t = TournoiTitle.objects.get(nom=title)
+			c = TournoiCategorie.objects.get(nom=cat)
+			new_tournoi = Tournoi.objects.get(titre=t,categorie=c)
+
+			if new_tournoi != pair.tournoi:
+				pair.tournoi = new_tournoi
+				LogActivity(user=request.user,section="Pair",details="Pair "+id+ " tournoi = "+str(new_tournoi)).save()
 			if valid == "Oui":
 				valider = True
-				LogActivity(user=request.user,section="Pair",details="Pair "+id+ " valide").save()
+				if valider != pair.valid:
+					LogActivity(user=request.user,section="Pair",details="Pair "+id+ " valide").save()
 			else:
 				valider = False
-				LogActivity(user=request.user,section="Pair",details="Pair "+id+ " non valide").save()
+				if valider != pair.valid:
+					LogActivity(user=request.user,section="Pair",details="Pair "+id+ " non valide").save()
 			if paid == "Oui":
 				payer = True
-				LogActivity(user=request.user,section="Pair",details="Pair "+id+ " paye").save()
+				if payer != pair.pay:
+					LogActivity(user=request.user,section="Pair",details="Pair "+id+ " paye").save()
 			else:
 				payer = False
-				LogActivity(user=request.user,section="Pair",details="Pair "+id+ " non paye").save()
+				if payer != pair.pay:
+					LogActivity(user=request.user,section="Pair",details="Pair "+id+ " non paye").save()
 			pair.valid = valider
 			pair.pay = payer
 			pair.save()
