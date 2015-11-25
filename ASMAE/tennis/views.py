@@ -1193,6 +1193,13 @@ def validatePair(request, id):
 
 	allTournoi = Tournoi.objects.all()
 
+	#Check si la paire fait deja partie d'une poule
+	noPoule = True
+	for elem in Poule.objects.all():
+		if pair in elem.paires.all():
+			noPoule = False
+			break
+
 	today = infoTournoi.objects.all()[0].date
 	born = pair.user1.participant.datenaissance
 	age1 = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
@@ -1217,22 +1224,22 @@ def validatePair(request, id):
 
 			if new_tournoi != pair.tournoi:
 				pair.tournoi = new_tournoi
-				LogActivity(user=request.user,section="Pair",details="Pair "+id+ " tournoi = "+str(new_tournoi.nom())).save()
+				LogActivity(user=request.user,section="Pair",details="Pair "+id+ " tournoi = "+str(new_tournoi)).save()
 			if valid == "Oui":
 				valider = True
-				if valid != pair.valid:
+				if valider != pair.valid:
 					LogActivity(user=request.user,section="Pair",details="Pair "+id+ " valide").save()
 			else:
 				valider = False
-				if valid != pair.valid:
+				if valider != pair.valid:
 					LogActivity(user=request.user,section="Pair",details="Pair "+id+ " non valide").save()
 			if paid == "Oui":
 				payer = True
-				if paid != pair.pay:
+				if payer != pair.pay:
 					LogActivity(user=request.user,section="Pair",details="Pair "+id+ " paye").save()
 			else:
 				payer = False
-				if paid != pair.pay:
+				if payer != pair.pay:
 					LogActivity(user=request.user,section="Pair",details="Pair "+id+ " non paye").save()
 			pair.valid = valider
 			pair.pay = payer

@@ -19,9 +19,9 @@
 		      	<select class="form-control" name="tournoi" id="tournoi_select">
 		      		{% for elem in allTournoi %}
 		      		{% if elem == pair.tournoi %}
-		      		<option value="{{ elem.nom }}" selected>{{ elem.nom }}</option>
-		      		{% else %}
-		      		<option value="{{ elem.nom }}">{{ elem.nom }}</option>
+		      		<option value="{{ elem.nom }}" selected>{{ elem }}</option>
+		      		{% elif noPoule %}
+		      		<option value="{{ elem.nom }}">{{ elem }}</option>
 		      		{% endif %}
 		      		{% endfor %}
 				</select>
