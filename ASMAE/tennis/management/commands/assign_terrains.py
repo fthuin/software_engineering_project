@@ -16,7 +16,7 @@ class Command(BaseCommand):
         nbr = 0
         while (nbr < NBR_TERRAINS):
             participant = random.choice(self.participants)
-            c = Court(rue=u'' + participant.rue, numero= participant.numero, boite=participant.boite, codepostal=participant.codepostal, localite=u''+participant.localite, matiere=random.choice(self.surfaces), type=random.choice(self.types), dispoSamedi=random.choice([True, False]), dispoDimanche=random.choice([True, False]), etat=random.choice(self.etats), valide=random.choice([True, False]), user=participant.user)
+            c = Court(rue=u'' + participant.rue, numero= participant.numero, boite=participant.boite, codepostal=participant.codepostal, localite=u''+participant.localite, matiere=random.choice(self.surfaces), type=random.choice(self.types), dispoSamedi=random.choice([True, False]), dispoDimanche=random.choice([True, False]), etat=random.choice(self.etats), valide=random.choice([True, False]), user=participant.user, latitude=participant.latitude, longitude=participant.longitude)
             c.save()
             nbr += 1
             
