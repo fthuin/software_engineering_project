@@ -31,7 +31,7 @@
 
                 </div>
                 <div class="panel-body">
-                    {% if p.status.id == 2 %}
+                    {% if p.status.numero == 2 %}
 
                     <b>Leader : </b>{{p.leader.participant.prenom}} {{p.leader.participant.nom}}
                     <br>
@@ -92,7 +92,7 @@ for (var i = 1; i < mesPanel.length; i++) {
 //Enable tree button if all status are ok
 var valid = true;
 {% for p in poules %}
-if('{{p.status.id}}' != 2){
+if('{{p.status.numero}}' != 2){
     valid = false;
 }
 {% endfor %}

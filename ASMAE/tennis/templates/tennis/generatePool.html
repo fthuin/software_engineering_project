@@ -6,7 +6,7 @@
 {% block bodyStaff %}
 <!-- Gestionnaire des groupes -->
 <div class="content-box" id="gestionTournoi">
-    <h2 class="center">{{ tournoi.nom }}</h2>
+    <h2 class="center">{{ tournoi }}</h2>
     <hr class="line">
     <form class="form-horizontal" action="{% url 'tennis.views.generatePool' tournoi.nom %}" method="post">
 	{% csrf_token %}
@@ -170,13 +170,34 @@ setPoules({{defaultValue}});
 //Listener sur le nombre de pair
 $('#poulesNumber').on('input', function() {
     var nbr = document.getElementById("poulesNumber").value;
-    setPoules(nbr);
+
+    //test if there is to much poules or to few
+    if(nbr > PairList.length){
+        document.getElementById("poulesNumber").value = PairList.length;
+        nbr = PairList.length;
+    }else if (nbr < 1 ){
+        document.getElementById("poulesNumber").value = 1;
+        nbr = 1;
+    }
+
+    setPoules(nbr)
+
+    ;
 });
 
 //Listener sur le size des poules
 $('#poulesSize').on('input', function() {
     var nbr = document.getElementById("poulesSize").value;
-    setPoules2(nbr);
+    //test if there is to much paires by poules or to few
+    if(nbr > PairList.length){
+        document.getElementById("poulesNumber").value = PairList.length;
+        nbr = PairList.length;
+    }else if (nbr < 1 ){
+        document.getElementById("poulesNumber").value = 1
+        nbr = 1;
+    }
+
+    setPoules2(nbr)
 });
 
 function save() {
@@ -307,6 +328,8 @@ function terrainAssignement()
 				var terrainlatLng = new google.maps.LatLng(parseFloat(terrainLat.replace(",", ".")), parseFloat(terrainLng.replace(",", ".")))
 					for(var key in poulesDict){
 
+						var totalDistanceTerrain = 0;
+
 						for(var i = 0;i<poulesDict[key]['pairList'].length;i++){
 
 							var user1Lat = poulesDict[key]['pairList'][i].lat1;
@@ -346,8 +369,8 @@ function terrainAssignement()
 			}
 		}
 		//Assigner le terrain index a la poule key par html brole
-		console.log(key);
-		console.log("Poule "+key+" with terrain "+index);
+		//console.log(key);
+		//console.log("Poule "+key+" with terrain "+index);
 		setInfoTerrain(TerrainList[index].user,TerrainList[index].matiere,TerrainList[index].addr,TerrainList[index].id,parseInt(key)+1);
 		document.getElementById("empreinte"+(parseInt(key)+1)).innerHTML = Math.round(minDistance)/1000;
 		alreadyTaken.push(index);
@@ -412,12 +435,141 @@ function autogen(){
 		 }
 
 	}
-	BranchAndBound();
+	greedySolution(distanceMatrix,document.getElementById("poulesNumber").value);
 
 }
-function BranchAndBound(){
+
+function greedySolution(matrix,nbrPoule){
+	//On calcule le nombre de pair dans chaque poule. Et si le nombre de pai par divible par le nombre poule on calcule le nombre de pair dans la derniere poule
+	var pairParPoule = Math.ceil(matrix.length/nbrPoule);
+	var lastpoule = matrix.length-(pairParPoule * (nbrPoule-1));
+	var nPairInPoule = new Array(parseInt(nbrPoule));
+	for(var i =0;i<nPairInPoule.length;i++){
+		nPairInPoule[i] = 0;
+	}
+	var indexTab = 0;
+	for(var i =0;i<matrix.length;i++){
+		
+		nPairInPoule[indexTab % nPairInPoule.length]++;
+		indexTab++;
+	}
+	console.log(nPairInPoule)
+
+	
+	var closestCourt = new Array(matrix.length);
+	for(var i = 0;i<matrix.length;i++){
+		closestCourt[i] = new Array(matrix[i].length);
+		
+		for(var j =0;j<matrix[i].length;j++){
+			closestCourt[i].push([j,matrix[i][j]]);
+			
+		}
+			closestCourt[i].sort(function(a, b){return a[1]-b[1]});
+			
+	}
+	
+	var valueCourt = new Array(matrix[0].length);
+	for(var i=0;i<valueCourt.length;i++){
+		valueCourt[i] = [i,0];
+	}	
+	for(var i =0;i<matrix.length;i++){
+		for(var j=0;j<matrix[i].length;j++){
+			//console.log(closestCourt[i][j][0]);
+			valueCourt[closestCourt[i][j][0]][1] += j;
+			//console.log(valueCourt[closestCourt[i][j][0]]);
+			
+		}
+	}
+	console.log(valueCourt);
+	listTerrain = new Array(nbrPoule);
+	valueCourt.sort(function(a, b){return a[1]-b[1]});
+	for(var i=0;i<nbrPoule;i++)
+	{
+		listTerrain[i] = valueCourt[i][0];
+	}
+	console.log(listTerrain);
+	
+	
+	//On rajoute les pairs aux terrains choisis
+	pairInPoule = new Array(parseInt(nbrPoule));
+	kmParPoule = new Array(parseInt(nbrPoule));
+	console.log(pairInPoule);
+	for(var i=0;i<kmParPoule.length;i++){
+		kmParPoule[i] =0;
+	}
+	
+	alreadyIn = [];
+	for(var i =0;i<listTerrain.length;i++){
+		var nInPoule = nPairInPoule[i];
+		
+		pairInPoule[i] = [];
+		for(var j=0;j<matrix[0].length;j++){
+			for(var x=0;x<matrix.length;x++){
+				//console.log(x+" "+j);
+				//console.log(pairInPoule[i].length);
+				if(closestCourt[x][j][0] == listTerrain[i] && alreadyIn.indexOf(x) == -1 && pairInPoule[i].length < nInPoule)
+				{
+					kmParPoule[i] = kmParPoule[i] + matrix[x][listTerrain[i]];
+					pairInPoule[i].push(x);
+					alreadyIn.push(x);
+				}
+				
+			}
+		}
+		
+	}
+console.log(kmParPoule);
+console.log(pairInPoule);
+var maxnbrInPoule = pairInPoule[0].length
+document.getElementById("poulesDiv").innerHTML = "";
+
+for(var i =0;i<nbrPoule;i++)
+{
+	var panel = createPanel(i+1);
+	document.getElementById("poulesDiv").appendChild(panel);
+
+	for(var j=0;j<pairInPoule[i].length;j++){
+			var p = createPair(pairList[pairInPoule[i][j]]);
+			document.getElementById("list"+(i+1)).appendChild(p);
+
+			//List
+			var nom1 = pairList[pairInPoule[i][j]].user1;
+			var nom2 = pairList[pairInPoule[i][j]].user2;
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1));
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2));
+			document.getElementById("Leader"+(i+1)).appendChild(getSpaceOption());
+	}
+	if(pairInPoule[i].length < maxnbrInPoule){
+		var p = createEmptyPair(i+"-"+j);
+		document.getElementById("list"+(i+1)).appendChild(p);
+	}
+	
+}
+setTerrains(nbrPoule);
+
+for(var i=0;i<nbrPoule;i++){
+listTerrain[i]
+setInfoTerrain(TerrainList[listTerrain[i]].user,TerrainList[listTerrain[i]].matiere,TerrainList[listTerrain[i]].addr,TerrainList[listTerrain[i]].id,i+1);
+document.getElementById("empreinte"+(i+1)).innerHTML = Math.round(kmParPoule[i])/1000;
 
 }
+
+terrainAssignement()
+
+
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+
+}
+
 
 </script>
 {% endblock %}

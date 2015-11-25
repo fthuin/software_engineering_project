@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from tennis.models import Extra,Participant,Court,Tournoi,Pair,Groupe, CourtState, CourtSurface, CourtType, LogActivity, Poule, Score, TournoiStatus, PouleStatus, Arbre
+from tennis.models import Extra,Participant,Court,Tournoi,Pair, CourtState, CourtSurface, CourtType, LogActivity, Poule, Score, TournoiStatus, PouleStatus, Arbre, TournoiTitle, TournoiCategorie, infoTournoi
 # Register your models here.
 
 class ParticipantAdmin(admin.ModelAdmin):
@@ -45,14 +45,15 @@ class PouleAdmin(admin.ModelAdmin):
     ordering = ('id',)
     
 class TournoiAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'description', 'jour', 'status')
+    list_display = ('id', 'titre','categorie')
 
 admin.site.register(Participant, ParticipantAdmin)
 admin.site.register(Extra, ExtraAdmin)
 admin.site.register(Court, CourtAdmin)
+admin.site.register(TournoiTitle)
+admin.site.register(TournoiCategorie)
 admin.site.register(Tournoi, TournoiAdmin)
 admin.site.register(Pair, PairAdmin)
-admin.site.register(Groupe)
 admin.site.register(Poule, PouleAdmin)
 admin.site.register(Score)
 admin.site.register(Arbre)
@@ -62,3 +63,4 @@ admin.site.register(LogActivity, LogActivityAdmin)
 admin.site.register(CourtState, CourtStateAdmin)
 admin.site.register(CourtSurface, CourtSurfaceAdmin)
 admin.site.register(CourtType, CourtTypeAdmin)
+admin.site.register(infoTournoi)

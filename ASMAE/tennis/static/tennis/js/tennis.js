@@ -503,7 +503,7 @@ function selectUserStaff(username,nom,prenom,perm,group){
 	document.getElementById("userInfo").href = "/tennis/staff/utilisateurs/"+username;
 
 	//TODO set permissions on checkpoint
-    if(perm.indexOf("extra") > -1)
+    if(perm.indexOf("Extra") > -1)
     {
         document.getElementById("extraID").checked = true;
     }
@@ -511,7 +511,7 @@ function selectUserStaff(username,nom,prenom,perm,group){
     {
         document.getElementById("extraID").checked = false;
     }
-    if(perm.indexOf("pair") > -1)
+    if(perm.indexOf("Pair") > -1)
     {
         document.getElementById("pairID").checked = true;
     }
@@ -519,7 +519,7 @@ function selectUserStaff(username,nom,prenom,perm,group){
     {
         document.getElementById("pairID").checked = false;
     }
-    if(perm.indexOf("court") > -1)
+    if(perm.indexOf("Court") > -1)
     {
         document.getElementById("courtID").checked = true;
     }
@@ -597,8 +597,7 @@ function extra(id, nom,prix,comment){
 	document.getElementById("deleteID").value = id;
 	document.getElementById("extraName").value = nom;
 	document.getElementById("formTitle").innerHTML = "Editer " + nom;
-	var prixWithPoint = prix.replace(",",".");
-	document.getElementById("extraPrice").value = prixWithPoint;
+	document.getElementById("extraPrice").value = prix;
 	document.getElementById("extracommentaire").innerHTML = comment;
 }
 

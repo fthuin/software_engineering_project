@@ -13,5 +13,5 @@ class Command(BaseCommand):
             t.save()
 
     def handle(self, *args, **options):
+        print("Ajout des types de terrains")
         self.addBasicTypes()
-

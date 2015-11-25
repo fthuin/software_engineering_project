@@ -6,8 +6,42 @@
 {% block bodyStaff %}
 <!-- Gestionnaire des extras -->
 <div class="content-box" id="gestionExtra">
-	<h2 class="center">Gestionnaire des extras</h2>
+	<h2 class="center">Gestionnaire des inscriptions</h2>
 	<hr class="line">
+	<form class="form-horizontal" action="">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Tournoi
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-sm-6">
+						<!-- Frais d'inscription -->
+						<div class="form-group">
+					      <label class="control-label col-sm-4 col-sm-offset-4" for="username">Frais d'inscription</label>
+					      <div class="col-sm-4">
+					      	<input type="text" class="form-control" maxlength="30" name="name" value="{{ prix_inscription }}">
+					      </div>
+					    </div>
+					</div>
+					<div class="col-sm-6">
+						<!-- Date de tournoi -->
+						<div class="form-group">
+					      <label class="control-label col-sm-4" for="username">Date du tournoi</label>
+					      <div class="col-sm-4">
+					      	<input type="date" class="form-control" maxlength="30" name="name" value="{{ date_inscription }}">
+					      </div>
+					    </div>
+					</div>
+				</div>
+				<button class="btn btn-default center-block">Editer</button>
+			</div>
+		</div>
+		
+	</form>
+
+
+
 	{% if errorAdd %}
 	<div class="alert alert-danger">
 	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
