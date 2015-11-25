@@ -233,15 +233,16 @@ var nombrePanel = mesPanel.length;
 if(nombrePanel<17){
   {% for p in poules %}
   var pouleBoxes = document.getElementsByClassName({{p.id}}+"Box");
-  var pouleCheck = document.getElementsByClassName({{p.id}}+"Check");
+  var pouleCheck = document.getElementsByClassName('{{p.id}}'+"Check");
+  var obv = '{{p.id}}'+"Check";
   if(nombrePanel>8 || pouleBoxes.length<2){
     pouleBoxes[0].checked = true;
-    pouleCheck[0].className = "glyphicon glyphicon-check"
+    pouleCheck[0].className = "glyphicon glyphicon-check "+obv
   }else{
     pouleBoxes[0].checked = true;
     pouleBoxes[1].checked = true;
-    pouleCheck[0].className = "glyphicon glyphicon-check"
-    pouleCheck[1].className = "glyphicon glyphicon-check"
+    pouleCheck[0].className = "glyphicon glyphicon-check "+obv
+    pouleCheck[1].className = "glyphicon glyphicon-check "+obv
   }
   {% endfor %}
 }

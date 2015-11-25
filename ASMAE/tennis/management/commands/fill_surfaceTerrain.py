@@ -13,5 +13,5 @@ class Command(BaseCommand):
             s.save()
 
     def handle(self, *args, **options):
+        print("Ajout des surfaces des terrains")
         self.addBasicSurfaces()
-
