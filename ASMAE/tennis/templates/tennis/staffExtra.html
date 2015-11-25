@@ -15,23 +15,66 @@
 			</div>
 			<div class="panel-body">
 				<div class="row">
-					<div class="col-sm-6">
+					<div class="col-sm-4">
 						<!-- Frais d'inscription -->
 						<div class="form-group">
-					      <label class="control-label col-sm-4 col-sm-offset-4" for="username">Frais d'inscription</label>
+					      <label class="control-label col-sm-8" for="username">Frais d'inscription</label>
 					      <div class="col-sm-4">
 					      	<input type="text" class="form-control" maxlength="30" name="name" value="{{ prix_inscription }}">
 					      </div>
 					    </div>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-8">
 						<!-- Date de tournoi -->
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="username">Date du tournoi</label>
-					      <div class="col-sm-4">
-					      	<input type="date" class="form-control" maxlength="30" name="name" value="{{ date_inscription }}">
+					      <div class="col-sm-8">
+					      	<div class="row">
+					      		<div class="col-xs-3" style="padding-right:0">
+					      			<select class="form-control" name="jour" id="select_jour" style="padding-right:0" onchange="onChangeDayOfBirth()">
+										<option selected disabled>Jour</option>
+										{% for i in "123456789" %}
+									    <option value="0{{ i }}">0{{ i }}</option>
+									    {% endfor %}
+									    {% for i in "0123456789" %}
+									    <option value="1{{ i }}">1{{ i }}</option>
+									    {% endfor %}
+									    {% for i in "0123456789" %}
+									    <option value="2{{ i }}">2{{ i }}</option>
+									    {% endfor %}
+									    <option value="30">30</option>
+									    <option value="31">31</option>
+									</select>
+					      		</div>
+					      		<div class="col-xs-5">
+					      			<select class="form-control" id="select_mois" name="mois" onchange="onChangeMonthOfBirth()">
+										<option selected disabled>Mois</option>
+										<option value="01">Janvier</option>
+									    <option value="02">Février</option>
+									    <option value="03">Mars</option>
+									    <option value="04">Avril</option>
+									    <option value="05">Mai</option>
+									    <option value="06">Juin</option>
+									    <option value="07">Juillet</option>
+									    <option value="08">Août</option>
+									    <option value="09">Septembre</option>
+									    <option value="10">Octobre</option>
+									    <option value="11">Novembre</option>
+									    <option value="12">Décembre</option>
+									</select>
+					      		</div>
+					      		<div class="col-xs-4" style="padding-left:0">
+					      			<select class="form-control" id="select_an" name="an" onchange="onChangeYearOfBirth()">
+										<option selected disabled>Année</option>
+										{% for i in yearLoop %}
+									    <option value="{{ i }}">{{ i }}</option>
+									    {% endfor %}
+									</select>
+					      		</div>
+						    </div>
+						    <input type="text" class="form-control" name="birthdate" id="birthdateID" value="{{ formatedBirthdate }}" style="display:none">
 					      </div>
-					    </div>
+					   	</div>
 					</div>
 				</div>
 				<button class="btn btn-default center-block">Editer</button>
@@ -219,6 +262,38 @@
 {% endblock %}
 
 {% block commande %}
+<script>
+	function onChangeDayOfBirth() {
+    var select_jour = document.getElementById("select_jour");
+    var jour = select_jour.options[select_jour.selectedIndex].value
+	date = dateNaissance.value
+	dateNaissance.value = jour+date.substring(2,date.length);
+}
+
+function onChangeMonthOfBirth() {
+    var select_mois = document.getElementById("select_mois");
+    var mois = select_mois.options[select_mois.selectedIndex].value
+	date = dateNaissance.value
+	dateNaissance.value = date.substring(0,3)+mois+date.substring(5,date.length);
+}
+
+function onChangeYearOfBirth() {
+    var select_an = document.getElementById("select_an");
+    var an = select_an.options[select_an.selectedIndex].value
+	date = dateNaissance.value
+	dateNaissance.value = date.substring(0,6)+an
+}
+
+	$('#select_jour').on('input', function() { 
+	    onChangeDayOfBirth();
+});
+	$('#select_mois').on('input', function() { 
+        onChangeMonthOfBirth();
+});
+	$('#select_an').on('input', function() { 
+        onChangeYearOfBirth();
+});
+</script>
 <script>
 //On met le premier extra de la liste en "active"
 extra('{{ Ex.0.id }}', '{{ Ex.0.nom }}','{{ Ex.0.prix }}','{{ Ex.0.commentaires }}');

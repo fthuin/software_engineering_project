@@ -809,6 +809,7 @@ def staffExtra(request):
 	info = infoTournoi.objects.all()[0]
 	prix_inscription = info.prix
 	date_inscription = info.date
+	yearLoop = range(date.today().year,date.today().year+5)
 	if request.method == "POST":
 		if request.POST['action'] == "addExtra":
 			nom = request.POST['name']
