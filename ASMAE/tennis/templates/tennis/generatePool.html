@@ -180,9 +180,9 @@ $('#poulesNumber').on('input', function() {
         nbr = 1;
     }
 
-    setPoules(nbr)
+    setPoules(nbr);
 
-    ;
+
 });
 
 //Listener sur le size des poules
@@ -355,10 +355,14 @@ function terrainAssignement()
 	//On a toutes les distance des poules au terrainmatieannt on va assigner les terrains
 
 	alreadyTaken = [];
-	for(var key in dico[key]){
+	firstkey = Object.keys(dico)[0];
+	for(var key in dico[firstkey]){
+		console.log("idpair");
+		console.log(key);
 		var minDistance =  Number.MAX_VALUE;
 		var index = -1;
 		for (var key2 in dico){
+			
 			console.log(key2);
 			console.log(dico[key2][key]);
 			if(minDistance > dico[key2][key] && (alreadyTaken.indexOf(key2-1) ==-1 || alreadyTaken.length == TerrainList.length)){
@@ -369,8 +373,8 @@ function terrainAssignement()
 			}
 		}
 		//Assigner le terrain index a la poule key par html brole
-		//console.log(key);
-		//console.log("Poule "+key+" with terrain "+index);
+		console.log(key);
+		console.log("Poule "+key+" with terrain "+index);
 		setInfoTerrain(TerrainList[index].user,TerrainList[index].matiere,TerrainList[index].addr,TerrainList[index].id,parseInt(key)+1);
 		document.getElementById("empreinte"+(parseInt(key)+1)).innerHTML = Math.round(minDistance)/1000;
 		alreadyTaken.push(index);
