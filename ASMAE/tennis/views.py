@@ -461,7 +461,7 @@ def staffTournoi(request):
 		allTitre = TournoiTitle.objects.all()
 		allTournoi = Tournoi.objects.all()
 		for tourn in allTournoi:
-			nbrPair = len(Pair.objects.filter(tournoi=tourn))
+			nbrPair = len(Pair.objects.filter(tournoi=tourn,valid=True))
 			tourn.np = nbrPair
 			pouleLength = len(Poule.objects.filter(tournoi=tourn))
 			tourn.pl = pouleLength
@@ -667,7 +667,7 @@ def generatePool(request,name):
 	ca = TournoiCategorie.objects.get(nom=cat)
 	tournoi = Tournoi.objects.get(titre=ti,categorie=ca)
 	terrains = Court.objects.all()
-	allPair = Pair.objects.filter(tournoi=tournoi)
+	allPair = Pair.objects.filter(tournoi=tournoi, valid=True)
 	poules = Poule.objects.filter(tournoi=tournoi)
 	if request.method == "POST":
 		if request.POST['action'] == 'save':
