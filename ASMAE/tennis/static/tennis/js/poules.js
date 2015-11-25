@@ -43,13 +43,20 @@ function setKm()
 					
 					for(var key in poulesDict){
 						var terId = poulesDict[key]['terrainID']
-						terId = terId -1;
-						console.log(terId)
-						if(!isNaN(terId))
+						var terIndex = -1;
+						console.log("terId "+ terId);
+					
+						for(var j=0;j<TerrainList.length;j++){
+							if(TerrainList[j].id == terId){
+								terIndex = j
+							}
+						}
+						console.log("terIndex "+terIndex);
+						if(terIndex != -1)
 						{
 						
-						var terrainLat = TerrainList[terId].lat;
-						var terrainLng = TerrainList[terId].lng;
+						var terrainLat = TerrainList[terIndex].lat;
+						var terrainLng = TerrainList[terIndex].lng;
 						var terrainlatLng = new google.maps.LatLng(parseFloat(terrainLat.replace(",", ".")), parseFloat(terrainLng.replace(",", ".")))						
 
 						var totalDistanceTerrain = 0;

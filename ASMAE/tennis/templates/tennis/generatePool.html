@@ -320,7 +320,7 @@ function terrainAssignement()
 
 	dico = {};
 	for(var j=0;j<TerrainList.length;j++){
-				dico[TerrainList[j].id] = {};
+				dico[j] = {};
 				totalDistanceTerrain = 0;
 				var terrainLat = TerrainList[j].lat;
 				var terrainLng = TerrainList[j].lng;
@@ -345,7 +345,7 @@ function terrainAssignement()
 						}
 					//alert("total");
 					//alert(totalDistanceTerrain);
-					dico[TerrainList[j].id][key] = totalDistanceTerrain;
+					dico[j][key] = totalDistanceTerrain;
 
 					}
 
@@ -364,10 +364,10 @@ function terrainAssignement()
 			
 			console.log(key2);
 			console.log(dico[key2][key]);
-			if(minDistance > dico[key2][key] && (alreadyTaken.indexOf(key2-1) ==-1 || alreadyTaken.length == TerrainList.length)){
+			if(minDistance > dico[key2][key] && (alreadyTaken.indexOf(key2) ==-1 || alreadyTaken.length == TerrainList.length)){
 
 				minDistance = dico[key2][key];
-				index = key2-1;
+				index = key2;
 
 			}
 		}
