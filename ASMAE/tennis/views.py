@@ -1056,6 +1056,14 @@ def staffUser(request):
 	Use = User.objects.all().order_by('username')
 	today = date.today()
 	for u in Use:
+		u1_list = u.user1.all()
+		u2_list = u.user2.all()
+		inPair = False
+		for p in u1_list or u2_list:
+			if p.confirm:
+				inPair = True
+				break
+		u.inpaire = inPair
 		born = u.participant.datenaissance
 		u.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 	if request.user.is_authenticated():

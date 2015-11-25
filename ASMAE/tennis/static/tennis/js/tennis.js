@@ -355,7 +355,25 @@ function setUserStaff(page){
 		}else{
 			icon = '<i class="fa fa-female" style="color:#ff0066"></i>';
 		}
-		var p = '<tr onclick="window.document.location='+"'utilisateurs/"+UserList[i][0]+"'"+';" class="clickable-row"><td style="text-align:center">'+icon+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td></tr>';
+
+
+		var tour = UserList[i][5];
+		var icont
+		if (tour == "True"){
+			icont = '<span class="glyphicon glyphicon-ok" style="color:green;"></span>';
+		}else{
+			icont = '<span class="glyphicon glyphicon-remove" style="color:red;"></span>';
+		}
+
+		var vet = UserList[i][6];
+		var iconv
+		if (vet == "True"){
+			iconv = '<span class="glyphicon glyphicon-ok" style="color:green;"></span>';
+		}else{
+			iconv = '<span class="glyphicon glyphicon-remove" style="color:red;"></span>';
+		}
+		
+		var p = '<tr onclick="window.document.location='+"'utilisateurs/"+UserList[i][0]+"'"+';" class="clickable-row"><td style="text-align:center">'+icon+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td><td style="text-align:center">'+icont+'</td><td style="text-align:center">'+iconv+'</td></tr>';
 		panneau.innerHTML += p;
 	};
 
