@@ -128,42 +128,42 @@ def inscriptionTournoi(request):
 			return render(request,'tennis/inscriptionTournoi.html',locals())
 
 		#On véririe qu'il ne s'est pas entré lui meme
-		user = User.objects.filter(username=request.user.username)[0]
+		user1 = User.objects.filter(username=request.user.username)[0]
 		user2 = User.objects.filter(username=username2)[0]
 
-		if (user==user2):
+		if (user1==user2):
 			errorAdd = "Vous ne pouvez pas faire une pair avec vous meme"
 			return render(request,'tennis/inscriptionTournoi.html',locals())
 
 		#Série de vérification pour que l'utilisateur ou son partenaire ne soit pas inscrit dans un tournoi du meme jour
-		user1Tournoi1 = user.user1.all()
-		user1Tournoi2 = user.user2.all()
+		user1Tournoi1 = user1.user1.all()
+		user1Tournoi2 = user1.user2.all()
 
 		user2Tournoi1 = user2.user1.all()
 		user2Tournoi2 = user2.user2.all()
 
 		for elem in user1Tournoi1:
-			if(elem.tournoi.jour == tournois.jour):
+			if(elem.tournoi.titre.jour == tournois.titre.jour):
 				errorAdd = "Vous etes deja inscrit a un tournoi ce jour!"
 				return render(request,'tennis/inscriptionTournoi.html',locals())
 
 		for elem in user1Tournoi2:
-			if(elem.tournoi.jour == tournois.jour):
+			if(elem.tournoi.titre.jour == tournois.titre.jour):
 				errorAdd = "Vous etes deja inscrit a un tournoi ce jour!"
 				return render(request,'tennis/inscriptionTournoi.html',locals())
 
 		for elem in user2Tournoi1:
-			if(elem.tournoi.jour == tournois.jour and elem.confirm):
+			if(elem.tournoi.titre.jour == tournois.titre.jour and elem.confirm):
 				errorAdd = "Le joueur 2 est deja inscrit dans un tournoi ce jour!"
 				return render(request,'tennis/inscriptionTournoi.html',locals())
 
 		for elem in user2Tournoi2:
-			if(elem.tournoi.jour == tournois.jour and elem.confirm):
+			if(elem.tournoi.titre.jour == tournois.titre.jour and elem.confirm):
 				errorAdd = "Le joueur 2 est deja inscrit dans un tournoi ce jour!"
 				return render(request,'tennis/inscriptionTournoi.html',locals())
 
 		#On cré la pair
-		pair = Pair(tournoi = tournois,user1=user,user2=user2,comment1 = comment1,confirm = False,valid = False,pay = False)
+		pair = Pair(tournoi = tournois,user1=user1,user2=user2,comment1 = comment1,confirm = False,valid = False,pay = False)
 		pair.save()
 		#On rajoute les extras
 		for elem in extra:
@@ -261,6 +261,10 @@ def cancelPair(request,id):
 	return redirect(reverse(home))
 
 def viewPair(request,id):
+	if request.method == "POST":
+		pair = Pair.objects.filter(id=id)
+		pair.delete()
+		return redirect(reverse(tournoi))
 	pair = Pair.objects.filter(id=id)
 	if len(pair) <1:
 		return redirect(reverse(tournoi))
@@ -268,8 +272,6 @@ def viewPair(request,id):
 	if pair.user1 != request.user and pair.user2 != request.user:
 		return redirect(reverse(tournoi))
 	if request.user.is_authenticated():
-
-
 		Ex = Extra.objects.all()
 		extra1 = pair.extra1.all()
 		extranot1 = list()
@@ -290,8 +292,6 @@ def viewPair(request,id):
 					contained = True
 			if contained == False:
 				extranot2.append(Extra.objects.filter(id=elem.id)[0])
-
-
 		return render(request,'tennis/viewPair.html',locals())
 	return redirect(reverse(home))
 

@@ -5,6 +5,12 @@
 {% block body %}
 <div class="container">
 	<div class="content-box">
+		{% if errorAdd %}
+		<div class="alert alert-danger">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		<strong>Error!</strong> {{ errorAdd }}
+		</div>
+		{% endif %}
 		<h2 class="center">Inscription au tournoi</h2>
 		<hr class="line">
 		<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.inscriptionTournoi" %}">

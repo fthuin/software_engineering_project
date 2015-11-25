@@ -89,7 +89,46 @@
 		<h4 class="center">Paire payée : {% if pair.pay %}oui{% else %}non{% endif %}</h4>
 
 		<!-- Inscription button -->
-		<button class="btn btn-default center-block" onClick="location.href='{% url "tennis.views.payPair" pair.id %}';" style="margin-top:20px;">Payer</button>
+		<ul class="list-inline text-center" style="margin-top:20px;">
+			<li>
+				<button class="btn btn-default" onClick="location.href='{% url "tennis.views.payPair" pair.id %}';">Payer</button>
+			</li>
+			<li>
+				<form class="form-horizontal" role="form" method="post" action="{% url "tennis.views.viewPair" pair.id %}" {% if pair.valid %}style="display:none"{% endif %}>
+					{% csrf_token %}
+					<button class="btn-default btn" type="button" data-toggle="modal" data-target="#myModal">Supprimer</button>
+					<button class="btn-default btn" style="display:none" id="deletePair" type="submit">Supprimer</button>
+				</form>
+			</li>
+		</ul>
+
+<!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title center">Confirmation de suppression</h4>
+        </div>
+        <div class="modal-body">
+          <p>Etes-vous sûr de vouloir supprimer votre paire?</p>
+        
+	    	<ul class="list-inline text-center">
+				<li>
+					<button type="button" class="btn btn-default" onclick="document.getElementById('deletePair').click();">oui</button>
+				</li>
+				<li>
+					<button type="button" class="btn btn-default" data-dismiss="modal">non</button>
+				</li>
+			</ul>
+		</div>
+      </div>
+      
+    </div>
+  </div>
+		
 			
 
 	</div>
