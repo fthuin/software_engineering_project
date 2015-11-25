@@ -154,6 +154,7 @@ class Court(models.Model):
 	commentaireStaff = models.TextField(null=True, blank=True)
 	valide = models.BooleanField(default=False, verbose_name='Validé')
 	user = models.ForeignKey(User, verbose_name='Utilisateur')
+	used = models.BooleanField(default=False)
 	usedLastYear = models.BooleanField(default=False)
 
 	def __str__(self):
@@ -249,7 +250,10 @@ class Tournoi(models.Model):
 			return str(self.titre)+": "+str(self.categorie)
 
 	def __unicode__(self):
-		return u'' + str(self.titre) +": "+ str(self.categorie)
+		if(self.titre.nom==self.categorie.nom):
+			return u'' + str(self.titre)
+		else:
+			return u'' + str(self.titre)+": "+str(self.categorie)
 
 	def nom(self):
 		if(self.titre.nom==self.categorie.nom):

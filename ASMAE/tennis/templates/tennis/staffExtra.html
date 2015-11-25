@@ -243,9 +243,12 @@
 				</div>
 			  </form>
 		</div>
+			{% if isAdmin %}
 			<form class="form-horizontal" method="post" action="{% url "tennis.views.staffExtra" %}">
 		{% csrf_token %}
+			
 		  <button class="btn btn-default center-block" data-toggle="modal" data-target="#myModal2" type="button">Nettoyer la base de donnée pour l'année suivante</button>
+			
 			<!-- Modal -->
 			  <div class="modal fade" id="myModal2" role="dialog">
 				<div class="modal-dialog">
@@ -261,7 +264,7 @@
 
 						<ul class="list-inline text-center">
 							<li>
-								<button type="button" class="btn btn-default center-block" name="action" value="cleanDb">oui</button>
+								<button class="btn btn-default center-block" name="action" value="cleanDb">oui</button>
 							</li>
 							<li>
 								<button type="button" class="btn btn-default center-block" data-dismiss="modal">non</button>
@@ -274,6 +277,7 @@
 			  </div>
 		
 		</form>
+		{% endif %}
 	</div>
 </div>
 

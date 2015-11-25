@@ -1,3 +1,85 @@
+function setKm()
+{
+
+	/* DEBUT COPIER COLLER */
+    document.getElementById("assignTerrains").value = ""
+    document.getElementById("assignPairPoules").value = ""
+    document.getElementById("assignLeaders").value = ""
+    var nbr = document.getElementById("poulesNumber").value;
+    var poulesDict = {};
+    for (var i = 0; i < nbr ; i++) {
+        var poule = {}
+        poule['leader'] = document.getElementById("Leader"+(i+1)).value;
+        poule['terrainID'] = document.getElementById("ID"+(i+1)).textContent;
+        poule['pairList'] = [];
+        poulesDict[''+i] = poule;
+        // TODO : Check si le leader et le terrainID sont valides
+    }
+    for (var i = 0; i < PairList.length ; i++) {
+        // On link les paires aux ID des poules
+        var id = "" + document.getElementById(""+PairList[i].id).parentNode.parentNode.parentNode.id;
+        id = id.replace("list", "");
+        poulesDict[''+(id-1)]['pairList'].push(PairList[i]);
+    }
+    for (var i = 0; i < nbr ; i++) {
+         document.getElementById("assignTerrains").value += poulesDict[''+i]['terrainID'] + '-';
+         document.getElementById("assignPairPoules").value += '[' + i + ']-'
+         for (var j = 0 ; j < poulesDict[''+i]['pairList'].length ; j++) {
+            document.getElementById("assignPairPoules").value += poulesDict[''+i]['pairList'][j].id + '-';
+         }
+         document.getElementById("assignLeaders").value += poulesDict[''+i]['leader'] + '/';
+    }
+	/* FIN COPIER COLLER */
+	/* Accéder à la première paire de la première poule */
+	// poulesDict['1']['pairList'][0]
+	/* Fin accéder à la premiere ... */
+	//alert(poulesDict['1']['pairList'][0].u2addr);
+
+
+	dico = {};
+/*	for(var j=0;j<TerrainList.length;j++){
+				dico[TerrainList[j].id] = {};
+				totalDistanceTerrain = 0;*/
+					
+					for(var key in poulesDict){
+						var terId = poulesDict[key]['terrainID']
+						terId = terId -1;
+						console.log(terId)
+						if(!isNaN(terId))
+						{
+						
+						var terrainLat = TerrainList[terId].lat;
+						var terrainLng = TerrainList[terId].lng;
+						var terrainlatLng = new google.maps.LatLng(parseFloat(terrainLat.replace(",", ".")), parseFloat(terrainLng.replace(",", ".")))						
+
+						var totalDistanceTerrain = 0;
+						for(var i = 0;i<poulesDict[key]['pairList'].length;i++){
+
+							var user1Lat = poulesDict[key]['pairList'][i].lat1;
+							var user1Lng = poulesDict[key]['pairList'][i].lng1;
+							var user2Lat = poulesDict[key]['pairList'][i].lat2;
+							var user2Lng = poulesDict[key]['pairList'][i].lng2;
+							var latLng1 = new google.maps.LatLng(parseFloat(user1Lat.replace(",", ".")), parseFloat(user1Lng.replace(",", ".")));
+							var latLng2 = new google.maps.LatLng(parseFloat(user2Lat.replace(",", ".")), parseFloat(user2Lng.replace(",", ".")));
+							var distance1 = google.maps.geometry.spherical.computeDistanceBetween(latLng1, terrainlatLng);
+							var distance2 = google.maps.geometry.spherical.computeDistanceBetween(latLng2, terrainlatLng);
+							totalDistanceTerrain = totalDistanceTerrain + distance1 + distance2;
+							//alert(distance1);
+							//alert(distance2);
+						}
+					//alert("total");
+					//alert(totalDistanceTerrain);
+
+					dico[key] = totalDistanceTerrain;
+					document.getElementById("empreinte"+(parseInt(key)+1)).innerHTML = Math.round(totalDistanceTerrain)/1000;
+					}
+				}
+					
+
+	}
+	
+//}
+
 //utilisé pour le drag and drop
 function drag (ev) {
   ev.dataTransfer.setData("src", ev.target.id);
@@ -18,6 +100,8 @@ function drop (ev) {
   //update leader liste
   updatePanel(targetID, "Choisir un leader");
   updatePanel(sourceID, "Choisir un leader");
+
+	setKm();
 
 }
 
@@ -251,6 +335,20 @@ function setInfoTerrain(p,matiere,addr,ID,number){
 	document.getElementById("matiere"+number).innerHTML = matiere;
 	document.getElementById("addr"+number).innerHTML = addr;
 	document.getElementById("ID"+number).innerHTML = ID;
+
+	//TODO Ajouter type de terrain
+	setKm()
+	
+}
+function setInfoTerrainNoUpdateKm(p,matiere,addr,ID,number){
+	document.getElementById("proprio"+number).innerHTML = p;
+	document.getElementById("matiere"+number).innerHTML = matiere;
+	document.getElementById("addr"+number).innerHTML = addr;
+	document.getElementById("ID"+number).innerHTML = ID;
+
+	//TODO Ajouter type de terrain
+
+	
 }
 
 //Return une option avec comme nom et valeur le name
@@ -317,8 +415,8 @@ function createPanel(number){
 							'</div>'+
 
 							'<div class="row">'+
-								'<label class="control-label col-xs-7">Kilomètres</label>'+
-								'<div class="col-xs-5"><p class="info" id="empreinte'+number+'"> - </p></div>'+
+								'<label class="control-label col-xs-4">Kilomètres</label>'+
+								'<div class="col-xs-8"><p class="info" id="empreinte'+number+'"> - </p></div>'+
 							'</div>'+
 						'</div>'+
 					'</div>';
@@ -334,12 +432,12 @@ function createPair(pair){
 	if(pair.titre1=="Mr"){
 		gender1 = '<i class="fa fa-male" style="color:blue"></i>';
 	}else{
-		gender1 = '<i class="fa fa-female" style="color:red"></i>';
+		gender1 = '<i class="fa fa-female" style="color:#ff0066"></i>';
 	}
 	if(pair.titre2=="Mr"){
 		gender2 = '<i class="fa fa-male" style="color:blue"></i>';
 	}else{
-		gender2 = '<i class="fa fa-female" style="color:red"></i>';
+		gender2 = '<i class="fa fa-female" style="color:#ff0066"></i>';
 	}
 
 
@@ -392,6 +490,8 @@ function clickEventPair(ID){
 			//update leader liste
 			updatePanel(targetID, "Choisir un leader");
 			updatePanel(sourceID, "Choisir un leader");
+			
+			setKm();
 
 			
 

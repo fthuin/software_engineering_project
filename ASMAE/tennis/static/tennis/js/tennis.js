@@ -64,6 +64,9 @@ var UserList;
 //longueur de la page
 var pageLength;
 
+var user_age;
+var user_sexe;
+
 //On met à jours les infos
 function setUserListInfo(userList,longueur){
 	UserList = userList;
@@ -86,9 +89,9 @@ function setUser(page){
 		if (titre == "Mr"){
 			icon = '<i class="fa fa-male" style="color:blue"></i>';
 		}else{
-			icon = '<i class="fa fa-female" style="color:red"></i>';
+			icon = '<i class="fa fa-female" style="color:#ff0066"></i>';
 		}
-		var p = '<tr class="clickable-row" onClick="selectUser('+"'"+UserList[i][0]+"',"+"'"+UserList[i][2]+"',"+"'"+UserList[i][1]+"'"+');"><td style="text-align:center">'+icon+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td></tr>';
+		var p = '<tr class="clickable-row" onClick="selectUser('+"'"+UserList[i][0]+"',"+"'"+UserList[i][2]+"',"+"'"+UserList[i][1]+"',"+"'"+UserList[i][3]+"',"+"'"+UserList[i][4]+"'"+');"><td style="text-align:center">'+icon+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td><td style="text-align:center">'+UserList[i][5]+'</td></tr>';
 		panneau.innerHTML += p;
 	};
 
@@ -99,12 +102,62 @@ function setUser(page){
 }
 
 //Lorsqu'on selectionne un utilistaeur on met ses valeurs dans le tableaux du dessous
-function selectUser(username,nom,prenom){
+function selectUser(username,nom,prenom,sexe,age){
 	document.getElementById("username2Value").value = username;
-	document.getElementById("user2").innerHTML = prenom +' '+nom+' ('+username+')';
-	if(document.getElementById("hint-tournoi").innerHTML==""){
-		document.getElementById("InscriptionButton").disabled = false;
+	document.getElementById("user2").innerHTML = '['+username+'] '+prenom +' '+nom+' '+age+' ans';
+	document.getElementById("InscriptionButton").disabled = false;
+
+	//Check tournoi et catégorie en fonction de l'user courant
+	tournoi = ""
+	categorie = ""
+	jour = ""
+	//Check age voir si tournoi des familles
+	if((user_age >= 25 && age <= 15) || (user_age <= 15 && age >=25))
+	{
+		tournoi = "Tournoi des familles"
+		jour = "Samedi"
+		categorie = "-"
+	}else{
+		//Sinon check sexe pour voir tournoi homme femme ou mixte
+		if(user_sexe == sexe){
+			if(user_sexe == "Mr"){
+				tournoi = "Double hommes"
+				jour = "Dimanche"
+			}else{
+				tournoi = "Double femmes"
+				jour = "Dimanche"
+			}
+		}else{
+			tournoi = "Double mixte"
+			jour = "Samedi"
+		}
+		//Check age du plus vieux pour voir la categorie
+		var v
+		if(user_age >= age){
+			v = user_age
+		}else{
+			v = age
+		}
+		if(v >= 41){
+			categorie = "Elites"
+		}else if(v >= 20){
+			categorie = "Seniors"
+		}else if(v >=17){
+			categorie = "Juniors"
+		}else if(v >= 15){
+			categorie = "Scolaires"
+		}else if(v >= 13){
+			categorie = "Cadets"
+		}else if(v >= 11){
+			categorie = "Minimes"
+		}else if(v >= 9){
+			categorie = "Pre minimes"
+		}
 	}
+	document.getElementById("tournoiLabel").value = tournoi
+	document.getElementById("jourLabel").value = jour
+	document.getElementById("categorieLabel").value = categorie
+	
 }
 
 //Lorsqu'on click sur un tournoi, on met à jours la description ainsi que les différentes restriction par rapport au tournoi
@@ -208,6 +261,7 @@ function setCourt(page){
 		}else{
 			adress = CourtList[i][5]+' '+CourtList[i][6]+',<br> '+CourtList[i][7]+' '+CourtList[i][8];
 		}
+
 		var valid = CourtList[i][10];
 		if (valid == "oui") {
 		    valid = '<span class="glyphicon glyphicon-ok" style="color:green;"></span>'
@@ -215,10 +269,30 @@ function setCourt(page){
 		else if (valid == "non") {
 		    valid = '<span class="glyphicon glyphicon-remove" style="color:red;"></span>'
 		}
+
+		var used = CourtList[i][14];
+		var useIcon
+		if (used == "True") {
+		    useIcon = '<span class="glyphicon glyphicon-ok" style="color:green;"></span>'
+		}
+		else {
+		    useIcon = '<span class="glyphicon glyphicon-remove" style="color:red;"></span>'
+		}
+
+		var vet = CourtList[i][15];
+		var vetIcon
+		if (vet == "True") {
+		    vetIcon = '<span class="glyphicon glyphicon-ok" style="color:green;"></span>'
+		}
+		else {
+		    vetIcon = '<span class="glyphicon glyphicon-remove" style="color:red;"></span>'
+		}
+
+
 		var dispo = CourtList[i][11];
 
 		//var p = '<tr class="clickable-row" data-href="utilisateurs/'+UserList[i][0]+'"><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td>'+age+' ans</td></tr>';
-		var p = '<tr onclick="window.document.location='+"'terrains/"+CourtList[i][3]+"'"+';" class="clickable-row"><td>'+CourtList[i][3]+'</td><td>'+CourtList[i][4]+'</td><td style="text-align:center;">'+valid+'</td><td>'+dispo+'</td><td>'+CourtList[i][1]+' '+CourtList[i][2]+' ('+CourtList[i][0]+')</td><td>'+adress+'</td></tr>';
+		var p = '<tr onclick="window.document.location='+"'terrains/"+CourtList[i][3]+"'"+';" class="clickable-row"><td>'+CourtList[i][3]+'</td><td>'+CourtList[i][4]+'</td><td style="text-align:center;">'+valid+'</td><td style="text-align:center;">'+useIcon+'</td><td>'+dispo+'</td><td>'+CourtList[i][1]+' '+CourtList[i][2]+' ('+CourtList[i][0]+')</td><td>'+adress+'</td><td style="text-align:center;">'+vetIcon+'</td></tr>';
 		panneau.innerHTML += p;
 	};
 
@@ -300,9 +374,27 @@ function setUserStaff(page){
 		if (titre == "Mr"){
 			icon = '<i class="fa fa-male" style="color:blue"></i>';
 		}else{
-			icon = '<i class="fa fa-female" style="color:red"></i>';
+			icon = '<i class="fa fa-female" style="color:#ff0066"></i>';
 		}
-		var p = '<tr onclick="window.document.location='+"'utilisateurs/"+UserList[i][0]+"'"+';" class="clickable-row"><td style="text-align:center">'+icon+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td></tr>';
+
+
+		var tour = UserList[i][5];
+		var icont
+		if (tour == "True"){
+			icont = '<span class="glyphicon glyphicon-ok" style="color:green;"></span>';
+		}else{
+			icont = '<span class="glyphicon glyphicon-remove" style="color:red;"></span>';
+		}
+
+		var vet = UserList[i][6];
+		var iconv
+		if (vet == "True"){
+			iconv = '<span class="glyphicon glyphicon-ok" style="color:green;"></span>';
+		}else{
+			iconv = '<span class="glyphicon glyphicon-remove" style="color:red;"></span>';
+		}
+		
+		var p = '<tr onclick="window.document.location='+"'utilisateurs/"+UserList[i][0]+"'"+';" class="clickable-row"><td style="text-align:center">'+icon+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td><td style="text-align:center">'+icont+'</td><td style="text-align:center">'+iconv+'</td></tr>';
 		panneau.innerHTML += p;
 	};
 
@@ -625,6 +717,118 @@ function validateEditInfo() {
 			document.getElementById("saveinfo").click();
 		    }else{
 		    	document.getElementById("hint-locality").innerHTML = "Adresse non reconnue";
+		    }
+		});
+	}
+
+}
+function validateEditStaffInfo() {
+
+	valid = true;
+
+	//Verification nom présent
+	var lastname = document.getElementById("lastname").value;
+	if(lastname==null || lastname == ""){
+		document.getElementById("hint-lastname").innerHTML = " ! Entrer un nom";
+		valid = false;
+	}else{
+		document.getElementById("hint-lastname").innerHTML = "";
+	}
+
+	//Verification prénom présent
+	var firstname = document.getElementById("firstname").value;
+	if(firstname==null || firstname == ""){
+		document.getElementById("hint-firstname").innerHTML = " ! Entrer un prénom";
+		valid = false;
+	}else{
+		document.getElementById("hint-firstname").innerHTML = "";
+	}
+
+	//Verification telephone présent
+	var tel = document.getElementById("tel").value;
+	var gsm = document.getElementById("gsm").value;
+	if((tel==null || tel == "") && (gsm==null || gsm == "")){
+		document.getElementById("hint-tel").innerHTML = " ! Entrer un numéro de téléphone ou de GSM";
+		valid = false;
+	}else{
+		//Verify number validity TODO
+		document.getElementById("hint-tel").innerHTML = "";
+	}
+
+	//Verification rue présent
+	var street = document.getElementById("street").value;
+	if(street==null || street == ""){
+		document.getElementById("hint-street").innerHTML = " ! Entrer un rue";
+		valid = false;
+	}else{
+		document.getElementById("hint-street").innerHTML = "";
+	}
+
+	//Verification numero présent
+	var number = document.getElementById("number").value;
+	if(number==null || number == ""){
+		document.getElementById("hint-number").innerHTML = " ! Entrer un numéro";
+		valid = false;
+	}else{
+		document.getElementById("hint-number").innerHTML = "";
+	}
+
+	//Verification code postal présent
+	var postalcode = document.getElementById("postalcode").value;
+	if(postalcode==null || postalcode == ""){
+		document.getElementById("hint-postalcode").innerHTML = " ! Entrer un code postal";
+		valid = false;
+	}else{
+		document.getElementById("hint-postalcode").innerHTML = "";
+	}
+
+	//Verification localité présent
+	var locality = document.getElementById("locality").value;
+	if(locality==null || locality == ""){
+		document.getElementById("hint-locality").innerHTML = " ! Entrer un localité";
+		valid = false;
+	}else{
+		document.getElementById("hint-locality").innerHTML = "";
+	}
+	
+	//Verification email
+	var email = document.getElementById("email").value;
+	if(email==null || email == ""){
+		document.getElementById("hint-email").innerHTML = " ! Entrer un email";
+		valid = false;
+	}else{
+		document.getElementById("hint-email").innerHTML = "";
+	}
+
+
+
+	//Verification date de naissance présent
+	var birthdate = document.getElementById("birthdateID").value;
+	if(birthdate==null || birthdate == ""){
+		document.getElementById("hint-birthdate").innerHTML = " ! Entrer un date de naissance";
+		valid = false;
+	}else{
+		document.getElementById("hint-birthdate").innerHTML = "";
+	}
+
+	if(valid){
+		
+		var geocoder = new google.maps.Geocoder();
+		var address = street+", "+number+" "+postalcode+" "+locality+" Belgium";
+
+		geocoder.geocode( { 'address': address}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			
+			var latitude = results[0].geometry.location.lat();
+		    var longitude = results[0].geometry.location.lng();
+			
+			document.getElementById("latitude").value = latitude;
+			document.getElementById("longitude").value = longitude;
+			
+			document.getElementById("saveinfo").click();
+		    }else{
+		    	document.getElementById("hint-locality").innerHTML = "Adresse non reconnue";
+				
 		    }
 		});
 	}

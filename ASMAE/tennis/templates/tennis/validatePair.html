@@ -8,15 +8,27 @@
 	<div class="content-box">
 		<h2 class="center">Paire {{ pair.id }}</h2>
 		<hr class="line">
+		<form role="form" class="form-horizontal" method="post" action="">
+			{% csrf_token %}
 
+		<!-- Tournoi -->
 		<div class="row">
-			<div class="col-sm-4 col-sm-offset-0">
-				<h4 class="center">Tournoi : {{ pair.tournoi.nom }}</h4>
-			</div>
-			<div class="col-sm-7">
-				<p class="info">{{ pair.tournoi.description }}</p>
-			</div>
-		</div>
+			<div class="form-group col-sm-6">
+		      <label class="control-label col-sm-4" for="tournoi">Tournoi</label>
+		      <div class="col-sm-8">
+		      	<select class="form-control" name="tournoi" id="tournoi_select">
+		      		{% for elem in allTournoi %}
+		      		{% if elem == pair.tournoi %}
+		      		<option value="{{ elem.nom }}" selected>{{ elem }}</option>
+		      		{% elif noPoule %}
+		      		<option value="{{ elem.nom }}">{{ elem }}</option>
+		      		{% endif %}
+		      		{% endfor %}
+				</select>
+
+		      </div>
+		    </div>
+	    </div>
 
 		<div class="row">
 
@@ -24,7 +36,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">Joueur 1</div>
 					<div class="panel-body">
-						<a class="UserLink" style="text-align:center" href="{% url "tennis.views.viewUser" pair.user1.username %}">{{ pair.user1.participant.titre }} {{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} ({{ pair.user1.username }})</a>
+						<a class="UserLink" style="text-align:center" href="{% url "tennis.views.viewUser" pair.user1.username %}">{{ pair.user1.participant.titre }} {{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} {{ age1 }} ans ({{ pair.user1.username }})</a>
 					    <!-- Extra -->
 						<div class="form-group">
 					      <label class="info control-label col-sm-4" for="username">Extras : </label>
@@ -56,7 +68,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">Joueur 2</div>
 					<div class="panel-body">
-						<a class="UserLink" style="text-align:center" href="{% url "tennis.views.viewUser" pair.user2.username %}">{{ pair.user2.participant.titre }} {{ pair.user2.participant.prenom }} {{ pair.user2.participant.nom }} ({{ pair.user2.username }})</a>
+						<a class="UserLink" style="text-align:center" href="{% url "tennis.views.viewUser" pair.user2.username %}">{{ pair.user2.participant.titre }} {{ pair.user2.participant.prenom }} {{ pair.user2.participant.nom }} {{ age2 }} ans ({{ pair.user2.username }})</a>
 					    <!-- Extra -->
 						<div class="form-group">
 					      <label class="info control-label col-sm-4" for="username">Extras : </label>
@@ -86,8 +98,6 @@
 		</div>
 
 		<div style="margin-top:20px;">
-			<form role="form" class="form-horizontal" method="post" action="">
-			{% csrf_token %}
 			<div class="row">
 				<div class="col-sm-4 col-sm-offset-4">
 					<!-- Valid -->
