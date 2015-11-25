@@ -854,6 +854,9 @@ def staffExtra(request):
 				extra.commandsCount += 1
 
 	if request.method == "POST":
+		resetDbForNextYear
+		if request.POST['action'] == "cleanDb":
+			resetDbForNextYear()
 		if request.POST['action'] == "modifyInfoTournoi":
 			prixTournoi = request.POST['prixInscription'].strip()
 			dateInfoTournoi = request.POST['birthdate'].strip()
@@ -1531,8 +1534,8 @@ def printScoreBoard(request, pouleId):
 		strPairs.append(u'' + pair.user1.participant.prenom + u' <b>' + pair.user1.participant.nom + u'</b><br>' + pair.user2.participant.prenom + u' <b>' + pair.user2.participant.nom + u'</b>')
 	return render(request, 'tennis/printScoreBoard.html', {'strPairs':strPairs})
 
-def resetDbForNextYear(request):
-
+def resetDbForNextYear():
+	
 	listParticipant = Participant.objects.all()
 	for participant in listParticipant:
 		participant.oldparticipant = False
@@ -1562,3 +1565,6 @@ def resetDbForNextYear(request):
 	Score.objects.all().delete()
 	Poule.objects.all().delete()
 	LogActivity.objects.all().delete()
+	
+	print("resetdb")
+

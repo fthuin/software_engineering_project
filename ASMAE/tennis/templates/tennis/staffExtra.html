@@ -243,8 +243,10 @@
 				</div>
 			  </form>
 		</div>
-
-		<button class="btn btn-default center-block">RESET LA DB T'ES UN OUF</button>
+			<form class="form-horizontal" method="post" action="{% url "tennis.views.staffExtra" %}">
+		{% csrf_token %}
+		<button class="btn btn-default center-block" name="action" value="cleanDb">Nettoyer la base de dononée pour l'année suivante</button>
+		</form>
 	</div>
 </div>
 
