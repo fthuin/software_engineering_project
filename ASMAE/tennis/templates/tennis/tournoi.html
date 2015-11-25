@@ -6,10 +6,7 @@
 {% block body %}
 
 <div class="container">
-	
-	<!-- Affichage Normal : Inscription - Historique - Agenda -->
-	<!-- Les différents tournoi -->
-	<!-- TODO set info -->
+
 	<div class="content-box">
 		<h2 class="center">Inscription</h2>
 		<hr class="line">
@@ -18,16 +15,37 @@
 				<!-- Panel infos -->
 				<div class="panel panel-default">
 					<div class="panel-heading">Demande d'inscription</div>
-					<div class="list-group">
-						{% for item in demande %}
-						<a href="{% url "tennis.views.confirmPair" item.id %}" class="list-group-item">
-							<b>En attente de votre confirmation</b> <br>
-							<b>ID : </b> {{ item.id}} / <b>Tournoi : </b> {{item.tournoi.nom}} / <b>Jour : </b>{{ item.tournoi.jour }} <br> 
-							<b>Joueur 1 : </b>{{item.user1.participant.prenom}} {{item.user1.participant.nom}} - <b>Joueur 2 : </b>{{item.user2.participant.prenom}} {{item.user2.participant.nom}}
-						</a>
-						{% empty %}
-						<li class="list-group-item center">Vous n'avez pas de demande d'inscription</li>
-						{% endfor %}
+					<div class="table-responsive">
+		            <table class="table table-hover">
+		                <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tournoi</th>
+                                <th>Jour</th>
+                                <th>Joueur 1</th>
+                                <th>Joueur 2</th>
+                            </tr>
+                       </thead>
+                       <tbody>
+                        {% for item in demande %}
+                            <tr onclick="window.document.location='{% url "tennis.views.confirmPair" item.id %}'" class="clickable-row">
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.tournoi.nom }}</td>
+                                <td>{{ item.tournoi.jour }}</td>
+                                <td>{{item.user1.participant.prenom}} {{item.user1.participant.nom}}</td>
+                                <td>{{item.user2.participant.prenom}} {{item.user2.participant.nom}}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        {% endfor %}
+                       </tbody>
+		             </table>
 					</div>
 				</div>
 			</div>
@@ -35,17 +53,37 @@
 				<!-- Panel infos -->
 				<div class="panel panel-default">
 					<div class="panel-heading">Partenaire non confirmé</div>
-					<div class="list-group">
-						{% for item in nonComfirme %}
-						<a href="{% url "tennis.views.cancelPair" item.id %}" class="list-group-item">
-							<b>En attente de confirmation par le joueur 2</b> <br>
-							<b>ID : </b> {{ item.id}} / <b>Tournoi : </b> {{item.tournoi.nom}} / <b>Jour : </b>{{ item.tournoi.jour }} <br> 
-							<b>Joueur 1 : </b>{{item.user1.participant.prenom}} {{item.user1.participant.nom}} - <b>Joueur 2 : </b>{{item.user2.participant.prenom}} {{item.user2.participant.nom}}
-						</a>
-						{% empty %}
-						<li class="list-group-item center">Vous n'avez pas de demande en attente de confirmation</li>
-						{% endfor %}
-						
+					<div class="table-responsive">
+		            <table class="table table-hover">
+		                <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tournoi</th>
+                                <th>Jour</th>
+                                <th>Joueur 1</th>
+                                <th>Joueur 2</th>
+                            </tr>
+                       </thead>
+                       <tbody>
+                        {% for item in nonComfirme %}
+                            <tr onclick="window.document.location='{% url "tennis.views.cancelPair" item.id %}'" class="clickable-row">
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.tournoi.nom }}</td>
+                                <td>{{ item.tournoi.jour }}</td>
+                                <td>{{item.user1.participant.prenom}} {{item.user1.participant.nom}}</td>
+                                <td>{{item.user2.participant.prenom}} {{item.user2.participant.nom}}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        {% endfor %}
+                       </tbody>
+		             </table>
 					</div>
 				</div>
 			</div>

@@ -5,15 +5,7 @@
 {% block body %}
 <div class="container">
 	<div class="content-box">
-
-		{% if errorAdd %}
-		<div class="alert alert-danger">
-		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		<strong>Error!</strong> {{ errorAdd }}
-		</div>
-		{% endif %}
 		<h2 class="center">Inscription au tournoi</h2>
-
 		<hr class="line">
 		<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.inscriptionTournoi" %}">
 			{% csrf_token %}
@@ -21,25 +13,65 @@
 				<div class="col-sm-6">
 					<!-- Tournoi -->
 					<div class="form-group">
-				      <label class="control-label col-sm-4" for="tournoi">Tournoi : </label>
+				      <label class="control-label col-sm-4" for="tournoi">Jour : </label>
 				      <div class="col-sm-8">
-				      	<select class="form-control" name="tournoi" id="selector" value=" " onChange="setDescription('{{user.participant.titre}}','{{ user.participant.datenaissance }}');">
-				      		<option value="" selected disabled>Choisir un tournoi</option>
-						
-				      		{% for elem in Tour %}
-				      		<option id="{{ elem.description }}" value="{{ elem.nom }}">{{ elem.nom }}</option>
-				      		{% endfor %}
+				      	<select class="form-control" name="tournoi" id="selector" onChange="setDescription();">
+				      		<option id="samedi" value="Samedi">Samedi</option>
+				      		<option id="dimanche" value="Dimanche">Dimanche</option>
 						</select>
-						<p class="hint" id="hint-tournoi"></p>
 				      </div>
 				    </div>
-				    <!-- Description -->
-					<div class="form-group">
-				      <label class="control-label col-sm-4" for="tournoi">Description : </label>
-				      <div class="col-sm-8">
-				      	<p class="info" id="Description"></p>
-				      </div>
-				    </div>
+
+					<!-- Joueur 1 -->
+				    <div class="panel panel-default">
+						<div class="panel-heading">Joueur 1</div>
+						<div class="panel-body">
+							<h4 class="center">{{ user.participant.prenom }} {{ user.participant.nom }} ({{ user.username }})</h4>
+						    <!-- Extra -->
+							<div class="form-group">
+						      <label class="control-label col-sm-4" for="username">Extras : </label>
+						      <div class="col-sm-8">
+						      	{% for extra in extra1 %}
+						      	<div class="checkbox">
+
+							      <label><input type="checkbox" name = "extra" value="{{ extra.id }}" checked>{{ extra.nom }} ({{ extra.prix }} €)</label>
+							    </div>
+							    {% endfor %}
+							{% for extra in extranot1 %}
+						      	<div class="checkbox">
+
+							      <label><input type="checkbox" name = "extra" value="{{ extra.id }}" >{{ extra.nom }} ({{ extra.prix }} €)</label>
+							    </div>
+							    {% endfor %}
+						      </div>
+						    </div>
+						</div>
+					</div>
+
+					<!-- Joueur 2 -->
+					<div class="panel panel-default">
+						<div class="panel-heading">Joueur 2</div>
+						<div class="panel-body">
+							<input type="text" name="username2" id="username2Value" value="" style="display:none">
+							<h4 class="center" id="user2"> Coéquipier </h4>
+						    <!-- Extra -->
+							<div class="form-group">
+						      <label class="control-label col-sm-4" for="username">Extras : </label>
+						      <div class="col-sm-8">
+						      	{% for extra in Ex %}
+						      	<div class="checkbox">
+							      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
+							    </div>
+							    {% endfor %}
+						      </div>
+						    </div>
+						</div>
+					</div>
+
+					<!-- Info -->
+					<label>Informations additionnelles (souhaits, remarques, ...) : </label>
+					<textarea class="form-control" rows="3" name="remarque" id="remarque" placeholder="Remarque et/ou souhaits ...">{{ comment1}}</textarea>
+
 				</div>
 
 				<div class="col-sm-6">
@@ -70,63 +102,6 @@
 					</div>
 
 				</div>				
-			</div>
-			<div class="row">
-
-				<div class="col-sm-6">
-					<div class="panel panel-default">
-						<div class="panel-heading">Joueur 1</div>
-						<div class="panel-body">
-							<h4 class="center">{{ user.participant.prenom }} {{ user.participant.nom }} ({{ user.username }})</h4>
-						    <!-- Extra -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Extras : </label>
-						      <div class="col-sm-8">
-						      	{% for extra in extra1 %}
-						      	<div class="checkbox">
-
-							      <label><input type="checkbox" name = "extra" value="{{ extra.id }}" checked>{{ extra.nom }} ({{ extra.prix }} €)</label>
-							    </div>
-							    {% endfor %}
-							{% for extra in extranot1 %}
-						      	<div class="checkbox">
-
-							      <label><input type="checkbox" name = "extra" value="{{ extra.id }}" >{{ extra.nom }} ({{ extra.prix }} €)</label>
-							    </div>
-							    {% endfor %}
-						      </div>
-						    </div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-sm-6">
-					<div class="panel panel-default">
-						<div class="panel-heading">Joueur 2</div>
-						<div class="panel-body">
-							<input type="text" name="username2" id="username2Value" value="" style="display:none">
-							<h4 class="center" id="user2"> Coéquipier </h4>
-						    <!-- Extra -->
-							<div class="form-group">
-						      <label class="control-label col-sm-4" for="username">Extras : </label>
-						      <div class="col-sm-8">
-						      	{% for extra in Ex %}
-						      	<div class="checkbox">
-							      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
-							    </div>
-							    {% endfor %}
-						      </div>
-						    </div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Info -->
-			<div class="row">
-				<div class="col-sm-10 col-sm-offset-1">
-					<label>Informations additionnelles (souhaits, remarques, ...) : </label>
-					<textarea class="form-control" rows="3" name="remarque" id="remarque" placeholder="Remarque et/ou souhaits ...">{{ comment1}}</textarea>
-				</div>
 			</div>
 
 			<!-- Inscription button -->

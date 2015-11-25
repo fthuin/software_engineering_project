@@ -101,141 +101,11 @@ function selectUser(username,nom,prenom){
 }
 
 //Lorsqu'on click sur un tournoi, on met à jours la description ainsi que les différentes restriction par rapport au tournoi
-function setDescription(sexe,birth){
+function setDescription(){
 	//Reset valeur du joueur 2
 	document.getElementById("username2Value").value = "";
 	document.getElementById("user2").innerHTML = 'Coéquipier';
 	document.getElementById("InscriptionButton").disabled = true;
-
-	//Paneau d'utilisateur
-	var panneau = document.getElementById("UserList");
-
-	//Tournoi selectionner
-	var selector = document.getElementById("selector");
-	var value = selector.options[selector.selectedIndex].id;
-	var tournoi = selector.options[selector.selectedIndex].innerHTML;
-
-	var valid = true;
-	var error = "";
-
-	if(tournoi=="Tournoi des familles"){
-		//Check s'il peut participer à ce tournoi
-		var year = birth.split(',')[1];
-		var now = new Date().getFullYear();
-		var age = now-year;
-		if(age>15 && age<25){
-			error = "Vous ne pouvez pas participer au tournoi des familles car vous n'avez pas moins de 15 ans ou plus de 25 ans !";
-			valid = false;
-		}
-	}
-	if(tournoi=="Double hommes"){
-		//Check s'il peut participer à ce tournoi
-		if(sexe=="Mme"){
-			error = "Vous ne pouvez pas participer au double hommes car vous n'êtes pas un homme !";
-			valid = false;
-		}
-	}
-	if(tournoi=="Double femmes"){
-		//Check s'il peut participer à ce tournoi
-		if(sexe=="Mr"){
-			error = "Vous ne pouvez pas participer au double femmes car vous n'êtes pas un femme !";
-			valid = false;
-		}
-	}
-
-	document.getElementById("Description").innerHTML=value;
-	document.getElementById("hint-tournoi").innerHTML = error;
-
-	var pagination = document.getElementById("UserPagination");
-	var pageNow = 1;
-	for (var i = 0; i < pagination.children.length; i++) {
-
-		if(pagination.children[i].className=="page active"){
-			pageNow = pagination.children[i].children[0].innerHTML
-		}
-	};
-	//On set les uers restrictions
-	setUserRestriction(sexe,birth,pageNow);
-}
-
-//permet de mette  des restrictions sur les utilistaurs. S'ils peuvent pas etre avec sois en tournoi il sont mis en rouge et non clickable
-function setUserRestriction(sexe,birth,page){
-	//CLean tableau
-	setUser(page);
-
-	var panneau = document.getElementById("UserList");
-
-	var selector = document.getElementById("selector");
-	var value = selector.options[selector.selectedIndex].id;
-	var tournoi = selector.options[selector.selectedIndex].innerHTML;
-
-	if(tournoi=="Tournoi des familles"){
-		var year = birth.split(',')[1];
-		var now = new Date().getFullYear();
-		var age = now-year;
-		//Set les participant s'il peut les prendre ou non
-		for (var i = 0; i < panneau.children.length; i++) {
-			//Age du joueur du panneau
-			var otherAge = panneau.children[i].innerHTML.split(" - ")[2].split(" ")[0];
-			//SI on a moins de 15ans, il faut que le joueur ai plus de 25 ans
-			if(age<=15 && otherAge<25){
-				panneau.children[i].style.color ="red";
-				panneau.children[i].style.fontWeight ="bold";
-				panneau.children[i].onclick = function() {return false;};
-			}
-			//SI on a plus de 25ans, il faut que le joueur ai 15 ans ou moins
-			if(age>=25 && otherAge>15){
-				panneau.children[i].style.color ="red";
-				panneau.children[i].style.fontWeight ="bold";
-				panneau.children[i].onclick = function() {return false;};
-			}
-			//Les joueurs entre 15 et 25 ans ne peuvent pas participer
-			if(otherAge<25 && otherAge>15){
-				panneau.children[i].style.color ="red";
-				panneau.children[i].style.fontWeight ="bold";
-				panneau.children[i].onclick = function() {return false;};
-			}
-
-		}
-
-	}
-	if(tournoi=="Double mixte"){
-		//Set les participant s'il peut les prendre ou non
-		for (var i = 0; i < panneau.children.length; i++) {
-			//Sexe du joueur du panneau
-			var otherSexe = panneau.children[i].innerHTML.split(" - ")[1].split(" ")[0];
-			if(sexe==otherSexe){
-				panneau.children[i].style.color ="red";
-				panneau.children[i].style.fontWeight ="bold";
-				panneau.children[i].onclick = function() {return false;};
-			}
-		}
-	}
-	if(tournoi=="Double hommes"){
-		//Set les participant s'il peut les prendre ou non
-		for (var i = 0; i < panneau.children.length; i++) {
-			//Sexe du joueur du panneau
-			var otherSexe = panneau.children[i].innerHTML.split(" - ")[1].split(" ")[0];
-			if(otherSexe=="Mme"){
-				panneau.children[i].style.color ="red";
-				panneau.children[i].style.fontWeight ="bold";
-				panneau.children[i].onclick = function() {return false;};
-			}
-		}
-	}
-	if(tournoi=="Double femmes"){
-		//Set les participant s'il peut les prendre ou non
-		for (var i = 0; i < panneau.children.length; i++) {
-			//Sexe du joueur du panneau
-			var otherSexe = panneau.children[i].innerHTML.split(" - ")[1].split(" ")[0];
-			if(otherSexe=="Mr"){
-				panneau.children[i].style.color ="red";
-				panneau.children[i].style.fontWeight ="bold";
-				panneau.children[i].onclick = function() {return false;};
-			}
-		}
-	}
-
 }
 //Fin de la section des users dans l'inscription à un tournoi
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -412,7 +282,7 @@ function setUserStaff(page){
 
 	//Ajout des users
 	for (var i = debut; i < UserList.length && i<fin; i++) {
-		var p = '<tr onclick="window.document.location='+"'utilisateurs/"+UserList[i][0]+"'"+';" class="clickable-row"><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td>'+UserList[i][4]+' ans</td></tr>';
+		var p = '<tr onclick="window.document.location='+"'utilisateurs/"+UserList[i][0]+"'"+';" class="clickable-row"><td style="text-align:center">'+"sexe"+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td></tr>';
 		panneau.innerHTML += p;
 	};
 
