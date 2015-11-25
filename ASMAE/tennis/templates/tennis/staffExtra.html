@@ -245,7 +245,34 @@
 		</div>
 			<form class="form-horizontal" method="post" action="{% url "tennis.views.staffExtra" %}">
 		{% csrf_token %}
-		<button class="btn btn-default center-block" name="action" value="cleanDb">Nettoyer la base de donnée pour l'année suivante</button>
+		  <button class="btn btn-default center-block" data-toggle="modal" data-target="#myModal2" type="button">Nettoyer la base de donnée pour l'année suivante</button>
+			<!-- Modal -->
+			  <div class="modal fade" id="myModal2" role="dialog">
+				<div class="modal-dialog">
+
+				  <!-- Modal content-->
+				  <div class="modal-content">
+					<div class="modal-header">
+					  <button type="button" class="close" data-dismiss="modal">&times;</button>
+					  <h4 class="modal-title center">Confirmation de suppression</h4>
+					</div>
+					<div class="modal-body">
+					  <p>ATTENTION !!! Vous etes sur le point de supprimmer une grande partie de la base de donnée. Etes-vous sur de vouloir continuer?</p>
+
+						<ul class="list-inline text-center">
+							<li>
+								<button type="button" class="btn btn-default center-block" name="action" value="cleanDb">oui</button>
+							</li>
+							<li>
+								<button type="button" class="btn btn-default center-block" data-dismiss="modal">non</button>
+							</li>
+						</ul>
+					</div>
+				  </div>
+
+				</div>
+			  </div>
+		
 		</form>
 	</div>
 </div>
