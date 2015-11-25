@@ -8,6 +8,19 @@ class infoTournoi(models.Model):
 	prix = models.DecimalField(max_digits=11,decimal_places=2, verbose_name="Prix de l'inscription")
 	date = models.DateTimeField(verbose_name="Date du tournoi")
 
+class Ranking(models.Model):
+	id = models.AutoField(primary_key=True)
+	nom = models.CharField(max_length=15, unique=True)
+
+	def __str__(self):
+		return self.Nom
+
+	def __unicode__(self):
+		return u'' + self.nom
+
+	class Meta:
+		verbose_name = "Classement"
+
 class Participant(models.Model):
 	user = models.OneToOneField(User,null=True)
 	titre = models.CharField(max_length=5)
@@ -24,7 +37,7 @@ class Participant(models.Model):
 	fax = models.CharField(max_length=30,null=True, blank=True)
 	gsm = models.CharField(max_length=30,null=True)
 	datenaissance = models.DateTimeField(null=True, verbose_name="Date de naissance")
-	classement = models.CharField(max_length=10,null=True, blank=True)
+	classement = models.ForeignKey(Ranking)
 	oldparticipant = models.BooleanField(default=False)
 	isClassementVerified = models.BooleanField(default=False)
 	isAccountActivated = models.BooleanField(default=True)
