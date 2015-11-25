@@ -236,7 +236,10 @@ class Tournoi(models.Model):
 			return str(self.titre)+": "+str(self.categorie)
 
 	def __unicode__(self):
-		return u'' + str(self.titre) +": "+ str(self.categorie)
+		if(self.titre.nom==self.categorie.nom):
+			return u'' + str(self.titre)
+		else:
+			return u'' + str(self.titre)+": "+str(self.categorie)
 
 	def nom(self):
 		if(self.titre.nom==self.categorie.nom):
