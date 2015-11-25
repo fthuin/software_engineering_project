@@ -139,7 +139,7 @@ var PairDict = {};
 var addr = '{{elem.rue}}'+ ", "+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
 var Lat = '{{elem.latitude}}'
 var Lng = '{{elem.longitude}}'
-TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng})
+TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng,used:'{{elem.used}}',type:'{{elem.type}}'})
 
 {% endfor %}
 
@@ -375,7 +375,7 @@ function terrainAssignement()
 		console.log(key);
 		console.log("Poule "+key+" with terrain "+index);
 
-		setInfoTerrainNoUpdateKm(TerrainList[index].user,TerrainList[index].matiere,TerrainList[index].addr,TerrainList[index].id,parseInt(key)+1);
+		setInfoTerrainNoUpdateKm(TerrainList[index].user,TerrainList[index].matiere,TerrainList[index].addr,TerrainList[index].id,parseInt(key)+1,TerrainList[index].type);
 		document.getElementById("empreinte"+(parseInt(key)+1)).innerHTML = Math.round(minDistance)/1000;
 
 		alreadyTaken.push(index);
@@ -552,14 +552,10 @@ for(var i =0;i<nbrPoule;i++)
 }
 setTerrains(nbrPoule);
 
-/*for(var i=0;i<nbrPoule;i++){
-listTerrain[i]
-setInfoTerrain(TerrainList[listTerrain[i]].user,TerrainList[listTerrain[i]].matiere,TerrainList[listTerrain[i]].addr,TerrainList[listTerrain[i]].id,i+1);
-document.getElementById("empreinte"+(i+1)).innerHTML = Math.round(kmParPoule[i])/1000;
 
-}*/
 
 terrainAssignement()
+
 }
 
 

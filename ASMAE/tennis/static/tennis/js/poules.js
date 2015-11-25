@@ -133,7 +133,7 @@ function setTerrains(nbrPoules) {
     var lenTer = terrainList.length;
     for (var i = 0 ; i < nbrPoules ; i++) {
         for (var j = 0 ; j < lenTer ; j++) {
-            document.getElementById("terrain"+(i+1)).appendChild(getDropDownOption(terrainList[j].user,terrainList[j].addr,terrainList[j].matiere,terrainList[j].id,(i+1)));
+            document.getElementById("terrain"+(i+1)).appendChild(getDropDownOption(terrainList[j].user,terrainList[j].addr,terrainList[j].matiere,terrainList[j].id,(i+1),terrainList[j].type));
         }
     }
 }
@@ -170,7 +170,7 @@ function mySetPoules(nbrPoules, sizePoules) {
 	setTerrains(nbrPoules);
 	for (var i = 0 ; i < terrainSaved.length ; i++) {
 	    if (terrainSaved[i].id != '') {
-	        setInfoTerrain(terrainSaved[i].user,terrainSaved[i].matiere,terrainSaved[i].addr,terrainSaved[i].id,i+1)
+	        setInfoTerrain(terrainSaved[i].user,terrainSaved[i].matiere,terrainSaved[i].addr,terrainSaved[i].id,i+1,terrainSaved[i].type)
 	    }
 	}
 	for (var i = 0 ; i < leaderSaved.length ; i++) {
@@ -320,9 +320,9 @@ function getPairbyId(ID){
 	};
 }
 
-function getDropDownOption(proprio,addr,matiere,id,number){
+function getDropDownOption(proprio,addr,matiere,id,number,type){
 	var li = document.createElement("LI");
-	li.innerHTML = 	'<a href="javascript:void(0);" onclick="setInfoTerrain('+"'"+proprio+"','"+matiere+"','"+addr+"','"+id+"','"+number+"'"+');">['+id+'] <b>'+proprio+'</b> ('+matiere+')'+'<br>'+
+	li.innerHTML = 	'<a href="javascript:void(0);" onclick="setInfoTerrain('+"'"+proprio+"','"+matiere+"','"+addr+"','"+id+"','"+number+"','"+type+"'"+');">['+id+'] <b>'+proprio+'</b> ('+matiere+')'+'<br>'+
 						addr
 					'</a>';
 
@@ -330,9 +330,10 @@ function getDropDownOption(proprio,addr,matiere,id,number){
 
 }
 
-function setInfoTerrain(p,matiere,addr,ID,number){
+function setInfoTerrain(p,matiere,addr,ID,number,type){
 	document.getElementById("proprio"+number).innerHTML = p;
 	document.getElementById("matiere"+number).innerHTML = matiere;
+	document.getElementById("type"+number).innerHTML = type;
 	document.getElementById("addr"+number).innerHTML = addr;
 	document.getElementById("ID"+number).innerHTML = ID;
 
@@ -340,15 +341,14 @@ function setInfoTerrain(p,matiere,addr,ID,number){
 	setKm()
 	
 }
-function setInfoTerrainNoUpdateKm(p,matiere,addr,ID,number){
+function setInfoTerrainNoUpdateKm(p,matiere,addr,ID,number,type){
 	document.getElementById("proprio"+number).innerHTML = p;
 	document.getElementById("matiere"+number).innerHTML = matiere;
+	document.getElementById("type"+number).innerHTML = type;
 	document.getElementById("addr"+number).innerHTML = addr;
 	document.getElementById("ID"+number).innerHTML = ID;
 
 	//TODO Ajouter type de terrain
-
-	
 }
 
 //Return une option avec comme nom et valeur le name
@@ -408,6 +408,10 @@ function createPanel(number){
 							'<div class="row">'+
 								'<label class="control-label col-xs-4">Matiere</label>'+
 								'<div class="col-xs-8"><p class="info" id="matiere'+number+'">-</p></div>'+
+							'</div>'+
+							'<div class="row">'+
+								'<label class="control-label col-xs-4">Type</label>'+
+								'<div class="col-xs-8"><p class="info" id="type'+number+'">-</p></div>'+
 							'</div>'+
 							'<div class="row">'+
 								'<label class="control-label col-xs-4">Adresse</label>'+
