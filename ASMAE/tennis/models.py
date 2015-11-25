@@ -221,13 +221,22 @@ class Tournoi(models.Model):
 	titre = models.ForeignKey(TournoiTitle, null=True)
 	categorie = models.ForeignKey(TournoiCategorie, null=True)
 	status = models.ForeignKey(TournoiStatus, null=True)
-	arbre = models.ForeignKey(Arbre, null=True)
+	arbre = models.ForeignKey(Arbre, null=True, blank=True)
 
 	def __str__(self):
-		return "Tournoi " + str(self.titre) + str(self.categorie)
+		if(self.titre.nom==self.categorie.nom):
+			return str(self.titre)
+		else:
+			return str(self.titre)+": "+str(self.categorie)
 
 	def __unicode__(self):
-		return u'' + "Tournoi " + str(self.titre) + str(self.categorie)
+		return u'' + str(self.titre) +": "+ str(self.categorie)
+
+	def nom(self):
+		if(self.titre.nom==self.categorie.nom):
+			return str(self.titre)
+		else:
+			return str(self.titre)+"_"+str(self.categorie)
 
 	class Meta:
 		verbose_name = 'Tournoi'
@@ -255,7 +264,7 @@ class Pair(models.Model):
 
 
 	def __str__(self):
-		return str(self.id) +" "+ self.tournoi.nom+" : "+self.user1.username+" et "+self.user2.username
+		return str(self.id) +" "+ str(self.tournoi)+" : "+str(self.user1.username)+" et "+str(self.user2.username)
 
 	class Meta:
 		verbose_name = 'Paire'

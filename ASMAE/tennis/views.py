@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, PouleStatus,Arbre, TournoiStatus
+from tennis.models import Extra, Participant,Court, Tournoi, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, PouleStatus,Arbre, TournoiStatus, TournoiTitle, TournoiCategorie
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail
 import re, math
 import json
@@ -424,6 +424,7 @@ def staff(request):
 #TODO permission QUENTIN GUSBIN
 def staffTournoi(request):
 	if request.user.is_authenticated():
+		allTitre = TournoiTitle.objects.all()
 		allTournoi = Tournoi.objects.all()
 		for tourn in allTournoi:
 			nbrPair = len(Pair.objects.filter(tournoi=tourn))
@@ -438,11 +439,18 @@ def pouleTournoi(request,name):
 		return item[1]
 
 	if request.user.is_authenticated():
-		tournoi = Tournoi.objects.get(nom=name)
+		title = name
+		cat = name
+		if "_" in name:
+			title = name.split("_")[0]
+			cat = name.split("_")[1]
+		ti = TournoiTitle.objects.get(nom=title)
+		ca = TournoiCategorie.objects.get(nom=cat)
+		tournoi = Tournoi.objects.get(titre=ti,categorie=ca)
 		poules = Poule.objects.filter(tournoi=tournoi)
 		dictionnaire = dict()
 		for poule in poules:
-			if poule.status == PouleStatus.objects.get(id=2):
+			if poule.status == PouleStatus.objects.get(numero=2):
 				scores = poule.score.all()
 				dico = dict()
 				for paire in poule.paires.all():
@@ -466,7 +474,14 @@ def pouleTournoi(request,name):
 
 #TODO permissions QUENTIN GUSBIN
 def knockOff(request,name):
-	tournoi = Tournoi.objects.get(nom=name)
+	title = name
+	cat = name
+	if "_" in name:
+		title = name.split("_")[0]
+		cat = name.split("_")[1]
+	ti = TournoiTitle.objects.get(nom=title)
+	ca = TournoiCategorie.objects.get(nom=cat)
+	tournoi = Tournoi.objects.get(titre=ti,categorie=ca)
 	def getKey(item):
 		return item[1]
 	if request.method == "POST":
@@ -500,7 +515,7 @@ def knockOff(request,name):
 				arbre.data = treeData
 				arbre.label= treeLabel
 				arbre.save()
-				LogActivity(user=request.user,section="Tournoi",details="Mise a jour de l'abre du tournoi : "+tournoi.nom).save()
+				LogActivity(user=request.user,section="Tournoi",details="Mise a jour de l'abre du tournoi : "+tournoi.nom()).save()
 
 		elif request.POST['action'] == "deleteTree":
 			if tournoi.arbre is not None:
@@ -521,7 +536,7 @@ def knockOff(request,name):
 		dictionnaire = dict()
 		allPaires = list()
 		for poule in poules:
-			if poule.status == PouleStatus.objects.get(id=2):
+			if poule.status == PouleStatus.objects.get(numero=2):
 				scores = poule.score.all()
 				dico = dict()
 				for paire in poule.paires.all():
@@ -560,11 +575,21 @@ def pouleScore(request,id):
 	poule = Poule.objects.get(id=id)
 	if request.method == "POST":
 		if request.POST['action'] == 'save':
-			poule.status = PouleStatus.objects.get(id=1)
+			poule.status = PouleStatus.objects.get(numero=1)
 			poule.save()
 		elif request.POST['action'] == 'saveFinite':
-			poule.status = PouleStatus.objects.get(id=2)
+			poule.status = PouleStatus.objects.get(numero=2)
 			poule.save()
+			#Check si toutes les poules sont finite
+			valid = True
+			for elem in Poule.objects.filter(tournoi=poule.tournoi):
+				if elem.status.numero != 2:
+					valid = False
+					break
+			if valid : 
+				t = poule.tournoi
+				t.status = TournoiStatus.objects.get(numero=3)
+				t.save()
 			LogActivity(user=request.user,section="Tournoi",details="Mise a jour des point de la poule "+id+" dans le tournoi ").save()
 		poule.score.all().delete()
 		pairList = poule.paires.all()
@@ -585,7 +610,7 @@ def pouleScore(request,id):
 		if request.POST['action'] == 'save':
 			return redirect(reverse(pouleScore,args={id}))
 		elif request.POST['action'] == 'saveFinite':
-			return redirect(reverse(pouleTournoi,args={poule.tournoi.nom}))
+			return redirect(reverse(pouleTournoi,args={poule.tournoi.nom()}))
 
 		return redirect(reverse(staffTournoi))
 	if request.user.is_authenticated():
@@ -599,8 +624,15 @@ def pouleScore(request,id):
 
 #TODO permission QUENTIN GUSBIN
 def generatePool(request,name):
+	title = name
+	cat = name
+	if "_" in name:
+		title = name.split("_")[0]
+		cat = name.split("_")[1]
+	ti = TournoiTitle.objects.get(nom=title)
+	ca = TournoiCategorie.objects.get(nom=cat)
+	tournoi = Tournoi.objects.get(titre=ti,categorie=ca)
 	terrains = Court.objects.all()
-	tournoi = Tournoi.objects.get(nom=name)
 	allPair = Pair.objects.filter(tournoi=tournoi)
 	poules = Poule.objects.filter(tournoi=tournoi)
 	if request.method == "POST":
@@ -610,7 +642,7 @@ def generatePool(request,name):
 		elif request.POST['action'] == 'saveFinite':
 			tournoi.status = TournoiStatus.objects.get(numero=2)
 			tournoi.save()
-			LogActivity(user=request.user,section="Tournoi",details="Generation des poules du tournoi : "+tournoi.nom).save()
+			LogActivity(user=request.user,section="Tournoi",details="Generation des poules du tournoi : "+tournoi.nom()).save()
 		terrainsList = request.POST['assignTerrains'].split('-')
 		terrainsList.pop()
 
@@ -646,7 +678,7 @@ def generatePool(request,name):
 		Poule.objects.filter(tournoi=tournoi).delete()
 		while (i <= j):
 			p = Poule(tournoi=tournoi)
-			p.status = PouleStatus.objects.get(id=0)
+			p.status = PouleStatus.objects.get(numero=0)
 			p.save()
 			if 'leader' in pouleDict[i]:
 				p.leader = pouleDict[i]['leader']
@@ -659,7 +691,7 @@ def generatePool(request,name):
 		
 
 		if request.POST['action'] == 'save':
-			return redirect(reverse(generatePool,args={tournoi.nom}))
+			return redirect(reverse(generatePool,args={tournoi.nom()}))
 			#request.method = "GET"
 			#return generatePool(request,tournoi.nom)
 			#return HttpResponseRedirect('/tennis/staff/tournois/%s'%tournoi.nom)

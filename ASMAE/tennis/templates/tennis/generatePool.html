@@ -6,7 +6,7 @@
 {% block bodyStaff %}
 <!-- Gestionnaire des groupes -->
 <div class="content-box" id="gestionTournoi">
-    <h2 class="center">{{ tournoi.nom }}</h2>
+    <h2 class="center">{{ tournoi }}</h2>
     <hr class="line">
     <form class="form-horizontal" action="{% url 'tennis.views.generatePool' tournoi.nom %}" method="post">
 	{% csrf_token %}
