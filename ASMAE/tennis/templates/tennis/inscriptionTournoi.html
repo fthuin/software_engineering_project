@@ -90,8 +90,21 @@
 					<!-- Liste des users -->
 					<div class="panel panel-default center-block" style="max-width:600px;">
 						<div class="panel-heading">Utilisateurs</div>
-						<div class="list-group" id="UserList">
-						</div>
+						<div class="table-responsive">
+						<table class="table table-hover">
+							<thead>
+					          <tr>
+					          	<th style="text-align:center">Sexe</th>
+					            <th>Nom d'utilisateur</th>
+					            <th>Prénom</th>
+					            <th>Nom</th>
+					            <th style="text-align:center">Age</th>
+					          </tr>
+					        </thead>
+					        <tbody id="UserList">
+					        </tbody>
+						</table>
+				</div>
 					</div>
 
 					<!-- Info -->
@@ -131,7 +144,7 @@ function pagination(list) {
       onPageClick: function (event, page) {
       	//Lorsqu'on clique sur une page, on met à jour le contenu
 	    //On met à jour la page en fonction du tournoi selectionné
-	    setUserRestriction('{{user.participant.titre}}','{{ user.participant.datenaissance }}',page);;
+	    setUser(page);
       }
     });
     //On met à jour les info (liste des users et longueur de chaque page)
