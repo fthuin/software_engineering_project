@@ -11,9 +11,9 @@ This utility was made to create fake accounts to populate the database.
 # Constante
 TMP_FILE = "src.tmp"
 RES_FILE = "res.csv"
-URL_RANDOM = "http://en.fakenamegenerator.com/advanced.php?t=country&n[]=fr&c[]=bg&gen=100&age-min=8&age-max=65" # Hommes
-#URL_RANDOM = "http://en.fakenamegenerator.com/advanced.php?t=country&n[]=fr&c[]=bg&gen=0&age-min=8&age-max=65" # Femmes
-NBR_PEOPLE = 250
+#URL_RANDOM = "http://en.fakenamegenerator.com/advanced.php?t=country&n[]=fr&c[]=bg&gen=100&age-min=8&age-max=65" # Hommes
+URL_RANDOM = "http://en.fakenamegenerator.com/advanced.php?t=country&n[]=fr&c[]=bg&gen=0&age-min=8&age-max=65" # Femmes
+NBR_PEOPLE = 500
 
 ''' Only need to add :
     - a constant with a number which is the position in the .csv file
@@ -170,10 +170,13 @@ def generatePeople(browser):
             i+=1
     return ppl
 
-browser = webdriver.Firefox()
+profile = webdriver.FirefoxProfile("/home/florian/.mozilla/firefox/mwad0hks.default")
+browser = webdriver.Firefox(profile)
+#browser = webdriver.Firefox()
 personnes = []
 
 for i in range(NBR_PEOPLE):
+    print(repr(i+1)+"/" + repr(NBR_PEOPLE))
     personnes.append(generatePeople(browser))
 
 with open(RES_FILE, 'w') as file:
