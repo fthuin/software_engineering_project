@@ -10,6 +10,9 @@
     <hr class="line">
 
     {% for title in allTitre %}
+	{% if perms.tennis.DoubleMixte and title.nom == "Double mixte" or perms.tennis.DoubleHommes and title.nom == "Double hommes" or perms.tennis.DoubleFemmes and title.nom == "Double femmes" or perms.tennis.TournoiDesFamilles and title.nom == "Tournoi des familles"%}
+	
+
     <div class="panel panel-default center-block" style="max-width:90%;">
         <div class="panel-heading">{{title}} - {{title.jour}}</div>
         <div class="table-responsive">
@@ -27,6 +30,7 @@
                 </thead>
                 <tbody>
                     {% for tournoi in allTournoi %}
+					
                     {% if tournoi.titre == title %}
                     <tr>
                         <td style="width:18%;vertical-align: middle;">{{ tournoi.categorie }}</td>
@@ -44,12 +48,14 @@
                             <button class="btn btn-default" onclick="location.href='{% url "tennis.views.knockOff" tournoi.nom %}';" {% if tournoi.status.numero >= 3 %}{% else %}disabled{% endif %}><i class="fa fa-sitemap fa-lg"></i></button>
                         </td>
                     </tr>
+				
                     {% endif %}
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
+	{% endif %}
     {% endfor %}
     
 </div>
