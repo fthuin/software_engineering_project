@@ -950,7 +950,7 @@ def staffPerm(request):
 
 
 	Use = User.objects.all().order_by('username')
-	tournoiAll = Tournoi.objects.all()
+	tournoiAll = TournoiTitle.objects.all()
 
 	for u in Use:
 		bd = u.participant.datenaissance
