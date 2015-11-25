@@ -11,8 +11,9 @@ This utility was made to create fake accounts to populate the database.
 # Constante
 TMP_FILE = "src.tmp"
 RES_FILE = "res.csv"
-URL_RANDOM = "http://en.fakenamegenerator.com/advanced.php?t=country&n[]=fr&c[]=bg&gen=100&age-min=8&age-max=65"
-NBR_PEOPLE = 50
+URL_RANDOM = "http://en.fakenamegenerator.com/advanced.php?t=country&n[]=fr&c[]=bg&gen=100&age-min=8&age-max=65" # Hommes
+#URL_RANDOM = "http://en.fakenamegenerator.com/advanced.php?t=country&n[]=fr&c[]=bg&gen=0&age-min=8&age-max=65" # Femmes
+NBR_PEOPLE = 250
 
 ''' Only need to add :
     - a constant with a number which is the position in the .csv file
@@ -29,6 +30,8 @@ regex_name_start = "(.*)<h3>(.*)"
 regex_name_stop = "(.*)<h3>(.*?)</h3>(.*)"
 regex_addr_start = '(.*)<div class="adr">(.*)'
 regex_addr_stop = "(.*)<br />(.*?)</div>(.*)"
+regex_geo_start = "(.*)<dt>Geo coordinates</dt>(.*)"
+regex_geo_stop = "(.*)<dd>(.*?)</dd>(.*)"
 regex_phone_start = "(.*)<dt>Phone</dt>(.*)"
 regex_phone_stop = "(.*)<dd>(.*?)</dd>(.*)"
 regex_birth_start = "(.*)<dt>Birthday</dt>(.*)"
@@ -39,9 +42,9 @@ regex_username_start = "(.*)<dt>Username</dt>(.*)"
 regex_username_stop = "(.*)<dd>(.*?)</dd>(.*)"
 regex_password_start = "(.*)<dt>Password</dt>(.*)"
 regex_password_stop = "(.*)<dd>(.*?)</dd>(.*)"
-list_info = ["Nom", "Adresse", "Téléphone", "Date", "Email", "Username", "Password"]
-list_regex_to_find = [regex_name_start, regex_addr_start, regex_phone_start, regex_birth_start, regex_email_start, regex_username_start, regex_password_start]
-list_regex_get = [regex_name_stop, regex_addr_stop, regex_phone_stop, regex_birth_stop, regex_email_stop, regex_username_stop, regex_password_stop]
+list_info = ["Nom", "Adresse", "Téléphone", "Date", "Email", "Username", "Password", "GeoData"]
+list_regex_to_find = [regex_name_start, regex_addr_start, regex_phone_start, regex_birth_start, regex_email_start, regex_username_start, regex_password_start, regex_geo_start]
+list_regex_get = [regex_name_stop, regex_addr_stop, regex_phone_stop, regex_birth_stop, regex_email_stop, regex_username_stop, regex_password_stop, regex_geo_stop]
 default = [""]
 
 class People :
@@ -122,15 +125,19 @@ class People :
 
     def __str__(self):
         res = ""
-        for item in list_info:
-            if item == "Adresse":
-                res += self.att['Adresse'] + ','
-                res += self.att['Numéro'] + ','
-                res += self.att['Code'] + ','
-                res += self.att['Ville'] + ','
-            else:
-                res += self.att[item] + ","
-        res+= "\n"
+        try:
+            for item in list_info:
+                if item == "Adresse":
+                    res += self.att['Adresse'] + ','
+                    res += self.att['Numéro'] + ','
+                    res += self.att['Code'] + ','
+                    res += self.att['Ville'] + ','
+                else:
+                    res += self.att[item] + ","
+            res+= "\n"
+        except KeyError:
+            print("Une personne n'a pas pu être traitée")
+            return ""
         return res
 
 
@@ -153,6 +160,11 @@ def generatePeople(browser):
                     addr = addr.replace("  ", "")
                     addr = addr.replace("</div>", "")
                     ppl.add(i, addr)
+                elif regex == regex_geo_start:
+                    geo = re.match(list_regex_get[i], src[a+1]).group(2)
+                    geo = geo.replace('<a href="javascript:void(0)" id="geo">' , '')
+                    geo = geo.replace('</a>' , '')
+                    ppl.add(i, geo)
                 else:
                     ppl.add(i, re.match(list_regex_get[i], src[a+1]).group(2))
             i+=1
@@ -167,3 +179,5 @@ for i in range(NBR_PEOPLE):
 with open(RES_FILE, 'w') as file:
     for ppl in personnes:
         file.write(ppl.__str__())
+        
+browser.close()
