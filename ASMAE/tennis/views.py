@@ -1654,12 +1654,14 @@ def resetDbForNextYear(request):
 
 	listCourt = Court.objects.all()
 	for court in listCourt:
-		court.usedLastYear = True
+		court.usedLastYear = False
 		court.dispoSamedi = False
 		court.dispoDimanche = False
 		court.commentaire = None
 		court.commentaireStaff = None
 		court.save()
+
+	#Mettre tous les terrain utilisé a used
 
 	listPair = Pair.objects.all()
 	for pair in listPair:
