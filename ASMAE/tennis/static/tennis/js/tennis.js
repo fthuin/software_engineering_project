@@ -261,6 +261,7 @@ function setCourt(page){
 		}else{
 			adress = CourtList[i][5]+' '+CourtList[i][6]+',<br> '+CourtList[i][7]+' '+CourtList[i][8];
 		}
+
 		var valid = CourtList[i][10];
 		if (valid == "oui") {
 		    valid = '<span class="glyphicon glyphicon-ok" style="color:green;"></span>'
@@ -268,10 +269,30 @@ function setCourt(page){
 		else if (valid == "non") {
 		    valid = '<span class="glyphicon glyphicon-remove" style="color:red;"></span>'
 		}
+
+		var used = CourtList[i][14];
+		var useIcon
+		if (used == "True") {
+		    useIcon = '<span class="glyphicon glyphicon-ok" style="color:green;"></span>'
+		}
+		else {
+		    useIcon = '<span class="glyphicon glyphicon-remove" style="color:red;"></span>'
+		}
+
+		var vet = CourtList[i][15];
+		var vetIcon
+		if (used == "True") {
+		    vetIcon = '<span class="glyphicon glyphicon-ok" style="color:green;"></span>'
+		}
+		else {
+		    vetIcon = '<span class="glyphicon glyphicon-remove" style="color:red;"></span>'
+		}
+
+
 		var dispo = CourtList[i][11];
 
 		//var p = '<tr class="clickable-row" data-href="utilisateurs/'+UserList[i][0]+'"><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td>'+age+' ans</td></tr>';
-		var p = '<tr onclick="window.document.location='+"'terrains/"+CourtList[i][3]+"'"+';" class="clickable-row"><td>'+CourtList[i][3]+'</td><td>'+CourtList[i][4]+'</td><td style="text-align:center;">'+valid+'</td><td>'+dispo+'</td><td>'+CourtList[i][1]+' '+CourtList[i][2]+' ('+CourtList[i][0]+')</td><td>'+adress+'</td></tr>';
+		var p = '<tr onclick="window.document.location='+"'terrains/"+CourtList[i][3]+"'"+';" class="clickable-row"><td>'+CourtList[i][3]+'</td><td>'+CourtList[i][4]+'</td><td style="text-align:center;">'+valid+'</td><td style="text-align:center;">'+useIcon+'</td><td>'+dispo+'</td><td>'+CourtList[i][1]+' '+CourtList[i][2]+' ('+CourtList[i][0]+')</td><td>'+adress+'</td><td style="text-align:center;">'+vetIcon+'</td></tr>';
 		panneau.innerHTML += p;
 	};
 
