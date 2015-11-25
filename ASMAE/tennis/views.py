@@ -1530,3 +1530,35 @@ def printScoreBoard(request, pouleId):
 	for pair in allPairs:
 		strPairs.append(u'' + pair.user1.participant.prenom + u' <b>' + pair.user1.participant.nom + u'</b><br>' + pair.user2.participant.prenom + u' <b>' + pair.user2.participant.nom + u'</b>')
 	return render(request, 'tennis/printScoreBoard.html', {'strPairs':strPairs})
+
+def resetDbForNextYear(request):
+
+	listParticipant = Participant.objects.all()
+	for participant in listParticipant:
+		participant.oldparticipant = False
+		participant.save()
+
+	listCourt = Court.objects.all()
+	for court in listCourt:
+		court.usedLastYear = True
+		court.dispoSamedi = False
+		court.dispoDimanche = False
+		court.commentaire = None
+		court.commentaireStaff = None
+		court.save()
+
+	listPair = Pair.objects.all()
+	for pair in listPair:
+		user1 = pair.user1
+		user2 = pair.user2
+		user1.oldparticipant = True
+		user2.oldparticipant = True
+		user1.save()
+		user2.save()
+
+	Extra.objects.all().delete()
+	Arbre.objects.all().delete()
+	Pair.objects.all().delete()
+	Score.objects.all().delete()
+	Poule.objects.all().delete()
+	LogActivity.objects.all().delete()
