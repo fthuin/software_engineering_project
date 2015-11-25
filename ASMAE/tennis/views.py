@@ -22,6 +22,35 @@ from django.template.defaulttags import register
 
 # Create your views here.
 def home(request):
+	date = infoTournoi.objects.all()[0].date
+	year = date.year
+	month = date.month
+	month_text = ""
+	if month == 1:
+		month_text = "janvier"
+	elif month == 2:
+		month_text = "février"
+	elif month == 3:
+		month_text = "mars"
+	elif month == 4:
+		month_text = "avril"
+	elif month == 5:
+		month_text = "mai"
+	elif month == 6:
+		month_text = "juin"
+	elif month == 7:
+		month_text = "juillet"
+	elif month == 8:
+		month_text = "août"
+	elif month == 9:
+		month_text = "septembre"
+	elif month == 10:
+		month_text = "octobre"
+	elif month == 11:
+		month_text = "novembre"
+	elif month == 12:
+		month_text = "decembre"
+	day = date.day
 	return render(request,'tennis/home.html',locals())
 
 def qcq(request):
@@ -810,6 +839,8 @@ def staffExtra(request):
 	info = infoTournoi.objects.all()[0]
 	prix_inscription = info.prix
 	date_inscription = info.date
+	formated_date = date_inscription.strftime('%d/%m/%Y')
+	yearLoop = range(date.today().year,date.today().year+5)
 	# On récupère les extras, on set le nombre de demandes à zéro
 	for extra in extras:
 		extra.commandsCount = 0
@@ -823,6 +854,39 @@ def staffExtra(request):
 				extra.commandsCount += 1
 
 	if request.method == "POST":
+		if request.POST['action'] == "modifyInfoTournoi":
+			prixTournoi = request.POST['prixInscription'].strip()
+			dateInfoTournoi = request.POST['birthdate'].strip()
+
+			print(prixTournoi)
+			print(dateInfoTournoi)
+
+			info = infoTournoi.objects.all()[0]
+			prixTournoi = prixTournoi.replace(",",".")
+			if(float(prixTournoi)>=0.0):
+				info.prix = prixTournoi
+				LogActivity(user=request.user,section="InfoTournoi",details=u"Prix du tournoi modifié").save()
+			else:
+				errorInfoPrix = "Le prix doit etre plus grand ou égale a zéro"
+			
+
+			splitedDateInfoTournoi = dateInfoTournoi.split("/")
+			datetoEnreg = datetime.datetime(int(splitedDateInfoTournoi[2]),int(splitedDateInfoTournoi[1]),int(splitedDateInfoTournoi[0]))
+			now = datetime.datetime.now()
+			if(now<datetoEnreg):
+				info.date = datetoEnreg
+				LogActivity(user=request.user,section="InfoTournoi",details=u"Date du tournoi modifiée").save()
+			else:
+				errorInfoDate = "La date doit etre plus tard que maintenant"
+
+			info.save()
+			info = infoTournoi.objects.all()[0]
+			prix_inscription = info.prix
+			date_inscription = info.date
+			formated_date = date_inscription.strftime('%d/%m/%Y')
+			return render(request,'tennis/staffExtra.html',locals())
+
+
 		if request.POST['action'] == "addExtra":
 			nom = request.POST['name'].strip()
 			prix = request.POST['price'].strip()

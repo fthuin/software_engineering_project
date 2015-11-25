@@ -8,33 +8,89 @@
 <div class="content-box" id="gestionExtra">
 	<h2 class="center">Gestionnaire des inscriptions</h2>
 	<hr class="line">
-	<form class="form-horizontal" action="">
+	{% if errorInfoPrix %}
+	<div class="alert alert-danger">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	<strong>[Erreur lors de la modification]</strong> {{ errorInfoPrix }}
+	</div>
+	{% endif %}
+	{% if errorInfoDate %}
+	<div class="alert alert-danger">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	<strong>[Erreur lors de la modification]</strong> {{ errorInfoDate }}
+	</div>
+	{% endif %}
+	<form class="form-horizontal" method="post" action="{% url "tennis.views.staffExtra" %}">
+		{% csrf_token %}
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				Tournoi
 			</div>
 			<div class="panel-body">
 				<div class="row">
-					<div class="col-sm-6">
+					<div class="col-sm-4">
 						<!-- Frais d'inscription -->
 						<div class="form-group">
-					      <label class="control-label col-sm-4 col-sm-offset-4" for="username">Frais d'inscription</label>
+					      <label class="control-label col-sm-8" for="username">Frais d'inscription</label>
 					      <div class="col-sm-4">
-					      	<input type="text" class="form-control" maxlength="30" name="name" value="{{ prix_inscription }}">
+					      	<input type="text" class="form-control" maxlength="30" name="prixInscription" value="{{ prix_inscription }}">
 					      </div>
 					    </div>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-8">
 						<!-- Date de tournoi -->
 						<div class="form-group">
 					      <label class="control-label col-sm-4" for="username">Date du tournoi</label>
-					      <div class="col-sm-4">
-					      	<input type="date" class="form-control" maxlength="30" name="name" value="{{ date_inscription }}">
+					      <div class="col-sm-8">
+					      	<div class="row">
+					      		<div class="col-xs-3" style="padding-right:0">
+					      			<select class="form-control" name="jour" id="select_jour" style="padding-right:0" onchange="onChangeDayOfBirth()">
+										<option selected disabled>Jour</option>
+										{% for i in "123456789" %}
+									    <option value="0{{ i }}">0{{ i }}</option>
+									    {% endfor %}
+									    {% for i in "0123456789" %}
+									    <option value="1{{ i }}">1{{ i }}</option>
+									    {% endfor %}
+									    {% for i in "0123456789" %}
+									    <option value="2{{ i }}">2{{ i }}</option>
+									    {% endfor %}
+									    <option value="30">30</option>
+									    <option value="31">31</option>
+									</select>
+					      		</div>
+					      		<div class="col-xs-5">
+					      			<select class="form-control" id="select_mois" name="mois" onchange="onChangeMonthOfBirth()">
+										<option selected disabled>Mois</option>
+										<option value="01">Janvier</option>
+									    <option value="02">Février</option>
+									    <option value="03">Mars</option>
+									    <option value="04">Avril</option>
+									    <option value="05">Mai</option>
+									    <option value="06">Juin</option>
+									    <option value="07">Juillet</option>
+									    <option value="08">Août</option>
+									    <option value="09">Septembre</option>
+									    <option value="10">Octobre</option>
+									    <option value="11">Novembre</option>
+									    <option value="12">Décembre</option>
+									</select>
+					      		</div>
+					      		<div class="col-xs-4" style="padding-left:0">
+					      			<select class="form-control" id="select_an" name="an" onchange="onChangeYearOfBirth()">
+										<option selected disabled>Année</option>
+										{% for i in yearLoop %}
+									    <option value="{{ i }}">{{ i }}</option>
+									    {% endfor %}
+									</select>
+					      		</div>
+						    </div>
+						    <input type="text" class="form-control" name="birthdate" id="birthdateID" value="{{ formated_date }}" style="display:none">
 					      </div>
-					    </div>
+					   	</div>
 					</div>
 				</div>
-				<button class="btn btn-default center-block">Editer</button>
+				<button class="btn btn-default center-block" name="action" value="modifyInfoTournoi">Editer</button>
 			</div>
 		</div>
 		
@@ -219,6 +275,64 @@
 {% endblock %}
 
 {% block commande %}
+<script>
+var dateNaissance = document.getElementById("birthdateID");
+
+function setSelectedIndex(s, valsearch)
+{
+// Loop through all the items in drop down list
+	for (i = 0; i< s.options.length; i++)
+	{
+		if (s.options[i].value == valsearch)
+		{
+		// Item is found. Set its property and exit
+		s.options[i].selected = true;
+		break;
+		}
+	}
+	return;
+}
+
+//set date en fonction de la valeur
+var date_jour = dateNaissance.value.substring(0,2);
+var date_mois = dateNaissance.value.substring(3,5);
+var date_an = dateNaissance.value.substring(6,10);
+
+setSelectedIndex(document.getElementById("select_jour"),date_jour);
+setSelectedIndex(document.getElementById("select_mois"),date_mois);
+setSelectedIndex(document.getElementById("select_an"),date_an);
+
+function onChangeDayOfBirth() {
+    var select_jour = document.getElementById("select_jour");
+    var jour = select_jour.options[select_jour.selectedIndex].value
+	date = dateNaissance.value
+	dateNaissance.value = jour+date.substring(2,date.length);
+}
+
+function onChangeMonthOfBirth() {
+    var select_mois = document.getElementById("select_mois");
+    var mois = select_mois.options[select_mois.selectedIndex].value
+	date = dateNaissance.value
+	dateNaissance.value = date.substring(0,3)+mois+date.substring(5,date.length);
+}
+
+function onChangeYearOfBirth() {
+    var select_an = document.getElementById("select_an");
+    var an = select_an.options[select_an.selectedIndex].value
+	date = dateNaissance.value
+	dateNaissance.value = date.substring(0,6)+an
+}
+
+	$('#select_jour').on('input', function() { 
+	    onChangeDayOfBirth();
+});
+	$('#select_mois').on('input', function() { 
+        onChangeMonthOfBirth();
+});
+	$('#select_an').on('input', function() { 
+        onChangeYearOfBirth();
+});
+</script>
 <script>
 //On met le premier extra de la liste en "active"
 extra('{{ extras.0.id }}', '{{ extras.0.nom }}','{{ extras.0.prix }}','{{ extras.0.commentaires }}');
