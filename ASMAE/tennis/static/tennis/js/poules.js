@@ -334,12 +334,12 @@ function createPair(pair){
 	if(pair.titre1=="Mr"){
 		gender1 = '<i class="fa fa-male" style="color:blue"></i>';
 	}else{
-		gender1 = '<i class="fa fa-female" style="color:red"></i>';
+		gender1 = '<i class="fa fa-female" style="color:#ff0066"></i>';
 	}
 	if(pair.titre2=="Mr"){
 		gender2 = '<i class="fa fa-male" style="color:blue"></i>';
 	}else{
-		gender2 = '<i class="fa fa-female" style="color:red"></i>';
+		gender2 = '<i class="fa fa-female" style="color:#ff0066"></i>';
 	}
 
 

@@ -89,7 +89,7 @@ function setUser(page){
 		if (titre == "Mr"){
 			icon = '<i class="fa fa-male" style="color:blue"></i>';
 		}else{
-			icon = '<i class="fa fa-female" style="color:red"></i>';
+			icon = '<i class="fa fa-female" style="color:#ff0066"></i>';
 		}
 		var p = '<tr class="clickable-row" onClick="selectUser('+"'"+UserList[i][0]+"',"+"'"+UserList[i][2]+"',"+"'"+UserList[i][1]+"',"+"'"+UserList[i][3]+"',"+"'"+UserList[i][4]+"'"+');"><td style="text-align:center">'+icon+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td></tr>';
 		panneau.innerHTML += p;
@@ -353,7 +353,7 @@ function setUserStaff(page){
 		if (titre == "Mr"){
 			icon = '<i class="fa fa-male" style="color:blue"></i>';
 		}else{
-			icon = '<i class="fa fa-female" style="color:red"></i>';
+			icon = '<i class="fa fa-female" style="color:#ff0066"></i>';
 		}
 		var p = '<tr onclick="window.document.location='+"'utilisateurs/"+UserList[i][0]+"'"+';" class="clickable-row"><td style="text-align:center">'+icon+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td></tr>';
 		panneau.innerHTML += p;
