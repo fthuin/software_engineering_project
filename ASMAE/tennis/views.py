@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, PouleStatus,Arbre, TournoiStatus, TournoiTitle, TournoiCategorie
+from tennis.models import Extra, Participant,Court, Tournoi, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, PouleStatus,Arbre, TournoiStatus, TournoiTitle, TournoiCategorie, infoTournoi
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail
 from tennis.classement import validate_classement_thread
 import re, math
@@ -806,6 +806,9 @@ def staffExtra(request):
 			return False
 
 	Ex = Extra.objects.all()
+	info = infoTournoi.objects.all()[0]
+	prix_inscription = info.prix
+	date_inscription = info.date
 	if request.method == "POST":
 		if request.POST['action'] == "addExtra":
 			nom = request.POST['name']

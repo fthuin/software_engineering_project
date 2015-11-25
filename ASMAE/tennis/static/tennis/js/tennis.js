@@ -583,8 +583,7 @@ function extra(id, nom,prix,comment){
 	document.getElementById("deleteID").value = id;
 	document.getElementById("extraName").value = nom;
 	document.getElementById("formTitle").innerHTML = "Editer " + nom;
-	var prixWithPoint = prix.replace(",",".");
-	document.getElementById("extraPrice").value = prixWithPoint;
+	document.getElementById("extraPrice").value = prix;
 	document.getElementById("extracommentaire").innerHTML = comment;
 }
 

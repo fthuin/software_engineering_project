@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from django.core.management.base import BaseCommand
-from tennis.models import TournoiTitle, TournoiCategorie, Tournoi, TournoiStatus, PouleStatus
+from tennis.models import TournoiTitle, TournoiCategorie, Tournoi, TournoiStatus, PouleStatus, infoTournoi
+import datetime
 
 ####################
 #Titre des tournois#
@@ -94,6 +95,12 @@ list_tournoi = ['Double mixte', 'Double hommes', 'Double femmes']
 ###########
 
 class Command(BaseCommand):
+    def addInfo(self):
+        for elem in infoTournoi.objects.all():
+            elem.delete()
+        i = infoTournoi(prix=20,date=datetime.date(2016, 9, 10))
+        i.save()
+
     def addTitle(self):
         for elem in list_title:
             descr = title_dict[elem]["description"]
@@ -149,6 +156,8 @@ class Command(BaseCommand):
         t.save()
 
     def handle(self, *args, **options):
+        print("Ajout des info du tournoi")
+        self.addInfo()
         print("Ajout des titres des tournois")
         self.addTitle()
         print("Ajout des catégories des tournois")

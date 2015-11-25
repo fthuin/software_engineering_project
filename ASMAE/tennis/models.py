@@ -4,6 +4,10 @@ from django.contrib.auth.models import User
 from datetime import date
 import datetime
 
+class infoTournoi(models.Model):
+	prix = models.DecimalField(max_digits=11,decimal_places=2, verbose_name="Prix de l'inscription")
+	date = models.DateTimeField(verbose_name="Date du tournoi")
+
 class Participant(models.Model):
 	user = models.OneToOneField(User,null=True)
 	titre = models.CharField(max_length=5)
