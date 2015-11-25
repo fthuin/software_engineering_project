@@ -13,13 +13,13 @@
 				<div class="col-sm-6">
 					<!-- Tournoi -->
 					<div class="form-group">
-				      <label class="control-label col-sm-4" for="tournoi">Jour : </label>
-				      <div class="col-sm-8">
-				      	<select class="form-control" name="tournoi" id="selector" onChange="setDescription();">
-				      		<option id="samedi" value="Samedi">Samedi</option>
-				      		<option id="dimanche" value="Dimanche">Dimanche</option>
-						</select>
-				      </div>
+				      <label class="control-label col-sm-4" for="tournoi">Tournoi : </label>
+				      <p class="info"> - </p>
+				    </div>
+
+				    <div class="form-group">
+				      <label class="control-label col-sm-4" for="tournoi">Catégorie : </label>
+				      <p class="info"> - </p>
 				    </div>
 
 					<!-- Joueur 1 -->
@@ -153,6 +153,10 @@ function pagination(list) {
     //On met à jour la première page
     setUser(1);
 }
+
+//Recuperation et stockage de l'age et du sexe de l'utilisateur courant
+user_age = '{{ user.age }}'
+user_sexe = '{{ user.participant.titre }}'
 
 //Recuperation des users et stockage dans un tableau
 var userList = [];

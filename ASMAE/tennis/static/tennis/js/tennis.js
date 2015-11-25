@@ -64,6 +64,9 @@ var UserList;
 //longueur de la page
 var pageLength;
 
+var user_age;
+var user_sexe;
+
 //On met à jours les infos
 function setUserListInfo(userList,longueur){
 	UserList = userList;
@@ -88,7 +91,7 @@ function setUser(page){
 		}else{
 			icon = '<i class="fa fa-female" style="color:red"></i>';
 		}
-		var p = '<tr class="clickable-row" onClick="selectUser('+"'"+UserList[i][0]+"',"+"'"+UserList[i][2]+"',"+"'"+UserList[i][1]+"'"+');"><td style="text-align:center">'+icon+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td></tr>';
+		var p = '<tr class="clickable-row" onClick="selectUser('+"'"+UserList[i][0]+"',"+"'"+UserList[i][2]+"',"+"'"+UserList[i][1]+"',"+"'"+UserList[i][3]+"',"+"'"+UserList[i][4]+"'"+');"><td style="text-align:center">'+icon+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td></tr>';
 		panneau.innerHTML += p;
 	};
 
@@ -99,12 +102,14 @@ function setUser(page){
 }
 
 //Lorsqu'on selectionne un utilistaeur on met ses valeurs dans le tableaux du dessous
-function selectUser(username,nom,prenom){
+function selectUser(username,nom,prenom,sexe,age){
 	document.getElementById("username2Value").value = username;
 	document.getElementById("user2").innerHTML = prenom +' '+nom+' ('+username+')';
-	if(document.getElementById("hint-tournoi").innerHTML==""){
-		document.getElementById("InscriptionButton").disabled = false;
-	}
+	document.getElementById("InscriptionButton").disabled = false;
+
+	//Check tournoi et catégorie en fonction de l'user courant
+	alert(user_age)
+	alert(user_sexe)
 }
 
 //Lorsqu'on click sur un tournoi, on met à jours la description ainsi que les différentes restriction par rapport au tournoi

@@ -82,8 +82,12 @@ def inscriptionTournoi(request):
 	Ex = Extra.objects.all()
 	Tour = Tournoi.objects.all()
 	Use = User.objects.all().order_by('username')
+	
+	#today = date.today()
+	today = infoTournoi.objects.all()[0].date
 
-	today = date.today()
+	born = request.user.participant.datenaissance
+	request.user.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
 	for u in Use:
 		born = u.participant.datenaissance
