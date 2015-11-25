@@ -666,7 +666,7 @@ def generatePool(request,name):
 	ti = TournoiTitle.objects.get(nom=title)
 	ca = TournoiCategorie.objects.get(nom=cat)
 	tournoi = Tournoi.objects.get(titre=ti,categorie=ca)
-	terrains = Court.objects.all()
+	terrains = Court.objects.filter(valide=True)
 	allPair = Pair.objects.filter(tournoi=tournoi, valid=True)
 	poules = Poule.objects.filter(tournoi=tournoi)
 	if request.method == "POST":
