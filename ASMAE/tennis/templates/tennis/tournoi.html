@@ -111,8 +111,8 @@
                                 <td>{{ item.id }}</td>
                                 <td>{{ item.tournoi.nom }}</td>
                                 <td>{{ item.tournoi.jour }}</td>
-                                <td>{% if item.valid %}oui{% else %}non{% endif %}</td>
-                                <td>{% if item.pay %}oui{% else %}non{% endif %}</td>
+                                <td>{% if item.valid %}<span class="glyphicon glyphicon-ok"></span>{% else %}<span class="glyphicon glyphicon-remove"></span>{% endif %}</td>
+                                <td style="text-align:center;">{% if item.pay %}<span class="glyphicon glyphicon-ok" style="color:green;"></span>{% else %}<span class="glyphicon glyphicon-remove" style="color:green;"></span>{% endif %}</td>
                                 <td>{{item.user1.participant.prenom}} {{item.user1.participant.nom}}</td>
                                 <td>{{item.user2.participant.prenom}} {{item.user2.participant.nom}}</td>
                             </tr>
@@ -131,7 +131,7 @@
 		             </table>
 			</div>
 		</div>
-		
+
 
 		<!-- Inscription -->
 		<button onClick="location.href='{% url "tennis.views.inscriptionTournoi" %}';" class="btn btn-default b-center">S'inscrire à un tournoi</button>
@@ -196,7 +196,7 @@
 						</select>
 		    		</div>
 				</div>
-				
+
 				<!-- Panel infos -->
 				<div class="panel panel-default">
 					<div class="panel-heading">Prochains matchs</div>
@@ -211,8 +211,8 @@
 		</div>
 	</div>
 
-	
-	
+
+
 
 </div>
 
