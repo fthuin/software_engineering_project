@@ -865,6 +865,7 @@ def staffExtra(request):
 			prixTournoi = prixTournoi.replace(",",".")
 			if(float(prixTournoi)>=0.0):
 				info.prix = prixTournoi
+				LogActivity(user=request.user,section="InfoTournoi",details=u"Prix du tournoi modifié").save()
 			else:
 				errorInfoPrix = "Le prix doit etre plus grand ou égale a zéro"
 			
@@ -874,6 +875,7 @@ def staffExtra(request):
 			now = datetime.datetime.now()
 			if(now<datetoEnreg):
 				info.date = datetoEnreg
+				LogActivity(user=request.user,section="InfoTournoi",details=u"Date du tournoi modifiée").save()
 			else:
 				errorInfoDate = "La date doit etre plus tard que maintenant"
 
