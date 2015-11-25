@@ -11,11 +11,55 @@
 			{% csrf_token %}
 			<div class="row">
 				<div class="col-sm-6">
+					
+					<!-- Rechercher -->
+					<div class="row" style="margin-bottom:15px;">
+						<div class="col-sm-8 col-sm-offset-2">
+							<div class="input-group">
+						      <input type="text" class="form-control" placeholder="Rechercher un utilisateur" id="user_search_value">
+						      <span class="input-group-btn">
+						        <button class="btn btn-default" type="button" onclick="search_user()"><span class="glyphicon glyphicon-search"></span></button>
+						      </span>
+						    </div>
+						</div>
+					</div>  
+
+					<!-- Liste des users -->
+					<div class="panel panel-default center-block" style="max-width:600px;">
+						<div class="panel-heading">Utilisateurs</div>
+						<div class="table-responsive">
+						<table class="table table-hover">
+							<thead>
+					          <tr>
+					          	<th style="text-align:center">Sexe</th>
+					            <th>Nom d'utilisateur</th>
+					            <th>Prénom</th>
+					            <th>Nom</th>
+					            <th style="text-align:center">Age</th>
+					            <th style="text-align:center">Cls</th>
+					          </tr>
+					        </thead>
+					        <tbody id="UserList">
+					        </tbody>
+						</table>
+						</div>
+					</div>
+
+					<!-- Info -->
+					<p class="center" id="UserInfo"></p>
+
+					<!-- Bottom pagination -->
+					<div class="text-center" id="paginationholder">
+					</div>
+
+				</div>
+
+				<div class="col-sm-6">
 					<!-- Tournoi -->
 					<div class="form-group" style="margin-bottom:0">
 				      <label class="control-label col-sm-4">Tournoi : </label>
 				      <div class="col-sm-8">
-				      	<input id="tournoiLabel" value="-" readonly style="font-weight:bold;padding-top:7px;border:0;color:#D4542D; background-color:transparent;">
+				      	<input id="tournoiLabel" name="title_tournoi" value="-" readonly style="font-weight:bold;padding-top:7px;border:0;color:#D4542D; background-color:transparent;">
 				      </div>
 				      
 				    </div>
@@ -30,7 +74,7 @@
 				    <div class="form-group">
 				      <label class="control-label col-sm-4">Catégorie : </label>
 				      <div class="col-sm-8">
-				      	<input id="categorieLabel" value="-" readonly style="font-weight:bold;padding-top:7px;border:0;color:#D4542D; background-color:transparent;">
+				      	<input id="categorieLabel" name="categorie_tournoi" value="-" readonly style="font-weight:bold;padding-top:7px;border:0;color:#D4542D; background-color:transparent;">
 				      </div>
 				    </div>
 
@@ -82,49 +126,7 @@
 
 					<!-- Info -->
 					<label>Informations additionnelles (souhaits, remarques, ...) : </label>
-					<textarea class="form-control" rows="3" name="remarque" id="remarque" placeholder="Remarque et/ou souhaits ...">{{ comment1}}</textarea>
-
-				</div>
-
-				<div class="col-sm-6">
-					<!-- Rechercher -->
-					<div class="row" style="margin-bottom:15px;">
-						<div class="col-sm-8 col-sm-offset-2">
-							<div class="input-group">
-						      <input type="text" class="form-control" placeholder="Rechercher un utilisateur" id="user_search_value">
-						      <span class="input-group-btn">
-						        <button class="btn btn-default" type="button" onclick="search_user()"><span class="glyphicon glyphicon-search"></span></button>
-						      </span>
-						    </div>
-						</div>
-					</div>  
-
-					<!-- Liste des users -->
-					<div class="panel panel-default center-block" style="max-width:600px;">
-						<div class="panel-heading">Utilisateurs</div>
-						<div class="table-responsive">
-						<table class="table table-hover">
-							<thead>
-					          <tr>
-					          	<th style="text-align:center">Sexe</th>
-					            <th>Nom d'utilisateur</th>
-					            <th>Prénom</th>
-					            <th>Nom</th>
-					            <th style="text-align:center">Age</th>
-					          </tr>
-					        </thead>
-					        <tbody id="UserList">
-					        </tbody>
-						</table>
-				</div>
-					</div>
-
-					<!-- Info -->
-					<p class="center" id="UserInfo"></p>
-
-					<!-- Bottom pagination -->
-					<div class="text-center" id="paginationholder">
-					</div>
+					<textarea class="form-control" rows="3" name="remarque" id="remarque" placeholder="Remarque et/ou souhaits ..." style="margin-bottom:15px;">{{ comment1}}</textarea>
 
 				</div>				
 			</div>
@@ -175,7 +177,7 @@ var userList = [];
 {% for use in Use %}
 //on ne stock pas sois meme dans la liste des joueurs
 {% if  use.username != user.username and not use.is_staff %}
-userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.age }}']);
+userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.age }}','{{ use.participant.classement }}']);
 {% endif %}
 {% endfor %}
 

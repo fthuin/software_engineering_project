@@ -98,6 +98,14 @@ def inscriptionTournoi(request):
 		#On recupère les donnée du formualaire
 		username2 = request.POST['username2']
 		comment1 = request.POST['remarque']
+		title_tournoi = request.POST['title_tournoi']
+		categorie_tournoi = request.POST['categorie_tournoi']
+		if categorie_tournoi == "-":
+			categorie_tournoi = title_tournoi
+		#On recupere le tournoi en fonction du titre et de la categorie
+		t = TournoiTitle.objects.get(nom=title_tournoi)
+		c = TournoiCategorie.objects.get(nom=categorie_tournoi)
+		tournois = Tournoi.objects.filter(titre=t,categorie=c)[0]
 		extra = request.POST.getlist('extra')
 		#On recupere les extras pris par l'utilisateur
 		extra1 = list()
@@ -114,14 +122,6 @@ def inscriptionTournoi(request):
 			if contained == False:
 				extranot1.append(Extra.objects.filter(id=elem.id)[0])
 
-		#On recupere le tournoi(et on vérifie que l'utilisateur a bien entré un tournoi)
-		nomTournoi = request.POST['tournoi']
-
-		if (nomTournoi==""):
-			errorAdd = "Veuillez selectionner un tournoi!"
-			return render(request,'tennis/inscriptionTournoi.html',locals())
-
-		tournois = Tournoi.objects.filter(nom=nomTournoi)[0]
 		#On vérifie que l'utilisateur a bien rentré un deuxieme joueur
 		if (username2==""):
 			errorAdd = "Veuillez rajouter un deuxieme joueur pour votre pair"
