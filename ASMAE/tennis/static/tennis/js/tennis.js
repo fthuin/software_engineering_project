@@ -282,7 +282,14 @@ function setUserStaff(page){
 
 	//Ajout des users
 	for (var i = debut; i < UserList.length && i<fin; i++) {
-		var p = '<tr onclick="window.document.location='+"'utilisateurs/"+UserList[i][0]+"'"+';" class="clickable-row"><td style="text-align:center">'+"sexe"+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td></tr>';
+		var titre = UserList[i][3];
+		var icon
+		if (titre == "Mr"){
+			icon = '<i class="fa fa-male" style="color:blue"></i>';
+		}else{
+			icon = '<i class="fa fa-female" style="color:red"></i>';
+		}
+		var p = '<tr onclick="window.document.location='+"'utilisateurs/"+UserList[i][0]+"'"+';" class="clickable-row"><td style="text-align:center">'+icon+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td></tr>';
 		panneau.innerHTML += p;
 	};
 
