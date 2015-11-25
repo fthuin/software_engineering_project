@@ -371,10 +371,24 @@ function setPair(page){
 		var user1 = PairList[i][7] +' '+ PairList[i][5] + ' ('+PairList[i][3]+')';
 		var user2 = PairList[i][8] +' '+ PairList[i][6] + ' ('+PairList[i][4]+')';
 		var valid = PairList[i][1];
-		var pay = PairList[i][2];
-		var info = '<b>ID : </b>'+PairList[i][0]+' / <b> Tournoi : </b>'+PairList[i][9]+' / <b>Valide : </b>'+valid+' / <b>Payé : </b>'+pay;
+        /* Remplacement du texte par une icône de statut */
+        if (valid == "oui") {
+            valid = '<span class="glyphicon glyphicon-ok" aria-hidden="true" style="color:green;"></span>';
+        }
+        else if (valid == "non") {
+            valid = '<span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red;"></span>';
+        }
 
-		var p = '<tr onclick="window.document.location='+"'paires/"+PairList[i][0]+"'"+';" class="clickable-row"><td>'+PairList[i][0]+'</td><td>'+PairList[i][9]+'</td><td>'+valid+'</td><td>'+pay+'</td><td>'+user1+'</td><td>'+user2+'</td></tr>';
+		var pay = PairList[i][2];
+        /* Remplacement du texte par une icône de statut*/
+        if (pay == "oui") {
+            pay = '<span class="glyphicon glyphicon-ok" aria-hidden="true" style="color:green;"></span>';
+        }
+        else if (pay == "non") {
+            pay = '<span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red;"></span>';
+        }
+
+		var p = '<tr onclick="window.document.location='+"'paires/"+PairList[i][0]+"'"+';" class="clickable-row"><td>'+PairList[i][0]+'</td><td>'+PairList[i][9]+'</td><td style="text-align:center;">'+valid+'</td><td>'+pay+'</td><td>'+user1+'</td><td>'+user2+'</td></tr>';
 
 		//var p = '<a href="paires/'+PairList[i][0]+'" class="list-group-item">'+info+'<br>'+user1+' - '+user2+'</a>';
 		panneau.innerHTML += p;
@@ -860,13 +874,13 @@ function validateRegister() {
 		var address = street+", "+number+" "+postalcode+" "+locality+" Belgium";
 
 		geocoder.geocode( { 'address': address}, function(results, status) {
-		if (status == google.maps.GeocoderStatus.OK) {			
+		if (status == google.maps.GeocoderStatus.OK) {
 			var latitude = results[0].geometry.location.lat();
 		    var longitude = results[0].geometry.location.lng();
 			document.getElementById("latitude").value = latitude;
 			document.getElementById("longitude").value = longitude;
 			document.getElementById("registerButton").click();
-		    }else{	    	
+		    }else{
 		    	document.getElementById("hint-locality").innerHTML = "Adresse non reconnue";
 		    }
 		});
