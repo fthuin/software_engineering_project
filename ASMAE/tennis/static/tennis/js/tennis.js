@@ -104,12 +104,53 @@ function setUser(page){
 //Lorsqu'on selectionne un utilistaeur on met ses valeurs dans le tableaux du dessous
 function selectUser(username,nom,prenom,sexe,age){
 	document.getElementById("username2Value").value = username;
-	document.getElementById("user2").innerHTML = prenom +' '+nom+' ('+username+')';
+	document.getElementById("user2").innerHTML = '['+username+'] '+prenom +' '+nom+' '+age+' ans';
 	document.getElementById("InscriptionButton").disabled = false;
 
 	//Check tournoi et catégorie en fonction de l'user courant
-	alert(user_age)
-	alert(user_sexe)
+	tournoi = ""
+	categorie = ""
+	//Check age voir si tournoi des familles
+	if((user_age >= 25 && age <= 15) || (user_age <= 15 && age >=25))
+	{
+		tournoi = "Tournoi des familles"
+		categorie = "-"
+	}else{
+		//Sinon check sexe pour voir tournoi homme femme ou mixte
+		if(user_sexe == sexe){
+			if(user_sexe == "Mr"){
+				tournoi = "Double homme"
+			}else{
+				tournoi = "Double femme"
+			}
+		}else{
+			tournoi = "Double mixte"
+		}
+		//Check age du plus vieux pour voir la categorie
+		var v
+		if(user_age >= age){
+			v = user_age
+		}else{
+			v = age
+		}
+		if(v >= 41){
+			categorie = "Elites"
+		}else if(v >= 20){
+			categorie = "Seniors"
+		}else if(v >=17){
+			categorie = "Juniors"
+		}else if(v >= 15){
+			categorie = "Scolaires"
+		}else if(v >= 13){
+			categorie = "Cadets"
+		}else if(v >= 11){
+			categorie = "Minimes"
+		}else if(v >= 9){
+			categorie = "Pre minimes"
+		}
+	}
+	document.getElementById("tournoiLabel").innerHTML = tournoi
+	document.getElementById("categorieLabel").innerHTML = categorie
 }
 
 //Lorsqu'on click sur un tournoi, on met à jours la description ainsi que les différentes restriction par rapport au tournoi
