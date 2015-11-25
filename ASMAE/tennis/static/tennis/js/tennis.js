@@ -121,10 +121,10 @@ function selectUser(username,nom,prenom,sexe,age){
 		//Sinon check sexe pour voir tournoi homme femme ou mixte
 		if(user_sexe == sexe){
 			if(user_sexe == "Mr"){
-				tournoi = "Double homme"
+				tournoi = "Double hommes"
 				jour = "Dimanche"
 			}else{
-				tournoi = "Double femme"
+				tournoi = "Double femmes"
 				jour = "Dimanche"
 			}
 		}else{
@@ -154,9 +154,9 @@ function selectUser(username,nom,prenom,sexe,age){
 			categorie = "Pre minimes"
 		}
 	}
-	document.getElementById("tournoiLabel").innerHTML = tournoi
-	document.getElementById("jourLabel").innerHTML = jour
-	document.getElementById("categorieLabel").innerHTML = categorie
+	document.getElementById("tournoiLabel").value = tournoi
+	document.getElementById("jourLabel").value = jour
+	document.getElementById("categorieLabel").value = categorie
 	
 }
 
