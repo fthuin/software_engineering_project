@@ -854,6 +854,37 @@ def staffExtra(request):
 				extra.commandsCount += 1
 
 	if request.method == "POST":
+		if request.POST['action'] == "modifyInfoTournoi":
+			prixTournoi = request.POST['prixInscription'].strip()
+			dateInfoTournoi = request.POST['birthdate'].strip()
+
+			print(prixTournoi)
+			print(dateInfoTournoi)
+
+			info = infoTournoi.objects.all()[0]
+			prixTournoi = prixTournoi.replace(",",".")
+			if(float(prixTournoi)>=0.0):
+				info.prix = prixTournoi
+			else:
+				errorInfoPrix = "Le prix doit etre plus grand ou égale a zéro"
+			
+
+			splitedDateInfoTournoi = dateInfoTournoi.split("/")
+			datetoEnreg = datetime.datetime(int(splitedDateInfoTournoi[2]),int(splitedDateInfoTournoi[1]),int(splitedDateInfoTournoi[0]))
+			now = datetime.datetime.now()
+			if(now<datetoEnreg):
+				info.date = datetoEnreg
+			else:
+				errorInfoDate = "La date doit etre plus tard que maintenant"
+
+			info.save()
+			info = infoTournoi.objects.all()[0]
+			prix_inscription = info.prix
+			date_inscription = info.date
+			formated_date = date_inscription.strftime('%d/%m/%Y')
+			return render(request,'tennis/staffExtra.html',locals())
+
+
 		if request.POST['action'] == "addExtra":
 			nom = request.POST['name'].strip()
 			prix = request.POST['price'].strip()
