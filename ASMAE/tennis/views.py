@@ -22,6 +22,35 @@ from django.template.defaulttags import register
 
 # Create your views here.
 def home(request):
+	date = infoTournoi.objects.all()[0].date
+	year = date.year
+	month = date.month
+	month_text = ""
+	if month == 1:
+		month_text = "janvier"
+	elif month == 2:
+		month_text = "février"
+	elif month == 3:
+		month_text = "mars"
+	elif month == 4:
+		month_text = "avril"
+	elif month == 5:
+		month_text = "mai"
+	elif month == 6:
+		month_text = "juin"
+	elif month == 7:
+		month_text = "juillet"
+	elif month == 8:
+		month_text = "août"
+	elif month == 9:
+		month_text = "septembre"
+	elif month == 10:
+		month_text = "octobre"
+	elif month == 11:
+		month_text = "novembre"
+	elif month == 12:
+		month_text = "decembre"
+	day = date.day
 	return render(request,'tennis/home.html',locals())
 
 def qcq(request):
