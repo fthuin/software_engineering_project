@@ -8,7 +8,20 @@
 <div class="content-box" id="gestionExtra">
 	<h2 class="center">Gestionnaire des inscriptions</h2>
 	<hr class="line">
-	<form class="form-horizontal" action="">
+	{% if errorInfoPrix %}
+	<div class="alert alert-danger">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	<strong>[Erreur lors de la modification]</strong> {{ errorInfoPrix }}
+	</div>
+	{% endif %}
+	{% if errorInfoDate %}
+	<div class="alert alert-danger">
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	<strong>[Erreur lors de la modification]</strong> {{ errorInfoDate }}
+	</div>
+	{% endif %}
+	<form class="form-horizontal" method="post" action="{% url "tennis.views.staffExtra" %}">
+		{% csrf_token %}
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				Tournoi
@@ -20,7 +33,7 @@
 						<div class="form-group">
 					      <label class="control-label col-sm-8" for="username">Frais d'inscription</label>
 					      <div class="col-sm-4">
-					      	<input type="text" class="form-control" maxlength="30" name="name" value="{{ prix_inscription }}">
+					      	<input type="text" class="form-control" maxlength="30" name="prixInscription" value="{{ prix_inscription }}">
 					      </div>
 					    </div>
 					</div>
@@ -77,7 +90,7 @@
 					   	</div>
 					</div>
 				</div>
-				<button class="btn btn-default center-block">Editer</button>
+				<button class="btn btn-default center-block" name="action" value="modifyInfoTournoi">Editer</button>
 			</div>
 		</div>
 		
