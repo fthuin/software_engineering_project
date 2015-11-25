@@ -281,7 +281,7 @@ function setCourt(page){
 
 		var vet = CourtList[i][15];
 		var vetIcon
-		if (used == "True") {
+		if (vet == "True") {
 		    vetIcon = '<span class="glyphicon glyphicon-ok" style="color:green;"></span>'
 		}
 		else {
