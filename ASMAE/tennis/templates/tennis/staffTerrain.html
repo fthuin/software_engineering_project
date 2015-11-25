@@ -29,6 +29,19 @@
 				    <div class="panel-heading" onclick="setPlusMoins()" data-toggle="collapse" data-target="#list_criteria" style="cursor:pointer;" href="#list_criteria">Critères d'affichage <span id="plusmoins" class="glyphicon glyphicon-chevron-up pull-right"></span></div>
 				    <div class="list-group panel-collapse collapse in" id="list_criteria">
 
+				    	<li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-4">Matière</label>
+							    <div class="col-sm-8">
+								    <select id="material_selector" class="form-control" onchange="search_court()">
+								        <option value="" selected>Tous</option>
+								        {% for courtSurface in allCourtSurface %}
+									  	<option value="{{ courtSurface.nom }}">{{ courtSurface.nom }}</option>
+									  	{% endfor %}
+								    </select>
+								</div>
+							</div>
+					    </li>
 					    <li class="list-group-item">
 						    <div class="row">
 							    <label class="control-label col-sm-4">Validation</label>
@@ -44,13 +57,12 @@
 
 					    <li class="list-group-item">
 						    <div class="row">
-							    <label class="control-label col-sm-4">Disponibilité</label>
+							    <label class="control-label col-sm-4">Utilisé</label>
 							    <div class="col-sm-8">
-								    <select id="availability_selector" class="form-control" onchange="search_court()">
-								        <option value="" selected>Tous</option>
-								        <option value="saturday">Samedi</option>
-								        <option value="sunday">Dimanche</option>
-								        <option value="saturday_sunday">Samedi et dimanche</option>
+								    <select id="used_selector" class="form-control" onchange="search_court()">
+								        <option value="Tous" selected>Tous</option>
+								        <option value="True">Oui</option>
+								        <option value="False">Non</option>
 								    </select>
 								</div>
 							</div>
@@ -58,13 +70,13 @@
 
 					    <li class="list-group-item">
 						    <div class="row">
-							    <label class="control-label col-sm-4">Matière</label>
+							    <label class="control-label col-sm-4">Disponibilité</label>
 							    <div class="col-sm-8">
-								    <select id="material_selector" class="form-control" onchange="search_court()">
+								    <select id="availability_selector" class="form-control" onchange="search_court()">
 								        <option value="" selected>Tous</option>
-								        {% for courtSurface in allCourtSurface %}
-									  	<option value="{{ courtSurface.nom }}">{{ courtSurface.nom }}</option>
-									  	{% endfor %}
+								        <option value="saturday">Samedi</option>
+								        <option value="sunday">Dimanche</option>
+								        <option value="saturday_sunday">Samedi et dimanche</option>
 								    </select>
 								</div>
 							</div>
@@ -91,6 +103,18 @@
 							      	{% for courtType in allCourtType %}
 							      		<option value="{{ courtType.nom }}">{{ courtType.nom }}</option>
 									{% endfor %}
+								    </select>
+								</div>
+							</div>
+					    </li>
+					    <li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-4">Vétéran</label>
+							    <div class="col-sm-8">
+								    <select id="vet_selector" class="form-control" onchange="search_court()">
+								        <option value="Tous" selected>Tous</option>
+								        <option value="True">Oui</option>
+								        <option value="False">Non</option>
 								    </select>
 								</div>
 							</div>
@@ -189,6 +213,10 @@ function search_court() {
     var state_choice = state_selector.options[state_selector.selectedIndex].text.sansAccent().toLocaleUpperCase();
     var type_selector = document.getElementById("type_selector");
     var type_choice = type_selector.options[type_selector.selectedIndex].text.sansAccent().toLocaleUpperCase();
+    var used_selector = document.getElementById("used_selector");
+	var used_choice = used_selector.options[used_selector.selectedIndex].value;
+	var vet_selector = document.getElementById("vet_selector");
+	var vet_choice = vet_selector.options[vet_selector.selectedIndex].value;
     if (material_choice.indexOf("Tous".toLocaleUpperCase()) != -1) {
     	material_choice = "";
     }
@@ -218,7 +246,9 @@ function search_court() {
          var availabilityStatus = myCourt[11].sansAccent().toLocaleUpperCase();
          var etat = myCourt[12].sansAccent().toLocaleUpperCase();
          var type = myCourt[13].sansAccent().toLocaleUpperCase();
-         if (! (username.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1 || id.indexOf(retour) != -1 || rue.indexOf(retour) != -1 || codepostal.indexOf(retour) != -1 || localite.indexOf(retour) != -1 ) || matiere.indexOf(material_choice) == -1 || validationStatus.indexOf(validation_choice) == -1 || availabilityStatus.indexOf(availability_choice) == -1 || etat.indexOf(state_choice) || type.indexOf(type_choice) ) {
+         var used = myCourt[14]
+         var vet = myCourt[15]
+         if (! (username.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1 || id.indexOf(retour) != -1 || rue.indexOf(retour) != -1 || codepostal.indexOf(retour) != -1 || localite.indexOf(retour) != -1 ) || matiere.indexOf(material_choice) == -1 || validationStatus.indexOf(validation_choice) == -1 || availabilityStatus.indexOf(availability_choice) == -1 || etat.indexOf(state_choice) || type.indexOf(type_choice) || (used != used_choice && used_choice != "Tous") || (vet != vet_choice && vet_choice != "Tous") ) {
             resultList.splice(i, 1);
          }
     }
