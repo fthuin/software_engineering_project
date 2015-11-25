@@ -41,4 +41,5 @@ class Command(BaseCommand):
         groupe.permissions.add(permission)
 
     def handle(self, *args, **options):
+        print("Creation du groupe admin")
         self.createGroupAdmin()

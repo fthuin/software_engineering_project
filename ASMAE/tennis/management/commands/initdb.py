@@ -13,4 +13,5 @@ class Command(BaseCommand):
         os.system("python manage.py fill_typeTerrain")
         os.system("python manage.py fill_extra")
         os.system("python manage.py fill_tournoi")
+        os.system("python manage.py create_admingroup")
         print("Fin de l'initialisation")
