@@ -337,7 +337,7 @@ function setInfoTerrain(p,matiere,addr,ID,number){
 	document.getElementById("ID"+number).innerHTML = ID;
 
 	//TODO Ajouter type de terrain
-
+	setKm()
 	
 }
 function setInfoTerrainNoUpdateKm(p,matiere,addr,ID,number){
