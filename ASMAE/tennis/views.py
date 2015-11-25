@@ -13,7 +13,7 @@ import json
 import datetime
 from datetime import date
 from itertools import chain
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import permission_required,  user_passes_test
 from django.contrib.auth.models import Permission,Group
 from django.utils.crypto import get_random_string
 from django.http import HttpResponse, HttpResponseRedirect
@@ -841,6 +841,8 @@ def staffExtra(request):
 	date_inscription = info.date
 	formated_date = date_inscription.strftime('%d/%m/%Y')
 	yearLoop = range(date.today().year,date.today().year+5)
+	isAdmin = request.user.groups.filter(name="Admin").exists()
+	print(isAdmin)
 	# On récupère les extras, on set le nombre de demandes à zéro
 	for extra in extras:
 		extra.commandsCount = 0
@@ -854,9 +856,11 @@ def staffExtra(request):
 				extra.commandsCount += 1
 
 	if request.method == "POST":
-		resetDbForNextYear
+		resetDbForNextYear(request)
 		if request.POST['action'] == "cleanDb":
-			resetDbForNextYear()
+			print("yo")
+			resetDbForNextYear(request)
+
 		if request.POST['action'] == "modifyInfoTournoi":
 			prixTournoi = request.POST['prixInscription'].strip()
 			dateInfoTournoi = request.POST['birthdate'].strip()
@@ -1534,7 +1538,8 @@ def printScoreBoard(request, pouleId):
 		strPairs.append(u'' + pair.user1.participant.prenom + u' <b>' + pair.user1.participant.nom + u'</b><br>' + pair.user2.participant.prenom + u' <b>' + pair.user2.participant.nom + u'</b>')
 	return render(request, 'tennis/printScoreBoard.html', {'strPairs':strPairs})
 
-def resetDbForNextYear():
+@user_passes_test(lambda u: u.groups.filter(name='admin').exists)
+def resetDbForNextYear(request):
 	
 	listParticipant = Participant.objects.all()
 	for participant in listParticipant:
@@ -1567,4 +1572,6 @@ def resetDbForNextYear():
 	LogActivity.objects.all().delete()
 	
 	print("resetdb")
+
+
 
