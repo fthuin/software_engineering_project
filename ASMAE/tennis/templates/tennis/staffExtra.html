@@ -72,7 +72,7 @@
 									</select>
 					      		</div>
 						    </div>
-						    <input type="text" class="form-control" name="birthdate" id="birthdateID" value="{{ formatedBirthdate }}" style="display:none">
+						    <input type="text" class="form-control" name="birthdate" id="birthdateID" value="{{ formated_date }}" style="display:none">
 					      </div>
 					   	</div>
 					</div>
@@ -263,7 +263,33 @@
 
 {% block commande %}
 <script>
-	function onChangeDayOfBirth() {
+var dateNaissance = document.getElementById("birthdateID");
+
+function setSelectedIndex(s, valsearch)
+{
+// Loop through all the items in drop down list
+	for (i = 0; i< s.options.length; i++)
+	{
+		if (s.options[i].value == valsearch)
+		{
+		// Item is found. Set its property and exit
+		s.options[i].selected = true;
+		break;
+		}
+	}
+	return;
+}
+
+//set date en fonction de la valeur
+var date_jour = dateNaissance.value.substring(0,2);
+var date_mois = dateNaissance.value.substring(3,5);
+var date_an = dateNaissance.value.substring(6,10);
+
+setSelectedIndex(document.getElementById("select_jour"),date_jour);
+setSelectedIndex(document.getElementById("select_mois"),date_mois);
+setSelectedIndex(document.getElementById("select_an"),date_an);
+
+function onChangeDayOfBirth() {
     var select_jour = document.getElementById("select_jour");
     var jour = select_jour.options[select_jour.selectedIndex].value
 	date = dateNaissance.value

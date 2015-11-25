@@ -810,6 +810,7 @@ def staffExtra(request):
 	info = infoTournoi.objects.all()[0]
 	prix_inscription = info.prix
 	date_inscription = info.date
+	formated_date = date_inscription.strftime('%d/%m/%Y')
 	yearLoop = range(date.today().year,date.today().year+5)
 	# On récupère les extras, on set le nombre de demandes à zéro
 	for extra in extras:
