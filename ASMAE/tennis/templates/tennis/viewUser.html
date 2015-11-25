@@ -5,6 +5,18 @@
 
 {% block body %}
 <div class="container">
+	{% if errorEdit %}
+		<div class="alert alert-danger">
+		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		    <strong>Error!</strong> {{ errorEdit }}
+		</div>
+		<script>changeProfilPannel();</script>
+		{% elif successEdit %}
+		<div class="alert alert-success">
+		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		    <strong>Succès!</strong> {{ successEdit }}
+		</div>
+		{% endif %}
 	<div class="content-box">
 		<h2 class="center">{{ use.username }}</h2>
 		<hr class="line">
@@ -128,11 +140,212 @@
 					</div>
 				</div>
 			</div>
+			<button class="btn btn-default center-block" data-toggle="modal" data-target="#myModal" type="button" onclick="checkValues()">Modifier informations</button>
 		</div>
 		<h3>Google Map <span id="statusMap" style="color:red;"></span></h3>
 		<div id="map" style="height:250px;"></div>
 	</div>
+	
+	
 </div>
+<!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title center">Modification des informations</h4>
+        </div>
+        <div class="modal-body">
+			<form class="form-vertical" method="post" action="{% url "tennis.views.viewUser" use.username %}">
+			{% csrf_token %}
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-lg-6">
+							<!-- Titre -->
+							<div class="form-group">
+						      <label class="control-label" for="title">Titre *</label>
+						      <div class="">
+						      	<select class="form-control" name="title">
+						      	{% if use.participant.titre == "Mme" %}
+						      		<option>Mr</option>
+								    <option selected="selected">Mme</option>
+								{% else %}
+									<option>Mr</option>
+								    <option>Mme</option>
+						      	{% endif %}
+								</select>
+
+						      </div>
+						    </div>
+						    <!-- nom -->
+						    <div class="form-group">
+						      <label class="control-label" for="lastname">Nom *</label>
+						      <div class="">
+						      	<input type="text" class="form-control" name="lastname" id="lastname" placeholder="Nom" value="{{ use.participant.nom  }}">
+						      	<p class="hint" id="hint-lastname"></p>
+						      </div>
+						    </div>
+						    <!-- prenom -->
+						    <div class="form-group">
+						      <label class="control-label" for="firstname">Prénom *</label>
+						      <div class="">
+						      	<input type="text" class="form-control" name="firstname" id="firstname" placeholder="Prénom" value="{{ use.participant.prenom }}">
+						      	<p class="hint" id="hint-firstname"></p>
+						      </div>
+						    </div>
+						    <!-- date de naissance -->
+						    <div class="form-group">
+						      <label class="control-label" for="birthdate">Date de Naissance *</label>
+						      <div class="">
+						      	<div class="row">
+						      		<div class="col-xs-3" style="padding-right:0">
+						      			<select class="form-control" name="jour" id="select_jour" style="padding-right:0" onchange="onChangeDayOfBirth()">
+											<option selected disabled>Jour</option>
+											{% for i in "123456789" %}
+										    <option value="0{{ i }}">0{{ i }}</option>
+										    {% endfor %}
+										    {% for i in "0123456789" %}
+										    <option value="1{{ i }}">1{{ i }}</option>
+										    {% endfor %}
+										    {% for i in "0123456789" %}
+										    <option value="2{{ i }}">2{{ i }}</option>
+										    {% endfor %}
+										    <option value="30">30</option>
+										    <option value="31">31</option>
+										</select>
+						      		</div>
+						      		<div class="col-xs-5">
+						      			<select class="form-control" id="select_mois" name="mois" onchange="onChangeMonthOfBirth()">
+											<option selected disabled>Mois</option>
+											<option value="01">Janvier</option>
+										    <option value="02">Février</option>
+										    <option value="03">Mars</option>
+										    <option value="04">Avril</option>
+										    <option value="05">Mai</option>
+										    <option value="06">Juin</option>
+										    <option value="07">Juillet</option>
+										    <option value="08">Août</option>
+										    <option value="09">Septembre</option>
+										    <option value="10">Octobre</option>
+										    <option value="11">Novembre</option>
+										    <option value="12">Décembre</option>
+										</select>
+						      		</div>
+						      		<div class="col-xs-4" style="padding-left:0">
+						      			<select class="form-control" id="select_an" name="an" onchange="onChangeYearOfBirth()">
+											<option selected disabled>Année</option>
+											{% for i in yearLoop %}
+										    <option value="{{ i }}">{{ i }}</option>
+										    {% endfor %}
+										</select>
+						      		</div>
+						      	</div>
+						      	<input type="text" class="form-control" name="birthdate" id="birthdateID" value="{{ formatedBirthdate }}" style="display:none">
+						      	<p class="hint" id="hint-birthdate"></p>
+						      </div>
+						    </div>
+						    <!-- telephone -->
+						    <div class="form-group">
+						      <label class="control-label" for="tel">Téléphone *</label>
+						      <div class="">
+						      	<input type="tel" class="form-control" name="tel" id="tel" placeholder="ex:010/56/56/10" value="{% if use.participant.telephone %}{{ use.participant.telephone }}{% endif %}">
+						      </div>
+						    </div>
+						    <!-- gsm -->
+						    <div class="form-group">
+						      <label class="control-label" for="gsm">GSM *</label>
+						      <div class="">
+						      	<input type="gsm" class="form-control" name="gsm" id="gsm" placeholder="ex:0477/56/54/89" value="{% if use.participant.gsm %}{{ use.participant.gsm }}{% endif %}">
+						      	<p class="hint" id="hint-tel"></p>
+						      </div>
+						    </div>
+						    <!-- fax -->
+						    <div class="form-group">
+						      <label class="control-label" for="fax">Fax</label>
+						      <div class="">
+						      	<input type="tel" class="form-control" name="fax" id="fax" placeholder="ex:010/56/54/89" value="{% if use.participant.fax %}{{ use.participant.fax }}{% endif %}">
+						      	<p class="hint" id="hint-fax"></p>
+						      </div>
+						    </div>
+						</div>
+
+						<div class="col-lg-6">
+							<!-- email -->
+							<div class="form-group">
+						      <label class="control-label" for="email">Email *</label>
+						      <div class="">
+						      	<input type="email" class="form-control" name="email" id="email" placeholder="Exemple@hotmail.com" value="{{ use.email }}">
+						      	<p class="hint" id="hint-email"></p>
+						      </div>
+						    </div>
+							
+							<!-- rue -->
+							<div class="form-group">
+						      <label class="control-label" for="street">Rue *</label>
+						      <div class="">
+						      	<input type="text" class="form-control" name="street" id="street" placeholder="Nom de rue" value="{{ use.participant.rue }}">
+						      	<p class="hint" id="hint-street"></p>
+						      </div>
+						    </div>
+						    <!-- numero -->
+						    <div class="form-group">
+						      <label class="control-label" for="number">Numéro *</label>
+						      <div class="">
+						      	<input type="text" class="form-control" name="number" id="number" placeholder="Numero" value="{{ use.participant.numero }}">
+						      	<p class="hint" id="hint-number"></p>
+						      </div>
+						    </div>
+						    <!-- boite -->
+						    <div class="form-group">
+						      <label class="control-label" for="boite">Boite</label>
+						      <div class="">
+						      	<input type="text" class="form-control" name="boite" id="boite" placeholder="Boite" value="{% if use.participant.boite %}{{ use.participant.boite }}{% endif %}">
+						      	<p class="hint" id="hint-boite"></p>
+						      </div>
+						    </div>
+						    <!-- code postal -->
+						    <div class="form-group">
+						      <label class="control-label" for="postalcode">Code Postal *</label>
+						      <div class="">
+						      	<input type="text" class="form-control" name="postalcode" id="postalcode" placeholder="Code postal" value="{{ use.participant.codepostal }}">
+						      	<p class="hint" id="hint-postalcode"></p>
+						      </div>
+						    </div>
+						    <!-- localité -->
+						    <div class="form-group">
+						      <label class="control-label" for="locality">Localité *</label>
+						      <div class="">
+						      	<input type="text" class="form-control" name="locality" id="locality" placeholder="Localité" value="{{ use.participant.localite }}">
+						      	<p class="hint" id="hint-locality"></p>
+						      </div>
+						    </div>
+						    <!-- classement -->
+						    <div class="form-group">
+						      <label class="control-label" for="classement">Classement</label>
+						      <div class="">
+						      	<input type="text" class="form-control" name="classement" id="classement" placeholder="Classement" value="{% if use.participant.classement %}{{ use.participant.classement }}{% endif %}">
+						      	<p class="hint" id="hint-classement"></p>
+						      </div>
+						    </div>
+
+						</div>
+					</div><!-- Row -->
+				</div><!-- Pannel-content -->
+			</div><!-- Pannel -->
+			<input type="text" id="latitude" name="lat" value="" style="display:none">
+			<input type="text" id="longitude" name="lng" value="" style="display:none">
+			<button class="btn btn-default center-block" id="saveinfo" style="display:none" >Sauver</button>
+			<button class="btn btn-default center-block" type="button" onclick="validateEditStaffInfo()">Sauver</button>
+			</form>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
 {% endblock %}
 
@@ -160,5 +373,64 @@ if (status == google.maps.GeocoderStatus.OK) {
 		});
     }
 }); 
+</script>
+<script>
+var dateNaissance = document.getElementById("birthdateID");
+
+function setSelectedIndex(s, valsearch)
+{
+// Loop through all the items in drop down list
+	for (i = 0; i< s.options.length; i++)
+	{
+		if (s.options[i].value == valsearch)
+		{
+		// Item is found. Set its property and exit
+		s.options[i].selected = true;
+		break;
+		}
+	}
+	return;
+}
+	
+//set date en fonction de la valeur
+var date_jour = dateNaissance.value.substring(0,2);
+var date_mois = dateNaissance.value.substring(3,5);
+var date_an = dateNaissance.value.substring(6,10);
+
+setSelectedIndex(document.getElementById("select_jour"),date_jour);
+setSelectedIndex(document.getElementById("select_mois"),date_mois);
+setSelectedIndex(document.getElementById("select_an"),date_an);
+
+
+function onChangeDayOfBirth() {
+    var select_jour = document.getElementById("select_jour");
+    var jour = select_jour.options[select_jour.selectedIndex].value
+	date = dateNaissance.value
+	dateNaissance.value = jour+date.substring(2,date.length);
+}
+
+function onChangeMonthOfBirth() {
+    var select_mois = document.getElementById("select_mois");
+    var mois = select_mois.options[select_mois.selectedIndex].value
+	date = dateNaissance.value
+	dateNaissance.value = date.substring(0,3)+mois+date.substring(5,date.length);
+}
+
+function onChangeYearOfBirth() {
+    var select_an = document.getElementById("select_an");
+    var an = select_an.options[select_an.selectedIndex].value
+	date = dateNaissance.value
+	dateNaissance.value = date.substring(0,6)+an
+}
+
+	$('#select_jour').on('input', function() { 
+	    onChangeDayOfBirth();
+});
+	$('#select_mois').on('input', function() { 
+        onChangeMonthOfBirth();
+});
+	$('#select_an').on('input', function() { 
+        onChangeYearOfBirth();
+});
 </script>
 {% endblock %}

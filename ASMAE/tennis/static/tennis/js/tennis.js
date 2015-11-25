@@ -683,6 +683,118 @@ function validateEditInfo() {
 	}
 
 }
+function validateEditStaffInfo() {
+
+	valid = true;
+
+	//Verification nom présent
+	var lastname = document.getElementById("lastname").value;
+	if(lastname==null || lastname == ""){
+		document.getElementById("hint-lastname").innerHTML = " ! Entrer un nom";
+		valid = false;
+	}else{
+		document.getElementById("hint-lastname").innerHTML = "";
+	}
+
+	//Verification prénom présent
+	var firstname = document.getElementById("firstname").value;
+	if(firstname==null || firstname == ""){
+		document.getElementById("hint-firstname").innerHTML = " ! Entrer un prénom";
+		valid = false;
+	}else{
+		document.getElementById("hint-firstname").innerHTML = "";
+	}
+
+	//Verification telephone présent
+	var tel = document.getElementById("tel").value;
+	var gsm = document.getElementById("gsm").value;
+	if((tel==null || tel == "") && (gsm==null || gsm == "")){
+		document.getElementById("hint-tel").innerHTML = " ! Entrer un numéro de téléphone ou de GSM";
+		valid = false;
+	}else{
+		//Verify number validity TODO
+		document.getElementById("hint-tel").innerHTML = "";
+	}
+
+	//Verification rue présent
+	var street = document.getElementById("street").value;
+	if(street==null || street == ""){
+		document.getElementById("hint-street").innerHTML = " ! Entrer un rue";
+		valid = false;
+	}else{
+		document.getElementById("hint-street").innerHTML = "";
+	}
+
+	//Verification numero présent
+	var number = document.getElementById("number").value;
+	if(number==null || number == ""){
+		document.getElementById("hint-number").innerHTML = " ! Entrer un numéro";
+		valid = false;
+	}else{
+		document.getElementById("hint-number").innerHTML = "";
+	}
+
+	//Verification code postal présent
+	var postalcode = document.getElementById("postalcode").value;
+	if(postalcode==null || postalcode == ""){
+		document.getElementById("hint-postalcode").innerHTML = " ! Entrer un code postal";
+		valid = false;
+	}else{
+		document.getElementById("hint-postalcode").innerHTML = "";
+	}
+
+	//Verification localité présent
+	var locality = document.getElementById("locality").value;
+	if(locality==null || locality == ""){
+		document.getElementById("hint-locality").innerHTML = " ! Entrer un localité";
+		valid = false;
+	}else{
+		document.getElementById("hint-locality").innerHTML = "";
+	}
+	
+	//Verification email
+	var email = document.getElementById("email").value;
+	if(email==null || email == ""){
+		document.getElementById("hint-email").innerHTML = " ! Entrer un email";
+		valid = false;
+	}else{
+		document.getElementById("hint-email").innerHTML = "";
+	}
+
+
+
+	//Verification date de naissance présent
+	var birthdate = document.getElementById("birthdateID").value;
+	if(birthdate==null || birthdate == ""){
+		document.getElementById("hint-birthdate").innerHTML = " ! Entrer un date de naissance";
+		valid = false;
+	}else{
+		document.getElementById("hint-birthdate").innerHTML = "";
+	}
+
+	if(valid){
+		
+		var geocoder = new google.maps.Geocoder();
+		var address = street+", "+number+" "+postalcode+" "+locality+" Belgium";
+
+		geocoder.geocode( { 'address': address}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			
+			var latitude = results[0].geometry.location.lat();
+		    var longitude = results[0].geometry.location.lng();
+			
+			document.getElementById("latitude").value = latitude;
+			document.getElementById("longitude").value = longitude;
+			
+			document.getElementById("saveinfo").click();
+		    }else{
+		    	document.getElementById("hint-locality").innerHTML = "Adresse non reconnue";
+				
+		    }
+		});
+	}
+
+}
 //fin de la section profil
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
