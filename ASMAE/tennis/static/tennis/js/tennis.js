@@ -489,7 +489,7 @@ function selectUserStaff(username,nom,prenom,perm,group){
 	document.getElementById("userInfo").href = "/tennis/staff/utilisateurs/"+username;
 
 	//TODO set permissions on checkpoint
-    if(perm.indexOf("extra") > -1)
+    if(perm.indexOf("Extra") > -1)
     {
         document.getElementById("extraID").checked = true;
     }
@@ -497,7 +497,7 @@ function selectUserStaff(username,nom,prenom,perm,group){
     {
         document.getElementById("extraID").checked = false;
     }
-    if(perm.indexOf("pair") > -1)
+    if(perm.indexOf("Pair") > -1)
     {
         document.getElementById("pairID").checked = true;
     }
@@ -505,7 +505,7 @@ function selectUserStaff(username,nom,prenom,perm,group){
     {
         document.getElementById("pairID").checked = false;
     }
-    if(perm.indexOf("court") > -1)
+    if(perm.indexOf("Court") > -1)
     {
         document.getElementById("courtID").checked = true;
     }
@@ -867,6 +867,10 @@ function validateRegister() {
 			document.getElementById("longitude").value = longitude;
 			document.getElementById("registerButton").click();
 		    }else{	    	
+
+
+
+
 		    	document.getElementById("hint-locality").innerHTML = "Adresse non reconnue";
 		    }
 		});
