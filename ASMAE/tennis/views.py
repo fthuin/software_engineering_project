@@ -682,13 +682,15 @@ def generatePool(request,name):
 	else:
 		terrains = terrains.filter(dispoDimanche=True)
 
+	terrains.order_by("id")
+
+
 
 	if request.method == "POST":
 
 
 		terrainsList = request.POST['assignTerrains'].split('-')
 		terrainsList.pop()
-		print(terrainsList)
 
 		leadersList = request.POST['assignLeaders'].split('/')
 		leadersList.pop()
@@ -752,12 +754,9 @@ def generatePool(request,name):
 		else:
 			return redirect(reverse(staffTournoi))
 	if request.user.is_authenticated():
-		dictTerrains = {}
-		# TODO : Indiquer les terrains déjà utilisés le jour du tournoi
-		for terrain in terrains:
-			dictTerrains[terrain.id] = terrain
+		
 
-		listTerrains = list(dictTerrains.values())
+		listTerrains = list(terrains)
 		listTerrainSaved = list()
 		listLeaderSaved = list()
 		nbrTerrains = len(listTerrains)
