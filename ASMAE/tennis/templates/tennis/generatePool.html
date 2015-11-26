@@ -139,8 +139,7 @@ var PairDict = {};
 var addr = '{{elem.rue}}'+ ", "+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
 var Lat = '{{elem.latitude}}'
 var Lng = '{{elem.longitude}}'
-TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng,used:'{{elem.used}}',type:'{{elem.type}}'})
-
+TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng,type:'{{elem.type.nom}}'})
 {% endfor %}
 
 var terrainSaved = []
@@ -148,7 +147,7 @@ var terrainSaved = []
 var addr = '{{elem.rue}}'+ ", "+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
 var Lat = '{{elem.latitude}}'
 var Lng = '{{elem.longitude}}'
-terrainSaved.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng})
+terrainSaved.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng,type:'{{elem.type.nom}}'})
 {% endfor %}
 var leaderSaved = []
 {% for elem in listLeaderSaved %}
