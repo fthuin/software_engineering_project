@@ -22,6 +22,7 @@ from django.template.defaulttags import register
 
 # Create your views here.
 def home(request):
+	edition = infoTournoi.objects.all()[0].edition
 	date = infoTournoi.objects.all()[0].date
 	year = date.year
 	month = date.month
