@@ -44,14 +44,14 @@ function setKm()
 					for(var key in poulesDict){
 						var terId = poulesDict[key]['terrainID']
 						var terIndex = -1;
-						console.log("terId "+ terId);
+
 					
 						for(var j=0;j<TerrainList.length;j++){
 							if(TerrainList[j].id == terId){
 								terIndex = j
 							}
 						}
-						console.log("terIndex "+terIndex);
+
 						if(terIndex != -1)
 						{
 						
@@ -109,6 +109,7 @@ function drop (ev) {
   updatePanel(sourceID, "Choisir un leader");
 
 	setKm();
+	leaderAssignement();
 
 }
 
@@ -347,7 +348,6 @@ function setInfoTerrain(user,matiere,type,addr,id,poules,ID){
 	document.getElementById("type"+ID).innerHTML = type;
 	document.getElementById("addr"+ID).innerHTML = addr;
 	document.getElementById("ID"+ID).innerHTML = id;
-
 	setKm()
 
 	//Si c'est pas un objet on le reconstruit
@@ -382,11 +382,6 @@ function setInfoTerrain(user,matiere,type,addr,id,poules,ID){
 	}else{
 		document.getElementById("errorTerrain"+ID).style.display = "none";
 	}
-
-	
-	
-	
-	
 	
 }
 function setInfoTerrainNoUpdateKm(user,matiere,type,addr,id,poules,ID){
@@ -396,10 +391,36 @@ function setInfoTerrainNoUpdateKm(user,matiere,type,addr,id,poules,ID){
 	document.getElementById("addr"+ID).innerHTML = addr;
 	document.getElementById("ID"+ID).innerHTML = id;
 
-	//Check poules du terrain
-	if(poules.length > 0){
+	
+	//Si c'est pas un objet on le reconstruit
+	var p = [];
+	if(typeof(poules)!="object" && poules.length > 0){
+		var table = poules.split("|");
+		table = table.splice(0,table.length-1);
+		for (var i = 0; i < table.length; i++) {
+			var t = table[i].split("/")
+			p.push({id:t[0],tournoi:t[1],jour:t[2]})
+		};
+		poules = p
+	}
+
+
+	var p = [];
+	for (var i = 0; i < poules.length; i++) {
+		//alert(JSON.stringify(poules[i]))
+		if(poules[i].jour == jour_tournoi && (nom_tournoi != poules[i].tournoi)) {
+			p.push(poules[i])
+		}
+	};
+	poules = p;
+
+	if(poules.length > 0 ){	
+		var content = "";
+		for (var i = 0; i < poules.length; i++) {
+			content += poules[i].tournoi + ": " + poules[i].id + "<br>";
+		};
 		document.getElementById("errorTerrain"+ID).style.display = "inherit";
-		document.getElementById("errorTerrain"+ID).setAttribute("data-content",JSON.stringify(poules));
+		document.getElementById("errorTerrain"+ID).setAttribute("data-content",content);
 	}else{
 		document.getElementById("errorTerrain"+ID).style.display = "none";
 	}
@@ -554,6 +575,7 @@ function clickEventPair(ID){
 			updatePanel(sourceID, "Choisir un leader");
 			
 			setKm();
+			leaderAssignement();
 
 			
 

@@ -517,6 +517,20 @@ def knockOff(request,name):
 	ti = TournoiTitle.objects.get(nom=title)
 	ca = TournoiCategorie.objects.get(nom=cat)
 	tournoi = Tournoi.objects.get(titre=ti,categorie=ca)
+
+
+	terrains = Court.objects.filter(valide=True)
+
+	jour = ti.jour
+	if(jour =="Samedi"):
+		terrains = terrains.filter(dispoSamedi=True)
+	else:
+		terrains = terrains.filter(dispoDimanche=True)
+
+	terrains.order_by("id")
+	print(terrains)
+
+
 	def getKey(item):
 		return item[1]
 	if request.method == "POST":
@@ -531,7 +545,6 @@ def knockOff(request,name):
 				pairgagnante.save()
 			if(finaliste != ""):
 				finalistes = finaliste.split("-")
-
 				finaliste1 = Pair.objects.get(id=int(finalistes[0]))
 				finaliste2 = Pair.objects.get(id=int(finalistes[1]))
 				finaliste1.finaliste = True
@@ -671,6 +684,10 @@ def generatePool(request,name):
 	allPair = Pair.objects.filter(tournoi=tournoi, valid=True)
 	poules = Poule.objects.filter(tournoi=tournoi)
 
+	infTournoi = infoTournoi.objects.all()[0]
+	infLng = infTournoi.longitude
+	infLat = infTournoi.latitude
+	
 	jour = tournoi.titre.jour
 	if(jour =="Samedi"):
 		terrains = terrains.filter(dispoSamedi=True)
@@ -679,13 +696,11 @@ def generatePool(request,name):
 
 	terrains.order_by('id')
 
-
 	if request.method == "POST":
 
 
 		terrainsList = request.POST['assignTerrains'].split('-')
 		terrainsList.pop()
-		print(terrainsList)
 
 		leadersList = request.POST['assignLeaders'].split('/')
 		leadersList.pop()
@@ -749,12 +764,9 @@ def generatePool(request,name):
 		else:
 			return redirect(reverse(staffTournoi))
 	if request.user.is_authenticated():
-		dictTerrains = {}
-		# TODO : Indiquer les terrains déjà utilisés le jour du tournoi
-		for terrain in terrains:
-			dictTerrains[terrain.id] = terrain
+		
 
-		listTerrains = list(dictTerrains.values())
+		listTerrains = list(terrains)
 		listTerrainSaved = list()
 		listLeaderSaved = list()
 		nbrTerrains = len(listTerrains)
