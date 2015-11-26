@@ -688,16 +688,13 @@ def generatePool(request,name):
 	infLng = infTournoi.longitude
 	infLat = infTournoi.latitude
 	
-	
 	jour = tournoi.titre.jour
 	if(jour =="Samedi"):
 		terrains = terrains.filter(dispoSamedi=True)
 	else:
 		terrains = terrains.filter(dispoDimanche=True)
 
-	terrains.order_by("id")
-
-
+	terrains.order_by('id')
 
 	if request.method == "POST":
 
