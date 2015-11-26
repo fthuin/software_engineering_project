@@ -517,6 +517,20 @@ def knockOff(request,name):
 	ti = TournoiTitle.objects.get(nom=title)
 	ca = TournoiCategorie.objects.get(nom=cat)
 	tournoi = Tournoi.objects.get(titre=ti,categorie=ca)
+
+
+	terrains = Court.objects.filter(valide=True)
+
+	jour = ti.jour
+	if(jour =="Samedi"):
+		terrains = terrains.filter(dispoSamedi=True)
+	else:
+		terrains = terrains.filter(dispoDimanche=True)
+
+	terrains.order_by("id")
+	print(terrains)
+
+
 	def getKey(item):
 		return item[1]
 	if request.method == "POST":
@@ -531,7 +545,6 @@ def knockOff(request,name):
 				pairgagnante.save()
 			if(finaliste != ""):
 				finalistes = finaliste.split("-")
-
 				finaliste1 = Pair.objects.get(id=int(finalistes[0]))
 				finaliste2 = Pair.objects.get(id=int(finalistes[1]))
 				finaliste1.finaliste = True
