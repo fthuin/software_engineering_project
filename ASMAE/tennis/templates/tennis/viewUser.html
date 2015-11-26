@@ -145,8 +145,8 @@
 		<h3>Google Map <span id="statusMap" style="color:red;"></span></h3>
 		<div id="map" style="height:250px;"></div>
 	</div>
-	
-	
+
+
 </div>
 <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
@@ -282,7 +282,7 @@
 						      	<p class="hint" id="hint-email"></p>
 						      </div>
 						    </div>
-							
+
 							<!-- rue -->
 							<div class="form-group">
 						      <label class="control-label" for="street">Rue *</label>
@@ -327,8 +327,15 @@
 						    <div class="form-group">
 						      <label class="control-label" for="classement">Classement</label>
 						      <div class="">
-						      	<input type="text" class="form-control" name="classement" id="classement" placeholder="Classement" value="{% if use.participant.classement %}{{ use.participant.classement }}{% endif %}">
-						      	<p class="hint" id="hint-classement"></p>
+										<select class="form-control" id="classement" name="classement" placeholder="Classement">
+											{% for rank in rankings %}
+												{% ifequal use.participant.classement.nom rank.nom %}
+												<option value={{rank.nom}} selected="selected">{{rank.nom}}</option>
+												{% else %}
+												<option value={{rank.nom}}>{{rank.nom}}</option>
+												{% endifequal %}
+											{% endfor %}
+										</select>
 						      </div>
 						    </div>
 
@@ -372,7 +379,7 @@ if (status == google.maps.GeocoderStatus.OK) {
 		    }
 		});
     }
-}); 
+});
 </script>
 <script>
 var dateNaissance = document.getElementById("birthdateID");
@@ -391,7 +398,7 @@ function setSelectedIndex(s, valsearch)
 	}
 	return;
 }
-	
+
 //set date en fonction de la valeur
 var date_jour = dateNaissance.value.substring(0,2);
 var date_mois = dateNaissance.value.substring(3,5);
@@ -423,13 +430,13 @@ function onChangeYearOfBirth() {
 	dateNaissance.value = date.substring(0,6)+an
 }
 
-	$('#select_jour').on('input', function() { 
+	$('#select_jour').on('input', function() {
 	    onChangeDayOfBirth();
 });
-	$('#select_mois').on('input', function() { 
+	$('#select_mois').on('input', function() {
         onChangeMonthOfBirth();
 });
-	$('#select_an').on('input', function() { 
+	$('#select_an').on('input', function() {
         onChangeYearOfBirth();
 });
 </script>

@@ -13,7 +13,7 @@ class Ranking(models.Model):
 	nom = models.CharField(max_length=15, unique=True)
 
 	def __str__(self):
-		return self.Nom
+		return self.nom
 
 	def __unicode__(self):
 		return u'' + self.nom
@@ -46,7 +46,7 @@ class Participant(models.Model):
 		return self.prenom +" "+ self.nom
 
 	def __unicode__(self):
-		return u'' + self.prenom + self.nom
+		return u'' + self.prenom + " " + self.nom
 
 	def fullName(self):
 		return u'' + self.titre +  " " + self.prenom + " " + self.nom

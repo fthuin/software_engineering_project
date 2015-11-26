@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, PouleStatus,Arbre, TournoiStatus, TournoiTitle, TournoiCategorie, infoTournoi
+from tennis.models import Extra, Participant,Court, Tournoi, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, PouleStatus,Arbre, TournoiStatus, TournoiTitle, TournoiCategorie, infoTournoi, Ranking
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail
 from tennis.classement import validate_classement_thread
 import re, math
@@ -82,7 +82,7 @@ def inscriptionTournoi(request):
 	Ex = Extra.objects.all()
 	Tour = Tournoi.objects.all()
 	Use = User.objects.all().order_by('username')
-	
+
 	#today = date.today()
 	today = infoTournoi.objects.all()[0].date
 
@@ -674,8 +674,8 @@ def generatePool(request,name):
 			print(obj)
 
 	if request.method == "POST":
-		
-		
+
+
 		terrainsList = request.POST['assignTerrains'].split('-')
 		terrainsList.pop()
 		print(terrainsList)
@@ -686,7 +686,7 @@ def generatePool(request,name):
 		pairspoulesList = request.POST['assignPairPoules'].split('-')
 		pairspoulesList.pop()
 
-		
+
 		if request.POST['action'] == 'save':
 			tournoi.status = TournoiStatus.objects.get(numero=1)
 			tournoi.save()
@@ -694,7 +694,7 @@ def generatePool(request,name):
 			tournoi.status = TournoiStatus.objects.get(numero=2)
 			tournoi.save()
 			LogActivity(user=request.user,section="Tournoi",details="Generation des poules du tournoi : "+tournoi.nom()).save()
-			
+
 
 		i = 0
 		j = -1
@@ -889,7 +889,7 @@ def staffExtra(request):
 				LogActivity(user=request.user,section="InfoTournoi",details=u"Prix du tournoi modifié").save()
 			else:
 				errorInfoPrix = "Le prix doit etre plus grand ou égale a zéro"
-			
+
 
 			splitedDateInfoTournoi = dateInfoTournoi.split("/")
 			datetoEnreg = datetime.datetime(int(splitedDateInfoTournoi[2]),int(splitedDateInfoTournoi[1]),int(splitedDateInfoTournoi[0]))
@@ -1082,7 +1082,8 @@ def staffUser(request):
 
 @permission_required('tennis.User')
 def viewUser(request,name):
-	
+	rankings = Ranking.objects.all()
+
 	use = User.objects.get(username=name)
 	yearLoop = range(1900,2015)
 	birthdate = use.participant.datenaissance
@@ -1111,7 +1112,7 @@ def viewUser(request,name):
 		lat = request.POST['lat']
 		lng = request.POST['lng']
 
-		
+
 
 		#check champs
 		if (firstname=="" or lastname=="" or (tel=="" and gsm=="") or street=="" or number=="" or locality=="" or postalcode=="" or birthdate==""):
@@ -1129,7 +1130,7 @@ def viewUser(request,name):
 
 		use.email = email
 		use.save()
-		
+
 		formatedBirthdate = birthdate
 		participant = use.participant
 		participant.titre = title
@@ -1144,7 +1145,7 @@ def viewUser(request,name):
 		participant.fax = fax
 		participant.gsm = gsm
 		participant.datenaissance = datenaissance
-		participant.classement = classement
+		participant.classement = Ranking.objects.get(nom=classement)
 		participant.latitude = lat
 		participant.longitude = lng
 		participant.save()
@@ -1162,7 +1163,7 @@ def viewUser(request,name):
 	tournoi1 = Pair.objects.filter(user1=use,confirm=True)
 	tournoi2 = Pair.objects.filter(user2=use,confirm=True)
 	tournoi = list(chain(tournoi1, tournoi2))
-	
+
 	if request.user.is_authenticated():
 		return render(request,'tennis/viewUser.html',locals())
 	return redirect(reverse(home))
@@ -1368,13 +1369,15 @@ def validatePair(request, id):
 	return redirect(reverse(home))
 
 def profil(request):
+	# TODO : Changer 2015 par l'année courante
+	rankings = Ranking.objects.all()
 	yearLoop = range(1900,2015)
 	birthdate = request.user.participant.datenaissance
 	formatedBirthdate = birthdate.strftime('%d/%m/%Y')
 	if request.method == "POST":
 		if request.POST['action'] == 'sendMailConfirmationMail':
 			# Send email with code to finish registration and validate account
-			successSendMail = "Un email vous a ete renvoye sur votre adresse courante. En cas de non - réception veuillez revérifier l'adresse enregistrée ci-dessous."
+			successSendMail = u"Un email vous a été renvoyé sur votre adresse courante. En cas de non-réception, veuillez revérifier l'adresse enregistrée ci-dessous."
 			participant = Participant.objects.get(user = request.user)
 			activationObject = UserInWaitOfActivation.objects.get(participant = participant)
 			activationObject.dayOfRegistration = datetime.datetime.now()
@@ -1457,7 +1460,7 @@ def profil(request):
 			participant.fax = fax
 			participant.gsm = gsm
 			participant.datenaissance = datenaissance
-			participant.classement = classement
+			participant.classement = Ranking.objects.get(nom=classement)
 			participant.oldparticipant = oldparticipant
 			participant.latitude = lat
 			participant.longitude = lng
@@ -1550,7 +1553,9 @@ def emailValidation(request, key):
 	return render(request,'tennis/emailValidation.html',locals())
 
 def register(request):
+	# TODO : Changer 2015 par l'année courante
 	yearLoop = range(1900,2015)
+	rankings = Ranking.objects.all()
 	if request.method == "POST":
 		#Recuperation des donnees
 		username = request.POST['username']
@@ -1617,7 +1622,7 @@ def register(request):
 		#Account creation & redirect
 		user = User.objects.create_user(username,email,password)
 		user.save()
-		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement = classement,oldparticipant = oldparticipant,datenaissance = datenaissance, isClassementVerified = False, isAccountActivated = False, latitude=lat, longitude=lng)
+		participant = Participant(user = user,titre=title,nom=lastname,prenom=firstname,rue=street,numero=number,boite=boite,codepostal=postalcode,localite=locality,telephone=tel,fax=fax,gsm=gsm,classement =Ranking.objects.get(nom=classement),oldparticipant = oldparticipant,datenaissance = datenaissance, isClassementVerified = False, isAccountActivated = False, latitude=lat, longitude=lng)
 		participant.save()
 
 		# Create UserInWaitOfActivation object to keep track of the activation
@@ -1664,7 +1669,7 @@ def printScoreBoard(request, pouleId):
 
 @user_passes_test(lambda u: u.groups.filter(name='admin').exists)
 def resetDbForNextYear(request):
-	
+
 	listParticipant = Participant.objects.all()
 	for participant in listParticipant:
 		participant.oldparticipant = False
@@ -1696,8 +1701,5 @@ def resetDbForNextYear(request):
 	Score.objects.all().delete()
 	Poule.objects.all().delete()
 	LogActivity.objects.all().delete()
-	
+
 	print("resetdb")
-
-
-
