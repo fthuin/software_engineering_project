@@ -669,7 +669,24 @@ def generatePool(request,name):
 	terrains = Court.objects.filter(valide=True)
 	allPair = Pair.objects.filter(tournoi=tournoi, valid=True)
 	poules = Poule.objects.filter(tournoi=tournoi)
+	for item in terrains:
+		for obj in item.poule_set.all():
+			print(obj)
+
 	if request.method == "POST":
+		
+		
+		terrainsList = request.POST['assignTerrains'].split('-')
+		terrainsList.pop()
+		print(terrainsList)
+
+		leadersList = request.POST['assignLeaders'].split('/')
+		leadersList.pop()
+
+		pairspoulesList = request.POST['assignPairPoules'].split('-')
+		pairspoulesList.pop()
+
+		
 		if request.POST['action'] == 'save':
 			tournoi.status = TournoiStatus.objects.get(numero=1)
 			tournoi.save()
@@ -677,14 +694,7 @@ def generatePool(request,name):
 			tournoi.status = TournoiStatus.objects.get(numero=2)
 			tournoi.save()
 			LogActivity(user=request.user,section="Tournoi",details="Generation des poules du tournoi : "+tournoi.nom()).save()
-		terrainsList = request.POST['assignTerrains'].split('-')
-		terrainsList.pop()
-
-		leadersList = request.POST['assignLeaders'].split('/')
-		leadersList.pop()
-
-		pairspoulesList = request.POST['assignPairPoules'].split('-')
-		pairspoulesList.pop()
+			
 
 		i = 0
 		j = -1
