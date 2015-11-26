@@ -194,7 +194,7 @@ function pagination(list) {
 //Recuperation des court et stockage dans un tableau
 var courtList = [];
 {% for court in allCourt %}
-courtList.push(['{{ court.user.username }}','{{ court.user.participant.prenom }}','{{ court.user.participant.nom }}','{{ court.id }}','{{ court.matiere }}','{{ court.rue }}','{{ court.numero }}','{{ court.codepostal }}','{{ court.localite }}','{{ court.boite }}',{% if court.valide %}'oui'{% else %}'non'{% endif %},{% if court.dispoSamedi and court.dispoDimanche %}'Samedi et dimanche'{% elif court.dispoSamedi %}'Samedi'{% elif court.dispoDimanche %}'Dimanche'{% else %}' - '{% endif %},'{{ court.etat }}', '{{ court.type }}', '{{ court.used }}', '{{ court.usedLastYear }}']);
+courtList.push(['{{ court.user.username }}','{{ court.user.participant.prenom }}','{{ court.user.participant.nom }}','{{ court.id }}','{{ court.matiere }}','{{ court.rue }}','{{ court.numero }}','{{ court.codepostal }}','{{ court.localite }}','{{ court.boite }}',{% if court.valide %}'oui'{% else %}'non'{% endif %},{% if court.dispoSamedi and court.dispoDimanche %}'Samedi et dimanche'{% elif court.dispoSamedi %}'Samedi'{% elif court.dispoDimanche %}'Dimanche'{% else %}' - '{% endif %},'{{ court.etat }}', '{{ court.type }}', '{{ court.poule_set.all }}', '{{ court.usedLastYear }}']);
 {% endfor %}
 
 pagination(courtList);
@@ -247,6 +247,11 @@ function search_court() {
          var etat = myCourt[12].sansAccent().toLocaleUpperCase();
          var type = myCourt[13].sansAccent().toLocaleUpperCase();
          var used = myCourt[14]
+         if(used=="[]"){
+         	used = "False"
+         }else{
+         	used = "True"
+         }
          var vet = myCourt[15]
          if (! (username.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1 || id.indexOf(retour) != -1 || rue.indexOf(retour) != -1 || codepostal.indexOf(retour) != -1 || localite.indexOf(retour) != -1 ) || matiere.indexOf(material_choice) == -1 || validationStatus.indexOf(validation_choice) == -1 || availabilityStatus.indexOf(availability_choice) == -1 || etat.indexOf(state_choice) || type.indexOf(type_choice) || (used != used_choice && used_choice != "Tous") || (vet != vet_choice && vet_choice != "Tous") ) {
             resultList.splice(i, 1);
