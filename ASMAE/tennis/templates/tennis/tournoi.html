@@ -30,8 +30,8 @@
                         {% for item in demande %}
                             <tr onclick="window.document.location='{% url "tennis.views.confirmPair" item.id %}'" class="clickable-row">
                                 <td>{{ item.id }}</td>
-                                <td>{{ item.tournoi.nom }}</td>
-                                <td>{{ item.tournoi.jour }}</td>
+                                <td>{{ item.tournoi.titre.nom }}</td>
+                                <td>{{ item.tournoi.titre.jour }}</td>
                                 <td>{{item.user1.participant.prenom}} {{item.user1.participant.nom}}</td>
                                 <td>{{item.user2.participant.prenom}} {{item.user2.participant.nom}}</td>
                             </tr>
@@ -68,8 +68,8 @@
                         {% for item in nonComfirme %}
                             <tr onclick="window.document.location='{% url "tennis.views.cancelPair" item.id %}'" class="clickable-row">
                                 <td>{{ item.id }}</td>
-                                <td>{{ item.tournoi.nom }}</td>
-                                <td>{{ item.tournoi.jour }}</td>
+                                <td>{{ item.tournoi.titre.nom }}</td>
+                                <td>{{ item.tournoi.titre.jour }}</td>
                                 <td>{{item.user1.participant.prenom}} {{item.user1.participant.nom}}</td>
                                 <td>{{item.user2.participant.prenom}} {{item.user2.participant.nom}}</td>
                             </tr>
@@ -109,8 +109,8 @@
                         {% for item in inscrit %}
                             <tr onclick="window.document.location='{% url 'tennis.views.viewPair' item.id %}'" class="clickable-row">
                                 <td>{{ item.id }}</td>
-                                <td>{{ item.tournoi.nom }}</td>
-                                <td>{{ item.tournoi.jour }}</td>
+                                <td>{{ item.tournoi.titre.nom }}</td>
+                                <td>{{ item.tournoi.titre.jour }}</td>
                                 <td style="text-align:center;">{% if item.valid %}<span class="glyphicon glyphicon-ok" style="color:green;"></span>{% else %}<span class="glyphicon glyphicon-remove" style="color:red;"></span>{% endif %}</td>
                                 <td style="text-align:center;">{% if item.pay %}<span class="glyphicon glyphicon-ok" style="color:green;"></span>{% else %}<span class="glyphicon glyphicon-remove" style="color:red;"></span>{% endif %}</td>
                                 <td>{{item.user1.participant.prenom}} {{item.user1.participant.nom}}</td>
