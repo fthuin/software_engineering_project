@@ -75,7 +75,9 @@
           <h4 class="modal-title center">Confirmation validation</h4>
         </div>
         <div class="modal-body">
-			<p id="textModalSameTerrain" >ATTENTION: Certains poules ont utilisent le même terrain!</p>
+
+			<p id="textModalIconDisplay" >ATTENTION: Certains terrains sont utilisés dans un autre tournoi du même jour!</p>
+			<p id="textModalSameTerrain" >ATTENTION: Certains poules utilisent le même terrain!</p>
 			<p id="textModalTerrain" >Veuillez mettre un terrain pour chaques poules</p>
 			<p id="textModalLeader" >Veuillez mettre un leader pour chaques poules</p>
           <p id="textModalConfirm">Etes-vous sûr de valider la formations des groupes de ce tournoi ?</p>
@@ -246,6 +248,7 @@ function save() {
 }
 function checkValues()
 {
+	document.getElementById("textModalIconDisplay").style.display = "none";
 	document.getElementById("textModalSameTerrain").style.display = "none";
 	document.getElementById("textModalTerrain").style.display = "none";
 	document.getElementById("textModalLeader").style.display = "none";
@@ -278,6 +281,9 @@ function checkValues()
 			}
 
 			pouleID.push(document.getElementById("ID"+(i+1)).textContent);
+		}
+		if(document.getElementById("errorTerrain"+(i+1)).style.display != 'none'){
+			document.getElementById("textModalIconDisplay").style.display = "inherit";
 		}
 		if(poule['leader'] == "Choisir un leader" || poule['leader'] == "")
 		{
