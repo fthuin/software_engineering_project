@@ -195,6 +195,8 @@ class Arbre(models.Model):
 	id = models.AutoField(primary_key=True)
 	data = models.TextField(null=True)
 	label = models.TextField(null=True)
+	court = models.ForeignKey(Court, null=True, blank=True)
+	
 
 
 	def __str__(self):
