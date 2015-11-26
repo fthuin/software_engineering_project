@@ -271,6 +271,11 @@ function setCourt(page){
 		}
 
 		var used = CourtList[i][14];
+		if(used=="[]"){
+         	used = "False"
+         }else{
+         	used = "True"
+         }
 		var useIcon
 		if (used == "True") {
 		    useIcon = '<span class="glyphicon glyphicon-ok" style="color:green;"></span>'
