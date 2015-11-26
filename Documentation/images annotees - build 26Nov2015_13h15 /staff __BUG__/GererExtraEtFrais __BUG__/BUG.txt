@@ -1,0 +1,7 @@
+Détail du bug:
+
+- barbecue à disparu en ajoutant un autre extra
+- modifier ou supprimer génère une erreur, et on a:
+	- plus aucun extras
+	- l’historique des modifications est vidée
+- toutes les paires ont disparu!

@@ -1,0 +1,4 @@
+Détail de l’incomplétude:
+
+- partie purement statique
+- pas de tracking de l’activité sur le terrain

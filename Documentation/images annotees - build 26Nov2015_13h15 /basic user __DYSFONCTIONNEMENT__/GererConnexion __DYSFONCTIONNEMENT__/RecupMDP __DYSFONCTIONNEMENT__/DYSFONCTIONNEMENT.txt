@@ -1,0 +1,4 @@
+Détail du dysfonctionnement:
+
+- pas d’email reçu
+- impossible de se connecter (Nom d’utilisateur ou mot de passe non conforme!)
