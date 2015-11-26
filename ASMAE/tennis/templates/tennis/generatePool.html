@@ -139,7 +139,7 @@ var PairDict = {};
 var addr = '{{elem.rue}}'+ ", "+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
 var Lat = '{{elem.latitude}}'
 var Lng = '{{elem.longitude}}'
-TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng,used:'{{elem.used}}',type:'{{elem.type}}'})
+TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng,used:'{{elem.used}}',type:'{{elem.type.nom}}'})
 
 {% endfor %}
 
@@ -361,7 +361,7 @@ function terrainAssignement()
 		var minDistance =  Number.MAX_VALUE;
 		var index = -1;
 		for (var key2 in dico){
-			
+
 			console.log(key2);
 			console.log(dico[key2][key]);
 			if(minDistance > dico[key2][key] && (alreadyTaken.indexOf(key2) ==-1 || alreadyTaken.length == TerrainList.length)){
@@ -454,35 +454,35 @@ function greedySolution(matrix,nbrPoule){
 	}
 	var indexTab = 0;
 	for(var i =0;i<matrix.length;i++){
-		
+
 		nPairInPoule[indexTab % nPairInPoule.length]++;
 		indexTab++;
 	}
 	console.log(nPairInPoule)
 
-	
+
 	var closestCourt = new Array(matrix.length);
 	for(var i = 0;i<matrix.length;i++){
 		closestCourt[i] = new Array(matrix[i].length);
-		
+
 		for(var j =0;j<matrix[i].length;j++){
 			closestCourt[i].push([j,matrix[i][j]]);
-			
+
 		}
 			closestCourt[i].sort(function(a, b){return a[1]-b[1]});
-			
+
 	}
-	
+
 	var valueCourt = new Array(matrix[0].length);
 	for(var i=0;i<valueCourt.length;i++){
 		valueCourt[i] = [i,0];
-	}	
+	}
 	for(var i =0;i<matrix.length;i++){
 		for(var j=0;j<matrix[i].length;j++){
 			//console.log(closestCourt[i][j][0]);
 			valueCourt[closestCourt[i][j][0]][1] += j;
 			//console.log(valueCourt[closestCourt[i][j][0]]);
-			
+
 		}
 	}
 	console.log(valueCourt);
@@ -493,8 +493,8 @@ function greedySolution(matrix,nbrPoule){
 		listTerrain[i] = valueCourt[i][0];
 	}
 	console.log(listTerrain);
-	
-	
+
+
 	//On rajoute les pairs aux terrains choisis
 	pairInPoule = new Array(parseInt(nbrPoule));
 	kmParPoule = new Array(parseInt(nbrPoule));
@@ -502,11 +502,11 @@ function greedySolution(matrix,nbrPoule){
 	for(var i=0;i<kmParPoule.length;i++){
 		kmParPoule[i] =0;
 	}
-	
+
 	alreadyIn = [];
 	for(var i =0;i<listTerrain.length;i++){
 		var nInPoule = nPairInPoule[i];
-		
+
 		pairInPoule[i] = [];
 		for(var j=0;j<matrix[0].length;j++){
 			for(var x=0;x<matrix.length;x++){
@@ -518,10 +518,10 @@ function greedySolution(matrix,nbrPoule){
 					pairInPoule[i].push(x);
 					alreadyIn.push(x);
 				}
-				
+
 			}
 		}
-		
+
 	}
 console.log(kmParPoule);
 console.log(pairInPoule);
@@ -548,7 +548,7 @@ for(var i =0;i<nbrPoule;i++)
 		var p = createEmptyPair(i+"-"+j);
 		document.getElementById("list"+(i+1)).appendChild(p);
 	}
-	
+
 }
 setTerrains(nbrPoule);
 

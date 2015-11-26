@@ -40,12 +40,12 @@ function setKm()
 /*	for(var j=0;j<TerrainList.length;j++){
 				dico[TerrainList[j].id] = {};
 				totalDistanceTerrain = 0;*/
-					
+
 					for(var key in poulesDict){
 						var terId = poulesDict[key]['terrainID']
 						var terIndex = -1;
 						console.log("terId "+ terId);
-					
+
 						for(var j=0;j<TerrainList.length;j++){
 							if(TerrainList[j].id == terId){
 								terIndex = j
@@ -54,10 +54,10 @@ function setKm()
 						console.log("terIndex "+terIndex);
 						if(terIndex != -1)
 						{
-						
+
 						var terrainLat = TerrainList[terIndex].lat;
 						var terrainLng = TerrainList[terIndex].lng;
-						var terrainlatLng = new google.maps.LatLng(parseFloat(terrainLat.replace(",", ".")), parseFloat(terrainLng.replace(",", ".")))						
+						var terrainlatLng = new google.maps.LatLng(parseFloat(terrainLat.replace(",", ".")), parseFloat(terrainLng.replace(",", ".")))
 
 						var totalDistanceTerrain = 0;
 						for(var i = 0;i<poulesDict[key]['pairList'].length;i++){
@@ -81,10 +81,10 @@ function setKm()
 					document.getElementById("empreinte"+(parseInt(key)+1)).innerHTML = Math.round(totalDistanceTerrain)/1000;
 					}
 				}
-					
+
 
 	}
-	
+
 //}
 
 //utilisé pour le drag and drop
@@ -346,7 +346,7 @@ function setInfoTerrain(p,matiere,addr,ID,number,type){
 
 	//TODO Ajouter type de terrain
 	setKm()
-	
+
 }
 function setInfoTerrainNoUpdateKm(p,matiere,addr,ID,number,type){
 	document.getElementById("proprio"+number).innerHTML = p;
@@ -501,16 +501,16 @@ function clickEventPair(ID){
 			//update leader liste
 			updatePanel(targetID, "Choisir un leader");
 			updatePanel(sourceID, "Choisir un leader");
-			
+
 			setKm();
 
-			
+
 
 		}else{
 			selected = true;
 			selected_id = ID;
 			elem.className = "zone-clicked"
 		}
-		
+
 	}
 }

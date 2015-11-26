@@ -17,7 +17,7 @@ from django.contrib.auth.decorators import permission_required,  user_passes_tes
 from django.contrib.auth.models import Permission,Group
 from django.utils.crypto import get_random_string
 from django.http import HttpResponse, HttpResponseRedirect
-from tennis.pdfdocument import PDFTerrain, PDFPair
+from tennis.pdfdocument import PDFTerrain, PDFPair, PDFPoule
 from django.template.defaulttags import register
 
 # Create your views here.
@@ -1661,11 +1661,10 @@ def recover(request):
 
 def printScoreBoard(request, pouleId):
 	poule = Poule.objects.get(id=pouleId)
-	allPairs = poule.paires.all()
-	strPairs = list()
-	for pair in allPairs:
-		strPairs.append(u'' + pair.user1.participant.prenom + u' <b>' + pair.user1.participant.nom + u'</b><br>' + pair.user2.participant.prenom + u' <b>' + pair.user2.participant.nom + u'</b>')
-	return render(request, 'tennis/printScoreBoard.html', {'strPairs':strPairs})
+	response = HttpResponse(content_type='application/pdf')
+	response['Content-Disposition'] = 'attachment;filename="poule'+pouleId+'.pdf"'
+	PDFPoule(response, poule, request.user)
+	return response
 
 @user_passes_test(lambda u: u.groups.filter(name='admin').exists)
 def resetDbForNextYear(request):
