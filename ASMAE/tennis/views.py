@@ -105,12 +105,12 @@ def inscriptionTournoi(request):
 		#On recupere le tournoi en fonction du titre et de la categorie
 		t = TournoiTitle.objects.get(nom=title_tournoi)
 		c = TournoiCategorie.objects.get(nom=categorie_tournoi)
-		tournois = Tournoi.objects.filter(titre=t,categorie=c)[0]
+		tournois = Tournoi.objects.get(titre=t,categorie=c)
 		extra = request.POST.getlist('extra')
 		#On recupere les extras pris par l'utilisateur
 		extra1 = list()
 		for elem in extra:
-			extra1.append(Extra.objects.filter(id=elem)[0])
+			extra1.append(Extra.objects.get(id=elem))
 		#On en déduit les extras non pris par l'utilisateur
 		extranot1 = list()
 		Ex = Extra.objects.all()
@@ -120,7 +120,7 @@ def inscriptionTournoi(request):
 				if elem.id == el.id:
 					contained = True
 			if contained == False:
-				extranot1.append(Extra.objects.filter(id=elem.id)[0])
+				extranot1.append(Extra.objects.get(id=elem.id))
 
 		#On vérifie que l'utilisateur a bien rentré un deuxieme joueur
 		if (username2==""):
@@ -128,8 +128,8 @@ def inscriptionTournoi(request):
 			return render(request,'tennis/inscriptionTournoi.html',locals())
 
 		#On véririe qu'il ne s'est pas entré lui meme
-		user1 = User.objects.filter(username=request.user.username)[0]
-		user2 = User.objects.filter(username=username2)[0]
+		user1 = User.objects.get(username=request.user.username)
+		user2 = User.objects.get(username=username2)
 
 		if (user1==user2):
 			errorAdd = "Vous ne pouvez pas faire une pair avec vous meme"
@@ -167,7 +167,7 @@ def inscriptionTournoi(request):
 		pair.save()
 		#On rajoute les extras
 		for elem in extra:
-			ext = Extra.objects.filter(id=elem)[0]
+			ext = Extra.objects.get(id=elem)
 			pair.extra1.add(ext)
 
 		# Send mail
@@ -186,7 +186,7 @@ def confirmPair(request,id):
 	pair = Pair.objects.filter(id=id)
 	if len(pair) <1:
 		return redirect(reverse(tournoi))
-	pair = Pair.objects.filter(id=id)[0]
+	pair = Pair.objects.get(id=id)
 	if pair.user2 != request.user:
 		return redirect(reverse(tournoi))
 	if request.method == "POST":
@@ -201,7 +201,7 @@ def confirmPair(request,id):
 			pair.save()
 
 			for elem in extra:
-				ext = Extra.objects.filter(id=elem)[0]
+				ext = Extra.objects.get(id=elem)
 				pair.extra2.add(ext)
 
 			pair.save()
@@ -225,7 +225,7 @@ def confirmPair(request,id):
 				if elem.id == el.id:
 					contained = True
 			if contained == False:
-				extranot1.append(Extra.objects.filter(id=elem.id)[0])
+				extranot1.append(Extra.objects.get(id=elem.id))
 
 
 
@@ -237,7 +237,7 @@ def cancelPair(request,id):
 	pair = Pair.objects.filter(id=id)
 	if len(pair) <1:
 		return redirect(reverse(tournoi))
-	pair = Pair.objects.filter(id=id)[0]
+	pair = Pair.objects.get(id=id)
 	if pair.user1 != request.user:
 		return redirect(reverse(tournoi))
 	if request.method == "POST":
@@ -255,7 +255,7 @@ def cancelPair(request,id):
 				if elem.id == el.id:
 					contained = True
 			if contained == False:
-				extranot1.append(Extra.objects.filter(id=elem.id)[0])
+				extranot1.append(Extra.objects.get(id=elem.id))
 
 		return render(request,'tennis/cancelPair.html',locals())
 	return redirect(reverse(home))
@@ -268,7 +268,7 @@ def viewPair(request,id):
 	pair = Pair.objects.filter(id=id)
 	if len(pair) <1:
 		return redirect(reverse(tournoi))
-	pair = Pair.objects.filter(id=id)[0]
+	pair = Pair.objects.get(id=id)
 	if pair.user1 != request.user and pair.user2 != request.user:
 		return redirect(reverse(tournoi))
 	if request.user.is_authenticated():
@@ -281,7 +281,7 @@ def viewPair(request,id):
 				if elem.id == el.id:
 					contained = True
 			if contained == False:
-				extranot1.append(Extra.objects.filter(id=elem.id)[0])
+				extranot1.append(Extra.objects.get(id=elem.id))
 
 		extra2 = pair.extra2.all()
 		extranot2 = list()
@@ -291,7 +291,7 @@ def viewPair(request,id):
 				if elem.id == el.id:
 					contained = True
 			if contained == False:
-				extranot2.append(Extra.objects.filter(id=elem.id)[0])
+				extranot2.append(Extra.objects.get(id=elem.id))
 		return render(request,'tennis/viewPair.html',locals())
 	return redirect(reverse(home))
 
@@ -299,7 +299,7 @@ def payPair(request,id):
 	pair = Pair.objects.filter(id=id)
 	if len(pair) <1:
 		return redirect(reverse(tournoi))
-	pair = Pair.objects.filter(id=id)[0]
+	pair = Pair.objects.get(id=id)
 	if pair.user1 != request.user and pair.user2 != request.user:
 		return redirect(reverse(tournoi))
 	if request.user.is_authenticated():
@@ -364,7 +364,7 @@ def registerTerrain(request):
 			return render(request,'tennis/registerTerrain.html',locals())
 
 		# Create court object
-		court = Court(rue = rue,numero=numero,boite=boite,codepostal=postalcode,localite=locality,acces=acces,matiere=CourtSurface.objects.filter(nom=matiere)[0],type=CourtType.objects.filter(nom=type)[0],dispoDimanche=dispoDimanche,dispoSamedi=dispoSamedi,etat=CourtState.objects.filter(nom=etat)[0],commentaire=commentaire,user = request.user,latitude=lat,longitude=lng)
+		court = Court(rue = rue,numero=numero,boite=boite,codepostal=postalcode,localite=locality,acces=acces,matiere=CourtSurface.objects.get(nom=matiere),type=CourtType.objects.get(nom=type),dispoDimanche=dispoDimanche,dispoSamedi=dispoSamedi,etat=CourtState.objects.get(nom=etat),commentaire=commentaire,user = request.user,latitude=lat,longitude=lng)
 
 		# Send confirmation mail
 		send_confirmation_email_court_registered(Participant.objects.get(user=request.user), court)
@@ -385,7 +385,7 @@ def editTerrain(request,id):
 
 	if len(court) <1:
 		return redirect(reverse(terrain))
-	court = Court.objects.filter(id=id)[0]
+	court = Court.objects.get(id=id)
 	if court.user != request.user:
 		return redirect(reverse(terrain))
 
@@ -424,11 +424,11 @@ def editTerrain(request,id):
 			court.codepostal=postalcode
 			court.localite=locality
 			court.acces=acces
-			court.matiere=CourtSurface.objects.filter(nom=matiere)[0]
-			court.type=CourtType.objects.filter(nom=type)[0]
+			court.matiere=CourtSurface.objects.get(nom=matiere)
+			court.type=CourtType.objects.get(nom=type)
 			court.dispoDimanche=dispoDimanche
 			court.dispoSamedi=dispoSamedi
-			court.etat=CourtState.objects.filter(nom=etat)[0]
+			court.etat=CourtState.objects.get(nom=etat)
 			court.commentaire=commentaire
 			court.user = request.user
 			court.latitude = lat
@@ -705,7 +705,7 @@ def generatePool(request,name):
 				pouleDict[j] = {}
 				pouleDict[j]['pairList'] = []
 				if terrainsList[j] != '':
-					pouleDict[j]['terrain'] = Court.objects.filter(id=terrainsList[j])[0]
+					pouleDict[j]['terrain'] = Court.objects.get(id=terrainsList[j])
 				pouleDict[j]['leaderName'] = leadersList[j]
 			else:
 				pair = Pair.objects.get(id=pairspoulesList[i])
@@ -981,68 +981,68 @@ def staffPerm(request):
 	if request.method == "POST":
 
 		usernamefield = request.POST['username']
-		utilisateur = User.objects.filter(username=usernamefield)[0]
+		utilisateur = User.objects.get(username=usernamefield)
 		if request.POST.__contains__("Tournoi des familles"):
-			perm = Permission.objects.filter(codename="TournoiDesFamilles")[0]
+			perm = Permission.objects.get(codename="TournoiDesFamilles")
 			utilisateur.user_permissions.add(perm)
 		else:
-			perm = Permission.objects.filter(codename="TournoiDesFamilles")[0]
+			perm = Permission.objects.get(codename="TournoiDesFamilles")
 			utilisateur.user_permissions.remove(perm)
 
 		if request.POST.__contains__("Double mixte"):
-			perm = Permission.objects.filter(codename="DoubleMixte")[0]
+			perm = Permission.objects.get(codename="DoubleMixte")
 			utilisateur.user_permissions.add(perm)
 		else:
-			perm = Permission.objects.filter(codename="DoubleMixte")[0]
+			perm = Permission.objects.get(codename="DoubleMixte")
 			utilisateur.user_permissions.remove(perm)
 
 		if request.POST.__contains__("Double hommes"):
-			perm = Permission.objects.filter(codename="DoubleHommes")[0]
+			perm = Permission.objects.get(codename="DoubleHommes")
 			utilisateur.user_permissions.add(perm)
 		else:
-			perm = Permission.objects.filter(codename="DoubleHommes")[0]
+			perm = Permission.objects.get(codename="DoubleHommes")
 			utilisateur.user_permissions.remove(perm)
 
 		if request.POST.__contains__("Double femmes"):
-			perm = Permission.objects.filter(codename="DoubleFemmes")[0]
+			perm = Permission.objects.get(codename="DoubleFemmes")
 			utilisateur.user_permissions.add(perm)
 		else:
-			perm = Permission.objects.filter(codename="DoubleFemmes")[0]
+			perm = Permission.objects.get(codename="DoubleFemmes")
 			utilisateur.user_permissions.remove(perm)
 
 		if request.POST.__contains__("court"):
-			perm = Permission.objects.filter(codename="Court")[0]
+			perm = Permission.objects.get(codename="Court")
 			utilisateur.user_permissions.add(perm)
 		else:
-			perm = Permission.objects.filter(codename="Court")[0]
+			perm = Permission.objects.get(codename="Court")
 			utilisateur.user_permissions.remove(perm)
 
 		if request.POST.__contains__("pair"):
-			perm = Permission.objects.filter(codename="Pair")[0]
+			perm = Permission.objects.get(codename="Pair")
 			utilisateur.user_permissions.add(perm)
 		else:
-			perm = Permission.objects.filter(codename="Pair")[0]
+			perm = Permission.objects.get(codename="Pair")
 			utilisateur.user_permissions.remove(perm)
 
 		if request.POST.__contains__("extra"):
-			perm = Permission.objects.filter(codename="Extra")[0]
+			perm = Permission.objects.get(codename="Extra")
 			utilisateur.user_permissions.add(perm)
 		else:
-			perm = Permission.objects.filter(codename="Extra")[0]
+			perm = Permission.objects.get(codename="Extra")
 			utilisateur.user_permissions.remove(perm)
 
 		if request.POST.__contains__("user"):
-			perm = Permission.objects.filter(codename="User")[0]
+			perm = Permission.objects.get(codename="User")
 			utilisateur.user_permissions.add(perm)
 		else:
-			perm = Permission.objects.filter(codename="User")[0]
+			perm = Permission.objects.get(codename="User")
 			utilisateur.user_permissions.remove(perm)
 
 		if request.POST.__contains__("perm"):
-			group = Group.objects.filter(name="Admin")[0]
+			group = Group.objects.get(name="Admin")
 			utilisateur.groups.add(group)
 		else:
-			group = Group.objects.filter(name="Admin")[0]
+			group = Group.objects.get(name="Admin")
 			utilisateur.groups.remove(group)
 
 		LogActivity(user=request.user,section="Permissions",details="Changed permission of user "+utilisateur.username).save()
@@ -1171,7 +1171,7 @@ def viewUser(request,name):
 @permission_required('tennis.Court')
 def validateTerrain(request, id):
 
-	court = Court.objects.filter(id=id)[0]
+	court = Court.objects.get(id=id)
 	if request.method == "POST":
 		message = request.POST['message']
 		if request.POST.__contains__("valide"):
@@ -1194,7 +1194,7 @@ def validateTerrain(request, id):
 @permission_required('tennis.Court')
 def terrainPDF(request, id):
     court = Court.objects.get(id=id)
-    proprietaire = Participant.objects.filter(user=court.user)[0]
+    proprietaire = Participant.objects.get(user=court.user)
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment;filename="terrain'+id+'.pdf"'
 
@@ -1217,7 +1217,7 @@ def editTerrainStaff(request, id):
 	allCourtSurface = CourtSurface.objects.all()
 	allCourtType = CourtType.objects.all()
 	allCourtState = CourtState.objects.all()
-	court = Court.objects.filter(id=id)[0]
+	court = Court.objects.get(id=id)
 	if request.method == "POST":
 		if request.POST['action'] == "modifyCourt":
 			rue = request.POST['street']
@@ -1252,11 +1252,11 @@ def editTerrainStaff(request, id):
 			court.codepostal=postalcode
 			court.localite=locality
 			court.acces=acces
-			court.matiere=CourtSurface.objects.filter(nom=matiere)[0]
-			court.type=CourtType.objects.filter(nom=type)[0]
+			court.matiere=CourtSurface.objects.get(nom=matiere)
+			court.type=CourtType.objects.get(nom=type)
 			court.dispoDimanche=dispoDimanche
 			court.dispoSamedi=dispoSamedi
-			court.etat=CourtState.objects.filter(nom=etat)[0]
+			court.etat=CourtState.objects.get(nom=etat)
 			court.commentaire=commentaire
 			court.longitude = lng
 			court.latitude = lat
@@ -1275,7 +1275,7 @@ def editTerrainStaff(request, id):
 
 @permission_required('tennis.Pair')
 def validatePair(request, id):
-	pair = Pair.objects.filter(id=id)[0]
+	pair = Pair.objects.get(id=id)
 
 	allTournoi = Tournoi.objects.all()
 
@@ -1348,7 +1348,7 @@ def validatePair(request, id):
 			if elem.id == el.id:
 				contained = True
 		if contained == False:
-			extranot1.append(Extra.objects.filter(id=elem.id)[0])
+			extranot1.append(Extra.objects.get(id=elem.id))
 
 	extra2 = pair.extra2.all()
 	extranot2 = list()
@@ -1358,7 +1358,7 @@ def validatePair(request, id):
 			if elem.id == el.id:
 				contained = True
 		if contained == False:
-			extranot2.append(Extra.objects.filter(id=elem.id)[0])
+			extranot2.append(Extra.objects.get(id=elem.id))
 
 	birthdate1 = pair.user1.participant.datenaissance
 	formatedBirthdate1 = birthdate1.strftime('%d/%m/%Y')
