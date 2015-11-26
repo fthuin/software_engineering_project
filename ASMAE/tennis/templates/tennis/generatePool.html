@@ -14,49 +14,34 @@
             <div class="panel-heading">Configuration</div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-sm-4">
-                        <label class="control-label col-sm-10">Nombre de paires</label>
-                        <div class="col-sm-2">
+                    <div class="col-sm-4 col-sm-offset-0">
+                        <label style="margin-top:10px" class="control-label col-sm-10">Nombre de paires</label>
+                        <div style="margin-top:10px" class="col-sm-2">
                             <p class="info">{{ allPair|length }}</p>
                         </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <label class="control-label col-sm-8">Nombre de poules</label>
-                        <div class="col-sm-4">
-                            <input class="form-control" style="min-width:50px;max-width:100px;" type="number" value="{{ defaultValue }}" name="poulesNumber" id="poulesNumber">
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <button class="btn btn-default center-block" type="button" onclick="autogen()">Génération automatique</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <label class="control-label col-sm-10">Nombre de terrains disponible</label>
-                        <div class="col-sm-2">
+                        <label style="margin-top:20px" class="control-label col-sm-10">Nombre de terrains disponible</label>
+                        <div style="margin-top:20px" class="col-sm-2">
                             <p class="info">{{ nbrTerrains }}</p>
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <label class="control-label col-sm-8">Taille des poules</label>
-                        <div class="col-sm-4">
+                        <label style="margin-top:10px" class="control-label col-sm-8">Nombre de poules</label>
+                        <div style="margin-top:10px" class="col-sm-4">
+                            <input class="form-control" style="min-width:50px;max-width:100px;" type="number" value="{{ defaultValue }}" name="poulesNumber" id="poulesNumber">
+                        </div>
+                        <label style="margin-top:20px" class="control-label col-sm-8">Taille des poules</label>
+                        <div style="margin-top:20px" class="col-sm-4">
                             <input class="form-control" style="min-width:50px;max-width:100px;" type="number" value="6" id="poulesSize">
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <button class="btn btn-default center-block" type="button" onclick="terrainAssignement()">Assigner les terrains</button>
+
+                        <button class="btn btn-default center-block" type="button" onclick="autogen()">Génération automatique</button>
+                        <button style="margin-top:5px;"class="btn btn-default center-block" type="button" onclick="terrainAssignement()">Assigner les terrains</button>
+                        <button style="margin-top:5px;" class="btn btn-default center-block" type="button" onclick="leaderAssignement()">Assigner les leaders</button>
+
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        
-                    </div>
-                    <div class="col-sm-4">
-                        
-                    </div>
-                    <div class="col-sm-4">
-                        <button class="btn btn-default center-block" type="button" onclick="leaderAssignement()">Assigner les leaders</button>
-                    </div>
+
                 </div>
             </div>
         </div>
