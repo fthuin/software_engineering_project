@@ -7,6 +7,9 @@ import datetime
 class infoTournoi(models.Model):
 	prix = models.DecimalField(max_digits=11,decimal_places=2, verbose_name="Prix de l'inscription")
 	date = models.DateTimeField(verbose_name="Date du tournoi")
+	edition = models.IntegerField()
+	addr = models.TextField(verbose_name="Adresse du QG")
+
 
 class Ranking(models.Model):
 	id = models.AutoField(primary_key=True)

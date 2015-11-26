@@ -98,7 +98,7 @@ class Command(BaseCommand):
     def addInfo(self):
         for elem in infoTournoi.objects.all():
             elem.delete()
-        i = infoTournoi(prix=20,date=datetime.date(2016, 9, 10))
+        i = infoTournoi(prix=20,date=datetime.date(2016, 9, 10),addr="Place des Carabiniers, 5, 1030 Bruxelles",edition=42)
         i.save()
 
     def addTitle(self):
