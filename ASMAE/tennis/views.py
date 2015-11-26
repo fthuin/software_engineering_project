@@ -1085,7 +1085,8 @@ def viewUser(request,name):
 	rankings = Ranking.objects.all()
 
 	use = User.objects.get(username=name)
-	yearLoop = range(1900,2015)
+	today = date.today()
+	yearLoop = range(1900,today.year-7)
 	birthdate = use.participant.datenaissance
 	formatedBirthdate = birthdate.strftime('%d/%m/%Y')
 	terrain = Court.objects.filter(user=use)
@@ -1156,7 +1157,8 @@ def viewUser(request,name):
 		successEdit = "Le profil a bien été changé"
 
 	use = User.objects.get(username=name)
-	yearLoop = range(1900,2015)
+	today = date.today()
+	yearLoop = range(1900,today.year-7)
 	birthdate = use.participant.datenaissance
 	formatedBirthdate = birthdate.strftime('%d/%m/%Y')
 	terrain = Court.objects.filter(user=use)
@@ -1369,9 +1371,9 @@ def validatePair(request, id):
 	return redirect(reverse(home))
 
 def profil(request):
-	# TODO : Changer 2015 par l'année courante
 	rankings = Ranking.objects.all()
-	yearLoop = range(1900,2015)
+	today = date.today()
+	yearLoop = range(1900,today.year-7)
 	birthdate = request.user.participant.datenaissance
 	formatedBirthdate = birthdate.strftime('%d/%m/%Y')
 	if request.method == "POST":
@@ -1553,8 +1555,8 @@ def emailValidation(request, key):
 	return render(request,'tennis/emailValidation.html',locals())
 
 def register(request):
-	# TODO : Changer 2015 par l'année courante
-	yearLoop = range(1900,2015)
+	today = date.today()
+	yearLoop = range(1900,today.year-7)
 	rankings = Ranking.objects.all()
 	if request.method == "POST":
 		#Recuperation des donnees
