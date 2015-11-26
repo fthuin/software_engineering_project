@@ -94,6 +94,30 @@
 		</div>
 	</div>
 
+	<div class="content-box" {%if court.poule_set.all %}{% else %}style="display:none;"{% endif %}>
+		<h2 class="center">Utilisation</h2>
+		<hr class="line">
+		{% for poule in court.poule_set.all %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{{ poule.tournoi }} - Poule {{ poule.id }}
+			</div>
+			<div class="panel-body">
+				<b>Status : </b> {{ poule.tournoi.status }} <br>
+				<b>Leader : </b> 
+				{% if poule.leader %}
+				<a href="{% url "tennis.views.viewUser" poule.leader.username %}">{{ poule.leader.participant.fullName }}</a>
+				{% endif %}
+				<br>
+				<b>Participant : </b> {{ poule.paires.all|length }} paires<br>
+				{% for p in poule.paires.all %}
+				<b>{{ p.id }} : </b> <a href="{% url "tennis.views.viewUser" p.user1.username %}">{{ p.user1.participant.fullName }}</a> &#38; <a href="{% url "tennis.views.viewUser" p.user2.username %}">{{ p.user2.participant.fullName }}</a> <br>
+				{% endfor %}
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+
 </div>
 
 {% endblock %}

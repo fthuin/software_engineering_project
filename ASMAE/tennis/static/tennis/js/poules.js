@@ -44,14 +44,12 @@ function setKm()
 					for(var key in poulesDict){
 						var terId = poulesDict[key]['terrainID']
 						var terIndex = -1;
-						console.log("terId "+ terId);
-
 						for(var j=0;j<TerrainList.length;j++){
 							if(TerrainList[j].id == terId){
 								terIndex = j
 							}
 						}
-						console.log("terIndex "+terIndex);
+
 						if(terIndex != -1)
 						{
 
@@ -109,6 +107,7 @@ function drop (ev) {
   updatePanel(sourceID, "Choisir un leader");
 
 	setKm();
+	leaderAssignement();
 
 }
 
@@ -140,7 +139,7 @@ function setTerrains(nbrPoules) {
     var lenTer = terrainList.length;
     for (var i = 0 ; i < nbrPoules ; i++) {
         for (var j = 0 ; j < lenTer ; j++) {
-            document.getElementById("terrain"+(i+1)).appendChild(getDropDownOption(terrainList[j].user,terrainList[j].addr,terrainList[j].matiere,terrainList[j].id,(i+1),terrainList[j].type));
+            document.getElementById("terrain"+(i+1)).appendChild(getDropDownOption(terrainList[j],(i+1)));
         }
     }
 }
@@ -177,7 +176,7 @@ function mySetPoules(nbrPoules, sizePoules) {
 	setTerrains(nbrPoules);
 	for (var i = 0 ; i < terrainSaved.length ; i++) {
 	    if (terrainSaved[i].id != '') {
-	        setInfoTerrain(terrainSaved[i].user,terrainSaved[i].matiere,terrainSaved[i].addr,terrainSaved[i].id,i+1,terrainSaved[i].type)
+	        setInfoTerrain(terrainSaved[i].user,terrainSaved[i].matiere,terrainSaved[i].type,terrainSaved[i].addr,terrainSaved[i].id,terrainSaved[i].poules,i+1)
 	    }
 	}
 	for (var i = 0 ; i < leaderSaved.length ; i++) {
@@ -327,35 +326,106 @@ function getPairbyId(ID){
 	};
 }
 
-function getDropDownOption(proprio,addr,matiere,id,number,type){
+function getDropDownOption(terrain,id){
+	poules = ""
+	for (var i = 0; i < terrain.poules.length; i++) {
+		poules += terrain.poules[i].id +"/"+terrain.poules[i].tournoi+"/"+terrain.poules[i].jour + "|"
+	};
 	var li = document.createElement("LI");
-	li.innerHTML = 	'<a href="javascript:void(0);" onclick="setInfoTerrain('+"'"+proprio+"','"+matiere+"','"+addr+"','"+id+"','"+number+"','"+type+"'"+');">['+id+'] <b>'+proprio+'</b> ('+matiere+')'+'<br>'+
-						addr
+	li.innerHTML = 	'<a href="javascript:void(0);" onclick="setInfoTerrain('+"'"+terrain.user+"','"+terrain.matiere+"','"+terrain.type+"','"+terrain.addr+"','"+terrain.id+"','"+poules+"','"+id+"'"+');">['+terrain.id+'] <b>'+terrain.user+'</b> ('+terrain.matiere+')'+'<br>'+
+						terrain.addr
 					'</a>';
 
 	return li;
 
 }
 
-function setInfoTerrain(p,matiere,addr,ID,number,type){
-	document.getElementById("proprio"+number).innerHTML = p;
-	document.getElementById("matiere"+number).innerHTML = matiere;
-	document.getElementById("type"+number).innerHTML = type;
-	document.getElementById("addr"+number).innerHTML = addr;
-	document.getElementById("ID"+number).innerHTML = ID;
-
-	//TODO Ajouter type de terrain
+function setInfoTerrain(user,matiere,type,addr,id,poules,ID){
+	document.getElementById("proprio"+ID).innerHTML = user;
+	document.getElementById("matiere"+ID).innerHTML = matiere;
+	document.getElementById("type"+ID).innerHTML = type;
+	document.getElementById("addr"+ID).innerHTML = addr;
+	document.getElementById("ID"+ID).innerHTML = id;
 	setKm()
 
-}
-function setInfoTerrainNoUpdateKm(p,matiere,addr,ID,number,type){
-	document.getElementById("proprio"+number).innerHTML = p;
-	document.getElementById("matiere"+number).innerHTML = matiere;
-	document.getElementById("type"+number).innerHTML = type;
-	document.getElementById("addr"+number).innerHTML = addr;
-	document.getElementById("ID"+number).innerHTML = ID;
+<<<<<<< HEAD
+=======
+	//Si c'est pas un objet on le reconstruit
+	var p = [];
+	if(typeof(poules)!="object" && poules.length > 0){
+		var table = poules.split("|");
+		table = table.splice(0,table.length-1);
+		for (var i = 0; i < table.length; i++) {
+			var t = table[i].split("/")
+			p.push({id:t[0],tournoi:t[1],jour:t[2]})
+		};
+		poules = p
+	}
 
-	//TODO Ajouter type de terrain
+
+	var p = [];
+	for (var i = 0; i < poules.length; i++) {
+		//alert(JSON.stringify(poules[i]))
+		if(poules[i].jour == jour_tournoi && (nom_tournoi != poules[i].tournoi)) {
+			p.push(poules[i])
+		}
+	};
+	poules = p;
+
+	if(poules.length > 0 ){
+		var content = "";
+		for (var i = 0; i < poules.length; i++) {
+			content += poules[i].tournoi + ": " + poules[i].id + "<br>";
+		};
+		document.getElementById("errorTerrain"+ID).style.display = "inherit";
+		document.getElementById("errorTerrain"+ID).setAttribute("data-content",content);
+	}else{
+		document.getElementById("errorTerrain"+ID).style.display = "none";
+	}
+
+>>>>>>> 4bdc219eff6aa325d27a309fbc7a7012636c0391
+}
+function setInfoTerrainNoUpdateKm(user,matiere,type,addr,id,poules,ID){
+	document.getElementById("proprio"+ID).innerHTML = user;
+	document.getElementById("matiere"+ID).innerHTML = matiere;
+	document.getElementById("type"+ID).innerHTML = type;
+	document.getElementById("addr"+ID).innerHTML = addr;
+	document.getElementById("ID"+ID).innerHTML = id;
+
+
+	//Si c'est pas un objet on le reconstruit
+	var p = [];
+	if(typeof(poules)!="object" && poules.length > 0){
+		var table = poules.split("|");
+		table = table.splice(0,table.length-1);
+		for (var i = 0; i < table.length; i++) {
+			var t = table[i].split("/")
+			p.push({id:t[0],tournoi:t[1],jour:t[2]})
+		};
+		poules = p
+	}
+
+
+	var p = [];
+	for (var i = 0; i < poules.length; i++) {
+		//alert(JSON.stringify(poules[i]))
+		if(poules[i].jour == jour_tournoi && (nom_tournoi != poules[i].tournoi)) {
+			p.push(poules[i])
+		}
+	};
+	poules = p;
+
+	if(poules.length > 0 ){
+		var content = "";
+		for (var i = 0; i < poules.length; i++) {
+			content += poules[i].tournoi + ": " + poules[i].id + "<br>";
+		};
+		document.getElementById("errorTerrain"+ID).style.display = "inherit";
+		document.getElementById("errorTerrain"+ID).setAttribute("data-content",content);
+	}else{
+		document.getElementById("errorTerrain"+ID).style.display = "none";
+	}
+
 }
 
 //Return une option avec comme nom et valeur le name
@@ -395,7 +465,7 @@ function createPanel(number){
 						'<div class="panel-footer">'+
 							'<hr class="line2">'+
 							'<div class="row">'+
-								'<div class="col-xs-7">'+
+								'<div class="col-xs-6">'+
 									'<div class="dropdown">'+
 			    						'<button class="btn btn-default dropdown-toggle" type="button"  data-toggle="dropdown">Choisir un terrain '+
 			    						'<span class="caret"></span></button>'+
@@ -403,26 +473,29 @@ function createPanel(number){
 										'</ul>'+
 									'</div>'+
 								'</div>'+
-								'<div class="col-xs-5">'+
-									'<label class="control-label col-xs-6">ID</label>'+
-									'<div class="col-xs-6"><p class="info" id="ID'+number+'">-</p></div>'+
+								'<div class="col-xs-6">'+
+									'<i id="errorTerrain'+number+'" data-toggle="popover" data-html="true" data-placement="top" data-content="" class="fa fa-info-circle fa-2x center" style="display:none;cursor:pointer;color:red;width:100%;padding-top:5px;vertical-align:middle"></i>'+
 								'</div>'+
 							'</div>'+
 							'<div class="row">'+
+								'<label class="control-label col-xs-4">ID</label>'+
+								'<div class="col-xs-8"><p class="info" style="margin:0;" id="ID'+number+'">-</p></div>'+
+							'</div>'+
+							'<div class="row">'+
 								'<label class="control-label col-xs-4">Propriétaire</label>'+
-								'<div class="col-xs-8"><p class="info" id="proprio'+number+'">-</p></div>'+
+								'<div class="col-xs-8"><p class="info" style="margin:0;" id="proprio'+number+'">-</p></div>'+
 							'</div>'+
 							'<div class="row">'+
 								'<label class="control-label col-xs-4">Matiere</label>'+
-								'<div class="col-xs-8"><p class="info" id="matiere'+number+'">-</p></div>'+
+								'<div class="col-xs-8"><p class="info" style="margin:0;" id="matiere'+number+'">-</p></div>'+
 							'</div>'+
 							'<div class="row">'+
 								'<label class="control-label col-xs-4">Type</label>'+
-								'<div class="col-xs-8"><p class="info" id="type'+number+'">-</p></div>'+
+								'<div class="col-xs-8"><p class="info" style="margin:0;" id="type'+number+'">-</p></div>'+
 							'</div>'+
 							'<div class="row">'+
 								'<label class="control-label col-xs-4">Adresse</label>'+
-								'<div class="col-xs-8"><p class="info" id="addr'+number+'">-<br><br></p></div>'+
+								'<div class="col-xs-8"><p class="info" style="margin:0;" id="addr'+number+'">-<br><br></p></div>'+
 							'</div>'+
 
 							'<div class="row">'+
@@ -454,7 +527,7 @@ function createPair(pair){
 
 	var comm = "" ;
 	if(pair.comment != ""){
-		comm = '<a href="javascript:void(0);" data-toggle="popover" data-html="true" data-placement="left" data-content="'+pair.comment+'"><b style="color:#222;"><i class="fa fa-file-text-o fa-2x"></i></b></a>';
+		comm = '<a href="javascript:void(0);" data-toggle="popover" data-html="true" data-placement="left" data-content="'+pair.comment+'" onclick="clickEventPair('+pair.id+')"><b style="color:#222;"><i class="fa fa-file-text-o fa-2x"></i></b></a>';
 	}
 
 	p.innerHTML = '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;"><div id="'+pair.id+'" draggable="true" ondragstart="drag(event)"><div onclick="clickEventPair('+pair.id+')" id="zone'+pair.id+'" class="zone"><div class="row"><div class="col-xs-10"><b style="color:#222">'+gender1+'</b> '+pair.user1+' ('+pair.age1+' ans)'+'<br><b style="color:#222">'+gender2+'</b> '+pair.user2+' ('+pair.age2+' ans)'+'</div><div class="col-xs-2">'+comm+'</div></div></div></div></div>';
@@ -503,6 +576,7 @@ function clickEventPair(ID){
 			updatePanel(sourceID, "Choisir un leader");
 
 			setKm();
+			leaderAssignement();
 
 
 

@@ -14,38 +14,34 @@
             <div class="panel-heading">Configuration</div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-sm-4">
-                        <label class="control-label col-sm-10">Nombre de paires</label>
-                        <div class="col-sm-2">
+                    <div class="col-sm-4 col-sm-offset-0">
+                        <label style="margin-top:10px" class="control-label col-sm-10">Nombre de paires</label>
+                        <div style="margin-top:10px" class="col-sm-2">
                             <p class="info">{{ allPair|length }}</p>
                         </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <label class="control-label col-sm-8">Nombre de poules</label>
-                        <div class="col-sm-4">
-                            <input class="form-control" style="min-width:50px;max-width:100px;" type="number" value="{{ defaultValue }}" name="poulesNumber" id="poulesNumber">
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <button class="btn btn-default center-block" type="button" onclick="autogen()">Génération automatique</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <label class="control-label col-sm-10">Nombre de terrains disponible</label>
-                        <div class="col-sm-2">
+                        <label style="margin-top:20px" class="control-label col-sm-10">Nombre de terrains disponible</label>
+                        <div style="margin-top:20px" class="col-sm-2">
                             <p class="info">{{ nbrTerrains }}</p>
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <label class="control-label col-sm-8">Taille des poules</label>
-                        <div class="col-sm-4">
+                        <label style="margin-top:10px" class="control-label col-sm-8">Nombre de poules</label>
+                        <div style="margin-top:10px" class="col-sm-4">
+                            <input class="form-control" style="min-width:50px;max-width:100px;" type="number" value="{{ defaultValue }}" name="poulesNumber" id="poulesNumber">
+                        </div>
+                        <label style="margin-top:20px" class="control-label col-sm-8">Taille des poules</label>
+                        <div style="margin-top:20px" class="col-sm-4">
                             <input class="form-control" style="min-width:50px;max-width:100px;" type="number" value="6" id="poulesSize">
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <button class="btn btn-default center-block" type="button" onclick="terrainAssignement()">Assigner les terrains</button>
+
+                        <button class="btn btn-default center-block" type="button" onclick="autogen()">Génération automatique</button>
+                        <button style="margin-top:5px;"class="btn btn-default center-block" type="button" onclick="terrainAssignement()">Assigner les terrains</button>
+                        <button style="margin-top:5px;" class="btn btn-default center-block" type="button" onclick="leaderAssignement()">Assigner les leaders</button>
+
                     </div>
+
                 </div>
             </div>
         </div>
@@ -79,7 +75,9 @@
           <h4 class="modal-title center">Confirmation validation</h4>
         </div>
         <div class="modal-body">
-			<p id="textModalSameTerrain" >ATTENTION: Certains poules ont utilisent le même terrain!</p>
+
+			<p id="textModalIconDisplay" >ATTENTION: Certains terrains sont utilisés dans un autre tournoi du même jour!</p>
+			<p id="textModalSameTerrain" >ATTENTION: Certains poules utilisent le même terrain!</p>
 			<p id="textModalTerrain" >Veuillez mettre un terrain pour chaques poules</p>
 			<p id="textModalLeader" >Veuillez mettre un leader pour chaques poules</p>
           <p id="textModalConfirm">Etes-vous sûr de valider la formations des groupes de ce tournoi ?</p>
@@ -108,6 +106,8 @@
 
 <script>
 
+var jour_tournoi = '{{tournoi.titre.jour}}';
+var nom_tournoi = '{{tournoi}}';
 
 //Creation de la liste des paires
 var PairList = [] ;
@@ -139,7 +139,12 @@ var PairDict = {};
 var addr = '{{elem.rue}}'+ ", "+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
 var Lat = '{{elem.latitude}}'
 var Lng = '{{elem.longitude}}'
-TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng,used:'{{elem.used}}',type:'{{elem.type.nom}}'})
+
+var poule_list = [];
+{% for p in elem.poule_set.all %}
+poule_list.push({id:'{{p.id}}',tournoi:'{{p.tournoi}}',jour:'{{p.tournoi.titre.jour}}'});
+{% endfor %}
+TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng,type:'{{elem.type.nom}}',poules:poule_list})
 
 {% endfor %}
 
@@ -148,7 +153,13 @@ var terrainSaved = []
 var addr = '{{elem.rue}}'+ ", "+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
 var Lat = '{{elem.latitude}}'
 var Lng = '{{elem.longitude}}'
-terrainSaved.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng})
+
+var poule_list = [];
+{% for p in elem.poule_set.all %}
+poule_list.push({id:'{{p.id}}',tournoi:'{{p.tournoi}}',jour:'{{p.tournoi.titre.jour}}'});
+{% endfor %}
+
+terrainSaved.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng,type:'{{elem.type.nom}}',poules:poule_list})
 {% endfor %}
 var leaderSaved = []
 {% for elem in listLeaderSaved %}
@@ -238,6 +249,7 @@ function save() {
 }
 function checkValues()
 {
+	document.getElementById("textModalIconDisplay").style.display = "none";
 	document.getElementById("textModalSameTerrain").style.display = "none";
 	document.getElementById("textModalTerrain").style.display = "none";
 	document.getElementById("textModalLeader").style.display = "none";
@@ -270,6 +282,9 @@ function checkValues()
 			}
 
 			pouleID.push(document.getElementById("ID"+(i+1)).textContent);
+		}
+		if(document.getElementById("errorTerrain"+(i+1)).style.display != 'none'){
+			document.getElementById("textModalIconDisplay").style.display = "inherit";
 		}
 		if(poule['leader'] == "Choisir un leader" || poule['leader'] == "")
 		{
@@ -375,7 +390,7 @@ function terrainAssignement()
 		console.log(key);
 		console.log("Poule "+key+" with terrain "+index);
 
-		setInfoTerrainNoUpdateKm(TerrainList[index].user,TerrainList[index].matiere,TerrainList[index].addr,TerrainList[index].id,parseInt(key)+1,TerrainList[index].type);
+		setInfoTerrainNoUpdateKm(TerrainList[index].user,TerrainList[index].matiere,TerrainList[index].type,TerrainList[index].addr,TerrainList[index].id,TerrainList[index].poules,parseInt(key)+1);
 		document.getElementById("empreinte"+(parseInt(key)+1)).innerHTML = Math.round(minDistance)/1000;
 
 		alreadyTaken.push(index);
@@ -523,8 +538,6 @@ function greedySolution(matrix,nbrPoule){
 		}
 
 	}
-console.log(kmParPoule);
-console.log(pairInPoule);
 var maxnbrInPoule = pairInPoule[0].length
 document.getElementById("poulesDiv").innerHTML = "";
 
@@ -555,7 +568,95 @@ setTerrains(nbrPoule);
 
 
 terrainAssignement()
+leaderAssignement()
 
+}
+function leaderAssignement(){
+
+	/* DEBUT COPIER COLLER */
+    document.getElementById("assignTerrains").value = ""
+    document.getElementById("assignPairPoules").value = ""
+    document.getElementById("assignLeaders").value = ""
+    var nbr = document.getElementById("poulesNumber").value;
+    var poulesDict = {};
+    for (var i = 0; i < nbr ; i++) {
+        var poule = {}
+        poule['leader'] = document.getElementById("Leader"+(i+1)).value;
+        poule['terrainID'] = document.getElementById("ID"+(i+1)).textContent;
+        poule['pairList'] = [];
+        poulesDict[''+i] = poule;
+        // TODO : Check si le leader et le terrainID sont valides
+    }
+    for (var i = 0; i < PairList.length ; i++) {
+        // On link les paires aux ID des poules
+        var id = "" + document.getElementById(""+PairList[i].id).parentNode.parentNode.parentNode.id;
+        id = id.replace("list", "");
+        poulesDict[''+(id-1)]['pairList'].push(PairList[i]);
+    }
+    for (var i = 0; i < nbr ; i++) {
+         document.getElementById("assignTerrains").value += poulesDict[''+i]['terrainID'] + '-';
+         document.getElementById("assignPairPoules").value += '[' + i + ']-'
+         for (var j = 0 ; j < poulesDict[''+i]['pairList'].length ; j++) {
+            document.getElementById("assignPairPoules").value += poulesDict[''+i]['pairList'][j].id + '-';
+         }
+         document.getElementById("assignLeaders").value += poulesDict[''+i]['leader'] + '/';
+    }
+	/* FIN COPIER COLLER */
+	/* Accéder à la première paire de la première poule */
+	// poulesDict['1']['pairList'][0]
+	/* Fin accéder à la premiere ... */
+	//alert(poulesDict['1']['pairList'][0].u2addr);
+
+	var terrainLat = '{{ infLat }}'
+	var terrainLng = '{{ infLng }}'
+
+	for(var key in poulesDict){
+	var minDist = Number.MAX_VALUE;
+	var minNom = ""
+
+
+
+		for(var i=0;i<poulesDict[key]['pairList'].length;i++){
+			var user1Lat = poulesDict[key]['pairList'][i].lat1;
+			var user1Lng = poulesDict[key]['pairList'][i].lng1;
+			var user2Lat = poulesDict[key]['pairList'][i].lat2;
+			var user2Lng = poulesDict[key]['pairList'][i].lng2;
+			var latLng1 = new google.maps.LatLng(parseFloat(user1Lat.replace(",", ".")), parseFloat(user1Lng.replace(",", ".")));
+			var latLng2 = new google.maps.LatLng(parseFloat(user2Lat.replace(",", ".")), parseFloat(user2Lng.replace(",", ".")));
+
+			var terrainlatLng = new google.maps.LatLng(parseFloat(terrainLat.replace(",", ".")), parseFloat(terrainLng.replace(",", ".")));
+
+			var distance1 = google.maps.geometry.spherical.computeDistanceBetween(latLng1, terrainlatLng);
+			var distance2 = google.maps.geometry.spherical.computeDistanceBetween(latLng2, terrainlatLng);
+			if(distance1 < minDist){
+				minDist = distance1;
+				minNom = minNom = poulesDict[key]['pairList'][i].user1
+			}
+			if(distance2 < minDist){
+				minDist = distance2;
+				minNom = poulesDict[key]['pairList'][i].user2
+			}
+
+
+
+
+		}
+		console.log(key);
+		//console.log(minDist);
+		//console.log(minNom);
+		console.log("Leader"+(key+1))
+		setSelectedIndex(document.getElementById("Leader"+(parseInt(key)+1)),minNom);
+	}
+
+}
+function setSelectedIndex(s, v) {
+	for ( var i = 0; i < s.options.length; i++ ) {
+		console.log(s);
+		if ( s.options[i].text == v ) {
+			s.options[i].selected = true;
+			return;
+		}
+	}
 }
 
 

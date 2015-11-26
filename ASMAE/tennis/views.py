@@ -22,6 +22,7 @@ from django.template.defaulttags import register
 
 # Create your views here.
 def home(request):
+	edition = infoTournoi.objects.all()[0].edition
 	date = infoTournoi.objects.all()[0].date
 	year = date.year
 	month = date.month
@@ -516,6 +517,20 @@ def knockOff(request,name):
 	ti = TournoiTitle.objects.get(nom=title)
 	ca = TournoiCategorie.objects.get(nom=cat)
 	tournoi = Tournoi.objects.get(titre=ti,categorie=ca)
+
+
+	terrains = Court.objects.filter(valide=True)
+
+	jour = ti.jour
+	if(jour =="Samedi"):
+		terrains = terrains.filter(dispoSamedi=True)
+	else:
+		terrains = terrains.filter(dispoDimanche=True)
+
+	terrains.order_by("id")
+	print(terrains)
+
+
 	def getKey(item):
 		return item[1]
 	if request.method == "POST":
@@ -530,7 +545,6 @@ def knockOff(request,name):
 				pairgagnante.save()
 			if(finaliste != ""):
 				finalistes = finaliste.split("-")
-
 				finaliste1 = Pair.objects.get(id=int(finalistes[0]))
 				finaliste2 = Pair.objects.get(id=int(finalistes[1]))
 				finaliste1.finaliste = True
@@ -669,16 +683,24 @@ def generatePool(request,name):
 	terrains = Court.objects.filter(valide=True)
 	allPair = Pair.objects.filter(tournoi=tournoi, valid=True)
 	poules = Poule.objects.filter(tournoi=tournoi)
-	for item in terrains:
-		for obj in item.poule_set.all():
-			print(obj)
+
+	infTournoi = infoTournoi.objects.all()[0]
+	infLng = infTournoi.longitude
+	infLat = infTournoi.latitude
+	
+	jour = tournoi.titre.jour
+	if(jour =="Samedi"):
+		terrains = terrains.filter(dispoSamedi=True)
+	else:
+		terrains = terrains.filter(dispoDimanche=True)
+
+	terrains.order_by('id')
 
 	if request.method == "POST":
 
 
 		terrainsList = request.POST['assignTerrains'].split('-')
 		terrainsList.pop()
-		print(terrainsList)
 
 		leadersList = request.POST['assignLeaders'].split('/')
 		leadersList.pop()
@@ -742,12 +764,9 @@ def generatePool(request,name):
 		else:
 			return redirect(reverse(staffTournoi))
 	if request.user.is_authenticated():
-		dictTerrains = {}
-		# TODO : Indiquer les terrains déjà utilisés le jour du tournoi
-		for terrain in terrains:
-			dictTerrains[terrain.id] = terrain
+		
 
-		listTerrains = list(dictTerrains.values())
+		listTerrains = list(terrains)
 		listTerrainSaved = list()
 		listLeaderSaved = list()
 		nbrTerrains = len(listTerrains)
@@ -1085,7 +1104,8 @@ def viewUser(request,name):
 	rankings = Ranking.objects.all()
 
 	use = User.objects.get(username=name)
-	yearLoop = range(1900,2015)
+	today = date.today()
+	yearLoop = range(1900,today.year-7)
 	birthdate = use.participant.datenaissance
 	formatedBirthdate = birthdate.strftime('%d/%m/%Y')
 	terrain = Court.objects.filter(user=use)
@@ -1156,7 +1176,8 @@ def viewUser(request,name):
 		successEdit = "Le profil a bien été changé"
 
 	use = User.objects.get(username=name)
-	yearLoop = range(1900,2015)
+	today = date.today()
+	yearLoop = range(1900,today.year-7)
 	birthdate = use.participant.datenaissance
 	formatedBirthdate = birthdate.strftime('%d/%m/%Y')
 	terrain = Court.objects.filter(user=use)
@@ -1369,9 +1390,9 @@ def validatePair(request, id):
 	return redirect(reverse(home))
 
 def profil(request):
-	# TODO : Changer 2015 par l'année courante
 	rankings = Ranking.objects.all()
-	yearLoop = range(1900,2015)
+	today = date.today()
+	yearLoop = range(1900,today.year-7)
 	birthdate = request.user.participant.datenaissance
 	formatedBirthdate = birthdate.strftime('%d/%m/%Y')
 	if request.method == "POST":
@@ -1553,8 +1574,8 @@ def emailValidation(request, key):
 	return render(request,'tennis/emailValidation.html',locals())
 
 def register(request):
-	# TODO : Changer 2015 par l'année courante
-	yearLoop = range(1900,2015)
+	today = date.today()
+	yearLoop = range(1900,today.year-7)
 	rankings = Ranking.objects.all()
 	if request.method == "POST":
 		#Recuperation des donnees
@@ -1676,14 +1697,15 @@ def resetDbForNextYear(request):
 
 	listCourt = Court.objects.all()
 	for court in listCourt:
-		court.usedLastYear = False
+		if len(court.poule_set.all()) > 0:
+			court.usedLastYear = True
+		else:
+			court.usedLastYear = False
 		court.dispoSamedi = False
 		court.dispoDimanche = False
 		court.commentaire = None
 		court.commentaireStaff = None
 		court.save()
-
-	#Mettre tous les terrain utilisé a used
 
 	listPair = Pair.objects.all()
 	for pair in listPair:
@@ -1700,5 +1722,9 @@ def resetDbForNextYear(request):
 	Score.objects.all().delete()
 	Poule.objects.all().delete()
 	LogActivity.objects.all().delete()
+	
+	obj = infoTournoi.objects.all()[0]
+	obj.edition += 1
+	obj.save()
 
-	print("resetdb")
+

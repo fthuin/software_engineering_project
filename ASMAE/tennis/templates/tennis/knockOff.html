@@ -45,6 +45,78 @@
 
     <!-- Deuxième étape set up de l'arbre -->
     <div id="secondStep" style="display:none">
+
+      <div class="panel panel-default center-block" style="max-width:600px;min-width:600px;">
+        <div class="panel-heading">Terrain</div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button"  data-toggle="dropdown">Choisir un terrain 
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu scrollable-menu" role="menu" id="terrain">
+                    {%for elem in terrains %}
+                    <li><a href="javascript:void(0);" onclick="setInfoTerrain('{{elem.id}}','{{elem.user.participant.smallName}}','{{elem.matiere}}','{{elem.type}}','{{elem.rue}}, {{elem.numero}} <br> {{elem.codepostal}} {{elem.localite}}')">
+                      [{{elem.id}}] <b>{{elem.user.participant.smallName}}</b> ({{elem.matiere}}) <br>
+                      {{elem.rue}}, {{elem.numero}} <br>
+                      {{elem.codepostal}} {{elem.localite}}
+                    </a></li>
+                    {% endfor %}
+                </ul>
+              </div>
+              <button class="btn btn-default" style="margin-top:20px;">Assigner Terrain</button>
+            </div>
+            <div class="col-sm-8">
+              <form class="form-horizontal" action="">
+                <!-- ID -->
+                <div class="form-group" style="margin:0">
+                    <label class="info col-sm-4" for="email">ID :</label>
+                    <div class="col-sm-8">
+                      <p style="margin:0" id="terrainID" class="info"> - </p>
+                    </div>
+                </div>
+                <!-- Proprio -->
+                <div class="form-group" style="margin:0">
+                    <label class="info col-sm-4" for="email">Propriétaire :</label>
+                    <div class="col-sm-8">
+                      <p style="margin:0" id="terrainProp" class="info"> - </p>
+                    </div>
+                </div>
+                <!-- matiere -->
+                <div class="form-group" style="margin:0">
+                    <label class="info col-sm-4" for="email">Matière :</label>
+                    <div class="col-sm-8">
+                      <p style="margin:0" id="terrainMat" class="info"> - </p>
+                    </div>
+                </div>
+                <!-- type -->
+                <div class="form-group" style="margin:0">
+                    <label class="info col-sm-4" for="email">Type :</label>
+                    <div class="col-sm-8">
+                      <p style="margin:0" id="terrainType" class="info"> - </p>
+                    </div>
+                </div>
+                <!-- addr -->
+                <div class="form-group" style="margin:0">
+                    <label class="info col-sm-4" for="email">Adresse :</label>
+                    <div class="col-sm-8">
+                      <p style="margin:0" id="terrainAddr" class="info"> - </p>
+                    </div>
+                </div>
+                <!-- km -->
+                <div class="form-group" style="margin:0">
+                    <label class="info col-sm-4" for="email">Kilomètre :</label>
+                    <div class="col-sm-8">
+                      <p style="margin:0" id="terrainKilo" class="info"> - </p>
+                    </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
       <div class="table-responsive">
         <div class="panel panel-default center-block" style="max-width:600px;min-width:600px;">
           <div class="panel-heading">Premier Round</div>
@@ -52,7 +124,10 @@
           </div>
         </div>
       </div>
+
       
+
+
       <button type="button" class="btn btn-default center-block" onClick="startTree()">Créer l'arbre du tournoi</button>
     </div>
   
@@ -245,6 +320,17 @@ if(nombrePanel<17){
     pouleCheck[1].className = "glyphicon glyphicon-check "+obv
   }
   {% endfor %}
+}
+
+function setInfoTerrain(id,prop,mat,type,addr){
+  document.getElementById("terrainID").innerHTML = id
+  document.getElementById("terrainProp").innerHTML = prop
+  document.getElementById("terrainMat").innerHTML = mat
+  document.getElementById("terrainType").innerHTML = type
+  document.getElementById("terrainAddr").innerHTML = addr
+
+  //set km quentin
+  //leftList et rightList
 }
 </script>
 
