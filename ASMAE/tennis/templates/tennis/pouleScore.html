@@ -74,6 +74,7 @@
           <h4 class="modal-title center">Confirmation validation</h4>
         </div>
         <div class="modal-body">
+			<p id="textModalScoreNotPositif" >Les scores doivent etre positif</p>
 			<p id="textModalScoreNotNumber" >Les scores doivent etre des chiffres</p>
 			<p id="textModalEmptyScore" >Veuillez remplir tous les scores pour valider la poule</p>
           <p id="textModalConfirm">Etes-vous sûr de valider les scores de cette poules?</p>
@@ -148,6 +149,7 @@ function checkPouleScoreInput()
 {% endfor %}
 }
 function checkValues(){
+	document.getElementById("textModalScoreNotPositif").style.display = "none";
 	document.getElementById("textModalScoreNotNumber").style.display = "none";
 	document.getElementById("textModalEmptyScore").style.display = "none";
 	document.getElementById("textModalConfirm").style.display = "inherit";
@@ -169,6 +171,11 @@ function checkValues(){
 				if(isNaN(value))
 				{
 					document.getElementById("textModalScoreNotNumber").style.display = "inherit";
+					document.getElementById("textModalConfirm").style.display = "none";
+					document.getElementById("yesModal").disabled = true;
+				}
+				if(value<0){
+					document.getElementById("textModalScoreNotPositif").style.display = "inherit";
 					document.getElementById("textModalConfirm").style.display = "none";
 					document.getElementById("yesModal").disabled = true;
 				}

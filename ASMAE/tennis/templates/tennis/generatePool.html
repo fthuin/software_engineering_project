@@ -139,7 +139,11 @@ var PairDict = {};
 var addr = '{{elem.rue}}'+ ", "+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
 var Lat = '{{elem.latitude}}'
 var Lng = '{{elem.longitude}}'
-TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng,used:'{{elem.used}}',type:'{{elem.type}}'})
+var poule_list = [];
+{% for p in elem.poule_set.all %}
+poule_list.push({id:'{{p.id}}',tournoi:'{{p.tournoi}}'});
+{% endfor %}
+TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng,used:'{{elem.used}}',type:'{{elem.type}}',poules:poule_list})
 
 {% endfor %}
 

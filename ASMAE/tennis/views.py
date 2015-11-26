@@ -669,9 +669,15 @@ def generatePool(request,name):
 	terrains = Court.objects.filter(valide=True)
 	allPair = Pair.objects.filter(tournoi=tournoi, valid=True)
 	poules = Poule.objects.filter(tournoi=tournoi)
-	for item in terrains:
-		for obj in item.poule_set.all():
-			print(obj)
+	#for item in terrains:
+		#for obj in item.poule_set.all():
+			#print(obj)
+	jour = tournoi.titre.jour
+	if(jour =="Samedi"):
+		terrains = terrains.filter(dispoSamedi=True)
+	else:
+		terrains = terrains.filter(dispoDimanche=True)
+
 
 	if request.method == "POST":
 
@@ -1677,14 +1683,15 @@ def resetDbForNextYear(request):
 
 	listCourt = Court.objects.all()
 	for court in listCourt:
-		court.usedLastYear = False
+		if len(court.poule_set.all()) > 0:
+			court.usedLastYear = True
+		else:
+			court.usedLastYear = False
 		court.dispoSamedi = False
 		court.dispoDimanche = False
 		court.commentaire = None
 		court.commentaireStaff = None
 		court.save()
-
-	#Mettre tous les terrain utilisé a used
 
 	listPair = Pair.objects.all()
 	for pair in listPair:
@@ -1701,5 +1708,9 @@ def resetDbForNextYear(request):
 	Score.objects.all().delete()
 	Poule.objects.all().delete()
 	LogActivity.objects.all().delete()
+	
+	obj = infoTournoi.objects.all()[0]
+	obj.edition += 1
+	obj.save()
 
-	print("resetdb")
+
