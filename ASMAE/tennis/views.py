@@ -670,14 +670,14 @@ def generatePool(request,name):
 	terrains = Court.objects.filter(valide=True)
 	allPair = Pair.objects.filter(tournoi=tournoi, valid=True)
 	poules = Poule.objects.filter(tournoi=tournoi)
-	#for item in terrains:
-		#for obj in item.poule_set.all():
-			#print(obj)
+
 	jour = tournoi.titre.jour
 	if(jour =="Samedi"):
 		terrains = terrains.filter(dispoSamedi=True)
 	else:
 		terrains = terrains.filter(dispoDimanche=True)
+
+	terrains.order_by('id')
 
 
 	if request.method == "POST":

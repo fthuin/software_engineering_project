@@ -102,6 +102,8 @@
 
 <script>
 
+var jour_tournoi = '{{tournoi.titre.jour}}';
+var nom_tournoi = '{{tournoi}}';
 
 //Creation de la liste des paires
 var PairList = [] ;
@@ -136,7 +138,7 @@ var Lng = '{{elem.longitude}}'
 
 var poule_list = [];
 {% for p in elem.poule_set.all %}
-poule_list.push({id:'{{p.id}}',tournoi:'{{p.tournoi}}',jour:'{{p.tournoi}}'});
+poule_list.push({id:'{{p.id}}',tournoi:'{{p.tournoi}}',jour:'{{p.tournoi.titre.jour}}'});
 {% endfor %}
 TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng,type:'{{elem.type.nom}}',poules:poule_list})
 
@@ -151,7 +153,7 @@ var Lng = '{{elem.longitude}}'
 
 var poule_list = [];
 {% for p in elem.poule_set.all %}
-poule_list.push({id:'{{p.id}}',tournoi:'{{p.tournoi}}',jour:'{{p.tournoi}}'});
+poule_list.push({id:'{{p.id}}',tournoi:'{{p.tournoi}}',jour:'{{p.tournoi.titre.jour}}'});
 {% endfor %}
 
 terrainSaved.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng,type:'{{elem.type.nom}}',poules:poule_list})
@@ -381,7 +383,7 @@ function terrainAssignement()
 		console.log(key);
 		console.log("Poule "+key+" with terrain "+index);
 
-		setInfoTerrainNoUpdateKm(TerrainList[index].user,TerrainList[index].matiere,TerrainList[index].addr,TerrainList[index].id,parseInt(key)+1,TerrainList[index].type);
+		setInfoTerrainNoUpdateKm(TerrainList[index].user,TerrainList[index].matiere,TerrainList[index].type,TerrainList[index].addr,TerrainList[index].id,TerrainList[index].poules,parseInt(key)+1);
 		document.getElementById("empreinte"+(parseInt(key)+1)).innerHTML = Math.round(minDistance)/1000;
 
 		alreadyTaken.push(index);
