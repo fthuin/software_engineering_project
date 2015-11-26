@@ -47,6 +47,17 @@
                         <button class="btn btn-default center-block" type="button" onclick="terrainAssignement()">Assigner les terrains</button>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        
+                    </div>
+                    <div class="col-sm-4">
+                        
+                    </div>
+                    <div class="col-sm-4">
+                        <button class="btn btn-default center-block" type="button" onclick="todoQUentin()">Assigner les leaders</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -142,7 +153,7 @@ var Lng = '{{elem.longitude}}'
 
 var poule_list = [];
 {% for p in elem.poule_set.all %}
-poule_list.push({id:'{{p.id}}',tournoi:'{{p.tournoi}}'});
+poule_list.push({id:'{{p.id}}',tournoi:'{{p.tournoi}}',jour:'{{p.tournoi}}'});
 {% endfor %}
 TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng,type:'{{elem.type.nom}}',poules:poule_list})
 
@@ -157,7 +168,7 @@ var Lng = '{{elem.longitude}}'
 
 var poule_list = [];
 {% for p in elem.poule_set.all %}
-poule_list.push({id:'{{p.id}}',tournoi:'{{p.tournoi}}'});
+poule_list.push({id:'{{p.id}}',tournoi:'{{p.tournoi}}',jour:'{{p.tournoi}}'});
 {% endfor %}
 
 terrainSaved.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',matiere:'{{elem.matiere}}',addr:addr,lat:Lat,lng:Lng,type:'{{elem.type.nom}}',poules:poule_list})
