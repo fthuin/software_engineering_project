@@ -44,14 +44,14 @@ function setKm()
 					for(var key in poulesDict){
 						var terId = poulesDict[key]['terrainID']
 						var terIndex = -1;
-						console.log("terId "+ terId);
+
 					
 						for(var j=0;j<TerrainList.length;j++){
 							if(TerrainList[j].id == terId){
 								terIndex = j
 							}
 						}
-						console.log("terIndex "+terIndex);
+
 						if(terIndex != -1)
 						{
 						
@@ -109,6 +109,7 @@ function drop (ev) {
   updatePanel(sourceID, "Choisir un leader");
 
 	setKm();
+	leaderAssignement();
 
 }
 
@@ -345,7 +346,7 @@ function setInfoTerrain(p,matiere,addr,ID,number,type){
 	document.getElementById("ID"+number).innerHTML = ID;
 
 	//TODO Ajouter type de terrain
-	setKm()
+	setKm();
 	
 }
 function setInfoTerrainNoUpdateKm(p,matiere,addr,ID,number,type){
@@ -503,6 +504,7 @@ function clickEventPair(ID){
 			updatePanel(sourceID, "Choisir un leader");
 			
 			setKm();
+			leaderAssignement();
 
 			
 

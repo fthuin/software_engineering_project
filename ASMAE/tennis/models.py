@@ -9,7 +9,8 @@ class infoTournoi(models.Model):
 	date = models.DateTimeField(verbose_name="Date du tournoi")
 	edition = models.IntegerField()
 	addr = models.TextField(verbose_name="Adresse du QG")
-
+	latitude = models.DecimalField(max_digits=19, decimal_places=10, default="50.8539751",blank=True,verbose_name="Latitude")
+	longitude = models.DecimalField(max_digits=19, decimal_places=10, default="4.398054",blank=True,verbose_name="Longitude")
 
 class Ranking(models.Model):
 	id = models.AutoField(primary_key=True)
