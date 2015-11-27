@@ -60,7 +60,7 @@
 								    <select id="tournament_selector" class="form-control" onchange="search_pair()">
 								        <option value="" selected>Tous</option>
 									    {% for elem in Tour %}
-									    <option value="{{ elem.nom }}">{{ elem.nom }}</option>
+									    <option value="{{ elem }}">{{ elem }}</option>
 									    {% endfor %}
 								    </select>
 								</div>

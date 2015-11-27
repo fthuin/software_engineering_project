@@ -74,6 +74,16 @@ def tournoi(request):
 			inscrit1 = request.user.user1.filter(confirm=True)
 			inscrit2 = request.user.user2.filter(confirm=True)
 			inscrit =  list(chain(inscrit1,inscrit2))
+			agenda = False
+			date1 = infoTournoi.objects.all()[0].date
+			date2 = date1 + datetime.timedelta(days=1)
+			for elem in inscrit:
+				if elem.tournoi.titre.jour == "Samedi":
+					elem.date = date1.strftime('%d/%m/%Y')
+				else:
+					elem.date = date2.strftime('%d/%m/%Y')
+				if elem.valid:
+					agenda = True
 			return render(request,'tennis/tournoi.html',locals())
 		else:
 			return render(request,'tennis/tournoiUserNotValidated.html',locals())
