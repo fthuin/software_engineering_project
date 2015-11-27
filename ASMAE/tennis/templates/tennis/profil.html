@@ -407,34 +407,6 @@
 							<div class="form-group">
 						      <label class="control-label col-sm-4" for="classement">Classement</label>
 						      <div class="col-sm-8">
-<<<<<<< HEAD
-						      	<select class="form-control" id="select_classement" name="classement" placeholder="Classement" onchange="onChangeClassement()">
-									<option>N.C.</option>
-								    <option>C30.5</option>
-								    <option>C30.4</option>
-								    <option>C30.3</option>
-								    <option>C30.2</option>
-								    <option>C30.1</option>
-								    <option>C30</option>
-								    <option>C15.5</option>
-								    <option>C15.4</option>
-									<option>C15.3</option>
-								    <option>C15.2</option>
-								    <option>C15.1</option>
-									<option>C15</option>
-									<option>B+4/6</option>
-									<option>B+2/6</option>
-									<option>B0</option>
-									<option>B-2/6</option>
-									<option>B-4/6</option>
-									<option>B-15</option>
-									<option>B-15.1</option>
-									<option>B-15.2</option>
-									<option>B-15.4</option>
-									<option>A Nat</option>
-									<option>A Int</option>
-								</select>
-=======
 										<select class="form-control" id="classement" name="classement" placeholder="Classement">
 											{% for rank in rankings %}
 												{% ifequal user.participant.classement.nom rank.nom %}
@@ -445,7 +417,6 @@
 											{% endfor %}
 										</select>
 						      	<p class="hint" id="hint-classement"></p>
->>>>>>> b64d2c80c38439fdd4e1f0628964db36197df19e
 						      </div>
 						    </div>
 						    <!-- deja participe -->
@@ -522,16 +493,12 @@ function onChangeYearOfBirth() {
 	dateNaissance.value = date.substring(0,6)+an
 }
 
-<<<<<<< HEAD
 function onChangeClassement() {
     var select_classement = document.getElementById("select_classement");
     classement = select_classement.options[select_classement.selectedIndex].value
 }
 
-	$('#select_jour').on('input', function() { 
-=======
 	$('#select_jour').on('input', function() {
->>>>>>> b64d2c80c38439fdd4e1f0628964db36197df19e
 	    onChangeDayOfBirth();
 });
 	$('#select_mois').on('input', function() {
@@ -540,7 +507,7 @@ function onChangeClassement() {
 	$('#select_an').on('input', function() {
         onChangeYearOfBirth();
 });
-	$('#select_classement').on('input', function() { 
+	$('#select_classement').on('input', function() {
         onChangeYearOfBirth();
 });
 </script>

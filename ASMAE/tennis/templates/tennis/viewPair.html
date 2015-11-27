@@ -91,12 +91,12 @@
 		<!-- Inscription button -->
 		<ul class="list-inline text-center" style="margin-top:20px;">
 			<li>
-				<button class="btn btn-default" onClick="location.href='{% url "tennis.views.payPair" pair.id %}';">Payer</button>
+				<button class="btn btn-default" onClick="location.href='{% url "tennis.views.payPair" pair.id %}';" {% if pair.pay %}disabled{% endif %}>Payer</button>
 			</li>
 			<li>
 				<form class="form-horizontal" role="form" method="post" action="{% url "tennis.views.viewPair" pair.id %}" {% if pair.valid %}style="display:none"{% endif %}>
 					{% csrf_token %}
-					<button class="btn-default btn" type="button" data-toggle="modal" data-target="#myModal">Supprimer</button>
+					<button class="btn-default btn" type="button" data-toggle="modal" data-target="#myModal" {% if pair.valid %}disabled{% endif %}>Supprimer</button>
 					<button class="btn-default btn" style="display:none" id="deletePair" type="submit">Supprimer</button>
 				</form>
 			</li>

@@ -1,5 +1,5 @@
 # coding=utf-8
-from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Paragraph, Table, TableStyle
+from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Paragraph, Table, TableStyle, Image
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_LEFT, TA_CENTER
 from reportlab.lib import colors
@@ -53,10 +53,12 @@ def stylesheet():
     styles['alert'] = ParagraphStyle(
         'alert',
         parent=styles['default'],
+        fontName='Helvetica-Bold',
         fontSize=14,
         leading=14,
         backColor="#D4542D",
-        borderColor="#D4542D",
+        borderColor="#BF4C28",
+        textColor="#FFFFFF",
         borderWidth=1,
         borderPadding=5,
         borderRadius=2,
@@ -97,7 +99,6 @@ def addIfNotNone(dic, ind, value):
 
 class PDFTerrain():
     def buildContent(self, stylesheet, owner_content, court_content, creator_content):
-        content = []
         owner_part = [Paragraph('Informations sur le propriétaire', stylesheet['alert'])]
         court_part = [Paragraph('Informations sur le terrain', stylesheet['alert'])]
         creator_part = [Paragraph('Informations sur le membre du staff', stylesheet['alert'])]
@@ -287,22 +288,76 @@ class PDFPoule():
 
         return pairs_part
 
-    def create_court_flowables(self, court):
-        owner_content = {}
-        owner_part = {}
-        #owner_part = [Paragraph('Informations sur le propriétaire', stylesheet['alert'])]
-        #court_part = [Paragraph('Informations sur le terrain', stylesheet['alert'])]
-        #creator_part = [Paragraph('Informations sur le membre du staff', stylesheet['alert'])]
+    def create_court_flowables(self, court, stylesheet):
+        court_part = []
+        owner_fullname = ""
+        if court.user.participant.titre != None:
+            owner_fullname += court.user.participant.titre + " "
+        if court.user.participant.prenom != None:
+            owner_fullname += court.user.participant.prenom + " "
+        if court.user.participant.nom != None:
+            owner_fullname += court.user.participant.nom
 
-        #for key, value in owner_content.iteritems():
-        #    owner_part.append(Paragraph(key + ' : ' + value, stylesheet['default']))
+        owner_fax = ""
+        if court.user.participant.nom != None and court.user.participant.nom.strip != "":
+            owner_fax += court.user.participant.fax
+        else: #NO FAX
+            owner_fax += "-"
 
-        #for key, value in court_content.iteritems():
-        #    court_part.append(Paragraph(key + " : " +value, stylesheet['default']))
+        owner_gsm = ""
+        if court.user.participant.gsm != None and court.user.participant.gsm.strip != "":
+            owner_gsm += court.user.participant.gsm
+        else:
+            owner_gsm += "-"
 
-        #for key, value in creator_content.iteritems():
-        #    creator_part.append(Paragraph(key + " : " +value, stylesheet['default']))
-        #return owner_part + court_part + creator_part
+        owner_telephone = ""
+        if court.user.participant.telephone != None and court.user.participant.telephone != "":
+            owner_telephone += court.user.participant.telephone
+        else:
+            owner_telephone += "-"
+
+        owner_part = []
+        owner_part = [Paragraph('Informations sur le propriétaire', stylesheet['alert'])]
+        court_part = [Paragraph('Informations sur le terrain', stylesheet['alert'])]
+
+        owner_part.append(Paragraph('NOM : ' +  owner_fullname, stylesheet['default']))
+        owner_part.append(Paragraph('FAX : ' + owner_fax, stylesheet['default']))
+        owner_part.append(Paragraph('GSM : ' + owner_gsm, stylesheet['default']))
+        owner_part.append(Paragraph('TELEPHONE : ' + owner_telephone, stylesheet['default']))
+        owner_part.append(Paragraph('ADRESSE DU PROPRIETAIRE : ' + court.user.participant.getAdresse(), stylesheet['default']))
+
+        court_etat = ""
+        if court.etat.nom != None and court.etat.nom.strip != "":
+            court_etat += court.etat.nom
+        else:
+            court_etat += "-"
+
+        court_surface = ""
+        if court.matiere.nom != None and court.matiere.nom.strip != "":
+            court_surface += court.matiere.nom
+        else:
+            court_surface += "-"
+
+        court_acces = ""
+        if court.acces != None and court.acces.strip != "":
+            court_acces += court.acces
+        else:
+            court_acces += "-"
+
+        court_part.append(Paragraph('ETAT : ' + court_etat, stylesheet['default']))
+        court_part.append(Paragraph('SURFACE : ' + court_surface, stylesheet['default']))
+        court_part.append(Paragraph('ACCES : ' + court_acces, stylesheet['default']))
+        court_part.append(Paragraph('ADRESSE DU TERRAIN : ' + court.getAdresse(), stylesheet['default']))
+
+        return owner_part + court_part
+
+    def create_sponsors_flowables(self):
+        sponsors_image = []
+        sponsors_image.append([Image("./tennis/static/tennis/img/sponsors_deloitte.jpg" , width = 181/2, height = 87/2), Image("./tennis/static/tennis/img/sponsors_eventail.jpg" , width = 189/2, height = 50/2), Image("./tennis/static/tennis/img/sponsors_exki.jpg" , width = 104/2, height = 105/2)])
+        sponsors_image.append([Image("./tennis/static/tennis/img/sponsors_hayez.jpg" , width = 202/2, height = 76/2), Image("./tennis/static/tennis/img/sponsors_lalibre.jpg" , width = 166/2, height = 58/2), Image("./tennis/static/tennis/img/sponsors_raidillon.jpg" , width = 109/2, height = 109/2)])
+        sponsors_image.append([Image("./tennis/static/tennis/img/sponsors_smart.jpg" , width = 173/2, height = 69/2), Image("./tennis/static/tennis/img/sponsors_VW.jpg" , width = 111/2, height = 131/2), Image("./tennis/static/tennis/img/sponsors_weplay.jpg" , width = 171/2, height = 45/2)])
+        table = Table(sponsors_image)
+        return [table]
 
     def __init__(self, response, poule, staffUser):
         self.poule = poule
@@ -312,4 +367,6 @@ class PDFPoule():
         flowables.append(Paragraph('Tableaux des scores', stylesheet()['alert']))
         flowables += self.create_poule_table_flowables()
         flowables += self.create_pairs_flowables(poule.paires.all())
+        flowables += self.create_court_flowables(poule.court, stylesheet())
+        flowables += self.create_sponsors_flowables()
         build_pdf(response, flowables)
