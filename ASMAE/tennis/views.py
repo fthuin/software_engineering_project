@@ -1456,8 +1456,7 @@ def validatePair(request, id):
 			pair.valid = valider
 			pair.pay = payer
 			pair.save()
-
-			return redirect(reverse(staffPaire))
+			return redirect(reverse(validatePair,args={id}))
 
 		if request.POST['action'] == "deletePair":
 			pair.delete()
