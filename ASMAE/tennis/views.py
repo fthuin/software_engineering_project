@@ -82,7 +82,7 @@ def tournoi(request):
 					elem.date = date1.strftime('%d/%m/%Y')
 				else:
 					elem.date = date2.strftime('%d/%m/%Y')
-				if elem.valid:
+				if elem.valid and elem.tournoi.status.numero >= 2:
 					agenda = True
 			return render(request,'tennis/tournoi.html',locals())
 		else:

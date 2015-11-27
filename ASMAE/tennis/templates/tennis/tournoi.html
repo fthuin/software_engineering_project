@@ -141,13 +141,20 @@
 		<h2 class="center">Agenda</h2>
 		<hr class="line">
 		{% for elem in inscrit %}
-		{% if elem.valid %}
+		{% if elem.valid and elem.tournoi.status.numero >= 2 %}
 		<div class="panel panel-default">
 			<div class="panel-heading">{{elem.tournoi}} - {{elem.id}}</div>
 			<div class="panel-body">
 				<b>Jour : </b> {{ elem.tournoi.titre.jour }} ({{elem.date}}) <br>
 				<b>Partenaire : </b> {% if elem.user1 == user %}{{elem.user2.participant.fullName}}{% else %}{{elem.user1.participant.fullName}}{% endif %} <br>
-				<b>Poule : </b> {{ elem.poule_set.all.0.id }}
+				<b>Poule : </b> {{ elem.poule_set.all.0.id }} <br>
+				<b>Leader : </b> {{ elem.poule_set.all.0.leader.participant.fullName }} <br>
+				<b>Participant : </b> {{ elem.poule_set.all.0.paires.all|length }} paires <br>
+				<b>Terrain : </b> {{ elem.poule_set.all.0.court.getAdresse }} (<a id="map{{elem.id}}" href="http://maps.google.com/maps?z=10&t=m&q=loc:" target="_blank">Map</a>)
+				<script>
+				var loc = '{{elem.poule_set.all.0.court.latitude}}'.replace(",",".")+"+"+'{{elem.poule_set.all.0.court.longitude}}'.replace(",",".");
+				document.getElementById("map{{elem.id}}").href += loc;
+				</script>
 			</div>
 		</div>
 		{% endif %}
