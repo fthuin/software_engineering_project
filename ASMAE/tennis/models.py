@@ -58,6 +58,12 @@ class Participant(models.Model):
 	def smallName(self):
 		return u'' +self.prenom[0:1].upper()+". "+self.nom
 
+	def limitName(self):
+		nom = self.nom
+		if len(self.nom) >= 16:
+			nom = nom[0:14]+".."
+		return u'' +self.prenom[0:1].upper()+". "+nom
+
 	def getAdresse(self):
 		return self.rue+","+self.numero+" "+self.localite+" Belgium"
 
