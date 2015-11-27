@@ -202,8 +202,6 @@ class Arbre(models.Model):
 	data = models.TextField(null=True)
 	label = models.TextField(null=True)
 	court = models.ForeignKey(Court, null=True, blank=True)
-	
-
 
 	def __str__(self):
 		return "Arbre n " + str(self.id)
