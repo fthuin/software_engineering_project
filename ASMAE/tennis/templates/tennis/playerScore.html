@@ -1,15 +1,16 @@
-{% extends "tennis/staff.html" %}
+{% extends "tennis/base.html" %}
 
 {% block title %}Poules {{poule.id}}{% endblock %}
-{% block ongTournoi %}class="active"{% endblock %}
+{% block nav-tournoi %}class="active"{% endblock %}
 
-{% block bodyStaff %}
+{% block body %}
 <!-- Gestionnaire des groupes -->
+<div class="container">
 <div class="content-box" id="gestionTournoi">
 	<p class="hint" id="hint-poule"></p>
     <h2 class="center">Poules {{poule.id}}</h2>
     <hr class="line">
-    <form action="{% url "tennis.views.pouleScore" poule.id %}" method="post" onsubmit="checkPouleScoreInput()">
+    <form action="{% url "tennis.views.enterScore" poule.id %}" method="post" onsubmit="checkPouleScoreInput()">
 	{% csrf_token %}
         <input type="text" name="poule" value="{{poule.id}}" style="display:none">
         <div class="table-responsive">
@@ -34,9 +35,9 @@
                             <div class="form-group" style="margin-top:5px;margin-bottom:5px;">
                                 <div class="row">
                                     <ul class="list-inline center">
-                                        <li style="margin:0;padding:0;"><input maxlength="2" type="text" name="{{pair.id}}-{{p.id}}"  class="sc {{pair.id}}-{{p.id}} form-control" style="max-width:50px;text-align:center"></li>
+                                        <li style="margin:0;padding:0;"><input maxlength="2" type="text" name="{{pair.id}}-{{p.id}}"  class="sc {{pair.id}}-{{p.id}} form-control" style="max-width:50px;text-align:center" {% if pair.user1 == user or pair.user2 == user or p.user1 == user or p.user2 == user %}{% else %}readonly{% endif %}></li>
                                         <li>-</li>
-                                        <li style="margin:0;padding:0;"><input maxlength="2"  type="text" class="sc {{p.id}}-{{pair.id}} form-control" style="max-width:50px;text-align:center"></li>
+                                        <li style="margin:0;padding:0;"><input maxlength="2"  type="text" class="sc {{p.id}}-{{pair.id}} form-control" style="max-width:50px;text-align:center" {% if pair.user1 == user or pair.user2 == user or p.user1 == user or p.user2 == user %}{% else %}readonly{% endif %}></li>
                                     </ul>
                                 </div>
                             </div>
@@ -54,45 +55,11 @@
                 <button class="btn btn-default"  value="save" name="action">Enregistrer</button>
 
             </li>
-            <li>
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal" type="button" onclick="checkValues()">Valider</button>
-				<button id="saveFinite" class="btn btn-default center-block" type="submit" style="display:none" value="saveFinite" name="action"></button>
-            </li>
         </ul>
         
     </form>
 </div>
-
-<!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title center">Confirmation validation</h4>
-        </div>
-        <div class="modal-body">
-			<p id="textModalScoreNotPositif" >Les scores doivent etre positif</p>
-			<p id="textModalScoreNotNumber" >Les scores doivent etre des chiffres</p>
-			<p id="textModalEmptyScore" >Veuillez remplir tous les scores pour valider la poule</p>
-          <p id="textModalConfirm">Etes-vous sûr de valider les scores de cette poules?</p>
-        
-            <ul class="list-inline text-center">
-                <li>
-                    <button type="button" class="btn btn-default" id="yesModal" onclick="document.getElementById('saveFinite').click()">oui</button>
-                </li>
-                <li>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">non</button>
-                </li>
-            </ul>
-        </div>
-      </div>
-      
-    </div>
-  </div>
-
+</div>
 {% endblock %}
 
 {% block commande %}

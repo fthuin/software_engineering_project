@@ -336,6 +336,43 @@ def payPair(request,id):
 		return render(request,'tennis/payPair.html',locals())
 	return redirect(reverse(home))
 
+def enterScore(request,id):
+	def is_number(s):
+		try:
+			float(s)
+			return True
+		except ValueError:
+			return False
+	poule = Poule.objects.get(id=id)
+	if request.method == "POST":
+		poule.score.all().delete()
+		pairList = poule.paires.all()
+		dictionnaire = dict()
+		for id1 in pairList:
+			for id2 in pairList:
+				if((str(id1.id)+"-"+str(id2.id) in dictionnaire) or (str(id2.id)+"-"+str(id1.id) in dictionnaire) or (id1==id2)):
+					pass
+				else:
+					dictionnaire[str(id1.id)+"-"+str(id2.id)] = True
+					dictionnaire[str(id2.id)+"-"+str(id1.id)] = True
+
+					if (is_number(request.POST[str(id1.id)+"-"+str(id2.id)]) and is_number(request.POST[str(id2.id)+"-"+str(id1.id)])):
+						score = Score(paire1 = id1,paire2=id2,point1=int(request.POST[str(id1.id)+"-"+str(id2.id)]),point2=int(request.POST[str(id2.id)+"-"+str(id1.id)]))
+						score.save()
+						poule.score.add(score)
+
+		return redirect(reverse(tournoi))
+
+	if request.user.is_authenticated():
+		scoreList = poule.score.all()
+		scoreValues = ""
+		for sco in scoreList:
+			scoreValues = scoreValues + repr(sco.paire1.id)+"-"+repr(sco.paire2.id)+","+repr(sco.point1)+"."+repr(sco.paire2.id)+"-"+repr(sco.paire1.id)+","+repr(sco.point2)+"."
+		scoreValues = scoreValues[:-1]
+		return render(request,'tennis/playerScore.html',locals())
+	return redirect(reverse(home))
+
+
 def terrain(request):
 	if request.user.is_authenticated():
 		if Participant.objects.get(user=request.user).isAccountActivated:

@@ -75,7 +75,8 @@
 		<h2 class="center">Le Charles de Lorraine</h2>
 		<hr class="line">
 		<div class="row">
-			<div class="col-lg-8">
+			<img class="img-responsive pull-right" src="{% static 'tennis/img/service.jpg' %}" alt="service">
+			
 				<p class="textHome">Le Charles de Lorraine a été fondé en 1974 par Monsieur et Madame Thierry de Ville de Goyet. Ils ont eu le soutien de Monsieur et Madame Francis Lagae et de Monsieur et Madame Thierry de Patoul pour se lancer dans cette grande aventure!</p>
 
 				<p class="textHome">Ce tournoi de tennis qui se voulait au départ le moyen de rassembler les habitants d'un même quartier est devenu très rapidement incontournable pour beaucoup de monde. En six ans, le nombre de joueurs est rapidement monté à plus de 900 joueurs. C'est en 1982, que le tournoi a été repris en main par Asmae au profit de ses projets. Le Charles de Lorraine a survécu aux années noires du tennis à la fin des années 80.</p>
@@ -85,11 +86,8 @@
 				<p class="textHome">Ce sont des équipes de jeunes bénévoles d'Asmae qui gèrent l'ensemble des activités proposées par le Charles de Lorraine.</p>
 
 				<a href="{% url "tennis.views.resultat" %}">Voir les résultats de l'année précédente</a>
-			</div>
 
-			<div class="col-lg-4">
-				<img class="img-responsive" src="{% static 'tennis/img/service.jpg' %}" alt="service">
-			</div>
+				
 		</div>
 		
 		<!--
