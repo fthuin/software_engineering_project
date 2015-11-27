@@ -1,18 +1,20 @@
 \section{Current implementation}
 
-The code source of the current implementation is as always available on our GitHub repository at \url{https://github.com/fthuin/software_engineering_project} (you have to be logged in to see the content) and an online version is available on \url{asmae.herokuapp.com}. As there thousands lines of code, we will describe the recently added features in this section.
+The code source of the current implementation is as always available on our GitHub repository at \url{https://github.com/fthuin/software_engineering_project} (you have to be logged in to see the content) and an online version is available on \url{asmae.herokuapp.com}. As there are thousands lines of code, we will describe the recently added features in this section.
 
 \subsection{Player}
 
-Staff member can now see if a player is linked to a pair in their interface. As the client request during the meeting, pairs are now automatically linked to a tournament after registration, depending on the pair properties of course.
+As the client requested during the meeting, staff member can now see if a player is linked to a pair in their interface and pairs are now automatically linked to a tournament after registration, depending on the pair properties of course.
+
+This is allowed by our new TounoiCategorie class which record the various age related criteria necessary to make a decision and our TounoiTitle class which record the gender both player can have (man only, women only or mixed).
 
 \subsection{Tournament}
 
-It is now possible to modify the date of a tournament as well as to affect it to a category (double homme, double femme, double mix, tournoi des familles). The category of a tournament will determine the rule a pair as to respect to join it (no mixed genre pair on double homme and double femme tournament, familly tournament under 15 years old, ...).
+It is now possible to modify the date of a tournament as well as to affect it to a category (double homme, double femme, double mix, tournoi des familles, ...). The category of a tournament will determine the rule a pair has to respect to join it (no mixed genre pair on double homme and double femme tournament, familly tournament under 15 years old, ...). The staff's tournament tab's design has also been fully reworked to be more intuitive and functional.
 
-\subsection{Extras}
+\subsection{Inscription fee}
 
-As requested by the client, it is now possible to see how much people selected a particular extra. It is now also possible to easily change the price of the default inscription fee as to facilitate the work of staff members.
+To satisfy the needs of the client, we added a gestion of the basic inscription fee which must be payed by everyone and regrouped it with the previously implemented extras management. Staff member can now also see how much people paid for each extra under this new inscription tab.
 
 \subsection{History}
 

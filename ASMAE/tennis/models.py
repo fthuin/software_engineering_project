@@ -58,6 +58,12 @@ class Participant(models.Model):
 	def smallName(self):
 		return u'' +self.prenom[0:1].upper()+". "+self.nom
 
+	def limitName(self):
+		nom = self.nom
+		if len(self.nom) >= 16:
+			nom = nom[0:14]+".."
+		return u'' +self.prenom[0:1].upper()+". "+nom
+
 	def getAdresse(self):
 		return u"" + self.numero + " " + self.rue + ", " + self.codepostal + " " + self.localite
 
@@ -146,8 +152,8 @@ class Court(models.Model):
 	boite = models.CharField(max_length=10,null=True, blank=True)
 	codepostal = models.CharField(max_length=10, verbose_name='Code postal')
 	localite = models.CharField(max_length=30, verbose_name='Localité')
-	latitude = models.DecimalField(max_digits=19, decimal_places=10, null=True,blank=True,verbose_name="Latitude")
-	longitude = models.DecimalField(max_digits=19, decimal_places=10, null=True,blank=True,verbose_name="Longitude")
+	latitude = models.DecimalField(max_digits=19, decimal_places=6, null=True,blank=True,verbose_name="Latitude")
+	longitude = models.DecimalField(max_digits=19, decimal_places=6, null=True,blank=True,verbose_name="Longitude")
 	acces = models.TextField(null=True,blank=True)
 	matiere = models.ForeignKey(CourtSurface, verbose_name='Surface')
 	type = models.ForeignKey(CourtType, verbose_name='Type')
@@ -196,8 +202,6 @@ class Arbre(models.Model):
 	data = models.TextField(null=True)
 	label = models.TextField(null=True)
 	court = models.ForeignKey(Court, null=True, blank=True)
-
-
 
 	def __str__(self):
 		return "Arbre n " + str(self.id)

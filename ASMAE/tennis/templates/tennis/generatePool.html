@@ -366,19 +366,18 @@ function terrainAssignement()
 
 	}
 
+
 	//On a toutes les distance des poules au terrainmatieannt on va assigner les terrains
 
 	alreadyTaken = [];
 	firstkey = Object.keys(dico)[0];
 	for(var key in dico[firstkey]){
-		console.log("idpair");
-		console.log(key);
+
 		var minDistance =  Number.MAX_VALUE;
 		var index = -1;
 		for (var key2 in dico){
 
-			console.log(key2);
-			console.log(dico[key2][key]);
+
 			if(minDistance > dico[key2][key] && (alreadyTaken.indexOf(key2) ==-1 || alreadyTaken.length == TerrainList.length)){
 
 				minDistance = dico[key2][key];
@@ -387,13 +386,18 @@ function terrainAssignement()
 			}
 		}
 		//Assigner le terrain index a la poule key par html brole
-		console.log(key);
-		console.log("Poule "+key+" with terrain "+index);
+
 
 		setInfoTerrainNoUpdateKm(TerrainList[index].user,TerrainList[index].matiere,TerrainList[index].type,TerrainList[index].addr,TerrainList[index].id,TerrainList[index].poules,parseInt(key)+1);
 		document.getElementById("empreinte"+(parseInt(key)+1)).innerHTML = Math.round(minDistance)/1000;
 
 		alreadyTaken.push(index);
+
+
+		if(alreadyTaken.length >= Object.keys(dico).length){
+
+			alreadyTaken = [];
+		}
 	}
 
 }
@@ -473,7 +477,7 @@ function greedySolution(matrix,nbrPoule){
 		nPairInPoule[indexTab % nPairInPoule.length]++;
 		indexTab++;
 	}
-	console.log(nPairInPoule)
+
 
 
 	var closestCourt = new Array(matrix.length);
@@ -494,40 +498,43 @@ function greedySolution(matrix,nbrPoule){
 	}
 	for(var i =0;i<matrix.length;i++){
 		for(var j=0;j<matrix[i].length;j++){
-			//console.log(closestCourt[i][j][0]);
+
 			valueCourt[closestCourt[i][j][0]][1] += j;
-			//console.log(valueCourt[closestCourt[i][j][0]]);
+
 
 		}
 	}
-	console.log(valueCourt);
+
 	listTerrain = new Array(nbrPoule);
 	valueCourt.sort(function(a, b){return a[1]-b[1]});
-	for(var i=0;i<nbrPoule;i++)
+
+	for(var i=0;i<valueCourt.length;i++)
 	{
 		listTerrain[i] = valueCourt[i][0];
 	}
-	console.log(listTerrain);
+
 
 
 	//On rajoute les pairs aux terrains choisis
 	pairInPoule = new Array(parseInt(nbrPoule));
 	kmParPoule = new Array(parseInt(nbrPoule));
-	console.log(pairInPoule);
+
 	for(var i=0;i<kmParPoule.length;i++){
 		kmParPoule[i] =0;
 	}
 
 	alreadyIn = [];
-	for(var i =0;i<listTerrain.length;i++){
+
+
+	for(var i =0;i<nbrPoule;i++){
+;
 		var nInPoule = nPairInPoule[i];
 
 		pairInPoule[i] = [];
 		for(var j=0;j<matrix[0].length;j++){
 			for(var x=0;x<matrix.length;x++){
-				//console.log(x+" "+j);
-				//console.log(pairInPoule[i].length);
-				if(closestCourt[x][j][0] == listTerrain[i] && alreadyIn.indexOf(x) == -1 && pairInPoule[i].length < nInPoule)
+
+				if(closestCourt[x][j][0] == listTerrain[i%listTerrain.length] && alreadyIn.indexOf(x) == -1 && pairInPoule[i].length < nInPoule)
 				{
 					kmParPoule[i] = kmParPoule[i] + matrix[x][listTerrain[i]];
 					pairInPoule[i].push(x);
@@ -538,6 +545,7 @@ function greedySolution(matrix,nbrPoule){
 		}
 
 	}
+
 var maxnbrInPoule = pairInPoule[0].length
 document.getElementById("poulesDiv").innerHTML = "";
 
@@ -641,17 +649,14 @@ function leaderAssignement(){
 
 
 		}
-		console.log(key);
-		//console.log(minDist);
-		//console.log(minNom);
-		console.log("Leader"+(key+1))
+
 		setSelectedIndex(document.getElementById("Leader"+(parseInt(key)+1)),minNom);
 	}
 
 }
 function setSelectedIndex(s, v) {
 	for ( var i = 0; i < s.options.length; i++ ) {
-		console.log(s);
+
 		if ( s.options[i].text == v ) {
 			s.options[i].selected = true;
 			return;
