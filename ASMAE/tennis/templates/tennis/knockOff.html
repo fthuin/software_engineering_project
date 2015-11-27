@@ -72,7 +72,7 @@
                 <div class="form-group" style="margin:0">
                     <label class="info col-sm-4" for="email">ID :</label>
                     <div class="col-sm-8">
-                      <p style="margin:0" id="terrainID" class="info">{% if arbre.court %}{{arbre.court.id}}{% else %} - {% endif %}</p>
+                      <p style="margin:0" id="terrainID" class="info"> - </p>
                       <input id="terrain" name="terrain" value="{{arbre.court.id}}" style="display:none;">
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                 <div class="form-group" style="margin:0">
                     <label class="info col-sm-4" for="email">Propriétaire :</label>
                     <div class="col-sm-8">
-                      <p style="margin:0" id="terrainProp" class="info">{% if arbre.court.user.participant. %}{{arbre.court.id}}{% else %} - {% endif %}</p>
+                      <p style="margin:0" id="terrainProp" class="info"> - </p>
                     </div>
                 </div>
                 <!-- matiere -->
@@ -151,7 +151,7 @@
 		<input id="treeLabel" name="treeLabel" value="" style="display:none;">
 		<input id="finaliste" name="finaliste" value="" style="display:none;">
 		<input id="gagnant" name="gagnant" value="" style="display:none;">
-
+		<input id="terrainToSend" name="terrain" value="{{arbre.court.id}}" style="display:none;">
 	
 		<button id="deleteTree" class="btn btn-default center-block" type="submit" style="display:none" value="deleteTree" name="action"></button>
       </ul>
@@ -330,6 +330,7 @@ if(nombrePanel<17){
   {% endfor %}
 }
 
+
 function setInfoTerrain(id,prop,mat,type,addr,km,setKmBol){
   document.getElementById("terrainID").innerHTML = id
   document.getElementById("terrainProp").innerHTML = prop
@@ -337,6 +338,8 @@ function setInfoTerrain(id,prop,mat,type,addr,km,setKmBol){
   document.getElementById("terrainType").innerHTML = type
   document.getElementById("terrainAddr").innerHTML = addr
   document.getElementById("terrainKilo").innerHTML = km
+  document.getElementById("terrainToSend").value = id
+
   if(setKmBol){
 		setKm(id);
 	}
@@ -393,7 +396,7 @@ function assignerTerrain(){
 
 }
 function setKm(id){
-
+	
 	terrainIndex = -1;
 	for(var i =0;i<TerrainList.length;i++)
 	{
@@ -402,13 +405,15 @@ function setKm(id){
 			terrainIndex = i;
 		}
 	}
-		
+
 		var terrainLat = TerrainList[terrainIndex].lat;
 		var terrainLng = TerrainList[terrainIndex].lng;
 		var terrainlatLng = new google.maps.LatLng(parseFloat(terrainLat.replace(",", ".")), parseFloat(terrainLng.replace(",", ".")));
 		var totalDistance = 0;
-
+		console.log(leftList.length);
+		console.log(righList.length);
 		for(var j = 0;j<leftList.length;j++){
+			
 			var user1Lat = leftList[j].lat1;
 			var user1Lng = leftList[j].lng1;
 			var user2Lat = leftList[j].lat2;
@@ -439,6 +444,13 @@ function setKm(id){
 	document.getElementById("terrainKilo").innerHTML = Math.round(totalDistance)/1000;
 }
 
+var actual_id = -1;
+{% if arbre.court %}
+
+setInfoTerrain('{{arbre.court.id}}','{{arbre.court.user.participant.smallName}}','{{arbre.court.matiere}}','{{arbre.court.type}}','{{arbre.court.numero}} {{arbre.court.rue}} <br> {{arbre.court.codepostal}} {{arbre.court.localite}}',"-",true);
+
+actual_id = '{{arbre.court.id}}';
+{% endif %}
 </script>
 
 {% endblock %}
