@@ -297,7 +297,7 @@ function setCourt(page){
 		var dispo = CourtList[i][11];
 
 		//var p = '<tr class="clickable-row" data-href="utilisateurs/'+UserList[i][0]+'"><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td>'+age+' ans</td></tr>';
-		var p = '<tr onclick="window.document.location='+"'terrains/"+CourtList[i][3]+"'"+';" class="clickable-row"><td>'+CourtList[i][3]+'</td><td>'+CourtList[i][4]+'</td><td style="text-align:center;">'+valid+'</td><td style="text-align:center;">'+useIcon+'</td><td>'+dispo+'</td><td>'+CourtList[i][1]+' '+CourtList[i][2]+' ('+CourtList[i][0]+')</td><td>'+adress+'</td><td style="text-align:center;">'+vetIcon+'</td></tr>';
+		var p = '<tr onclick="window.open('+"'terrains/"+CourtList[i][3]+"'"+','+"'_blank'"+');" class="clickable-row"><td>'+CourtList[i][3]+'</td><td>'+CourtList[i][4]+'</td><td style="text-align:center;">'+valid+'</td><td style="text-align:center;">'+useIcon+'</td><td>'+dispo+'</td><td>'+CourtList[i][1]+' '+CourtList[i][2]+' ('+CourtList[i][0]+')</td><td>'+adress+'</td><td style="text-align:center;">'+vetIcon+'</td></tr>';
 		panneau.innerHTML += p;
 	};
 
@@ -350,7 +350,7 @@ function setPair(page){
             pay = '<span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red;"></span>';
         }
 
-		var p = '<tr onclick="window.document.location='+"'paires/"+PairList[i][0]+"'"+';" class="clickable-row"><td>'+PairList[i][0]+'</td><td>'+PairList[i][9]+'</td><td style="text-align:center;">'+valid+'</td><td>'+pay+'</td><td>'+user1+'</td><td>'+user2+'</td></tr>';
+		var p = '<tr onclick="window.open('+"'paires/"+PairList[i][0]+"',"+"'_blank'"+');" class="clickable-row"><td>'+PairList[i][0]+'</td><td>'+PairList[i][9]+'</td><td style="text-align:center;">'+valid+'</td><td>'+pay+'</td><td>'+user1+'</td><td>'+user2+'</td></tr>';
 
 		//var p = '<a href="paires/'+PairList[i][0]+'" class="list-group-item">'+info+'<br>'+user1+' - '+user2+'</a>';
 		panneau.innerHTML += p;
@@ -399,7 +399,7 @@ function setUserStaff(page){
 			iconv = '<span class="glyphicon glyphicon-remove" style="color:red;"></span>';
 		}
 		
-		var p = '<tr onclick="window.document.location='+"'utilisateurs/"+UserList[i][0]+"'"+';" class="clickable-row"><td style="text-align:center">'+icon+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td><td style="text-align:center">'+icont+'</td><td style="text-align:center">'+iconv+'</td></tr>';
+		var p = '<tr onclick="window.open('+"'utilisateurs/"+UserList[i][0]+"','_blank')"+';" class="clickable-row"><td style="text-align:center">'+icon+'</td><td>'+UserList[i][0]+'</td><td>'+UserList[i][1]+'</td><td>'+UserList[i][2]+'</td><td style="text-align:center">'+UserList[i][4]+' ans</td><td style="text-align:center">'+icont+'</td><td style="text-align:center">'+iconv+'</td></tr>';
 		panneau.innerHTML += p;
 	};
 
