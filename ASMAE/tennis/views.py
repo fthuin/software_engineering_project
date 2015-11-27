@@ -1239,7 +1239,7 @@ def viewUser(request,name):
 		participant.save()
 
 		# Validate classement
-		#validate_classement_thread(participant)
+		validate_classement_thread(participant)
 
 		successEdit = "Le profil a bien été changé"
 
