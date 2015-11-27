@@ -484,6 +484,20 @@ def pouleTournoi(request,name):
 	def getKey(item):
 		return item[1]
 
+	if request.method == "POST":
+		title = name
+		cat = name
+		if "_" in name:
+			title = name.split("_")[0]
+			cat = name.split("_")[1]
+		ti = TournoiTitle.objects.get(nom=title)
+		ca = TournoiCategorie.objects.get(nom=cat)
+		tournoi = Tournoi.objects.get(titre=ti,categorie=ca)
+		s = TournoiStatus.objects.get(numero=1)
+		tournoi.status = s
+		tournoi.save()
+		return redirect(reverse(generatePool,args={name}))
+
 	if request.user.is_authenticated():
 		title = name
 		cat = name
@@ -750,7 +764,20 @@ def generatePool(request,name):
 
 			i += 1
 		i = 0
-		Poule.objects.filter(tournoi=tournoi).delete()
+
+		#Au lieu de delete on parcours la liste
+		#Poule.objects.filter(tournoi=tournoi).delete()
+		score_list = list()
+		#On parcours et on garde les scores
+		for elem in Poule.objects.filter(tournoi=tournoi):
+			print(elem)
+			score = list()
+			score.append(elem.paires.all()[:])
+			score.append(elem.score.all()[:])
+			score.append(elem.status)
+			elem.delete()
+		print(score_list)
+		
 		while (i <= j):
 			p = Poule(tournoi=tournoi)
 			p.status = PouleStatus.objects.get(numero=0)
@@ -761,6 +788,15 @@ def generatePool(request,name):
 				p.court = pouleDict[i]['terrain']
 			for pair in pouleDict[i]['pairList']:
 				p.paires.add(pair)
+			#check si c'est les meme pair qu'une des liste
+			for elem in score_list:
+				pair_list = sort(elem[0],key=lambda x: x.id)
+				pair_list2 = sort(p.paires.all(),key=lambda x: x.id)
+				if pair_list == pair_list2:
+					print("ok")
+					p.score = elem[1]
+					p.status = elem[2]
+					break
 			i += 1
 			p.save()
 

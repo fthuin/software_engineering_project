@@ -63,7 +63,17 @@
         {% endfor %}
     </div>
 
-    <button id="treeButton" class="btn btn-default center-block" onClick="location.href='{% url "tennis.views.knockOff" tournoi.nom %}';" disabled>Arbre de Tournoi</button>
+    <ul class="list-inline text-center">
+        <li>
+            <form action="{% url "tennis.views.pouleTournoi" tournoi.nom %}" method="post">
+                {% csrf_token %}
+                <button class="btn btn-default">Supprimer les poules</button>
+            </form>
+        </li>
+        <li>
+          <button id="treeButton" class="btn btn-default" onClick="location.href='{% url "tennis.views.knockOff" tournoi.nom %}';" disabled>Arbre de Tournoi</button>
+        </li>
+    </ul>
 </div>
 
 {% endblock %}
