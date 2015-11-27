@@ -1,40 +1,59 @@
 # -*- coding: utf-8 -*- 
-from splinter import Browser      
-import threading          
+import threading    
+import time
+from selenium import webdriver
+from tennis.models import Ranking
+from selenium.common.exceptions import NoSuchElementException
 
 def validateClassementOfParticipant(participant):
 	name = participant.prenom.upper() + " " + participant.nom.upper()
-	with Browser() as browser: 
-		# Enter search information
-		browser.visit('http://www.classement-tennis.be/calcul.html')
-		if not browser.is_text_present("Recherchez un joueur en tapant son numéro d'affiliation ou son nom."):
-			# Didn't load right page, close it
-			# print("No Connection")
-			participant.isClassementVerified = False
-			participant.save()
-			return 
-		browser.find_by_id('aft_id').fill(name)
-		resultList = browser.find_by_text(name)
-		if not len(resultList) == 1:
-			# Multiple or no result for name, ask for staff's help as it can't be validated automatically
-			# print("Multiple result")
-			participant.isClassementVerified = False
-			participant.save()
-			return
-		resultList.last.click()
-		# We are on the page, see if it's the correct page and if it is, return classement
-		if browser.is_text_present('Classement actuel: '):
-			# Correct page
-			# print(browser.find_by_tag('div')[46].text)   # Print Name for debug7
-			participant.classement = browser.find_by_tag('div')[48].text[len('Classement actuel: '):] # Ranking
-			participant.isClassementVerified = True # Boolean for verification
-			participant.save()
-		else:
-			# Something happened and we are back on main page, give up and unvalid it
-			# print("Bad link / page changed")
-			participant.isClassementVerified = False
-			participant.save()
-	return 
-	
+	driver	= webdriver.PhantomJS()
+	driver.set_window_size(1120, 550)
+	driver.get('http://www.classement-tennis.be/calcul.html')
+	try:
+		driver.find_element_by_id('aft_id').send_keys(name)
+	except NoSuchElementException:
+		# Didn't load right page, close it
+		# print("No Connection")
+		participant.isClassementVerified = False
+		participant.save()
+		driver.quit()
+		return 
+	# We are on the right page
+	time.sleep(1) # Wait so browser doesn't too quickly, important !
+	result = driver.find_elements_by_xpath("//*[contains(text(), '"+name+"')]")
+	if not len(result) == 1:
+		# Multiple or no result for name, ask for staff's help as it can't be validated automatically
+		# print("Multiple result", len(result))
+		participant.isClassementVerified = False
+		participant.save()
+		driver.quit()
+		return 
+	result[0].click()
+	# We should have changed page now, check if the page is correct, if it is get the classement
+	if len(driver.find_elements_by_xpath("//*[contains(text(), 'Classement actuel: ')]")) == 1:
+		# Correct page
+		classement = driver.find_element_by_xpath("//*[contains(text(), 'Classement actuel: ')]").text[len('Classement actuel: '):] # Ranking
+		for rank in Ranking.objects.all():
+			if rank.nom == classement:
+				# Classement matches
+				participant.classement = rank
+				participant.isClassementVerified = True # Boolean for verification
+				participant.save()
+				driver.quit()
+				return
+		# Classement doesn't match, put boolean to false and give up
+		participant.isClassementVerified = False # Boolean for verification
+		participant.save()
+		driver.quit()
+		return 
+	else:
+		# Something unexcpected happened and we are on a wrong page, give up and unvalid it
+		# print("Bad link / page changed")
+		participant.isClassementVerified = False
+		participant.save()
+		driver.quit()
+		return 
+
 def validate_classement_thread(participant):
 	threading.Thread(target=validateClassementOfParticipant, args=(participant, )).start()
