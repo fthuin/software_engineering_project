@@ -56,7 +56,7 @@
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu scrollable-menu" role="menu" id="terrain">
                     {%for elem in terrains %}
-                    <li><a href="javascript:void(0);" onclick="setInfoTerrain('{{elem.id}}','{{elem.user.participant.smallName}}','{{elem.matiere}}','{{elem.type}}','{{elem.rue}}, {{elem.numero}} <br> {{elem.codepostal}} {{elem.localite}}')">
+                    <li><a href="javascript:void(0);" onclick="setInfoTerrain('{{elem.id}}','{{elem.user.participant.smallName}}','{{elem.matiere}}','{{elem.type}}','{{elem.rue}}, {{elem.numero}} <br> {{elem.codepostal}} {{elem.localite}}','-','true')">
                       [{{elem.id}}] <b>{{elem.user.participant.smallName}}</b> ({{elem.matiere}}) <br>
                       {{elem.rue}}, {{elem.numero}} <br>
                       {{elem.codepostal}} {{elem.localite}}
@@ -64,7 +64,7 @@
                     {% endfor %}
                 </ul>
               </div>
-              <button class="btn btn-default" style="margin-top:20px;">Assigner Terrain</button>
+              <button class="btn btn-default" style="margin-top:20px;" onclick="assignerTerrain()">Assigner Terrain</button>
             </div>
             <div class="col-sm-8">
               <form class="form-horizontal" action="">
@@ -266,9 +266,13 @@
 {% block commande %}
 {% load static from staticfiles %}
 <script src="{% static 'tennis/js/knockOut.js' %}" type="text/javascript"></script>
-
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5lEleQslU1oemC3rf67mvETJrqOjKrFE&libraries=geometry"></script>
 <script type="text/javascript">
-
+TerrainList = [];
+{%for elem in terrains %}
+var addr = '{{elem.rue}}'+ ", "+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
+TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',smallName:'{{elem.user.participant.smallName}}',matiere:'{{elem.matiere}}',lat:'{{elem.latitude}}',lng:'{{elem.longitude}}',type:'{{elem.type.nom}}',addr:addr})
+{% endfor %}
 {% if arbre %}
 //on hide la première étape et on passe directement à l'arbre de tournoi
 document.getElementById("firstStep").style.display = "none";
@@ -286,7 +290,7 @@ setArbre(TreeData,TreeLabel);
 //Create an array with all paires
 var allPaires = new Array();
 {% for paire in allPaires %}
-var Paire = {id:'pair{{paire.id}}',user1:'{{paire.user1.participant.smallName}}',user2:'{{paire.user2.participant.smallName}}',pos:'{{paire.position}}',poule:'{{paire.poule}}'}
+var Paire = {id:'pair{{paire.id}}',user1:'{{paire.user1.participant.smallName}}',user2:'{{paire.user2.participant.smallName}}',pos:'{{paire.position}}',poule:'{{paire.poule}}',lat1:'{{paire.user1.participant.latitude}}',lat2:'{{paire.user2.participant.latitude}}',lng1:'{{paire.user1.participant.longitude}}',lng2:'{{paire.user2.participant.longitude}}'}
 allPaires[{{paire.id}}] = Paire;
 {% endfor %}
 
@@ -322,16 +326,115 @@ if(nombrePanel<17){
   {% endfor %}
 }
 
-function setInfoTerrain(id,prop,mat,type,addr){
+function setInfoTerrain(id,prop,mat,type,addr,km,setKmBol){
   document.getElementById("terrainID").innerHTML = id
   document.getElementById("terrainProp").innerHTML = prop
   document.getElementById("terrainMat").innerHTML = mat
   document.getElementById("terrainType").innerHTML = type
   document.getElementById("terrainAddr").innerHTML = addr
-
+  document.getElementById("terrainKilo").innerHTML = km
+  if(setKmBol){
+		setKm(id);
+	}
   //set km quentin
   //leftList et rightList
 }
+function assignerTerrain(){
+	distanceList = [];
+	for(var i=0;i<TerrainList.length;i++){
+		var terrainLat = TerrainList[i].lat;
+		var terrainLng = TerrainList[i].lng;
+		var terrainlatLng = new google.maps.LatLng(parseFloat(terrainLat.replace(",", ".")), parseFloat(terrainLng.replace(",", ".")));
+		var totalDistance = 0;
+		for(var j = 0;j<leftList.length;j++){
+			var user1Lat = leftList[j].lat1;
+			var user1Lng = leftList[j].lng1;
+			var user2Lat = leftList[j].lat2;
+			var user2Lng = leftList[j].lng2;
+
+			var user1LatLng = new google.maps.LatLng(parseFloat(user1Lat.replace(",", ".")), parseFloat(user1Lng.replace(",", ".")));
+			var user2LatLng = new google.maps.LatLng(parseFloat(user2Lat.replace(",", ".")), parseFloat(user2Lng.replace(",", ".")));
+			
+			var distance1 = google.maps.geometry.spherical.computeDistanceBetween(user1LatLng, terrainlatLng);
+			var distance2 = google.maps.geometry.spherical.computeDistanceBetween(user2LatLng, terrainlatLng);
+
+			totalDistance = totalDistance + distance1 + distance2;
+		}
+		for(var j = 0;j<righList.length;j++){
+			var user1Lat = righList[j].lat1;
+			var user1Lng = righList[j].lng1;
+			var user2Lat = righList[j].lat2;
+			var user2Lng = righList[j].lng2;
+
+			var user1LatLng = new google.maps.LatLng(parseFloat(user1Lat.replace(",", ".")), parseFloat(user1Lng.replace(",", ".")));
+			var user2LatLng = new google.maps.LatLng(parseFloat(user2Lat.replace(",", ".")), parseFloat(user2Lng.replace(",", ".")));
+
+			var distance1 = google.maps.geometry.spherical.computeDistanceBetween(user1LatLng, terrainlatLng);
+			var distance2 = google.maps.geometry.spherical.computeDistanceBetween(user2LatLng, terrainlatLng);
+
+			totalDistance = totalDistance + distance1 + distance2;
+		}
+	distanceList.push(totalDistance);
+	}
+
+	minDist = Number.MAX_VALUE;
+	minIndex = -1;
+	for(var i =0;i<distanceList.length;i++){
+		if(distanceList[i] < minDist){
+			minDist = distanceList[i];
+			minIndex = i;
+		}
+	}
+	setInfoTerrain(TerrainList[minIndex].id,TerrainList[minIndex].smallName,TerrainList[minIndex].matiere,TerrainList[minIndex].type,TerrainList[minIndex].addr,Math.round(minDist)/1000,false);
+
+}
+function setKm(id){
+
+	terrainIndex = -1;
+	for(var i =0;i<TerrainList.length;i++)
+	{
+		if(TerrainList[i].id == id)
+		{
+			terrainIndex = i;
+		}
+	}
+		
+		var terrainLat = TerrainList[terrainIndex].lat;
+		var terrainLng = TerrainList[terrainIndex].lng;
+		var terrainlatLng = new google.maps.LatLng(parseFloat(terrainLat.replace(",", ".")), parseFloat(terrainLng.replace(",", ".")));
+		var totalDistance = 0;
+
+		for(var j = 0;j<leftList.length;j++){
+			var user1Lat = leftList[j].lat1;
+			var user1Lng = leftList[j].lng1;
+			var user2Lat = leftList[j].lat2;
+			var user2Lng = leftList[j].lng2;
+
+			var user1LatLng = new google.maps.LatLng(parseFloat(user1Lat.replace(",", ".")), parseFloat(user1Lng.replace(",", ".")));
+			var user2LatLng = new google.maps.LatLng(parseFloat(user2Lat.replace(",", ".")), parseFloat(user2Lng.replace(",", ".")));
+			
+			var distance1 = google.maps.geometry.spherical.computeDistanceBetween(user1LatLng, terrainlatLng);
+			var distance2 = google.maps.geometry.spherical.computeDistanceBetween(user2LatLng, terrainlatLng);
+
+			totalDistance = totalDistance + distance1 + distance2;
+		}
+		for(var j = 0;j<righList.length;j++){
+			var user1Lat = righList[j].lat1;
+			var user1Lng = righList[j].lng1;
+			var user2Lat = righList[j].lat2;
+			var user2Lng = righList[j].lng2;
+
+			var user1LatLng = new google.maps.LatLng(parseFloat(user1Lat.replace(",", ".")), parseFloat(user1Lng.replace(",", ".")));
+			var user2LatLng = new google.maps.LatLng(parseFloat(user2Lat.replace(",", ".")), parseFloat(user2Lng.replace(",", ".")));
+
+			var distance1 = google.maps.geometry.spherical.computeDistanceBetween(user1LatLng, terrainlatLng);
+			var distance2 = google.maps.geometry.spherical.computeDistanceBetween(user2LatLng, terrainlatLng);
+
+			totalDistance = totalDistance + distance1 + distance2;
+		}
+	document.getElementById("terrainKilo").innerHTML = Math.round(totalDistance)/1000;
+}
+
 </script>
 
 {% endblock %}
