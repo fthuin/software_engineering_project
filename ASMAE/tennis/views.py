@@ -601,6 +601,9 @@ def knockOff(request,name):
 			treeLabel = request.POST['treeLabel']
 			gagnant = request.POST['gagnant']
 			finaliste = request.POST['finaliste']
+			terrainRecv = request.POST['terrain']
+			terrain = Court.objects.get(id=terrainRecv)
+			print(terrain)
 			if(gagnant != ""):
 				pairgagnante = Pair.objects.get(id=int(gagnant))
 				pairgagnante.gagnant = True
@@ -617,6 +620,7 @@ def knockOff(request,name):
 
 			if tournoi.arbre is None:
 				arbre = Arbre(data = treeData,label = treeLabel)
+				arbre.court = terrain
 				arbre.save()
 				tournoi.arbre = arbre
 				tournoi.save()
@@ -624,6 +628,7 @@ def knockOff(request,name):
 				arbre = tournoi.arbre
 				arbre.data = treeData
 				arbre.label= treeLabel
+				arbre.court = terrain
 				arbre.save()
 				LogActivity(user=request.user,section="Tournoi",details="Mise a jour de l'abre du tournoi : "+tournoi.nom()).save()
 
@@ -635,9 +640,9 @@ def knockOff(request,name):
 						pair.finaliste = False
 						pair.save()
 				arbre = tournoi.arbre
-				tournoi.arbre = None
-				tournoi.save()
-				arbre.delete()
+				arbre.data = None
+				arbre.label = None
+				arbre.save()
 				return redirect(reverse(knockOff,args={name}))
 
 	if request.user.is_authenticated():
@@ -671,6 +676,7 @@ def knockOff(request,name):
 					x = x +1
 		if tournoi.arbre is not None:
 			arbre = tournoi.arbre
+			print(arbre)
 		return render(request,'tennis/knockOff.html',locals())
 	return redirect(reverse(home))
 
@@ -1270,7 +1276,7 @@ def viewUser(request,name):
 		participant.save()
 
 		# Validate classement
-		#validate_classement_thread(participant)
+		validate_classement_thread(participant)
 
 		successEdit = "Le profil a bien été changé"
 
