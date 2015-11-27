@@ -348,8 +348,6 @@ function setInfoTerrain(user,matiere,type,addr,id,poules,ID){
 	document.getElementById("ID"+ID).innerHTML = id;
 	setKm()
 
-<<<<<<< HEAD
-=======
 	//Si c'est pas un objet on le reconstruit
 	var p = [];
 	if(typeof(poules)!="object" && poules.length > 0){
@@ -382,8 +380,6 @@ function setInfoTerrain(user,matiere,type,addr,id,poules,ID){
 	}else{
 		document.getElementById("errorTerrain"+ID).style.display = "none";
 	}
-
->>>>>>> 4bdc219eff6aa325d27a309fbc7a7012636c0391
 }
 function setInfoTerrainNoUpdateKm(user,matiere,type,addr,id,poules,ID){
 	document.getElementById("proprio"+ID).innerHTML = user;

@@ -528,8 +528,6 @@ def knockOff(request,name):
 		terrains = terrains.filter(dispoDimanche=True)
 
 	terrains.order_by("id")
-	print(terrains)
-
 
 	def getKey(item):
 		return item[1]
@@ -875,7 +873,7 @@ def staffExtra(request):
 	formated_date = date_inscription.strftime('%d/%m/%Y')
 	yearLoop = range(date.today().year,date.today().year+5)
 	isAdmin = request.user.groups.filter(name="Admin").exists()
-	print(isAdmin)
+
 	# On récupère les extras, on set le nombre de demandes à zéro
 	for extra in extras:
 		extra.commandsCount = 0
@@ -891,15 +889,11 @@ def staffExtra(request):
 	if request.method == "POST":
 		resetDbForNextYear(request)
 		if request.POST['action'] == "cleanDb":
-			print("yo")
 			resetDbForNextYear(request)
 
 		if request.POST['action'] == "modifyInfoTournoi":
 			prixTournoi = request.POST['prixInscription'].strip()
 			dateInfoTournoi = request.POST['birthdate'].strip()
-
-			print(prixTournoi)
-			print(dateInfoTournoi)
 
 			info = infoTournoi.objects.all()[0]
 			prixTournoi = prixTournoi.replace(",",".")
