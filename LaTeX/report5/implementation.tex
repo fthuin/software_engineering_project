@@ -1,0 +1,31 @@
+\section{Current implementation}
+
+The code source of the current implementation is as always available on our GitHub repository at \url{https://github.com/fthuin/software_engineering_project} (you have to be logged in to see the content) and an online version is available on \url{asmae.herokuapp.com}. As there thousands lines of code, we will describe the recently added features in this section.
+
+\subsection{Player}
+
+Staff member can now see if a player is linked to a pair in their interface. As the client request during the meeting, pairs are now automatically linked to a tournament after registration, depending on the pair properties of course.
+
+\subsection{Tournament}
+
+It is now possible to modify the date of a tournament as well as to affect it to a category (double homme, double femme, double mix, tournoi des familles). The category of a tournament will determine the rule a pair as to respect to join it (no mixed genre pair on double homme and double femme tournament, familly tournament under 15 years old, ...).
+
+\subsection{Extras}
+
+As requested by the client, it is now possible to see how much people selected a particular extra. It is now also possible to easily change the price of the default inscription fee as to facilitate the work of staff members.
+
+\subsection{History}
+
+As requested by the user we have added an \enquote{Historique} widget under players and courts as to simplify the staff's jobs and make the website more practical for their use. They can now have all the relevant information on the same page.
+
+\subsection{PDF}
+
+Once again, as requested by the user during our meeting, we have modified our pdf generation to centralize all the information of the court and player on the poule pdf. Allowing staff member to easily print the data and hand it to the player as needed.
+
+\subsection{Database}
+
+On the database side we now added a button that will flush the database of all informations relative to a yearly set of tournament such as pairs. This allows staff member to easily reinitialise the database while safe-keeping important information such as user account, court information, encoded extras, ...
+
+\subsection{Geolocalisation}
+
+We made our google maps tool fully functional and it is now possible for staff member to easily locate any given court or players home's location on the website.
