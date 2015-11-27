@@ -8,7 +8,7 @@ from tennis.forms import LoginForm
 from tennis.models import Extra, Participant,Court, Tournoi, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, PouleStatus,Arbre, TournoiStatus, TournoiTitle, TournoiCategorie, infoTournoi, Ranking
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail
 from tennis.classement import validate_classement_thread
-import re, math
+import re, math, copy
 import json
 import datetime
 from datetime import date
@@ -495,6 +495,8 @@ def pouleTournoi(request,name):
 		tournoi = Tournoi.objects.get(titre=ti,categorie=ca)
 		s = TournoiStatus.objects.get(numero=1)
 		tournoi.status = s
+		a = tournoi.arbre
+		tournoi.arbre = None
 		tournoi.save()
 		return redirect(reverse(generatePool,args={name}))
 
@@ -770,14 +772,17 @@ def generatePool(request,name):
 		score_list = list()
 		#On parcours et on garde les scores
 		for elem in Poule.objects.filter(tournoi=tournoi):
-			print(elem)
-			score = list()
-			score.append(elem.paires.all()[:])
-			score.append(elem.score.all()[:])
-			score.append(elem.status)
+			p2 = Poule(tournoi=tournoi)
+			p2.status = elem.status
+			p2.save()
+			for p in elem.paires.all():
+				p2.paires.add(p)
+			for p in elem.score.all():
+				p2.score.add(p)
+			score_list.append(p2)
 			elem.delete()
-		print(score_list)
-		
+
+		finali = True
 		while (i <= j):
 			p = Poule(tournoi=tournoi)
 			p.status = PouleStatus.objects.get(numero=0)
@@ -788,17 +793,32 @@ def generatePool(request,name):
 				p.court = pouleDict[i]['terrain']
 			for pair in pouleDict[i]['pairList']:
 				p.paires.add(pair)
+
+			p.save()
 			#check si c'est les meme pair qu'une des liste
 			for elem in score_list:
-				pair_list = sort(elem[0],key=lambda x: x.id)
-				pair_list2 = sort(p.paires.all(),key=lambda x: x.id)
+				pair_list = sorted(elem.paires.all(),key=lambda x: x.id)
+				pair_list2 = sorted(p.paires.all(),key=lambda x: x.id)
 				if pair_list == pair_list2:
-					print("ok")
-					p.score = elem[1]
-					p.status = elem[2]
+					p.score = elem.score.all()
+					p.status = elem.status
+					if p.status.numero < 2:
+						finali = False
 					break
+				else:
+					finali = False
 			i += 1
 			p.save()
+
+		for elem in score_list:
+			elem.delete()
+
+		if finali :
+			tournoi.status = TournoiStatus.objects.get(numero=3)
+			tournoi.save()
+		else:
+			tournoi.status = TournoiStatus.objects.get(numero=2)
+			tournoi.save()
 
 
 		if request.POST['action'] == 'save':
