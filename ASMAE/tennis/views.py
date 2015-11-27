@@ -822,6 +822,8 @@ def generatePool(request,name):
 
 
 		if request.POST['action'] == 'save':
+			tournoi.status = TournoiStatus.objects.get(numero=1)
+			tournoi.save()
 			return redirect(reverse(generatePool,args={tournoi.nom()}))
 			#request.method = "GET"
 			#return generatePool(request,tournoi.nom)
