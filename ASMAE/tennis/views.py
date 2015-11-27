@@ -74,6 +74,16 @@ def tournoi(request):
 			inscrit1 = request.user.user1.filter(confirm=True)
 			inscrit2 = request.user.user2.filter(confirm=True)
 			inscrit =  list(chain(inscrit1,inscrit2))
+			agenda = False
+			date1 = infoTournoi.objects.all()[0].date
+			date2 = date1 + datetime.timedelta(days=1)
+			for elem in inscrit:
+				if elem.tournoi.titre.jour == "Samedi":
+					elem.date = date1.strftime('%d/%m/%Y')
+				else:
+					elem.date = date2.strftime('%d/%m/%Y')
+				if elem.valid:
+					agenda = True
 			return render(request,'tennis/tournoi.html',locals())
 		else:
 			return render(request,'tennis/tournoiUserNotValidated.html',locals())
@@ -298,6 +308,7 @@ def viewPair(request,id):
 
 def payPair(request,id):
 	pair = Pair.objects.filter(id=id)
+	prix = infoTournoi.objects.all()[0].prix
 	if len(pair) <1:
 		return redirect(reverse(tournoi))
 	pair = Pair.objects.get(id=id)
@@ -308,7 +319,7 @@ def payPair(request,id):
 		allExtras = Extra.objects.all()
 		extra1 = pair.extra1.all()
 		extra2 = pair.extra2.all()
-		totalprice = 40.00
+		totalprice = 2*prix
 		listUniqueExtra = list(set(list(extra1) + list(extra2)))
 		extraList = []
 		for extra in listUniqueExtra:
@@ -528,8 +539,6 @@ def knockOff(request,name):
 		terrains = terrains.filter(dispoDimanche=True)
 
 	terrains.order_by("id")
-	print(terrains)
-
 
 	def getKey(item):
 		return item[1]
@@ -875,7 +884,7 @@ def staffExtra(request):
 	formated_date = date_inscription.strftime('%d/%m/%Y')
 	yearLoop = range(date.today().year,date.today().year+5)
 	isAdmin = request.user.groups.filter(name="Admin").exists()
-	print(isAdmin)
+
 	# On récupère les extras, on set le nombre de demandes à zéro
 	for extra in extras:
 		extra.commandsCount = 0
@@ -889,17 +898,12 @@ def staffExtra(request):
 				extra.commandsCount += 1
 
 	if request.method == "POST":
-		resetDbForNextYear(request)
 		if request.POST['action'] == "cleanDb":
-			print("yo")
 			resetDbForNextYear(request)
 
 		if request.POST['action'] == "modifyInfoTournoi":
 			prixTournoi = request.POST['prixInscription'].strip()
 			dateInfoTournoi = request.POST['birthdate'].strip()
-
-			print(prixTournoi)
-			print(dateInfoTournoi)
 
 			info = infoTournoi.objects.all()[0]
 			prixTournoi = prixTournoi.replace(",",".")
