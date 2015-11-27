@@ -59,7 +59,7 @@ class Participant(models.Model):
 		return u'' +self.prenom[0:1].upper()+". "+self.nom
 
 	def getAdresse(self):
-		return self.rue+","+self.numero+" "+self.localite+" Belgium"
+		return u"" + self.numero + " " + self.rue + ", " + self.codepostal + " " + self.localite
 
 	def shortAdresse(self):
 		return self.localite+" Belgium"
@@ -196,7 +196,7 @@ class Arbre(models.Model):
 	data = models.TextField(null=True)
 	label = models.TextField(null=True)
 	court = models.ForeignKey(Court, null=True, blank=True)
-	
+
 
 
 	def __str__(self):
