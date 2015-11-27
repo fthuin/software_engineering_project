@@ -235,19 +235,6 @@
 						      	</p>
 						      </div>
 						    </div>
-						    <!-- participée -->
-						    <div class="form-group">
-						      <label class="info col-sm-4" for="locality">Déjà participé :</label>
-						      <div class="col-sm-8">
-						      	<p class="info">
-						      		{% if user.participant.oldparticipant %}
-						      		Oui
-						      		{% else %}
-						      		Non
-						      		{% endif %}
-						      	</p>
-						      </div>
-						    </div>
 						</div>
 					</div><!-- Row -->
 				</div><!-- Pannel-content -->
@@ -375,7 +362,7 @@
 						</div>
 
 						<div class="col-lg-6">
-							
+
 							<!-- rue -->
 							<div class="form-group">
 						      <label class="control-label col-sm-4" for="street">Rue *</label>
@@ -420,6 +407,7 @@
 							<div class="form-group">
 						      <label class="control-label col-sm-4" for="classement">Classement</label>
 						      <div class="col-sm-8">
+<<<<<<< HEAD
 						      	<select class="form-control" id="select_classement" name="classement" placeholder="Classement" onchange="onChangeClassement()">
 									<option>N.C.</option>
 								    <option>C30.5</option>
@@ -446,6 +434,18 @@
 									<option>A Nat</option>
 									<option>A Int</option>
 								</select>
+=======
+										<select class="form-control" id="classement" name="classement" placeholder="Classement">
+											{% for rank in rankings %}
+												{% ifequal user.participant.classement.nom rank.nom %}
+												<option value={{rank.nom}} selected="selected">{{rank.nom}}</option>
+												{% else %}
+												<option value={{rank.nom}}>{{rank.nom}}</option>
+												{% endifequal %}
+											{% endfor %}
+										</select>
+						      	<p class="hint" id="hint-classement"></p>
+>>>>>>> b64d2c80c38439fdd4e1f0628964db36197df19e
 						      </div>
 						    </div>
 						    <!-- deja participe -->
@@ -456,6 +456,7 @@
 					</div><!-- Row -->
 				</div><!-- Pannel-content -->
 			</div><!-- Pannel -->
+
 			<!-- Bottom button -->
 			<input type="text" id="latitude" name="lat" value="" style="display:none">
 			<input type="text" id="longitude" name="lng" value="" style="display:none">
@@ -486,7 +487,7 @@ function setSelectedIndex(s, valsearch)
 	}
 	return;
 }
-	
+
 //set date en fonction de la valeur
 var date_jour = dateNaissance.value.substring(0,2);
 var date_mois = dateNaissance.value.substring(3,5);
@@ -521,18 +522,22 @@ function onChangeYearOfBirth() {
 	dateNaissance.value = date.substring(0,6)+an
 }
 
+<<<<<<< HEAD
 function onChangeClassement() {
     var select_classement = document.getElementById("select_classement");
     classement = select_classement.options[select_classement.selectedIndex].value
 }
 
 	$('#select_jour').on('input', function() { 
+=======
+	$('#select_jour').on('input', function() {
+>>>>>>> b64d2c80c38439fdd4e1f0628964db36197df19e
 	    onChangeDayOfBirth();
 });
-	$('#select_mois').on('input', function() { 
+	$('#select_mois').on('input', function() {
         onChangeMonthOfBirth();
 });
-	$('#select_an').on('input', function() { 
+	$('#select_an').on('input', function() {
         onChangeYearOfBirth();
 });
 	$('#select_classement').on('input', function() { 

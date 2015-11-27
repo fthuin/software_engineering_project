@@ -4,6 +4,27 @@ from django.contrib.auth.models import User
 from datetime import date
 import datetime
 
+class infoTournoi(models.Model):
+	prix = models.DecimalField(max_digits=11,decimal_places=2, verbose_name="Prix de l'inscription")
+	date = models.DateTimeField(verbose_name="Date du tournoi")
+	edition = models.IntegerField()
+	addr = models.TextField(verbose_name="Adresse du QG")
+	latitude = models.DecimalField(max_digits=19, decimal_places=10, default="50.8539751",blank=True,verbose_name="Latitude")
+	longitude = models.DecimalField(max_digits=19, decimal_places=10, default="4.398054",blank=True,verbose_name="Longitude")
+
+class Ranking(models.Model):
+	id = models.AutoField(primary_key=True)
+	nom = models.CharField(max_length=15, unique=True)
+
+	def __str__(self):
+		return self.nom
+
+	def __unicode__(self):
+		return u'' + self.nom
+
+	class Meta:
+		verbose_name = "Classement"
+
 class Participant(models.Model):
 	user = models.OneToOneField(User,null=True)
 	titre = models.CharField(max_length=5)
@@ -20,9 +41,8 @@ class Participant(models.Model):
 	fax = models.CharField(max_length=30,null=True, blank=True)
 	gsm = models.CharField(max_length=30,null=True)
 	datenaissance = models.DateTimeField(null=True, verbose_name="Date de naissance")
-	classement = models.CharField(max_length=10,null=True, blank=True)
+	classement = models.ForeignKey(Ranking)
 	oldparticipant = models.BooleanField(default=False)
-	isGroupLeader = models.BooleanField(default=False)
 	isClassementVerified = models.BooleanField(default=False)
 	isAccountActivated = models.BooleanField(default=True)
 
@@ -30,23 +50,23 @@ class Participant(models.Model):
 		return self.prenom +" "+ self.nom
 
 	def __unicode__(self):
-		return u'' + self.prenom + self.nom
-	
+		return u'' + self.prenom + " " + self.nom
+
 	def fullName(self):
 		return u'' + self.titre +  " " + self.prenom + " " + self.nom
 
 	def smallName(self):
 		return u'' +self.prenom[0:1].upper()+". "+self.nom
-	
+
 	def getAdresse(self):
 		return self.rue+","+self.numero+" "+self.localite+" Belgium"
 
 	def shortAdresse(self):
 		return self.localite+" Belgium"
-		
+
 	#def __eq__(self, other):
 	#	return self.username == other.user.username
-		
+
 	class Meta:
 		verbose_name = "Participant"
 		permissions = (
@@ -58,10 +78,10 @@ class UserInWaitOfActivation(models.Model):
 	participant = models.OneToOneField(Participant, null=False)
 	dayOfRegistration = models.DateTimeField(null=False)
 	confirmation_key = models.CharField(max_length=100,null=False)
-	
+
 	def isStillValid(self):
 		return self.dayOfRegistration + datetime.timedelta(weeks=1) > datetime.datetime.now()
-		
+
 	def isKeyValid(self, key):
 		return key == self.confirmation_key
 
@@ -73,7 +93,7 @@ class Extra(models.Model):
 
 	def __str__(self):
 		return self.nom
-		
+
 	def __unicode__(self):
 		return u'' + self.nom
 
@@ -85,37 +105,37 @@ class Extra(models.Model):
 
 class CourtSurface(models.Model):
 	nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
-	
+
 	def __str__(self):
 		return self.nom
-	
+
 	def __unicode__(self):
 		return u'' + self.nom
-		
+
 	class Meta:
 		verbose_name = "Surface de court"
 
 class CourtState(models.Model):
 	nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
-	
+
 	def __str__(self):
 		return self.nom
-	
+
 	def __unicode__(self):
 		return u'' + self.nom
-	
+
 	class Meta:
 		verbose_name = "Etat de court"
 
 class CourtType(models.Model):
 	nom = models.CharField(max_length=25, primary_key=True, verbose_name="Nom")
-	
+
 	def __str__(self):
 		return self.nom
-	
+
 	def __unicode__(self):
 		return u'' + self.nom
-	
+
 	class Meta:
 		verbose_name = "Type de court"
 
@@ -138,13 +158,14 @@ class Court(models.Model):
 	commentaireStaff = models.TextField(null=True, blank=True)
 	valide = models.BooleanField(default=False, verbose_name='Validé')
 	user = models.ForeignKey(User, verbose_name='Utilisateur')
+	usedLastYear = models.BooleanField(default=False)
 
 	def __str__(self):
 		return str(self.id) +" "+ self.rue
-		
+
 	def __unicode__(self):
 		return u'' + repr(self.id) + ' '+ self.rue
-		
+
 	def getAdresse(self):
 		return u"" + self.numero + " " + self.rue + ", " + self.codepostal + " " + self.localite
 
@@ -158,23 +179,24 @@ class Court(models.Model):
 		)
 
 class TournoiStatus(models.Model):
-	id = models.AutoField(primary_key=True)
-	numero = models.IntegerField(unique=True, null=True, verbose_name='ID')
+	numero = models.IntegerField(verbose_name='Numero', primary_key=True)
 	nom = models.CharField(max_length=25, verbose_name="Nom")
-	
+
 	def __str__(self):
 		return self.nom
-	
+
 	def __unicode__(self):
 		return u'' + self.nom
-	
+
 	class Meta:
-		verbose_name = "Status du tournoi"
+		verbose_name = "Status des tournoi"
 
 class Arbre(models.Model):
 	id = models.AutoField(primary_key=True)
 	data = models.TextField(null=True)
 	label = models.TextField(null=True)
+	court = models.ForeignKey(Court, null=True, blank=True)
+	
 
 
 	def __str__(self):
@@ -186,18 +208,63 @@ class Arbre(models.Model):
 	class Meta:
 		verbose_name = "Arbre"
 
-
-
-class Tournoi(models.Model):
+class TournoiTitle(models.Model):
 	nom = models.CharField(max_length=50,primary_key=True)
 	description = models.TextField(null=True)
 	jour = models.CharField(max_length=50)
-	status = models.ForeignKey(TournoiStatus,null=True,blank=True)
-	arbre = models.ForeignKey(Arbre, null=True, blank=True)
-
+	sexe_p1 = models.CharField(max_length=30, null=True)
+	sexe_p2 = models.CharField(max_length=30, null=True)
 
 	def __str__(self):
-		return self.nom
+		return str(self.nom)
+
+	def __unicode__(self):
+		return u'' + str(self.nom)
+
+	class Meta:
+		verbose_name = "Titre Tournoi"
+
+class TournoiCategorie(models.Model):
+	nom = models.CharField(max_length=50,primary_key=True)
+	age_min_p1 = models.IntegerField(null=True)
+	age_min_p2 = models.IntegerField(null=True)
+	age_max_p1 = models.IntegerField(null=True)
+	age_max_p2 = models.IntegerField(null=True)
+
+	def __str__(self):
+		return str(self.nom)
+
+	def __unicode__(self):
+		return u'' + str(self.nom)
+
+	class Meta:
+		verbose_name = "Catégorie Tournoi"
+
+
+class Tournoi(models.Model):
+	id = models.AutoField(primary_key=True)
+	titre = models.ForeignKey(TournoiTitle, null=True)
+	categorie = models.ForeignKey(TournoiCategorie, null=True)
+	status = models.ForeignKey(TournoiStatus, null=True)
+	arbre = models.ForeignKey(Arbre, null=True, blank=True)
+
+	def __str__(self):
+		if(self.titre.nom==self.categorie.nom):
+			return str(self.titre)
+		else:
+			return str(self.titre)+": "+str(self.categorie)
+
+	def __unicode__(self):
+		if(self.titre.nom==self.categorie.nom):
+			return u'' + str(self.titre)
+		else:
+			return u'' + str(self.titre)+": "+str(self.categorie)
+
+	def nom(self):
+		if(self.titre.nom==self.categorie.nom):
+			return str(self.titre)
+		else:
+			return str(self.titre)+"_"+str(self.categorie)
 
 	class Meta:
 		verbose_name = 'Tournoi'
@@ -208,15 +275,13 @@ class Tournoi(models.Model):
 			("DoubleMixte", "Manage double mixte"),
 		)
 
-
-
 class Pair(models.Model):
 	id = models.AutoField(primary_key=True, verbose_name="ID")
 	tournoi = models.ForeignKey(Tournoi)
 	user1 = models.ForeignKey(User, related_name='user1', verbose_name = "Utilisateur 1")
 	user2 = models.ForeignKey(User, related_name='user2', verbose_name = "Utilisateur 2")
-	extra1 = models.ManyToManyField(Extra, related_name='extra1')
-	extra2 = models.ManyToManyField(Extra, related_name='extra2')
+	extra1 = models.ManyToManyField(Extra, related_name='extra1', blank=True)
+	extra2 = models.ManyToManyField(Extra, related_name='extra2', blank=True)
 	comment1 = models.TextField(null=True, blank=True)
 	comment2 = models.TextField(null=True, blank=True)
 	confirm = models.BooleanField(default=False, verbose_name = "Confirmation")
@@ -227,7 +292,7 @@ class Pair(models.Model):
 
 
 	def __str__(self):
-		return str(self.id) +" "+ self.tournoi.nom+" : "+self.user1.username+" et "+self.user2.username
+		return str(self.id) +" "+ str(self.tournoi)+" : "+str(self.user1.username)+" et "+str(self.user2.username)
 
 	class Meta:
 		verbose_name = 'Paire'
@@ -236,34 +301,18 @@ class Pair(models.Model):
         )
 
 
-
-
-
-
-
-class Groupe(models.Model):
-	id = models.AutoField(primary_key=True)
-	tournoi = models.ForeignKey(Tournoi, default=None)
-	leader = models.ForeignKey('Pair', default=None) #TO CHANGE: ca doit etre un USER et pas une PAIR
-	court = models.ForeignKey(Court, default=None) #TO CHANGE: OneToOneField
-	gsize = models.IntegerField(null=True)
-
-	def __str__(self):
-		return "Groupe n " + str(self.id)
-
-
 class PouleStatus(models.Model):
-	id = models.IntegerField(primary_key=True, verbose_name='ID')
+	numero = models.IntegerField(verbose_name='Numero', primary_key=True)
 	nom = models.CharField(max_length=25, verbose_name="Nom")
-	
+
 	def __str__(self):
 		return self.nom
-	
+
 	def __unicode__(self):
 		return u'' + self.nom
-	
+
 	class Meta:
-		verbose_name = "Status de la poule"
+		verbose_name = "Status des poule"
 
 class Score(models.Model):
 	paire1 = models.ForeignKey(Pair, related_name='paire1', verbose_name = "Paire 1")
@@ -304,10 +353,6 @@ class LogActivity(models.Model):
 
 	def __str__(self):
 		return self.user.username + self.section + self.details
-	
+
 	class Meta:
 		verbose_name = "Log"
-
-
-
-

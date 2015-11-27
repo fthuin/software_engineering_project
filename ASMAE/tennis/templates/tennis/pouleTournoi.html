@@ -6,7 +6,7 @@
 {% block bodyStaff %}
 <!-- Gestionnaire des groupes -->
 <div class="content-box">
-    <h2 class="center">Gestion des scores : {{tournoi.nom}}</h2>
+    <h2 class="center">Poules - {{tournoi}}</h2>
     <hr class="line">
 
     <div class="row">
@@ -25,13 +25,13 @@
                                     <a href="{% url 'tennis.views.printScoreBoard' p.id %}" target="_blank" style="cursor:pointer;color:white;padding:0;margin:0;"><span class="glyphicon glyphicon-print"></span></a>
                                 </li>
                             </ul>
-                            
+
                         </div>
                     </div>
 
                 </div>
                 <div class="panel-body">
-                    {% if p.status.id == 2 %}
+                    {% if p.status.numero == 2 %}
 
                     <b>Leader : </b>{{p.leader.participant.prenom}} {{p.leader.participant.nom}}
                     <br>
@@ -92,7 +92,7 @@ for (var i = 1; i < mesPanel.length; i++) {
 //Enable tree button if all status are ok
 var valid = true;
 {% for p in poules %}
-if('{{p.status.id}}' != 2){
+if('{{p.status.numero}}' != 2){
     valid = false;
 }
 {% endfor %}

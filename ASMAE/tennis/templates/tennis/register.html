@@ -47,7 +47,7 @@
 							    </div>
   							</div>
 						</div>
-						
+
 					<!-- Information personnelle-->
 					<div class="panel panel-default">
 						<div class="panel-heading">Informations personnelles</div>
@@ -168,7 +168,7 @@
 								</div>
 
 								<div class="col-lg-6">
-									
+
 									<!-- rue -->
 									<div class="form-group">
 								      <label class="control-label col-sm-4" for="street">Rue *</label>
@@ -214,38 +214,12 @@
 								      <label class="control-label col-sm-4" for="title">Classement</label>
 								      <div class="col-sm-8">
 								      	<select class="form-control" id="select_classement" name="classement" placeholder="Classement" onchange="onChangeClassement()">
-											<option>N.C.</option>
-										    <option>C30.5</option>
-										    <option>C30.4</option>
-										    <option>C30.3</option>
-										    <option>C30.2</option>
-										    <option>C30.1</option>
-										    <option>C30</option>
-										    <option>C15.5</option>
-										    <option>C15.4</option>
-										    <option>C15.3</option>
-										    <option>C15.2</option>
-										    <option>C15.1</option>
-											<option>C15</option>
-											<option>B+4/6</option>
-											<option>B+2/6</option>
-											<option>B0</option>
-											<option>B-2/6</option>
-											<option>B-4/6</option>
-											<option>B-15</option>
-											<option>B-15.1</option>
-											<option>B-15.2</option>
-											<option>B-15.4</option>
-											<option>A Nat</option>
-											<option>A Int</option>
-										</select>
+													{% for rank in rankings %}
+														<option>{{rank.nom}}</option>
+													{% endfor %}
+												</select>
 								      </div>
 								    </div>
-								    <!-- deja participe -->
-								    <div class="checkbox col-sm-offset-4">
-								      <label><input type="checkbox" name="participated" {% if oldparticipant %}checked{% endif %}> Déjà participé</label>
-								    </div>
-									
 								</div>
 							</div><!-- Row -->
 						</div><!-- Pannel-content -->
@@ -288,7 +262,7 @@ function setSelectedIndex(s, valsearch)
 	}
 	return;
 }
-	
+
 //set date en fonction de la valeur
 var date_jour = dateNaissance.value.substring(0,2);
 var date_mois = dateNaissance.value.substring(3,5);
@@ -324,13 +298,13 @@ function onChangeClassement() {
     classement = select_classement.options[select_classement.selectedIndex].value
 }
 
-	$('#select_jour').on('input', function() { 
+	$('#select_jour').on('input', function() {
 	    onChangeDayOfBirth();
 });
-	$('#select_mois').on('input', function() { 
+	$('#select_mois').on('input', function() {
         onChangeMonthOfBirth();
 });
-	$('#select_an').on('input', function() { 
+	$('#select_an').on('input', function() {
         onChangeYearOfBirth();
 });
 	$('#select_classement').on('input', function() { 

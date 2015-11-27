@@ -7,7 +7,7 @@
 <!-- Gestionnaire des paires -->
 <div class="content-box" id="gestionPaire">
 	<h2 class="center">Gestionnaire des paires</h2>
-	<hr class="line">	
+	<hr class="line">
 
 	<div class="row">
 		<div class="col-lg-4">
@@ -81,8 +81,8 @@
 		                      <tr>
 		                        <th>ID</th>
 		                        <th>Tournoi</th>
-		                        <th>Validé</th>
-		                        <th>Payé</th>
+		                        <th style="text-align:center;">Validé</th>
+		                        <th style="text-align:center;">Payé</th>
 		                        <th>Joueur 1</th>
 		                        <th>Joueur 2</th>
 		                      </tr>
@@ -103,7 +103,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 </div>
 {% endblock %}
 
@@ -128,7 +128,7 @@ function pagination(list) {
     });
     //On met à jour les infos (liste des paires et longueur de chaque page)
     setPairListInfo(list,pageLength);
-    
+
     //On met à jour la première page
     setPair(1);
 }
@@ -137,7 +137,7 @@ function pagination(list) {
 var pairList = [];
 {% for pair in allPair %}
 {% if pair.confirm %}
-pairList.push(['{{ pair.id }}',{% if pair.valid %}'oui'{% else %}'non'{% endif %},{% if pair.pay %}'oui'{% else %}'non'{% endif %},'{{ pair.user1.username }}','{{ pair.user2.username }}','{{ pair.user1.participant.nom }}','{{ pair.user2.participant.nom }}','{{ pair.user1.participant.prenom }}','{{ pair.user2.participant.prenom }}','{{ pair.tournoi.nom }}']);
+pairList.push(['{{ pair.id }}',{% if pair.valid %}'oui'{% else %}'non'{% endif %},{% if pair.pay %}'oui'{% else %}'non'{% endif %},'{{ pair.user1.username }}','{{ pair.user2.username }}','{{ pair.user1.participant.nom }}','{{ pair.user2.participant.nom }}','{{ pair.user1.participant.prenom }}','{{ pair.user2.participant.prenom }}','{{ pair.tournoi }}']);
 {% endif %}
 {% endfor %}
 
@@ -173,7 +173,7 @@ function search_pair() {
      pagination(resultList);
 }
 
-$('#search_value').on('input', function() { 
+$('#search_value').on('input', function() {
     search_pair();
 });
 </script>

@@ -13,5 +13,5 @@ class Command(BaseCommand):
             e.save()
 
     def handle(self, *args, **options):
+        print("Ajout des etats des terrains")
         self.addBasicStates()
-

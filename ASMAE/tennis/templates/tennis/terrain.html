@@ -9,8 +9,12 @@
 	<div class="content-box" {% if court.0 %}style="display:none;"{% endif %}>
 		<h2>Informations</h2>
 		<hr class="line">
-		<p>Cette box s'affiche si l'utilisateur courant n'a pas enregistré de terrains</p>
-		<p>Texte insitant l'utilisateur à enregistrer un terrain s'il en à un (TODO)</p>
+		<p><strong>Vous n'avez actuellement enregistré aucun terrain.</strong> Si vous possédez un terrain,
+			nous vous invitons à l'enregistrer pour permettre à des joueurs du Charles de Lorraine de disputer
+			des matchs sur celui-ci lors du weekend de tournoi.
+		</p>
+		<p>Les informations introduites pourront être modifiées à tout moment et vous serez contactés avant
+		l'utilisation de votre terrain.</p>
 
 		<button onClick="location.href='{% url "tennis.views.registerTerrain" %}';" class="btn btn-default b-center">Enregistrer un nouveau terrain</button>
 
@@ -23,21 +27,7 @@
 				<h2 class="center">Mes terrains</h2>
 				<hr class="line">
 
-				<!-- Selecteur -->
-				<div class="row" style="margin-bottom: 20px;">
-					<div class="col-xs-3 info">
-						Type
-					</div>
-					<div class="col-lg-8 col-sm-4 col-xs-8">
-					   	<select class="form-control" name="title">
-							<option>Disponible cette année</option>
-						    <option>???</option>
-						    <option>???</option>
-						    <option>???</option>
-						</select>
-		    		</div>
-				</div>
-
+			
 				<!-- Panel infos -->
 				<div class="panel panel-default">
 					<div class="panel-heading">Mes terrains</div>
@@ -62,7 +52,6 @@
 		                    </table>
 		                </div>
 					</div>
-
 				<!-- Inscription -->
 				<button onClick="location.href='{% url "tennis.views.registerTerrain" %}';" class="btn btn-default b-center">Enregistrer un nouveau terrain</button>
 			</div>
@@ -71,34 +60,40 @@
 			<!-- Les activités -->
 			<!-- TODO set info -->
 			<div class="content-box">
-				<h2 class="center">Activités (TODO)</h2>
+				<h2 class="center">Activités</h2>
 				<hr class="line">
 
-				<!-- Selecteur -->
-				<div class="row" style="margin-bottom: 20px;">
-					<div class="col-xs-3 info">
-						Terrain
-					</div>
-					<div class="col-lg-8 col-sm-4 col-xs-8">
-					   	<select class="form-control" name="title">
-					   		{% for elem in court %}
-					   		<option>{{ elem.id }}</option>
-					   		{% endfor %}
-						</select>
-		    		</div>
-				</div>
-
+				{% for elem in court %}
 				<!-- Panel infos -->
 				<div class="panel panel-default">
-					<div class="panel-heading">Prochains match sur mes terrains</div>
-					<ul class="list-group">
-		  				<li class="list-group-item">15h30 - Terrain 345 - Paires 8945 vs 12345 (TODO)</li>
-						<li class="list-group-item">16h30 - Terrain 345 - Paires 14846 vs 13674 (TODO)</li>
-					</ul>
+					<div class="panel-heading">Terrain {{elem.id}} - {{elem.localite}}</div>
+					<div class="table-responsive">
+		                    <table class="table table-hover">
+		                        <thead>
+                                  <tr>
+                                    <th>Poule</th>
+                                    <th>Tournoi</th>
+                                    <th>Jour</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+						{% for p in elem.poule_set.all %}
+						{% if p.tournoi.status.numero >= 2 %}
+								<tr>
+                                    <td>Poule {{p.id}}</td>
+                                    <td>{{p.tournoi}}</td>
+                                    <td>{{p.tournoi.titre.jour}}</td>
+                                  </tr>
+                        {% endif %}
+						{% endfor %}
+								</tbody>
+							</table>
+						</div>
 				</div>
+				{% endfor %}
 
-				<!-- Consulter -->
-				<button class="btn btn-default b-center">Consulter toutes les activités</button>
+				
+
 			</div>
 		</div>
 	</div>

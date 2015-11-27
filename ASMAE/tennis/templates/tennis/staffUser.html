@@ -43,13 +43,38 @@
 						</li>
 						<li class="list-group-item">
 							<div class="row">
+								<label class="control-label col-sm-4">Paire : </label>
+								<div class="col-sm-8">
+								  	<select id="paire_selector" class="form-control" onchange="search_user();">
+										<option value="Tous" selected>Tous</option>
+										<option value="True">Oui</option>
+										<option value="False">Non</option>
+									</select>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div class="row">
+								<label class="control-label col-sm-4">Vétéran : </label>
+								<div class="col-sm-8">
+								  	<select id="vet_selector" class="form-control" onchange="search_user();">
+										<option value="Tous" selected>Tous</option>
+										<option value="True">Oui</option>
+										<option value="False">Non</option>
+									</select>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div class="row">
 								<label class="control-label col-sm-4">Age : </label>
 								<div class="col-sm-8">
-									  <input type="text" class="center-block" id="amount" readonly style="text-align:center; border:0; color:#f6931f; font-weight:bold; background-color:transparent;width:100%">
+									  <input type="text" class="center-block" id="amount" readonly style="text-align:center; border:0; color:#D4542D; font-weight:bold; background-color:transparent;width:100%">
 									<div id="slider-range" style="margin-top:5px;padding-left:15px;padding-right:15px;"></div>
 								</div>
 							</div>
 						</li>
+						
 					</div>
 				</div>
 			</form>
@@ -62,10 +87,13 @@
 						<table class="table table-hover">
 							<thead>
 					          <tr>
+					          	<th style="text-align:center">Sexe</th>
 					            <th>Nom d'utilisateur</th>
 					            <th>Prénom</th>
 					            <th>Nom</th>
-					            <th>Age</th>
+					            <th style="text-align:center">Age</th>
+					            <th style="text-align:center">Paire</th>
+					            <th style="text-align:center">Vétéran</th>
 					          </tr>
 					        </thead>
 					        <tbody id="UserList">
@@ -134,7 +162,7 @@ function pagination(list) {
 //Recuperation des users et stockage dans un tableau
 var userList = [];
 {% for use in Use %}
-userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.age }}']);
+userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.age }}','{{ use.inpaire }}','{{ use.participant.oldparticipant }}']);
 {% endfor %}
 
 pagination(userList);
@@ -155,6 +183,10 @@ function search_user() {
 	if ( sex_choice == "Femmes".sansAccent().toLocaleUpperCase()) {
 		sex_choice = "Mme".sansAccent().toLocaleUpperCase();
 	}
+	var paire_selector = document.getElementById("paire_selector");
+	var paire_choice = paire_selector.options[paire_selector.selectedIndex].value;
+	var vet_selector = document.getElementById("vet_selector");
+	var vet_choice = vet_selector.options[vet_selector.selectedIndex].value;
 	//alert(sex_choice.indexOf(''));
 	//alert(sex_choice.indexOf(''));
     // Copie du tableau pour garder l'original
@@ -167,7 +199,9 @@ function search_user() {
         var nom = myUser[2].sansAccent().toLocaleUpperCase();
 		var titre = myUser[3].sansAccent().toLocaleUpperCase();
 		var age = parseInt(myUser[4]);
-        if (! (username.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1) || titre.indexOf(sex_choice) == -1 || age < minAgeSearch || age > maxAgeSearch) {
+		var paire = myUser[5]
+		var vet = myUser[6]
+        if (! (username.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1) || titre.indexOf(sex_choice) == -1 || age < minAgeSearch || age > maxAgeSearch || (paire != paire_choice && paire_choice != "Tous") || (vet != vet_choice && vet_choice != "Tous")) {
             resultList.splice(i, 1);
         }
     }

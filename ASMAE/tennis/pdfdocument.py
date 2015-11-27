@@ -1,7 +1,8 @@
 # coding=utf-8
-from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Paragraph
+from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Paragraph, Table, TableStyle
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_LEFT, TA_CENTER
+from reportlab.lib import colors
 from reportlab.lib.colors import Color, black, purple, white, yellow, gray, orange
 
 def stylesheet():
@@ -226,7 +227,7 @@ class PDFPair():
         addIfNotNone(user2_content, u'Adresse', pair.user2.participant.localite)
         addIfNotNone(user2_content, u'GSM', pair.user2.participant.gsm)
 
-        addIfNotNone(pair_content, u'Tournoi', pair.tournoi.nom)
+        addIfNotNone(pair_content, u'Tournoi', pair.tournoi.titre.nom)
         addIfNotNone(pair_content, u'Commentaire du joueur 1', pair.comment1)
         addIfNotNone(pair_content, u'Commentaire du joueur 2', pair.comment2)
 
@@ -238,3 +239,77 @@ class PDFPair():
         addIfNotNone(creator_content, u'GSM', userCreator.gsm)
 
         build_pdf(response, self.build_flowables(stylesheet(), 'Paire '+repr(pair.id), pair_content, user1_content, user2_content, creator_content))
+
+class PDFPoule():
+    def create_poule_table_flowables(self):
+        paires = self.poule.paires.all()
+        poule_table = []
+        tableStyle = []
+        nbr_pairs = len(paires) + 1
+        for i in range(nbr_pairs):
+            if i == 0:
+                poule_table.append([''])
+                for j in range(nbr_pairs-1):
+                    poule_table[i].append(paires[j].user1.participant.smallName() +"\n" + paires[j].user2.participant.smallName() )
+            else:
+                poule_table.append([paires[i-1].user1.participant.smallName() + "\n" + paires[i-1].user2.participant.smallName()])
+                for j in range(nbr_pairs-1):
+                    poule_table[i].append("")
+            tableStyle.append(('BACKGROUND', (i,i), (i,i), colors.grey))
+            tableStyle.append(("INNERGRID", (0, 0), (i, nbr_pairs-1), 0, colors.black))
+        tableStyle.append(('FONTSIZE', (0,0), (0,nbr_pairs-1), 8))
+        tableStyle.append(('FONTSIZE', (0,0), (nbr_pairs-1,0), 8))
+        t=Table(poule_table)
+        t.setStyle(TableStyle(tableStyle))
+        return [t]
+    def create_staff_flowables(self, stylesheet, staffParticipant):
+        staff_part = [Paragraph('Informations sur le staff', stylesheet['alert'])]
+        nom = staffParticipant.titre + ' ' + staffParticipant.prenom + ' ' + staffParticipant.nom
+        gsm = staffParticipant.gsm
+        staff_part.append(Paragraph("NOM : " + nom, stylesheet['default']))
+        staff_part.append(Paragraph("GSM : " + gsm, stylesheet['default']))
+        return staff_part
+
+    def create_pairs_flowables(self, pairs):
+        pairs_part = []
+        for paire in pairs:
+            pairs_part += [Paragraph('Informations sur la paire ' + str(paire.id), stylesheet()['alert'])]
+            paire_part = []
+            paire_part.append(["NOM : " + paire.user1.participant.titre + " " + paire.user1.participant.prenom + " " + paire.user1.participant.nom, "NOM : " + paire.user2.participant.titre + " " + paire.user2.participant.prenom + " " + paire.user2.participant.nom])
+            paire_part.append(["GSM : " + paire.user1.participant.gsm, "GSM : " + paire.user2.participant.gsm])
+            paire_part.append(["CLASSEMENT : " + paire.user1.participant.classement.nom, "CLASSEMENT : " + paire.user2.participant.classement.nom])
+            tableStyle = []
+            tableStyle.append(('FONTSIZE', (0,0), (1,2), 8))
+            tableStyle.append(("INNERGRID", (0, 0), (1, 2), 0, colors.black))
+            t = Table(paire_part)
+            t.setStyle(TableStyle(tableStyle))
+            pairs_part.append(t)
+
+        return pairs_part
+
+    def create_court_flowables(self, court):
+        owner_content = {}
+        owner_part = {}
+        #owner_part = [Paragraph('Informations sur le propriétaire', stylesheet['alert'])]
+        #court_part = [Paragraph('Informations sur le terrain', stylesheet['alert'])]
+        #creator_part = [Paragraph('Informations sur le membre du staff', stylesheet['alert'])]
+
+        #for key, value in owner_content.iteritems():
+        #    owner_part.append(Paragraph(key + ' : ' + value, stylesheet['default']))
+
+        #for key, value in court_content.iteritems():
+        #    court_part.append(Paragraph(key + " : " +value, stylesheet['default']))
+
+        #for key, value in creator_content.iteritems():
+        #    creator_part.append(Paragraph(key + " : " +value, stylesheet['default']))
+        #return owner_part + court_part + creator_part
+
+    def __init__(self, response, poule, staffUser):
+        self.poule = poule
+        flowables = []
+        flowables.append(buildTitle(stylesheet(), "Poule " + repr(self.poule.id)))
+        flowables += self.create_staff_flowables(stylesheet(), staffUser.participant)
+        flowables.append(Paragraph('Tableaux des scores', stylesheet()['alert']))
+        flowables += self.create_poule_table_flowables()
+        flowables += self.create_pairs_flowables(poule.paires.all())
+        build_pdf(response, flowables)

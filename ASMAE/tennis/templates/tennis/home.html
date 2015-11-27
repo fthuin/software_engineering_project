@@ -15,16 +15,11 @@
 		              <li data-target="#myCarousel" data-slide-to="1"></li>
 		              <li data-target="#myCarousel" data-slide-to="2"></li>
 		              <li data-target="#myCarousel" data-slide-to="3"></li>
-		              <li data-target="#myCarousel" data-slide-to="4"></li>
 		            </ol>
 
 		            <!-- Wrapper for slides -->
 		            <div class="carousel-inner" role="listbox">
 		              <div class="item active">
-		                <img src="{% static 'tennis/img/cover0.jpg' %}" alt="cover 1" width="857" height="350">
-		              </div>
-
-		              <div class="item">
 		                <img src="{% static 'tennis/img/cover1.jpg' %}" alt="cover 2" width="857" height="350">
 		              </div>
 		            
@@ -54,20 +49,20 @@
 		</div>
 		<div class="col-lg-4">
 			<div class="content-box timer">
-				<h2 class="center">42ème édition</h2>
+				<h2 class="center">{{edition}}ème édition</h2>
 				<hr class="line">
-				<h3 class="center">Le 10 Septembre 2016</h3>
+				<h3 class="center">Le {{ day }} {{ month_text }} {{ year }}</h3>
 					<script type="application/javascript">
-                var date = new Date(2016,9,10,12,00,00,00);
-                var now = new Date();
-                var timer = (date.getTime() - now.getTime())/1000;
-                var myCountdown1 = new Countdown({
-                                                    time: timer,
-                                                    width:280, 
-                                                    height:50,  
-                                                    rangeHi:"month",
-                                                    style:"flip" 
-                                                    });
+	                var date = new Date({{ year }},{{ month }},{{ day }},12,00,00,00);
+	                var now = new Date();
+	                var timer = (date.getTime() - now.getTime())/1000;
+	                var myCountdown1 = new Countdown({
+	                                                    time: timer,
+	                                                    width:280, 
+	                                                    height:50,  
+	                                                    rangeHi:"month",
+	                                                    style:"flip" 
+	                                                    });
 
             </script>
             <h3 class="center">avant l'évènement</h3>

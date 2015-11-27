@@ -3,41 +3,66 @@
 
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
-from tennis.models import Extra, Participant, Court, Tournoi, Groupe, Pair
-from random import random
+from tennis.models import Participant, Tournoi, Pair, TournoiTitle, TournoiCategorie#, Extra, Court
+import random
 from datetime import datetime
-
-TOURNAMENT_LIST = ['Tournoi des familles', 'Double mixte', 'Double hommes', 'Double femmes']
 
 PROB_PAIR = 0.9
 PROB_HOMME = 0.5
 
-def getRandomElementFromList(list):
-    res = random()*len(list)
-    return list[int(res)]
-    
 def allowedTournaments(participant1, participant2):
     today = datetime.now()
     age1 = abs(participant1.datenaissance - today)
     age1 = age1.days / 365
     age2 = abs(participant2.datenaissance - today)
     age2 = age2.days / 365
-    resList = list(TOURNAMENT_LIST)
-    if ((age1 > 15 and age1 < 25) or (age2 > 15 and age2 < 25)):
-        resList.remove('Tournoi des familles')
-    if (participant1.titre == 'Mr'):
-        resList.remove('Double femmes')
-        if (participant2.titre == 'Mme'):
-            resList.remove('Double hommes')
-        else:
-            resList.remove('Double mixte')
+    tournoi = ""
+    jour = ""
+    categorie = ""
+    if (age1 >= 25 and age2 <= 15) or (age1 <= 15 and age2 >= 25):
+        tournoi = "Tournoi des familles"
+        jour = "Samedi"
+        categorie = "Tournoi des familles"
     else:
-        resList.remove('Double hommes')
-        if (participant2.titre == 'Mme'):
-            resList.remove('Double mixte')
+        if participant1.titre == participant2.titre:
+            if (participant2.titre == 'Mr'):
+                tournoi = "Double hommes"
+                jour = "Dimanche"
+            else:
+                tournoi = "Double femmes"
+                jour = "Dimanche"
         else:
-            resList.remove('Double femmes')
-    return resList
+            tournoi = "Double mixte"
+            jour = "Dimanche"
+        
+        ageMax = 0
+        if age1 > age2:
+            ageMax = age1
+        else:
+            ageMax = age2
+        
+        if ageMax >= 41:
+            categorie = "Elites"
+        elif ageMax >= 20:
+            categorie = "Seniors"
+        elif ageMax >= 17:
+            categorie = "Juniors"
+        elif ageMax >= 15:
+            categorie = "Scolaires"
+        elif ageMax >= 13:
+            categorie = "Cadets"
+        elif ageMax >= 11:
+            categorie = "Minimes"
+        elif ageMax >= 9:
+            categorie = "Pre minimes"
+    
+    print(tournoi)
+    t = TournoiTitle.objects.get(nom=tournoi)
+    print(categorie)
+    c = TournoiCategorie.objects.get(nom=categorie)
+    tour = Tournoi.objects.get(titre=t, categorie=c)
+    
+    return tour
 
 class Command(BaseCommand):
     def createPairs(self):
@@ -61,27 +86,21 @@ class Command(BaseCommand):
                 alone_participants.remove(e)
         i = 0
         while i < len(alone_participants) - 2:
+            print(repr(i) + "/" + repr(len(alone_participants)))
             participant1=alone_participants[i] 
             participant2=alone_participants[i+1]
-            tournoi = getRandomElementFromList(allowedTournaments(participant1, participant2))
-            for tour in self.Tournois:
-                if tournoi == tour.nom:
-                    tournoi = tour
-                    break
-            print(repr(tournoi))
-            print(repr(participant1.user))
-            print(repr(participant2.user))
-            pair = Pair(tournoi=tournoi, user1=participant1.user, user2=participant2.user, confirm=True)
+            #print(repr(participant1.user))
+            #print(repr(participant2.user))
+            pair = Pair(tournoi=allowedTournaments(participant1, participant2), user1=participant1.user, user2=participant2.user, valid=random.choice([True, False]), pay=random.choice([False,True]),confirm=True)
             pair.save()
             i += 2
 
     def handle(self, *args, **options):
         # On récupère toute la base de données
         self.Participants = Participant.objects.all()
-        self.Extras = Extra.objects.all()
-        self.Courts = Court.objects.all()
+        #self.Extras = Extra.objects.all()
+        #self.Courts = Court.objects.all()
         self.Tournois = Tournoi.objects.all()
-        self.Groupes = Groupe.objects.all()
         self.Pairs = Pair.objects.all()
 
         self.createPairs()
