@@ -298,6 +298,7 @@ def viewPair(request,id):
 
 def payPair(request,id):
 	pair = Pair.objects.filter(id=id)
+	prix = infoTournoi.objects.all()[0].prix
 	if len(pair) <1:
 		return redirect(reverse(tournoi))
 	pair = Pair.objects.get(id=id)
@@ -308,7 +309,7 @@ def payPair(request,id):
 		allExtras = Extra.objects.all()
 		extra1 = pair.extra1.all()
 		extra2 = pair.extra2.all()
-		totalprice = 40.00
+		totalprice = 2*prix
 		listUniqueExtra = list(set(list(extra1) + list(extra2)))
 		extraList = []
 		for extra in listUniqueExtra:
@@ -887,7 +888,6 @@ def staffExtra(request):
 				extra.commandsCount += 1
 
 	if request.method == "POST":
-		resetDbForNextYear(request)
 		if request.POST['action'] == "cleanDb":
 			resetDbForNextYear(request)
 
