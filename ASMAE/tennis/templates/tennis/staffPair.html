@@ -11,30 +11,32 @@
 
 	<div class="row">
 		<div class="col-lg-4">
-			<!-- Rechercher -->
-			<div class="row" style="margin-bottom:15px;">
-				<div class="col-lg-10 col-lg-offset-1 col-sm-4 col-sm-offset-4">
-					<div class="input-group">
-				      <input type="text" class="form-control" placeholder="Rechercher" id="search_value">
-				      <span class="input-group-btn">
-				        <button class="btn btn-default" type="button" onclick="search_pair()"><span class="glyphicon glyphicon-search"></span></button>
-				      </span>
-				    </div>
-				</div>
-			</div>
 			<!-- Paramètres de recherche avancée -->
-			<form action="" class="form-horizontal">
+			<form method="post" action="{% url "tennis.views.staffPaire" %}" class="form-horizontal">
+				{% csrf_token %}
+				<input type="text" name="page" style="display:none;" value="1" id="pageNumber">
+				<!-- Rechercher -->
+				<div class="row" style="margin-bottom:15px;">
+					<div class="col-lg-10 col-lg-offset-1 col-sm-4 col-sm-offset-4">
+						<div class="input-group">
+					      <input type="text" class="form-control" value="{{recherche}}" placeholder="Rechercher" name="rechercheField">
+					      <span class="input-group-btn">
+					        <button class="btn btn-default" type="submit" action="search" id="search_pair_button"><span class="glyphicon glyphicon-search"></span></button>
+					      </span>
+					    </div>
+					</div>
+				</div>
 				<div class="panel panel-default center-block" style="max-width:300px;">
 				    <div class="panel-heading" onclick="setPlusMoins()" data-toggle="collapse" data-target="#list_criteria" style="cursor:pointer;" href="#list_criteria">Critères d'affichage <span id="plusmoins" class="glyphicon glyphicon-chevron-up pull-right"></span></div>
 				    <div class="list-group panel-collapse collapse in" id="list_criteria">
 					    <li class="list-group-item">
 						    <div class="row">
-							    <label class="control-label col-sm-4">Validation</label>
-							    <div class="col-sm-8">
-								    <select id="validation_selector" class="form-control" onchange="search_pair()">
+							    <label class="control-label col-sm-5">Validation</label>
+							    <div class="col-sm-7">
+								    <select id="validation_selector" class="form-control" name="validation">
 								        <option value="" selected>Tous</option>
-								        <option value="oui">Valide</option>
-								        <option value="non">Non validée</option>
+								        <option value="True">Oui</option>
+								        <option value="False">Non</option>
 								    </select>
 								</div>
 							</div>
@@ -42,12 +44,12 @@
 
 					    <li class="list-group-item">
 						    <div class="row">
-							    <label class="control-label col-sm-4">Paiement</label>
-							    <div class="col-sm-8">
-								    <select id="payment_selector" class="form-control" onchange="search_pair()">
+							    <label class="control-label col-sm-5">Paiement</label>
+							    <div class="col-sm-7">
+								    <select id="payment_selector" class="form-control" name="paiement">
 								        <option value="" selected>Tous</option>
-								        <option value="oui">Valide</option>
-								        <option value="non">Non validée</option>
+								        <option value="True">Oui</option>
+								        <option value="False">Non</option>
 								    </select>
 								</div>
 							</div>
@@ -55,17 +57,26 @@
 
 					    <li class="list-group-item">
 						    <div class="row">
-							    <label class="control-label col-sm-4">Tournoi</label>
-							    <div class="col-sm-8">
-								    <select id="tournament_selector" class="form-control" onchange="search_pair()">
+							    <label class="control-label col-sm-5">Tournoi</label>
+							    <div class="col-sm-7">
+								    <select id="tournament_selector" class="form-control" name="tournoi">
 								        <option value="" selected>Tous</option>
 									    {% for elem in Tour %}
-									    <option value="{{ elem }}">{{ elem }}</option>
+									    <option value="{{ elem.nom }}">{{ elem }}</option>
 									    {% endfor %}
 								    </select>
 								</div>
 							</div>
 					    </li>
+
+					    <li class="list-group-item">
+							<div class="row">
+								<label class="control-label col-sm-5">Résultats</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="number" name="pagelength" value="{{pageLength}}">
+								</div>
+							</div>
+						</li>
 				    </div>
 				</div>
 			</form>
@@ -87,14 +98,36 @@
 		                        <th>Joueur 2</th>
 		                      </tr>
 		                    </thead>
-		                    <tbody id="PairList">
+		                    <tbody>
+		                    	{% for paire in allPair %}
+		                    	<tr onclick="window.open('{% url "tennis.views.validatePair" paire.id %}','_blank')" class="clickable-row">
+			                        <td>{{ paire.id }}</td>
+			                        <td>{{ paire.tournoi }}</td>
+			                        <td style="text-align:center;">
+			                        	{% if paire.valid %}
+					        			<span class="glyphicon glyphicon-ok" style="color:green;"></span>
+					        			{% else %}
+					        			<span class="glyphicon glyphicon-remove" style="color:red;"></span>
+					        			{% endif %}
+			                        </td>
+			                        <td style="text-align:center;">
+			                        	{% if paire.pay %}
+					        			<span class="glyphicon glyphicon-ok" style="color:green;"></span>
+					        			{% else %}
+					        			<span class="glyphicon glyphicon-remove" style="color:red;"></span>
+					        			{% endif %}
+			                        </td>
+			                        <td>{{ paire.user1.participant.codeName}}</td>
+			                        <td>{{ paire.user2.participant.codeName}}</td>
+			                      </tr>
+		                    	{% endfor %}
 		                    </tbody>
 				        </table>
 				    </div>
 			</div>
 
 			<!-- Info -->
-			<p class="center" id="PairInfo"></p>
+			<p class="center" id="">{{debut}}-{{fin}} sur {{pageLength}} résultats ({{length}} au total)</p>
 
 			<!-- Bottom pagination -->
 			<div class="text-center">
@@ -109,72 +142,37 @@
 
 {% block commande %}
 <script>
-function pagination(list) {
-    //Nombre d'entrées par page
-    var pageLength = 10;
-    //Nombre de pages
-    var total = Math.max(Math.ceil(list.length/pageLength), 1);
-    //Notre pagination
-    $('#paginationholder').html('');
-    $('#paginationholder').html('<ul class="pagination" id="PairPagination"></ul>');
-    $('#PairPagination').twbsPagination({
-            totalPages: total,
-            visiblePages: Math.min(total, 5),
-            onPageClick: function (event, page) {
-            //Lorsqu'on clique sur une page, on met à jour le contenu
-            setPair(page);
-
-            }
-    });
-    //On met à jour les infos (liste des paires et longueur de chaque page)
-    setPairListInfo(list,pageLength);
-
-    //On met à jour la première page
-    setPair(1);
-}
-
-//Initialisation de la liste des paires
-var pairList = [];
-{% for pair in allPair %}
-{% if pair.confirm %}
-pairList.push(['{{ pair.id }}',{% if pair.valid %}'oui'{% else %}'non'{% endif %},{% if pair.pay %}'oui'{% else %}'non'{% endif %},'{{ pair.user1.username }}','{{ pair.user2.username }}','{{ pair.user1.participant.nom }}','{{ pair.user2.participant.nom }}','{{ pair.user1.participant.prenom }}','{{ pair.user2.participant.prenom }}','{{ pair.tournoi }}']);
+{% if validation %}
+setSelectedIndex(document.getElementById("validation_selector"),'{{validation}}');
 {% endif %}
-{% endfor %}
 
-pagination(pairList);
+{% if paiement %}
+setSelectedIndex(document.getElementById("payment_selector"),'{{paiement}}');
+{% endif %}
 
-function search_pair() {
-     var retour = (document.getElementById("search_value").value).sansAccent().toLocaleUpperCase();
-     var validation_selector = document.getElementById("validation_selector");
-     var validation_choice = (validation_selector.options[validation_selector.selectedIndex].value).sansAccent().toLocaleUpperCase();
-     var payment_selector = document.getElementById("payment_selector");
-     var payment_choice = (payment_selector.options[payment_selector.selectedIndex].value).sansAccent().toLocaleUpperCase();
-     var tournament_selector = document.getElementById("tournament_selector");
-     var tournament_choice = (tournament_selector.options[tournament_selector.selectedIndex].value).sansAccent().toLocaleUpperCase();
-     // Copie du tableau pour garder l'original
-     var resultList = pairList.slice();
-     var nbr = resultList.length;
-     for (var i = nbr-1; i >= 0; i--) {
-         var myPair = resultList[i];
-         var pairID = myPair[0].sansAccent().toLocaleUpperCase();
-         var validationStatus = myPair[1].sansAccent().toLocaleUpperCase();
-         var paymentStatus = myPair[2].sansAccent().toLocaleUpperCase();
-         var username1 = myPair[3].sansAccent().toLocaleUpperCase();
-         var username2 = myPair[4].sansAccent().toLocaleUpperCase();
-         var nom1 = myPair[5].sansAccent().toLocaleUpperCase();
-         var nom2 = myPair[6].sansAccent().toLocaleUpperCase();
-         var prenom1 = myPair[7].sansAccent().toLocaleUpperCase();
-         var prenom2 = myPair[8].sansAccent().toLocaleUpperCase();
-         var tournoi = myPair[9].sansAccent().toLocaleUpperCase();
-         if (! (pairID.indexOf(retour) != -1 || username1.indexOf(retour) != -1 || username2.indexOf(retour) != -1 || nom1.indexOf(retour) != -1 || nom2.indexOf(retour) != -1 || prenom1.indexOf(retour) != -1 || prenom2.indexOf(retour) != -1 ) || validationStatus.indexOf(validation_choice) == -1 || paymentStatus.indexOf(payment_choice) == -1 || tournoi.indexOf(tournament_choice) == -1 ) {
-              resultList.splice(i,1);
-         }
-     }
-     pagination(resultList);
-}
+{% if tournoi %}
+setSelectedIndex(document.getElementById("tournament_selector"),'{{tournoi}}');
+{% endif %}
 
-$('#search_value').on('input', function() {
-    search_pair();
+
+//Nombre d'entrées par page
+var pageLength = 10;
+//Nombre de pages
+var total = Math.max(Math.ceil({{length}}/pageLength), 1);
+//Notre pagination
+$('#paginationholder').html('');
+$('#paginationholder').html('<ul class="pagination" id="PairPagination"></ul>');
+$('#PairPagination').twbsPagination({
+        totalPages: total,
+        visiblePages: Math.min(total, 5),
+        startPage: {{page}}, 
+        onPageClick: function (event, page) {
+        //Lorsqu'on clique sur une page, on met à jour le contenu
+        document.getElementById("pageNumber").value = page;
+  		document.getElementById("search_pair_button").click();
+
+        }
 });
+
 </script>
 {% endblock %}

@@ -470,7 +470,7 @@ function createPanel(number){
 									'</div>'+
 								'</div>'+
 								'<div class="col-xs-6">'+
-									'<i id="errorTerrain'+number+'" data-toggle="popover" data-html="true" data-placement="top" data-content="" class="fa fa-info-circle fa-2x center" style="display:none;cursor:pointer;color:red;width:100%;padding-top:5px;vertical-align:middle"></i>'+
+									'<i id="errorTerrain'+number+'" data-toggle="popover" data-html="true" data-placement="top" data-content="lol" class="fa fa-info-circle fa-2x center" style="display:none;cursor:pointer;color:red;width:100%;padding-top:5px;vertical-align:middle" data-original-title="" title=""></i>'+
 								'</div>'+
 							'</div>'+
 							'<div class="row">'+

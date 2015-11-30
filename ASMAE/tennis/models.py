@@ -52,6 +52,9 @@ class Participant(models.Model):
 	def __unicode__(self):
 		return u'' + self.prenom + " " + self.nom
 
+	def codeName(self):
+		return u'' + str(self.prenom)+ " " + str(self.nom) +" ("+ str(self.user.username)+")"
+
 	def fullName(self):
 		return u'' + self.titre +  " " + self.prenom + " " + self.nom
 
@@ -171,6 +174,16 @@ class Court(models.Model):
 
 	def __unicode__(self):
 		return u'' + repr(self.id) + ' '+ self.rue
+
+	def dispo(self):
+		if self.dispoSamedi and self.dispoDimanche:
+			return u'' + "Samedi et dimanche"
+		elif self.dispoSamedi: 
+			return u'' + "Samedi"
+		elif self.dispoDimanche:
+			return u'' + "Dimanche"
+		else:
+			return u'' + " - "
 
 	def getAdresse(self):
 		return u"" + self.numero + " " + self.rue + ", " + self.codepostal + " " + self.localite

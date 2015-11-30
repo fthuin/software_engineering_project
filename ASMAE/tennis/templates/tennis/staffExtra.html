@@ -134,7 +134,7 @@
 				<div class="panel-heading">Liste des extras</div>
 				<div class="list-group" id="listExtra">
 					{% for extra in extras %}
-					<a onClick="extra('{{ extra.id }}', '{{ extra.nom }}','{{ extra.prix }}','{{ extra.commentaires }}')" id="{{ extra.id }}" href="javascript:void(0);" class="list-group-item">{{ extra.nom }} [{{extra.commandsCount}}]</a>
+					<a onClick="extra('{{ extra.id }}', '{{ extra.nom }}','{{ extra.prix }}','{{ extra.commentaires }}')" id="{{ extra.id }}" href="javascript:void(0);" class="list-group-item">{{ extra.nom }} <span class="badge pull-right" style="background-color:#D4542D; color:white">{{extra.count}}</span></a>
 					{% endfor %}
 				</div>
 			</div>
@@ -191,7 +191,6 @@
 									<input type="text" class="form-control" name="id" id="deleteID" value="{{ extras.0.id }}" style="display:none;">
 									<button style="display:none" class="btn-default btn" name="action" id="deleteExtra" value="deleteExtra">Supprimer</button>
 								</form>
-
 							</li>
 						</ul>
 					</div>

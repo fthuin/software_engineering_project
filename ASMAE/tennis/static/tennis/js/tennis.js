@@ -33,22 +33,21 @@ String.prototype.sansAccent = function(){
 /*
  * Fonction used to select option in the terrain edit section
  */
-function preselectSelectOption(matiere,type,etat){
-	function setSelectedIndex(s, valsearch)
+ function setSelectedIndex(s, valsearch)
+{
+// Loop through all the items in drop down list
+	for (i = 0; i< s.options.length; i++)
 	{
-	// Loop through all the items in drop down list
-		for (i = 0; i< s.options.length; i++)
+		if (s.options[i].value == valsearch)
 		{
-			if (s.options[i].value == valsearch)
-			{
-			// Item is found. Set its property and exit
-			s.options[i].selected = true;
-			break;
-			}
+		// Item is found. Set its property and exit
+		s.options[i].selected = true;
+		break;
 		}
-		return;
 	}
-
+	return;
+}
+function preselectSelectOption(matiere,type,etat){
 	setSelectedIndex(document.getElementById("matiere"),matiere);
 	setSelectedIndex(document.getElementById("type"),type);
 	setSelectedIndex(document.getElementById("etat"),etat);

@@ -11,17 +11,21 @@
 	<hr class="line">
     <div class="row">
         <div class="col-sm-6">
-            <!-- Rechercher -->
-            <div class="row" style="margin-bottom:15px;">
-                <div class="col-sm-6 col-sm-offset-3">
-                    <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Rechercher" id="search_value">
-                      <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" id="search_user_button" onclick="search_user()"><span class="glyphicon glyphicon-search"></span></button>
-                      </span>
+            <form method="post" action="{% url "tennis.views.staffPerm" %}" class="form-horizontal">
+                {% csrf_token %}
+                <input type="text" name="page" style="display:none;" value="1" id="pageNumber">
+                <!-- Rechercher -->
+                <div class="row" style="margin-bottom:15px;">
+                    <div class="col-lg-10 col-lg-offset-1 col-sm-4 col-sm-offset-4">
+                        <div class="input-group">
+                          <input type="text" class="form-control" value="{{recherche}}" placeholder="Rechercher" name="rechercheField">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" name="action" value="search" type="submit" id="search_perm_button"><span class="glyphicon glyphicon-search"></span></button>
+                          </span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
 
             <!-- Liste des users -->
             <div class="panel panel-default center-block">
@@ -35,14 +39,21 @@
 							<th>Nom</th>
 						  </tr>
 						</thead>
-						<tbody id="UserList">
+						<tbody>
+                            {% for u in Use %}
+                            <tr class="clickable-row" onclick="selectUserStaff('{{u.username}}','{{u.participant.nom}}','{{u.participant.prenom}}','{{u.user_permissions.all}}','{{ u.groups.all }}');">
+                                <td>{{u.username}}</td>
+                                <td>{{u.participant.prenom}}</td>
+                                <td>{{u.participant.nom}}</td>
+                            </tr>
+                            {% endfor %}
 						</tbody>
 					</table>
 				</div>
             </div>
 
             <!-- Info -->
-            <p class="center" id="UserInfo"></p>
+            <p class="center" id="">{{debut}}-{{fin}} sur {{pageLength}} résultats ({{length}} au total)</p>
 
             <!-- Bottom pagination -->
             <div class="text-center">
@@ -94,7 +105,7 @@
 
                           </div>
                         </div>
-                        <button class="btn btn-default center-block" id="valider" disabled>Valider</button>
+                        <button class="btn btn-default center-block" name="action" value="edit" id="valider" disabled>Valider</button>
                     </div>
                 </div>
             </form>
@@ -107,57 +118,23 @@
 
 {% block commande %}
 <script>
-function pagination(list) {
-    //Nombre d'entrée par page
-    var pageLength = 10;
-    //Nombre de page
-    var total = Math.max(Math.ceil(list.length/pageLength), 1);
-    //Notre pagination
-    $('#paginationholder').html('');
-    $('#paginationholder').html('<ul class="pagination" id="UserPagination"></ul>');
-    $('#UserPagination').twbsPagination({
-      totalPages: total,
-      visiblePages: Math.min(total, 5),
-      onPageClick: function (event, page) {
-      	//Lorsqu'on clique sur une page, on met à jour le contenu
-	    //On met à jour la page en fonction du tournoi selectionné
-	    setUserPermStaff(page);
-      }
-    });
-    //On met à jour les info (liste des users et longueur de chaque page)
-    setUserListInfo(list,pageLength);
-
-    //On met à jour la première page
-    setUserPermStaff(1);
-}
-
-//Recuperation des users et stockage dans un tableau
-var userList = [];
-{% for use in Use %}
-userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.fb }}','{{ use.user_permissions.all }}','{{ use.groups.all }}']);
-{% endfor %}
-
-pagination(userList);
-
-
-function search_user() {
-    var retour = document.getElementById("search_value").value.sansAccent().toLocaleUpperCase();
-    // Copie du tableau pour garder l'original
-    var resultList = userList.slice();
-    var nbr = resultList.length;
-    for (var i = nbr-1; i >= 0 ; i--) {
-        var myUser = resultList[i];
-        var username = myUser[0].sansAccent().toLocaleUpperCase();
-        var prenom = myUser[1].sansAccent().toLocaleUpperCase();
-        var nom = myUser[2].sansAccent().toLocaleUpperCase();
-        if (! (username.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1)) {
-            resultList.splice(i, 1);
-        }
-    }
-    pagination(resultList);
-}
-$('#search_value').on('input', function() {
-    search_user();
+//Nombre d'entrée par page
+var pageLength = 10;
+//Nombre de page
+var total = Math.max(Math.ceil({{length}}/pageLength), 1);
+//Notre pagination
+$('#paginationholder').html('');
+$('#paginationholder').html('<ul class="pagination" id="UserPagination"></ul>');
+$('#UserPagination').twbsPagination({
+  totalPages: total,
+  visiblePages: Math.min(total, 5),
+  startPage: {{page}},
+  onPageClick: function (event, page) {
+  	//Lorsqu'on clique sur une page, on met à jour le contenu
+    //On met à jour la page en fonction du tournoi selectionné
+    document.getElementById("pageNumber").value = page;
+    document.getElementById("search_perm_button").click();
+  }
 });
 </script>
 {% endblock %}

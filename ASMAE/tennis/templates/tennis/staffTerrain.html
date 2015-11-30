@@ -12,28 +12,30 @@
 
 	<div class="row">
 		<div class="col-lg-4">
-			<!-- Rechercher -->
-			<div class="row" style="margin-bottom:15px;">
-				<div class="col-sm-4 col-sm-offset-4 col-lg-10 col-lg-offset-1">
-					<div class="input-group">
-				      <input type="text" class="form-control" placeholder="Rechercher" id="search_value" >
-				      <span class="input-group-btn">
-				        <button class="btn btn-default" type="button" onclick="search_court()"><span class="glyphicon glyphicon-search"></span></button>
-				      </span>
-				    </div>
-				</div>
-			</div>
 			<!-- Paramètres de recherche avancée -->
-			<form action="" class="form-horizontal">
+			<form method="post" action="{% url "tennis.views.staffTerrain" %}" class="form-horizontal">
+				{% csrf_token %}
+				<input type="text" name="page" style="display:none;" value="1" id="pageNumber">
+				<!-- Rechercher -->
+				<div class="row" style="margin-bottom:15px;">
+					<div class="col-lg-10 col-lg-offset-1 col-sm-4 col-sm-offset-4">
+						<div class="input-group">
+					      <input type="text" class="form-control" value="{{recherche}}" placeholder="Rechercher" name="rechercheField">
+					      <span class="input-group-btn">
+					        <button class="btn btn-default" type="submit" id="search_court_button"><span class="glyphicon glyphicon-search"></span></button>
+					      </span>
+					    </div>
+					</div>
+				</div>
 				<div class="panel panel-default center-block" style="max-width:300px;">
 				    <div class="panel-heading" onclick="setPlusMoins()" data-toggle="collapse" data-target="#list_criteria" style="cursor:pointer;" href="#list_criteria">Critères d'affichage <span id="plusmoins" class="glyphicon glyphicon-chevron-up pull-right"></span></div>
 				    <div class="list-group panel-collapse collapse in" id="list_criteria">
 
 				    	<li class="list-group-item">
 						    <div class="row">
-							    <label class="control-label col-sm-4">Matière</label>
-							    <div class="col-sm-8">
-								    <select id="material_selector" class="form-control" onchange="search_court()">
+							    <label class="control-label col-sm-5">Matière</label>
+							    <div class="col-sm-7">
+								    <select id="material_selector" class="form-control" name="material">
 								        <option value="" selected>Tous</option>
 								        {% for courtSurface in allCourtSurface %}
 									  	<option value="{{ courtSurface.nom }}">{{ courtSurface.nom }}</option>
@@ -44,23 +46,10 @@
 					    </li>
 					    <li class="list-group-item">
 						    <div class="row">
-							    <label class="control-label col-sm-4">Validation</label>
-							    <div class="col-sm-8">
-								    <select id="validation_selector" class="form-control" onchange="search_court()">
+							    <label class="control-label col-sm-5">Validation</label>
+							    <div class="col-sm-7">
+								    <select id="validation_selector" class="form-control" name="validation">
 								        <option value="" selected>Tous</option>
-								        <option value="oui">Valide</option>
-								        <option value="non">Non validé</option>
-								    </select>
-								</div>
-							</div>
-					    </li>
-
-					    <li class="list-group-item">
-						    <div class="row">
-							    <label class="control-label col-sm-4">Utilisé</label>
-							    <div class="col-sm-8">
-								    <select id="used_selector" class="form-control" onchange="search_court()">
-								        <option value="Tous" selected>Tous</option>
 								        <option value="True">Oui</option>
 								        <option value="False">Non</option>
 								    </select>
@@ -70,22 +59,35 @@
 
 					    <li class="list-group-item">
 						    <div class="row">
-							    <label class="control-label col-sm-4">Disponibilité</label>
-							    <div class="col-sm-8">
-								    <select id="availability_selector" class="form-control" onchange="search_court()">
+							    <label class="control-label col-sm-5">Utilisé</label>
+							    <div class="col-sm-7">
+								    <select id="used_selector" class="form-control" name="used">
 								        <option value="" selected>Tous</option>
-								        <option value="saturday">Samedi</option>
-								        <option value="sunday">Dimanche</option>
-								        <option value="saturday_sunday">Samedi et dimanche</option>
+								        <option value="True">Oui</option>
+								        <option value="False">Non</option>
+								    </select>
+								</div>
+							</div>
+					    </li>
+
+					    <li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-5">Disponibilité</label>
+							    <div class="col-sm-7">
+								    <select id="availability_selector" class="form-control" name="dispo">
+								        <option value="" selected>Tous</option>
+								        <option value="1">Samedi</option>
+								        <option value="2">Dimanche</option>
+								        <option value="3">Samedi et dimanche</option>
 								    </select>
 								</div>
 							</div>
 					    </li>
 					    <li class="list-group-item">
 						    <div class="row">
-							    <label class="control-label col-sm-4">Etat du terrain</label>
-							    <div class="col-sm-8">
-								    <select id="state_selector" class="form-control" onchange="search_court()">
+							    <label class="control-label col-sm-5">Etat du terrain</label>
+							    <div class="col-sm-7">
+								    <select id="state_selector" class="form-control" name="state">
 								        <option value="" selected>Tous</option>
 								        {% for courtState in allCourtState %}
 									  	<option value="{{ courtState.nom }}">{{ courtState.nom }}</option>
@@ -96,9 +98,9 @@
 					    </li>
 					    <li class="list-group-item">
 						    <div class="row">
-							    <label class="control-label col-sm-4">Type</label>
-							    <div class="col-sm-8">
-								    <select id="type_selector" class="form-control" onchange="search_court()">
+							    <label class="control-label col-sm-5">Type</label>
+							    <div class="col-sm-7">
+								    <select id="type_selector" class="form-control" name="type">
 								        <option value="" selected>Tous</option>
 							      	{% for courtType in allCourtType %}
 							      		<option value="{{ courtType.nom }}">{{ courtType.nom }}</option>
@@ -109,16 +111,24 @@
 					    </li>
 					    <li class="list-group-item">
 						    <div class="row">
-							    <label class="control-label col-sm-4">Vétéran</label>
-							    <div class="col-sm-8">
-								    <select id="vet_selector" class="form-control" onchange="search_court()">
-								        <option value="Tous" selected>Tous</option>
+							    <label class="control-label col-sm-5">Vétéran</label>
+							    <div class="col-sm-7">
+								    <select id="vet_selector" class="form-control" name="veteran">
+								        <option value="" selected>Tous</option>
 								        <option value="True">Oui</option>
 								        <option value="False">Non</option>
 								    </select>
 								</div>
 							</div>
 					    </li>
+					     <li class="list-group-item">
+							<div class="row">
+								<label class="control-label col-sm-5">Résultats</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="number" name="pagelength" value="{{pageLength}}">
+								</div>
+							</div>
+						</li>
 				    </div>
 				</div>
 			</form>
@@ -142,14 +152,44 @@
 		            <th style="text-align:center">Vétéran</th>
 		          </tr>
 		          </thead>
-		          <tbody id="CourtList">
+		          <tbody>
+		          	{% for court in allCourt %}
+		          	<tr onclick="window.open('{% url "tennis.views.validateTerrain" court.id %}','_blank');" class="clickable-row">
+		          		<td>{{court.id}}</td>
+		          		<td>{{court.matiere}}</td>
+		          		<td style="text-align:center">
+		          			{% if court.valide %}
+		        			<span class="glyphicon glyphicon-ok" style="color:green;"></span>
+		        			{% else %}
+		        			<span class="glyphicon glyphicon-remove" style="color:red;"></span>
+		        			{% endif %}
+		          		</td>
+		          		<td style="text-align:center">
+		          			{% if court.used %}
+		        			<span class="glyphicon glyphicon-ok" style="color:green;"></span>
+		        			{% else %}
+		        			<span class="glyphicon glyphicon-remove" style="color:red;"></span>
+		        			{% endif %}
+		          		</td>
+		          		<td>{{court.dispo}}</td>
+		          		<td>{{court.user.participant.codeName}}</td>
+		          		<td>{{court.user.participant.getAdresse}}</td>
+		          		<td style="text-align:center">
+		          			{% if court.usedLastYear %}
+		        			<span class="glyphicon glyphicon-ok" style="color:green;"></span>
+		        			{% else %}
+		        			<span class="glyphicon glyphicon-remove" style="color:red;"></span>
+		        			{% endif %}
+		          		</td>
+		          	</tr>
+		          	{% endfor %}
 		          </tbody>
 				</table>
 				</div>
 			</div>
 
 			<!-- Info -->
-			<p class="center" id="CourtInfo"></p>
+			<p class="center" id="">{{debut}}-{{fin}} sur {{pageLength}} résultats ({{length}} au total)</p>
 
 			<!-- Bottom pagination -->
 			<div class="text-center">
@@ -167,109 +207,50 @@
 
 {% block commande %}
 <script>
-function pagination(list) {
-    //Nombre d'entrée par page
-    var pageLength = 10;
-    //Nombre de page
-    var total = Math.max(Math.ceil(list.length/pageLength), 1);
-    //Notre pagination
-    $('#paginationholder').html('');
-    $('#paginationholder').html('<ul class="pagination" id="CourtPagination"></ul>');
-    $('#CourtPagination').twbsPagination({
-            totalPages: total,
-            visiblePages: Math.min(total, 5),
-            onPageClick: function (event, page) {
-                //Lorsqu'on click sur une page, on met à jours le contenu
-                setCourt(page);
-                }
-            });
+{% if material %}
+setSelectedIndex(document.getElementById("material_selector"),'{{material}}');
+{% endif %}
 
-    //On met jours les info (liste des users et longueur de chaque page)
-    setCourtListInfo(list,pageLength);
+{% if validation %}
+setSelectedIndex(document.getElementById("validation_selector"),'{{validation}}');
+{% endif %}
 
-    //On met à jours la première page
-    setCourt(1);
-}
-	//TERRAIN
-//Recuperation des court et stockage dans un tableau
-var courtList = [];
-{% for court in allCourt %}
-courtList.push(['{{ court.user.username }}','{{ court.user.participant.prenom }}','{{ court.user.participant.nom }}','{{ court.id }}','{{ court.matiere }}','{{ court.rue }}','{{ court.numero }}','{{ court.codepostal }}','{{ court.localite }}','{{ court.boite }}',{% if court.valide %}'oui'{% else %}'non'{% endif %},{% if court.dispoSamedi and court.dispoDimanche %}'Samedi et dimanche'{% elif court.dispoSamedi %}'Samedi'{% elif court.dispoDimanche %}'Dimanche'{% else %}' - '{% endif %},'{{ court.etat }}', '{{ court.type }}', '{{ court.poule_set.all }}', '{{ court.usedLastYear }}']);
-{% endfor %}
+{% if used %}
+setSelectedIndex(document.getElementById("used_selector"),'{{used}}');
+{% endif %}
 
-pagination(courtList);
+{% if dispo %}
+setSelectedIndex(document.getElementById("availability_selector"),'{{dispo}}');
+{% endif %}
 
-//username,prenom,nom courtID, matiere, rue, numero, codepostal, localite, boite, courtValide(oui,non), courtDispo (Samedi et dimanche, Samedi, Dimanche,  - )
+{% if state %}
+setSelectedIndex(document.getElementById("state_selector"),'{{state}}');
+{% endif %}
 
-function search_court() {
-    var retour = document.getElementById("search_value").value.sansAccent().toLocaleUpperCase();
-    var validation_selector = document.getElementById("validation_selector");
-    var validation_choice = validation_selector.options[validation_selector.selectedIndex].value.sansAccent().toLocaleUpperCase();
-    var availability_selector = document.getElementById("availability_selector");
-    var availability_choice = availability_selector.options[availability_selector.selectedIndex].text.sansAccent().toLocaleUpperCase();
-    var material_selector = document.getElementById("material_selector");
-    var material_choice = material_selector.options[material_selector.selectedIndex].text.sansAccent().toLocaleUpperCase();
-    var state_selector = document.getElementById("state_selector");
-    var state_choice = state_selector.options[state_selector.selectedIndex].text.sansAccent().toLocaleUpperCase();
-    var type_selector = document.getElementById("type_selector");
-    var type_choice = type_selector.options[type_selector.selectedIndex].text.sansAccent().toLocaleUpperCase();
-    var used_selector = document.getElementById("used_selector");
-	var used_choice = used_selector.options[used_selector.selectedIndex].value;
-	var vet_selector = document.getElementById("vet_selector");
-	var vet_choice = vet_selector.options[vet_selector.selectedIndex].value;
-    if (material_choice.indexOf("Tous".toLocaleUpperCase()) != -1) {
-    	material_choice = "";
+{% if typeCourt %}
+setSelectedIndex(document.getElementById("type_selector"),'{{typeCourt}}');
+{% endif %}
+
+{% if veteran %}
+setSelectedIndex(document.getElementById("vet_selector"),'{{veteran}}');
+{% endif %}
+//Nombre d'entrée par page
+var pageLength = 10;
+//Nombre de page
+var total = Math.max(Math.ceil({{length}}/pageLength), 1);
+//Notre pagination
+$('#paginationholder').html('');
+$('#paginationholder').html('<ul class="pagination" id="CourtPagination"></ul>');
+$('#CourtPagination').twbsPagination({
+    totalPages: total,
+    visiblePages: Math.min(total, 5),
+    startPage: {{page}}, 
+    onPageClick: function (event, page) {
+        //Lorsqu'on click sur une page, on met à jours le contenu
+        document.getElementById("pageNumber").value = page;
+		document.getElementById("search_court_button").click();
     }
-    if (availability_choice.indexOf("Tous".toLocaleUpperCase()) != -1) {
-    	availability_choice = "";
-    }
-    if (state_choice.indexOf("Tous".toLocaleUpperCase()) != -1) {
-    	state_choice = "";
-    }
-    if (type_choice.indexOf("Tous".toLocaleUpperCase()) != -1) {
-    	type_choice = "";
-    }
-    // Copie du tableau pour garder l'original
-    var resultList = courtList.slice();
-    var nbr = resultList.length;
-    for (var i = nbr-1 ; i >= 0 ; i--) {
-         var myCourt = resultList[i];
-         var username = myCourt[0].sansAccent().toLocaleUpperCase();
-         var prenom = myCourt[1].sansAccent().toLocaleUpperCase();
-         var nom = myCourt[2].sansAccent().toLocaleUpperCase();
-         var id = myCourt[3].sansAccent().toLocaleUpperCase();
-         var matiere = myCourt[4].sansAccent().toLocaleUpperCase();
-         var rue = myCourt[5].sansAccent().toLocaleUpperCase();
-         var codepostal = myCourt[7].sansAccent().toLocaleUpperCase();
-         var localite = myCourt[8].sansAccent().toLocaleUpperCase();
-         var validationStatus = myCourt[10].sansAccent().toLocaleUpperCase();
-         var availabilityStatus = myCourt[11].sansAccent().toLocaleUpperCase();
-         var etat = myCourt[12].sansAccent().toLocaleUpperCase();
-         var type = myCourt[13].sansAccent().toLocaleUpperCase();
-         var used = myCourt[14]
-         if(used=="[]"){
-         	used = "False"
-         }else{
-         	used = "True"
-         }
-         var vet = myCourt[15]
-         if (! (username.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1 || id.indexOf(retour) != -1 || rue.indexOf(retour) != -1 || codepostal.indexOf(retour) != -1 || localite.indexOf(retour) != -1 ) || matiere.indexOf(material_choice) == -1 || validationStatus.indexOf(validation_choice) == -1 || availabilityStatus.indexOf(availability_choice) == -1 || etat.indexOf(state_choice) || type.indexOf(type_choice) || (used != used_choice && used_choice != "Tous") || (vet != vet_choice && vet_choice != "Tous") ) {
-            resultList.splice(i, 1);
-         }
-    }
-    pagination(resultList);
-}
-$('#search_value').on('input', function() { 
-    search_court();
 });
-$('#validation_selector').on('input', function() { 
-    search_court();
-});
-$('#availability_selector').on('input', function() { 
-    search_court();
-});
-$('#material_selector').on('input', function() { 
-    search_court();
-});
+
 </script>
 {% endblock %}

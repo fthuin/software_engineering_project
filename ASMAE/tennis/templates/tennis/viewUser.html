@@ -80,8 +80,8 @@
 					    {% for item in tournoi %}
 					    <tr onclick='window.document.location="{% url 'tennis.views.validatePair' item.id %}"' class="clickable-row">
 					        <td>{{ item.id }}</td>
-					        <td>{{ item.tournoi.nom }}</td>
-					        <td>{{ item.tournoi.jour }}</td>
+					        <td>{{ item.tournoi }}</td>
+					        <td>{{ item.tournoi.titre.jour }}</td>
 					        <td>{% if item.valid %}oui{% else %}non{% endif %}</td>
 					        <td>{% if item.pay %}oui{% else %}non{% endif %}</td>
 					        <td>{{item.user1.participant.prenom}} {{item.user1.participant.nom}}</td>

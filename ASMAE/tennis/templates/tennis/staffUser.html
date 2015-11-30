@@ -11,42 +11,46 @@
 	<hr class="line">
 	<div class="row">
 		<div class="col-lg-4">
-			<!-- Rechercher -->
-			<div class="row" style="margin-bottom:15px;">
-				<div class="col-sm-4 col-sm-offset-4 col-lg-10 col-lg-offset-1">
-					<div class="input-group">
-				      <input type="text" class="form-control" placeholder="Rechercher" id="search_value">
-				      <span class="input-group-btn">
-				        <button class="btn btn-default" type="button" id="search_user_button" onclick="search_user()"><span class="glyphicon glyphicon-search"></span></button>
-				      </span>
-				    </div>
-				</div>
-			</div>
+			
 
 			<!-- Paramètres de recherche avancée -->
-			<form action="" class="form-horizontal">
+			<form method="post" action="{% url "tennis.views.staffUser" %}" class="form-horizontal">
+				{% csrf_token %}
+				<input type="text" name="page" style="display:none;" value="1" id="pageNumber">
+				<!-- Rechercher -->
+				<div class="row" style="margin-bottom:15px;">
+					<div class="col-sm-4 col-sm-offset-4 col-lg-10 col-lg-offset-1">
+						<div class="input-group">
+					      <input type="text" class="form-control" value="{{recherche}}" name="rechercheField" placeholder="Rechercher" id="search_value">
+					      <span class="input-group-btn">
+					        <button class="btn btn-default" type="submit" id="search_user_button"><span class="glyphicon glyphicon-search"></span></button>
+					      </span>
+					    </div>
+					</div>
+				</div>
+				
 				<div class="panel panel-default center-block" style="max-width:300px;">
 					<div class="panel-heading" onclick="setPlusMoins()" data-toggle="collapse" data-target="#list_criteria" style="cursor:pointer;" href="#list_criteria">Critères d'affichage <span id="plusmoins" class="glyphicon glyphicon-chevron-up pull-right"></span></div>
 					<div class="list-group panel-collapse collapse in" id="list_criteria">
 
 						<li class="list-group-item">
 							<div class="row">
-								<label class="control-label col-sm-4">Sexe</label>
-								<div class="col-sm-8">
-									<select id="sex_selector" class="form-control" onchange="search_user();">
-										<option value="Tous" selected>Tous</option>
-										<option value="Hommes">Hommes</option>
-										<option value="Femmes">Femmes</option>
+								<label class="control-label col-sm-5">Sexe</label>
+								<div class="col-sm-7">
+									<select id="sex_selector" name="sex_selector" class="form-control">
+										<option value="" selected>Tous</option>
+										<option value="Mr">Hommes</option>
+										<option value="Mme">Femmes</option>
 									</select>
 								</div>
 							</div>
 						</li>
 						<li class="list-group-item">
 							<div class="row">
-								<label class="control-label col-sm-4">Paire : </label>
-								<div class="col-sm-8">
-								  	<select id="paire_selector" class="form-control" onchange="search_user();">
-										<option value="Tous" selected>Tous</option>
+								<label class="control-label col-sm-5">Paire</label>
+								<div class="col-sm-7">
+								  	<select id="paire_selector" name="inpair" class="form-control">
+										<option value="" selected>Tous</option>
 										<option value="True">Oui</option>
 										<option value="False">Non</option>
 									</select>
@@ -55,10 +59,10 @@
 						</li>
 						<li class="list-group-item">
 							<div class="row">
-								<label class="control-label col-sm-4">Vétéran : </label>
-								<div class="col-sm-8">
-								  	<select id="vet_selector" class="form-control" onchange="search_user();">
-										<option value="Tous" selected>Tous</option>
+								<label class="control-label col-sm-5">Vétéran</label>
+								<div class="col-sm-7">
+								  	<select id="vet_selector" name="veteran" class="form-control">
+										<option value="" selected>Tous</option>
 										<option value="True">Oui</option>
 										<option value="False">Non</option>
 									</select>
@@ -67,10 +71,35 @@
 						</li>
 						<li class="list-group-item">
 							<div class="row">
-								<label class="control-label col-sm-4">Age : </label>
-								<div class="col-sm-8">
-									  <input type="text" class="center-block" id="amount" readonly style="text-align:center; border:0; color:#D4542D; font-weight:bold; background-color:transparent;width:100%">
-									<div id="slider-range" style="margin-top:5px;padding-left:15px;padding-right:15px;"></div>
+								<label class="control-label col-sm-5">Age min</label>
+								<div class="col-sm-7">
+									<select id="agemin" name="agemin" class="form-control">
+										{% for x in ageRange %} 
+										<option value="{{x}}">{{x}}</option>
+										{% endfor %}
+										<option value="100">100</option>
+									</select>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div class="row">
+								<label class="control-label col-sm-5">Age max</label>
+								<div class="col-sm-7">
+									<select id="agemax" name="agemax" class="form-control">
+										{% for x in ageRange %} 
+										<option value="{{x}}">{{x}}</option>
+										{% endfor %}
+										<option value="100" selected>100</option>
+									</select>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div class="row">
+								<label class="control-label col-sm-5">Résultats</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="number" name="pagelength" value="{{pageLength}}">
 								</div>
 							</div>
 						</li>
@@ -96,15 +125,43 @@
 					            <th style="text-align:center">Vétéran</th>
 					          </tr>
 					        </thead>
-					        <tbody id="UserList">
+					        <tbody id="">
+					        	{% for u in Use %}
+					        	<tr onclick="window.open('{% url "tennis.views.viewUser" u.username %}','_blank')"; class="clickable-row">
+					        		<td style="text-align:center">
+					        			{% if u.participant.titre == "Mr" %}
+					        			<i class="fa fa-male" style="color:blue"></i>
+					        			{% else %}
+					        			<i class="fa fa-female" style="color:#ff0066"></i>
+					        			{% endif %}
+					        		</td>
+					        		<td>{{u.username}}</td>
+					        		<td>{{u.participant.prenom}}</td>
+					        		<td>{{u.participant.nom}}</td>
+					        		<td style="text-align:center">{{u.age}}</td>
+					        		<td style="text-align:center">
+					        			{% if u.inpaire %}
+					        			<span class="glyphicon glyphicon-ok" style="color:green;"></span>
+					        			{% else %}
+					        			<span class="glyphicon glyphicon-remove" style="color:red;"></span>
+					        			{% endif %}
+					        		</td>
+					        		<td style="text-align:center">
+					        			{% if u.participant.oldparticipant %}
+					        			<span class="glyphicon glyphicon-ok" style="color:green;"></span>
+					        			{% else %}
+					        			<span class="glyphicon glyphicon-remove" style="color:red;"></span>
+					        			{% endif %}
+					        		</td>
+					        	</tr>
+					        	{% endfor %}
 					        </tbody>
 						</table>
-				</div>
-				
+				</div>				
 			</div>
 
 			<!-- Info -->
-			<p class="center" id="UserInfo"></p>
+			<p class="center" id="">{{debut}}-{{fin}} sur {{pageLength}} résultats ({{length}} au total)</p>
 
 			<!-- Bottom pagination -->
 			<div class="text-center">
@@ -122,102 +179,44 @@
 
 {% block commande %}
 <script>
-$(function() {
-  $( "#slider-range" ).slider({
-    range: true,
-    min: 0,
-    max: 100,
-    values: [ 0, 100 ],
-    slide: function( event, ui ) {
-      $( "#amount" ).val( "" + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
-    }
-  });
-  $( "#amount" ).val( "" + $( "#slider-range" ).slider( "values", 0 ) +
-    " - " + $( "#slider-range" ).slider( "values", 1 ) );
-});
-function pagination(list) {
-    //Nombre d'entrée par page
-    var pageLength = 10;
-    //Nombre de page
-    var total = Math.max(Math.ceil(list.length/pageLength), 1);
-    //Notre pagination
-    $('#paginationholder').html('');
-    $('#paginationholder').html('<div class="pagination" id="UserPagination"></div>');
-    $('#UserPagination').twbsPagination({
-      totalPages: total,
-      visiblePages: Math.min(total, 5),
-      onPageClick: function (event, page) {
-      	//Lorsqu'on clique sur une page, on met à jour le contenu
-	    //On met à jour la page en fonction du tournoi selectionné
-	    setUserStaff(page);
-      }
-    });
-    //On met à jour les info (liste des users et longueur de chaque page)
-    setUserListInfo(list,pageLength);
+{% if sexe %}
+setSelectedIndex(document.getElementById("sex_selector"),'{{sexe}}');
+{% endif %}
 
-    //On met à jour la première page
-    setUserStaff(1);
-}
+{% if in_paire %}
+setSelectedIndex(document.getElementById("paire_selector"),'{{in_paire}}');
+{% endif %}
 
-//Recuperation des users et stockage dans un tableau
-var userList = [];
-{% for use in Use %}
-userList.push(['{{ use.username }}','{{ use.participant.prenom }}','{{ use.participant.nom }}','{{ use.participant.titre }}','{{ use.age }}','{{ use.inpaire }}','{{ use.participant.oldparticipant }}']);
-{% endfor %}
+{% if veteran %}
+setSelectedIndex(document.getElementById("vet_selector"),'{{veteran}}');
+{% endif %}
 
-pagination(userList);
+{% if age_min %}
+setSelectedIndex(document.getElementById("agemin"),'{{age_min}}');
+{% endif %}
 
-function search_user() {
-    var retour = document.getElementById("search_value").value.sansAccent().toLocaleUpperCase();
-	var slidedValues = $('#slider-range').slider("values");
-	var minAgeSearch = slidedValues[0];
-	var maxAgeSearch = slidedValues[1];
-	var sex_selector = document.getElementById("sex_selector");
-	var sex_choice = sex_selector.options[sex_selector.selectedIndex].text.sansAccent().toLocaleUpperCase();
-	if ( sex_choice == "Tous".sansAccent().toLocaleUpperCase()) {
-		sex_choice = "";
-	}
-	if ( sex_choice == "Hommes".sansAccent().toLocaleUpperCase()) {
-		sex_choice = "Mr".sansAccent().toLocaleUpperCase();
-	}
-	if ( sex_choice == "Femmes".sansAccent().toLocaleUpperCase()) {
-		sex_choice = "Mme".sansAccent().toLocaleUpperCase();
-	}
-	var paire_selector = document.getElementById("paire_selector");
-	var paire_choice = paire_selector.options[paire_selector.selectedIndex].value;
-	var vet_selector = document.getElementById("vet_selector");
-	var vet_choice = vet_selector.options[vet_selector.selectedIndex].value;
-	//alert(sex_choice.indexOf(''));
-	//alert(sex_choice.indexOf(''));
-    // Copie du tableau pour garder l'original
-    var resultList = userList.slice();
-    var nbr = resultList.length;
-    for (var i = nbr-1; i >= 0 ; i--) {
-        var myUser = resultList[i];
-        var username = myUser[0].sansAccent().toLocaleUpperCase();
-        var prenom = myUser[1].sansAccent().toLocaleUpperCase();
-        var nom = myUser[2].sansAccent().toLocaleUpperCase();
-		var titre = myUser[3].sansAccent().toLocaleUpperCase();
-		var age = parseInt(myUser[4]);
-		var paire = myUser[5]
-		var vet = myUser[6]
-        if (! (username.indexOf(retour) != -1 || prenom.indexOf(retour) != -1 || nom.indexOf(retour) != -1) || titre.indexOf(sex_choice) == -1 || age < minAgeSearch || age > maxAgeSearch || (paire != paire_choice && paire_choice != "Tous") || (vet != vet_choice && vet_choice != "Tous")) {
-            resultList.splice(i, 1);
-        }
-    }
-    pagination(resultList);
-}
+{% if age_max %}
+setSelectedIndex(document.getElementById("agemax"),'{{age_max}}');
+{% endif %}
 
-$('#search_value').on('input', function() {
-    search_user();
-});
-$( "#slider-range").slider({
-  change: function( event, ui ) {
-	  search_user();
+
+//Nombre d'entrée par page
+var pageLength = 10;
+//Nombre de page
+var total = Math.max(Math.ceil({{length}}/pageLength), 1);
+//Notre pagination
+$('#paginationholder').html('');
+$('#paginationholder').html('<div class="pagination" id="UserPagination"></div>');
+$('#UserPagination').twbsPagination({
+  totalPages: total,
+  visiblePages: Math.min(total, 5),
+  startPage: {{page}}, 
+  onPageClick: function (event, page) {
+  	//Lorsqu'on clique sur une page, on met à jour le contenu
+  	document.getElementById("pageNumber").value = page;
+  	document.getElementById("search_user_button").click();
   }
 });
-$('#sex_selector').on('input', function() {
-    search_user();
-});
+
 </script>
 {% endblock %}
