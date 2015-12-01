@@ -51,7 +51,7 @@
     </div>
         <ul class="list-inline text-center" style="padding-top:10px">
             <li>
-                <button class="btn btn-default center-block" type="submit" onclick="save()" value="save" name="action">Sauvegarder</button>
+                <button class="btn btn-default center-block" id="save_button" type="submit" onclick="save()" value="save" name="action">Sauvegarder</button>
             </li>
             <li>
                 <button class="btn btn-default center-block" data-toggle="modal" data-target="#myModal" type="button" onclick="checkValues()">Valider</button>
@@ -387,7 +387,6 @@ function terrainAssignement()
 		}
 		//Assigner le terrain index a la poule key par html brole
 
-
 		setInfoTerrainNoUpdateKm(TerrainList[index].user,TerrainList[index].matiere,TerrainList[index].type,TerrainList[index].addr,TerrainList[index].id,TerrainList[index].poules,parseInt(key)+1);
 		document.getElementById("empreinte"+(parseInt(key)+1)).innerHTML = Math.round(minDistance)/1000;
 
@@ -546,13 +545,27 @@ function greedySolution(matrix,nbrPoule){
 
 	}
 
+
 var maxnbrInPoule = pairInPoule[0].length
-document.getElementById("poulesDiv").innerHTML = "";
+//document.getElementById("poulesDiv").innerHTML = "";
 
 for(var i =0;i<nbrPoule;i++)
 {
-	var panel = createPanel(i+1);
-	document.getElementById("poulesDiv").appendChild(panel);
+    /*
+	var row;
+
+    if(i%3 == 0){
+        row = document.createElement("div")
+        row.className = "row"
+        document.getElementById("poulesDiv").appendChild(row);
+    }
+    //Creation du panel de la poule
+    */
+    //var panel = document.getElementById("panel"+(i+1));
+    document.getElementById("list"+(i+1)).innerHTML = ""
+    document.getElementById("Leader"+(i+1)).innerHTML = ""
+
+    //row.appendChild(panel)
 
 	for(var j=0;j<pairInPoule[i].length;j++){
 			var p = createPair(pairList[pairInPoule[i][j]]);
@@ -577,6 +590,8 @@ setTerrains(nbrPoule);
 
 terrainAssignement()
 leaderAssignement()
+
+//document.getElementById("save_button").click()
 
 }
 function leaderAssignement(){
