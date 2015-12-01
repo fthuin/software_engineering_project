@@ -4,14 +4,6 @@ from django.contrib.auth.models import User
 from datetime import date
 import datetime
 
-class infoTournoi(models.Model):
-	prix = models.DecimalField(max_digits=11,decimal_places=2, verbose_name="Prix de l'inscription")
-	date = models.DateTimeField(verbose_name="Date du tournoi")
-	edition = models.IntegerField()
-	addr = models.TextField(verbose_name="Adresse du QG")
-	latitude = models.DecimalField(max_digits=19, decimal_places=10, default="50.8539751",blank=True,verbose_name="Latitude")
-	longitude = models.DecimalField(max_digits=19, decimal_places=10, default="4.398054",blank=True,verbose_name="Longitude")
-
 class Ranking(models.Model):
 	id = models.AutoField(primary_key=True)
 	nom = models.CharField(max_length=15, unique=True)
@@ -53,13 +45,13 @@ class Participant(models.Model):
 		return u'' + self.prenom + " " + self.nom
 
 	def codeName(self):
-		return u'' + repr(self.prenom)+ " " + repr(self.nom) +" ("+ repr(self.user.username)+")"
+		return u'' + self.prenom+ " " + self.nom +" ("+ self.user.username+")"
 
 	def fullName(self):
 		return u'' + self.titre +  " " + self.prenom + " " + self.nom
 
 	def smallName(self):
-		return u'' +self.prenom[0:1].upper()+". "+self.nom
+		return u'' + self.prenom[0:1].upper()+". "+ self.nom
 
 	def limitName(self):
 		nom = self.nom
@@ -68,10 +60,10 @@ class Participant(models.Model):
 		return u'' +self.prenom[0:1].upper()+". "+nom
 
 	def getAdresse(self):
-		return u"" + repr(self.numero) + " " + repr(self.rue) + ", " + repr(self.codepostal) + " " + repr(self.localite)
+		return u"" + self.numero + " " + self.rue + ", " + self.codepostal + " " + self.localite
 
 	def shortAdresse(self):
-		return repr(self.localite)+" Belgium"
+		return self.localite+" Belgium"
 
 	#def __eq__(self, other):
 	#	return self.username == other.user.username
@@ -173,7 +165,7 @@ class Court(models.Model):
 		return str(self.id) +" "+ self.rue
 
 	def __unicode__(self):
-		return u'' + repr(self.id) + ' '+ self.rue
+		return u'' + self.id + ' '+ self.rue
 
 	def dispo(self):
 		if self.dispoSamedi and self.dispoDimanche:
@@ -220,7 +212,7 @@ class Arbre(models.Model):
 		return "Arbre n " + str(self.id)
 
 	def __unicode__(self):
-		return u'' + "Arbre n " + str(self.id)
+		return u'' + "Arbre n " + self.id
 
 	class Meta:
 		verbose_name = "Arbre"
@@ -236,7 +228,7 @@ class TournoiTitle(models.Model):
 		return str(self.nom)
 
 	def __unicode__(self):
-		return u'' + str(self.nom)
+		return u'' + self.nom
 
 	class Meta:
 		verbose_name = "Titre Tournoi"
@@ -252,7 +244,7 @@ class TournoiCategorie(models.Model):
 		return str(self.nom)
 
 	def __unicode__(self):
-		return u'' + str(self.nom)
+		return u'' + self.nom
 
 	class Meta:
 		verbose_name = "Catégorie Tournoi"
@@ -267,21 +259,21 @@ class Tournoi(models.Model):
 
 	def __str__(self):
 		if(self.titre.nom==self.categorie.nom):
-			return str(self.titre)
+			return str(self.titre.nom)
 		else:
-			return str(self.titre)+": "+str(self.categorie)
+			return str(self.titre.nom)+": "+str(self.categorie.nom)
 
 	def __unicode__(self):
 		if(self.titre.nom==self.categorie.nom):
-			return u'' + str(self.titre)
+			return u'' + self.titre.nom
 		else:
-			return u'' + str(self.titre)+": "+str(self.categorie)
+			return u'' + self.titre.nom+": "+ self.categorie.nom
 
 	def nom(self):
 		if(self.titre.nom==self.categorie.nom):
-			return str(self.titre)
+			return str(self.titre.nom)
 		else:
-			return str(self.titre)+"_"+str(self.categorie)
+			return str(self.titre.nom)+"_"+str(self.categorie.nom)
 
 	class Meta:
 		verbose_name = 'Tournoi'
@@ -341,7 +333,7 @@ class Score(models.Model):
 		return "Score " + str(self.paire1.id) + " vs "+ str(self.paire2.id)
 
 	def __unicode__(self):
-		return u'' + "Score " + str(self.paire1.id) + " vs "+ str(self.paire2.id)
+		return u'' + "Score " + self.paire1.id + " vs "+ self.paire2.id
 
 class Poule(models.Model):
 	id = models.AutoField(primary_key=True)
@@ -357,7 +349,7 @@ class Poule(models.Model):
 		return "Poule n " + str(self.id)
 
 	def __unicode__(self):
-		return u'' + "Poule n " + str(self.id)
+		return u'' + "Poule n " + self.id
 
 	class Meta:
 		verbose_name = "Poule"
@@ -373,3 +365,30 @@ class LogActivity(models.Model):
 
 	class Meta:
 		verbose_name = "Log"
+
+class Resultat(models.Model):
+	id = models.AutoField(primary_key=True)
+	tournoi = models.ForeignKey(Tournoi)
+	gagnants = models.ManyToManyField(User, related_name='gagnants', verbose_name = "gagnants")
+	gagnants_alt = models.TextField(null=True,blank=True)
+	finalistes = models.ManyToManyField(User, related_name='finalistes', verbose_name = "finalistes")
+	finalistes_alt = models.TextField(null=True,blank=True)
+	def __str__(self):
+		return "Resultat du " + str(self.tournoi)
+
+	def __unicode__(self):
+		return u'' + "Resultat du " + self.tournoi
+
+class infoTournoi(models.Model):
+	prix = models.DecimalField(max_digits=11,decimal_places=2, verbose_name="Prix de l'inscription")
+	date = models.DateTimeField(verbose_name="Date du tournoi")
+	edition = models.IntegerField(primary_key=True)
+	addr = models.TextField(verbose_name="Adresse du QG")
+	latitude = models.DecimalField(max_digits=19, decimal_places=10, default="50.8539751",blank=True,verbose_name="Latitude")
+	longitude = models.DecimalField(max_digits=19, decimal_places=10, default="4.398054",blank=True,verbose_name="Longitude")
+	resultats = models.ManyToManyField(Resultat)
+	def __str__(self):
+		return "Edition " + str(self.edition)
+
+	def __unicode__(self):
+		return u'' + "Edition " + self.edition

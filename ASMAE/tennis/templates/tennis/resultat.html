@@ -6,124 +6,114 @@
 {% block body %}
 
 <div class="container">
-	<div class="content-box center">
-		<h2 class="center">Résultats de l'année précédente</h2>
+	<div class="content-box">
+		<h2 class="center">Résultats de l'édition {{info.edition}}</h2>
 		<hr class="line">
-			<h3>Double Mixte :</h3>
-			<h4>PREMINIME/MINIME</h4>
-			<p>
-				<b>Gagnants</b> : Julie RYELANDT et Evrard THIJSSEN
-				<br>
-				<b>Finalistes</b> : Lou Courbiau et Alaric KALISH
-			</p>
+		{% if info.resultats.all|length == 0 %}
 
-			<h4>CADET</h4>
-			<p>
-				<b>Gagnants</b> : Amandine PRIOUX et Antoine BOONE
-				<br>
-				<b>Finalistes</b> : Chloe OLESEN et Maxime de RIBAUCOURT
-			</p>
+		<h3 class="center">Il n'y a pas encore de résultats pour cette édition</h3>
+		<h3 class="center">Rendez vous le {{info.date|date:"d F Y"}}</h3>
+		{% else %}
+		<h3 class="center">{{info.edition}}ème édition du tournoi de tennis Charles de Lorraine ({{info.date|date:"Y"}})</h3>
+		<button class="btn btn-default" style="float:right" href="">Tous les résultats</button>
+		<h3>Dimanche</h3>
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						Double femmes
+					</div>
+					<div class="panel-body">
+						{% if not femmes|length > 0 %}
+						<b style="vertical-align:middle;">Aucun résultats</b>
+						{% else %}
+						<ul style="list-style-type: none;padding:0">
+						{% for elem in femmes %}
+							<li>
+								<h4 style="text-decoration: underline;">{{elem.tournoi.categorie}}</h4>
+								<p style="padding-left:20px;">
+									<b style="color:#D4542D">Gagnants : </b> {{elem.gagnants_alt}} <br>
+									<b style="color:#D4542D">Finalistes : </b> {{elem.finalistes_alt}}
+								</p>
+								
+							</li>
+						{% endfor %}
+						</ul>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						Double hommes
+					</div>
+					<div class="panel-body">
+						{% if not hommes|length > 0 %}
+						<b style="vertical-align:middle;">Aucun résultats</b>
+						{% else %}
+						<ul style="list-style-type: none;padding:0">
+						{% for elem in hommes %}
+							<li>
+								<h4 style="text-decoration: underline;">{{elem.tournoi.categorie}}</h4>
+								<p style="padding-left:20px;">
+									<b style="color:#D4542D">Gagnants : </b> {{elem.gagnants_alt}} <br>
+									<b style="color:#D4542D">Finalistes : </b> {{elem.finalistes_alt}}
+								</p>
+								
+							</li>
+						{% endfor %}
+						</ul>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+		<h3>Samedi</h3>
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						Double Mixte
+					</div>
+					<div class="panel-body">
+						{% if not mixte|length > 0 %}
+						<b style="vertical-align:middle;">Aucun résultats</b>
+						{% else %}
+						<ul style="list-style-type: none;padding:0">
+						{% for elem in mixte %}
+							<li>
+								<h4 style="text-decoration: underline;">{{elem.tournoi.categorie}}</h4>
+								<p style="padding-left:20px;">
+									<b style="color:#D4542D">Gagnants : </b> {{elem.gagnants_alt}} <br>
+									<b style="color:#D4542D">Finalistes : </b> {{elem.finalistes_alt}}
+								</p>
+								
+							</li>
+						{% endfor %}
+						</ul>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						Tournoi des Familles
+					</div>
+					<div class="panel-body">
+						{% if famille %}
+						<b style="color:#D4542D">Gagnants : </b> {{famille.gagnants_alt}} <br>
+						<b style="color:#D4542D">Finalistes : </b> {{famille.finalistes_alt}}
+						{% else %}
+						<b style="vertical-align:middle;">Aucun résultats</b>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
 
-			<h4>SCOLAIRE</h4>
-			<p>
-				<b>Gagnants</b> : Eleonore BOONEN et Guillaume-Constant CLAES
-				<br>
-				<b>Finalistes</b> : Maroussia Cattoir et Amaury Cattoir
-			</p>
-
-			<h4>JUNIOR</h4>
-			<p>
-				<b>Gagnants</b> : Anouchka LAURENT JOSI et Antoine de BORREKENS
-				<br>
-				<b>Finalistes</b> : Ségolène GOFFINET et Antoine REGINSTER
-			</p>
-
-			<h4>SENIOR/ELITE</h4>
-			<p>
-				<b>Gagnants</b> : Alizé REYPENS et Gregory VERHOOSEL
-				<br>
-				<b>Finalistes</b> : Sabine de VILLENFAGNE et Christophe WAUCQUEZ
-			</p>
-
-			<h3>Double Dames :</h3>
-
-			<h4>PREMINIME/MINIME</h4>
-			<p>
-				<b>Gagnants</b> : Julie RYELANDT et Lola SCHMID
-				<br>
-				<b>Finalistes</b> : Zoe VERHOOSEL et Alexia JACOB
-			</p>
-
-			<h4>CADET</h4>
-			<p>
-				<b>Gagnants</b> : Antoinette ADAM et Victorine ADAM
-				<br>
-				<b>Finalistes</b> : Agathe DE MOL et Louise-Marie DUPREZ
-			</p>
-
-			<h4>SCOLAIRE</h4>
-			<p>
-				<b>Gagnants</b> : Delphine SPRUYTTE et Ludivine D'YDEWALLE
-				<br>
-				<b>Finalistes</b> : Juliette DAVIGNON et Charlotte-Lucie DELBECQUE
-			</p>
-
-			<h4>JUNIOR</h4>
-			<p>
-				<b>Gagnants</b> : Laura DECLETY et Sophie GOFFAU
-				<br>
-				<b>Finalistes</b> : Alexia KASTEEL et Louise MONVILLE
-			</p>
-
-			<h3>Double Messieurs :</h3>
-
-			<h4>PREMINIME/MINIME</h4>
-			<p>
-				<b>Gagnants</b> : Arnaud DAVIGNON et Hidde DOMS
-				<br>
-				<b>Finalistes</b> : Alexis MENCIK et Jules RAEMDONCK
-			</p>
-
-			<h4>CADET</h4>
-			<p>
-				<b>Gagnants</b> : Quentin DAVIGNON et Alexandre VERHULST
-				<br>
-				<b>Finalistes</b> : Diego TIELENS et Alexandre de STAERCKE
-			</p>
-
-			<h4>SCOLAIRE</h4>
-			<p>
-				<b>Gagnants</b> : Charles le GRELLE et Martin van der MEERSCHEN
-				<br>
-				<b>Finalistes</b> : François DAVID et Antoine LEGRAND
-			</p>
-
-			<h4>JUNIOR</h4>
-			<p>
-				<b>Gagnants</b> : Augustin BOSSAERT DERACHE et Diego MOMMAERTS
-				<br>
-				<b>Finalistes</b> :  Felix de PATOUL et Nicolas van HAVRE
-			</p>
-
-			<h4>SENIOR/ELITE</h4>
-			<p>
-				<b>Gagnants</b> : Olivier MARTINOT et Didier PERWEZ
-				<br>
-				<b>Finalistes</b> : Philippe DE BRUYNE et Alain VERGAUWEN
-			</p>
-
-			<h3>Tournoi des familles :</h3>
-			<p>
-				<b>Gagnants</b> : Guillaume van LINT et Eric van LINT
-				<br>
-				<b>Finalistes</b> : Briac LOHEST et Emmanuel LOHEST
-			</p>
-
-			<h3>Tournoi de réconciliation :</h3>
-			<p>
-				<b>Gagnants</b> : Mahaut LOHEST et Harold van CUTSEM
-			</p>
-		</p>
+		{% endif %}
 	</div>
 </div>
 

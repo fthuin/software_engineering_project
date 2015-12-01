@@ -96,7 +96,7 @@ list_tournoi = ['Double mixte', 'Double hommes', 'Double femmes']
 
 class Command(BaseCommand):
     def addInfo(self):
-        for elem in infoTournoi.objects.all():
+        for elem in infoTournoi.objects.filter(edition=42):
             elem.delete()
         i = infoTournoi(prix=20,date=datetime.date(2016, 9, 10),addr="Place des Carabiniers, 5, 1030 Bruxelles",edition=42)
         i.save()

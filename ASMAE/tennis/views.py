@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
-from tennis.models import Extra, Participant,Court, Tournoi, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, PouleStatus,Arbre, TournoiStatus, TournoiTitle, TournoiCategorie, infoTournoi, Ranking
+from tennis.models import Extra, Participant,Court, Tournoi, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, PouleStatus,Arbre, TournoiStatus, TournoiTitle, TournoiCategorie, infoTournoi, Ranking, Resultat
 from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail
 from tennis.classement import validate_classement_thread
 import re, math, copy
@@ -23,8 +23,11 @@ from django.db.models import Q
 
 # Create your views here.
 def home(request):
-	edition = infoTournoi.objects.all()[0].edition
-	date = infoTournoi.objects.all()[0].date
+	info = infoTournoi.objects.all()
+	first = info.order_by("edition")[0].edition
+	info = info.order_by("edition")[len(info)-1]
+	edition = info.edition
+	date = info.date
 	year = date.year
 	month = date.month
 	month_text = ""
@@ -61,7 +64,28 @@ def qcq(request):
 def sponsors(request):
 	return render(request,'tennis/sponsors.html',locals())
 
-def resultat(request):
+def resultat(request,id):
+	info = infoTournoi.objects.get(edition=id)
+	#Resultat du tournoi des familles
+	ti = TournoiTitle.objects.get(nom="Tournoi des familles")
+	famille = info.resultats.filter(tournoi__titre=ti)
+	if len(famille) > 0:
+		famille = famille[0]
+
+	#Resultat du Double mixte
+	ti = TournoiTitle.objects.get(nom="Double mixte")
+	mixte = info.resultats.filter(tournoi__titre=ti)
+
+	#Resultat du Double femmes
+	ti = TournoiTitle.objects.get(nom="Double femmes")
+	femmes = info.resultats.filter(tournoi__titre=ti)
+
+	#Resultat du Double hommes
+	ti = TournoiTitle.objects.get(nom="Double hommes")
+	hommes = info.resultats.filter(tournoi__titre=ti)
+
+	ti = None
+
 	return render(request,'tennis/resultat.html',locals())
 
 def contact(request):
@@ -76,7 +100,9 @@ def tournoi(request):
 			inscrit2 = request.user.user2.filter(confirm=True)
 			inscrit =  list(chain(inscrit1,inscrit2))
 			agenda = False
-			date1 = infoTournoi.objects.all()[0].date
+			info = infoTournoi.objects.all()
+			info = info.order_by("edition")[len(info)-1]
+			date1 = info.date
 			date2 = date1 + datetime.timedelta(days=1)
 			for elem in inscrit:
 				if elem.tournoi.titre.jour == "Samedi":
@@ -96,7 +122,9 @@ def inscriptionTournoi(request):
 	Use = User.objects.all().order_by('username')
 
 	#today = date.today()
-	today = infoTournoi.objects.all()[0].date
+	info = infoTournoi.objects.all()
+	info = info.order_by("edition")[len(info)-1]
+	today = info.date
 
 	born = request.user.participant.datenaissance
 	request.user.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
@@ -311,7 +339,9 @@ def viewPair(request,id):
 
 def payPair(request,id):
 	pair = Pair.objects.filter(id=id)
-	prix = infoTournoi.objects.all()[0].prix
+	info = infoTournoi.objects.all()
+	info = info.order_by("edition")[len(info)-1]
+	prix = info.prix
 	if len(pair) <1:
 		return redirect(reverse(tournoi))
 	pair = Pair.objects.get(id=id)
@@ -634,11 +664,14 @@ def knockOff(request,name):
 			terrainRecv = request.POST['terrain']
 			terrain = Court.objects.get(id=terrainRecv)
 			print(terrain)
+			pair_g = None
 			if(gagnant != ""):
 				pairgagnante = Pair.objects.get(id=int(gagnant))
 				pairgagnante.gagnant = True
 				pairgagnante.save()
+				pair_g = pairgagnante
 
+			pair_f = None
 			if(finaliste != ""):
 				finalistes = finaliste.split("-")
 				finaliste1 = Pair.objects.get(id=int(finalistes[0]))
@@ -647,9 +680,34 @@ def knockOff(request,name):
 				finaliste1.save()
 				finaliste2.finaliste = True
 				finaliste2.save()
+				if pair_g is not None:
+					if pair_g == finaliste1:
+						pair_f = finaliste2
+					else:
+						pair_f = finaliste1
+
+			if pair_g is not None and pair_f is not None:
+				#Changement du status du tournoi
 				s = TournoiStatus.objects.get(numero=4)
 				tournoi.status = s
 				tournoi.save()
+
+				#Save des resultats
+				for elem in Resultat.objects.filter(tournoi=tournoi):
+					elem.delete()
+				ga = str(pair_g.user1.participant.prenom) +" "+ str(pair_g.user1.participant.nom).upper() +" et "+str(pair_g.user2.participant.prenom) +" "+ str(pair_g.user2.participant.nom).upper()
+				fi = str(pair_f.user1.participant.prenom) +" "+ str(pair_f.user1.participant.nom).upper() +" et "+str(pair_f.user2.participant.prenom) +" "+ str(pair_f.user2.participant.nom).upper()
+				r = Resultat(tournoi=tournoi,gagnants_alt=ga,finalistes_alt=fi)
+				r.save()
+				r.gagnants.add(pair_g.user1)
+				r.gagnants.add(pair_g.user2)
+				r.finalistes.add(pair_f.user1)
+				r.finalistes.add(pair_f.user2)
+				r.save()
+				info = infoTournoi.objects.all()
+				info = info.order_by("edition")[len(info)-1]
+				info.resultats.add(r)
+				info.save()
 
 			if tournoi.arbre is None:
 				arbre = Arbre(data = treeData,label = treeLabel)
@@ -788,7 +846,9 @@ def generatePool(request,name):
 	allPair = Pair.objects.filter(tournoi=tournoi, valid=True)
 	poules = Poule.objects.filter(tournoi=tournoi)
 
-	infTournoi = infoTournoi.objects.all()[0]
+	info = infoTournoi.objects.all()
+	info = info.order_by("edition")[len(info)-1]
+	infTournoi = info
 	infLng = infTournoi.longitude
 	infLat = infTournoi.latitude
 	
@@ -1153,7 +1213,8 @@ def staffExtra(request):
 			return False
 
 	extras = Extra.objects.all()
-	info = infoTournoi.objects.all()[0]
+	info = infoTournoi.objects.all()
+	info = info.order_by("edition")[len(info)-1]
 	prix_inscription = info.prix
 	date_inscription = info.date
 	formated_date = date_inscription.strftime('%d/%m/%Y')
@@ -1168,7 +1229,8 @@ def staffExtra(request):
 			prixTournoi = request.POST['prixInscription'].strip()
 			dateInfoTournoi = request.POST['birthdate'].strip()
 
-			info = infoTournoi.objects.all()[0]
+			info = infoTournoi.objects.all()
+			info = info.order_by("edition")[len(info)-1]
 			prixTournoi = prixTournoi.replace(",",".")
 			if(float(prixTournoi)>=0.0):
 				info.prix = prixTournoi
@@ -1187,7 +1249,8 @@ def staffExtra(request):
 				errorInfoDate = "La date doit etre plus tard que maintenant"
 
 			info.save()
-			info = infoTournoi.objects.all()[0]
+			info = infoTournoi.objects.all()
+			info = info.order_by("edition")[len(info)-1]
 			prix_inscription = info.prix
 			date_inscription = info.date
 			formated_date = date_inscription.strftime('%d/%m/%Y')
@@ -1664,7 +1727,9 @@ def validatePair(request, id):
 			noPoule = False
 			break
 
-	today = infoTournoi.objects.all()[0].date
+	info = infoTournoi.objects.all()
+	info = info.order_by("edition")[len(info)-1]
+	today = info.date
 	born = pair.user1.participant.datenaissance
 	age1 = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
@@ -2080,8 +2145,5 @@ def resetDbForNextYear(request):
 	Poule.objects.all().delete()
 	LogActivity.objects.all().delete()
 	
-	obj = infoTournoi.objects.all()[0]
-	obj.edition += 1
-	obj.save()
-
-
+	i = infoTournoi(prix=20,date=datetime.date(date.today().year+1, 9, 10),addr="Place des Carabiniers, 5, 1030 Bruxelles",edition=43)
+	i.save()

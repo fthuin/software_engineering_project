@@ -52,11 +52,12 @@
 				<h2 class="center">{{edition}}ème édition</h2>
 				<hr class="line">
 				<h3 class="center">Le {{ day }} {{ month_text }} {{ year }}</h3>
-				<button class="btn btn-default center-block" onclick="window.open('{% url "tennis.views.resultat" %}','_self')" id="result" style="display:none;">Consulter les resultats</button>
+				<button class="btn btn-default center-block" onclick="window.open('{% url "tennis.views.resultat" edition %}','_self')" id="result" style="display:none;">Consulter les resultats</button>
 					<script type="application/javascript">
-	                var date = new Date({{ year }},{{ month }},{{ day }},12,00,00,00);
+	                var date = new Date({{ year }},{{ month }}-1,{{ day }},12,00,00,00);
 	                var now = new Date();
 	                var timer = (date.getTime() - now.getTime())/1000;
+
 	                //timer = -1;
 	                if(timer > 0){
 	                	var myCountdown1 = new Countdown({
@@ -97,7 +98,7 @@
 
 				<p class="textHome">Ce sont des équipes de jeunes bénévoles d'Asmae qui gèrent l'ensemble des activités proposées par le Charles de Lorraine.</p>
 
-				<a href="{% url "tennis.views.resultat" %}">Voir les résultats de l'année précédente</a>
+				<a href="{% url "tennis.views.resultat" first %}">Voir les résultats des années précédentes</a>
 
 				
 		</div>
