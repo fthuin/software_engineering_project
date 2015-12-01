@@ -538,6 +538,7 @@ def pouleTournoi(request,name):
 		a = tournoi.arbre
 		tournoi.arbre = None
 		tournoi.save()
+		LogActivity(user=request.user,section="Poules",details="Suppressions des poules du tournoi : "+tournoi.nom()).save()
 		return redirect(reverse(generatePool,args={name}))
 
 	if request.user.is_authenticated():
@@ -637,6 +638,7 @@ def knockOff(request,name):
 				pairgagnante = Pair.objects.get(id=int(gagnant))
 				pairgagnante.gagnant = True
 				pairgagnante.save()
+
 			if(finaliste != ""):
 				finalistes = finaliste.split("-")
 				finaliste1 = Pair.objects.get(id=int(finalistes[0]))
@@ -645,7 +647,9 @@ def knockOff(request,name):
 				finaliste1.save()
 				finaliste2.finaliste = True
 				finaliste2.save()
-
+				s = TournoiStatus.objects.get(numero=4)
+				tournoi.status = s
+				tournoi.save()
 
 			if tournoi.arbre is None:
 				arbre = Arbre(data = treeData,label = treeLabel)
@@ -662,6 +666,9 @@ def knockOff(request,name):
 				LogActivity(user=request.user,section="Tournoi",details="Mise a jour de l'abre du tournoi : "+tournoi.nom()).save()
 
 		elif request.POST['action'] == "deleteTree":
+			s = TournoiStatus.objects.get(numero=3)
+			tournoi.status = s
+			tournoi.save()
 			if tournoi.arbre is not None:
 				for poule in tournoi.poule_set.all():
 					for pair in poule.paires.all():
@@ -672,6 +679,7 @@ def knockOff(request,name):
 				arbre.data = None
 				arbre.label = None
 				arbre.save()
+				LogActivity(user=request.user,section="Tournoi",details="Suppression de l'abre du tournoi : "+tournoi.nom()).save()
 				return redirect(reverse(knockOff,args={name}))
 
 	if request.user.is_authenticated():

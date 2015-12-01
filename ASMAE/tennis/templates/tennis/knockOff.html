@@ -131,7 +131,7 @@
       
 
 
-      <button id="create_tree" type="button" class="btn btn-default center-block" onClick="startTree()" disabled>Créer l'arbre du tournoi</button>
+      <button id="create_tree" type="button" class="btn btn-default center-block" onClick="startTree()" disabled>Voir l'arbre du tournoi</button>
     </div>
   
 
@@ -139,6 +139,34 @@
     <div id="TableArbre" style="display:none;">
       <div class="table-responsive">
         <div class="center-block" id="my_gracket"></div>
+      </div>
+
+      <div class="row">
+        <div class="panel panel-default center-block" style="max-width:600px;">
+          <div class="panel-heading">Information sur le terrain</div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-sm-4" style="text-align:right"><b>ID</b></div>
+              <div class="col-sm-8"><p id="terrainID2" id="" class="info" style="padding:0"> - </p></div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4" style="text-align:right"><b>Propriétaire</b></div>
+              <div class="col-sm-8"><p id="terrainProp2" class="info" style="padding:0"> - </p></div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4" style="text-align:right"><b>Matière</b></div>
+              <div class="col-sm-8"><p id="terrainMat2" class="info" style="padding:0"> - </p></div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4" style="text-align:right"><b>Type</b></div>
+              <div class="col-sm-8"><p id="terrainType2" class="info" style="padding:0"> - </p></div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4" style="text-align:right"><b>Adresse</b></div>
+              <div class="col-sm-8"><p id="terrainAddr2" class="info" style="padding:0"> - </p></div>
+            </div>
+          </div>
+        </div>
       </div>
 		<form action="{% url "tennis.views.knockOff" tournoi.nom %}" method="post">
 		{% csrf_token %}
@@ -362,8 +390,12 @@ function setInfoTerrain(id,prop,mat,type,addr,km,setKmBol){
   if(setKmBol){
 		setKm(id);
 	}
-  //set km quentin
-  //leftList et rightList
+  
+  document.getElementById("terrainID2").innerHTML = id
+  document.getElementById("terrainProp2").innerHTML = prop
+  document.getElementById("terrainMat2").innerHTML = mat
+  document.getElementById("terrainType2").innerHTML = type
+  document.getElementById("terrainAddr2").innerHTML = addr
 }
 function assignerTerrain(){
 	distanceList = [];

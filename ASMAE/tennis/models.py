@@ -53,7 +53,7 @@ class Participant(models.Model):
 		return u'' + self.prenom + " " + self.nom
 
 	def codeName(self):
-		return u'' + str(self.prenom)+ " " + str(self.nom) +" ("+ str(self.user.username)+")"
+		return u'' + repr(self.prenom)+ " " + repr(self.nom) +" ("+ repr(self.user.username)+")"
 
 	def fullName(self):
 		return u'' + self.titre +  " " + self.prenom + " " + self.nom
@@ -68,10 +68,10 @@ class Participant(models.Model):
 		return u'' +self.prenom[0:1].upper()+". "+nom
 
 	def getAdresse(self):
-		return u"" + self.numero + " " + self.rue + ", " + self.codepostal + " " + self.localite
+		return u"" + repr(self.numero) + " " + repr(self.rue) + ", " + repr(self.codepostal) + " " + repr(self.localite)
 
 	def shortAdresse(self):
-		return self.localite+" Belgium"
+		return repr(self.localite)+" Belgium"
 
 	#def __eq__(self, other):
 	#	return self.username == other.user.username

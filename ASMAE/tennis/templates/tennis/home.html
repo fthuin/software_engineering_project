@@ -52,20 +52,32 @@
 				<h2 class="center">{{edition}}ème édition</h2>
 				<hr class="line">
 				<h3 class="center">Le {{ day }} {{ month_text }} {{ year }}</h3>
+				<button class="btn btn-default center-block" onclick="window.open('{% url "tennis.views.resultat" %}','_self')" id="result" style="display:none;">Consulter les resultats</button>
 					<script type="application/javascript">
 	                var date = new Date({{ year }},{{ month }},{{ day }},12,00,00,00);
 	                var now = new Date();
 	                var timer = (date.getTime() - now.getTime())/1000;
-	                var myCountdown1 = new Countdown({
+	                //timer = -1;
+	                if(timer > 0){
+	                	var myCountdown1 = new Countdown({
 	                                                    time: timer,
 	                                                    width:280, 
 	                                                    height:50,  
 	                                                    rangeHi:"month",
 	                                                    style:"flip" 
 	                                                    });
+	                }else{
+	                	document.getElementById("result").style.display = "inherit";
+	                }
+	                
 
             </script>
-            <h3 class="center">avant l'évènement</h3>
+            <h3 id="event" class="center">avant l'évènement</h3>
+            <script>
+            if (document.getElementById("result").style.display == "inherit"){
+            	document.getElementById("event").style.display = "none";
+            }
+            </script>
 			</div>
 			
 		</div>
