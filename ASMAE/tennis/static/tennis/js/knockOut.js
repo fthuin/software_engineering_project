@@ -405,7 +405,6 @@ function secondStep(){
   document.getElementById("secondStep").style.display = "inherit";
   //on change le titre de la page
   document.getElementById("pageTitle").innerHTML = "Ordre des paires";
-	console.log("ziziz");
   //On stock les paires dans le panel du deuxieme step
   var allBoxes = document.getElementsByClassName("allBox");
   var challengers = [];

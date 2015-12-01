@@ -65,6 +65,8 @@
                 </ul>
               </div>
               <button class="btn btn-default" style="margin-top:20px;" onclick="assignerTerrain()">Assigner Terrain</button>
+              <i id="errorTerrain" data-toggle="popover" data-html="true" data-placement="top" data-content="lol" class="fa fa-info-circle fa-4x center" style="display:none;cursor:pointer;color:red;width:100%;padding-top:20px;"></i>
+
             </div>
             <div class="col-sm-8">
               <form class="form-horizontal" action="">
@@ -129,7 +131,7 @@
       
 
 
-      <button type="button" class="btn btn-default center-block" onClick="startTree()">Créer l'arbre du tournoi</button>
+      <button id="create_tree" type="button" class="btn btn-default center-block" onClick="startTree()" disabled>Créer l'arbre du tournoi</button>
     </div>
   
 
@@ -270,10 +272,14 @@
 <script src="{% static 'tennis/js/knockOut.js' %}" type="text/javascript"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5lEleQslU1oemC3rf67mvETJrqOjKrFE&libraries=geometry"></script>
 <script type="text/javascript">
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover(); 
+});
+
 TerrainList = [];
 {%for elem in terrains %}
 var addr = '{{elem.rue}}'+ ", "+'{{elem.numero}}'+"<br>"+'{{elem.codepostal}}'+ " "+'{{elem.localite}}';
-TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',smallName:'{{elem.user.participant.smallName}}',matiere:'{{elem.matiere}}',lat:'{{elem.latitude}}',lng:'{{elem.longitude}}',type:'{{elem.type.nom}}',addr:addr})
+TerrainList.push({id:'{{elem.id}}', user:'{{elem.user.participant.nom}}',smallName:'{{elem.user.participant.smallName}}',matiere:'{{elem.matiere}}',lat:'{{elem.latitude}}',lng:'{{elem.longitude}}',type:'{{elem.type.nom}}',addr:addr,conflict:'{{elem.conflict|safe}}'})
 {% endfor %}
 
 {% if arbre.data %}
@@ -339,6 +345,19 @@ function setInfoTerrain(id,prop,mat,type,addr,km,setKmBol){
   document.getElementById("terrainAddr").innerHTML = addr
   document.getElementById("terrainKilo").innerHTML = km
   document.getElementById("terrainToSend").value = id
+
+  var lol = $.grep(TerrainList, function(v) { return v.id === id; })[0];
+  console.log(lol)
+
+  if(lol.conflict != ""){
+    document.getElementById("errorTerrain").style.display = "inherit";
+    document.getElementById("errorTerrain").setAttribute("data-content",lol.conflict);
+  }else{
+    document.getElementById("errorTerrain").style.display = "none";
+  }
+  
+
+  document.getElementById("create_tree").disabled = false;
 
   if(setKmBol){
 		setKm(id);
@@ -410,8 +429,6 @@ function setKm(id){
 		var terrainLng = TerrainList[terrainIndex].lng;
 		var terrainlatLng = new google.maps.LatLng(parseFloat(terrainLat.replace(",", ".")), parseFloat(terrainLng.replace(",", ".")));
 		var totalDistance = 0;
-		console.log(leftList.length);
-		console.log(righList.length);
 		for(var j = 0;j<leftList.length;j++){
 			
 			var user1Lat = leftList[j].lat1;
@@ -451,6 +468,8 @@ setInfoTerrain('{{arbre.court.id}}','{{arbre.court.user.participant.smallName}}'
 
 actual_id = '{{arbre.court.id}}';
 {% endif %}
+
+
 </script>
 
 {% endblock %}

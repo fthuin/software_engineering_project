@@ -188,6 +188,8 @@ def inscriptionTournoi(request):
 		pair.save()
 		return redirect(reverse(tournoi))
 
+	Use = Use.only('username','participant')
+
 	if request.user.is_authenticated():
 		extranot1 = Extra.objects.all()
 
@@ -549,7 +551,13 @@ def pouleTournoi(request,name):
 		tournoi = Tournoi.objects.get(titre=ti,categorie=ca)
 		poules = Poule.objects.filter(tournoi=tournoi)
 		dictionnaire = dict()
+		x = 0
 		for poule in poules:
+			if x % 2 == 0 :
+				poule.newRow = True
+			else:
+				poule.newRow = False
+			x += 1
 			if poule.status == PouleStatus.objects.get(numero=2):
 				scores = poule.score.all()
 				dico = dict()
@@ -582,7 +590,18 @@ def knockOff(request,name):
 	ti = TournoiTitle.objects.get(nom=title)
 	ca = TournoiCategorie.objects.get(nom=cat)
 	tournoi = Tournoi.objects.get(titre=ti,categorie=ca)
+	#Liste des tournoi qui ont deja un arbre
+	all_tournoi_with_arbre = Tournoi.objects.filter(arbre__id__gte=0).exclude(titre=ti,categorie=ca)
+	court_list = dict()
 
+	for elem in all_tournoi_with_arbre:
+		if elem.arbre.court.id in court_list:
+			court_list[elem.arbre.court.id] += "<br>" + str(elem)
+		else:
+			court_list[elem.arbre.court.id] = str(elem)
+
+
+	all_tournoi_with_arbre = None
 
 	terrains = Court.objects.filter(valide=True)
 
@@ -594,6 +613,15 @@ def knockOff(request,name):
 
 	terrains.order_by("id")
 
+	
+
+	for elem in terrains:
+		if elem.id in court_list: 
+			elem.conflict = court_list[elem.id]
+		else:
+			elem.conflict = ""
+
+	court_list = None
 	def getKey(item):
 		return item[1]
 	if request.method == "POST":
@@ -677,7 +705,6 @@ def knockOff(request,name):
 					x = x +1
 		if tournoi.arbre is not None:
 			arbre = tournoi.arbre
-			print(arbre)
 		return render(request,'tennis/knockOff.html',locals())
 	return redirect(reverse(home))
 
@@ -1215,7 +1242,7 @@ def staffExtra(request):
 	extras = Extra.objects.all()
 
 	for e in extras:
-		a = len(e.extra1.all()) + len(e.extra2.all())
+		a = len(Extra.objects.filter(id=e.id,extra1__valid=True)) + len(Extra.objects.filter(id=e.id,extra2__valid=True))
 		e.count = a
 
 	if request.user.is_authenticated():

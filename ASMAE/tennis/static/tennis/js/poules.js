@@ -491,7 +491,7 @@ function createPanel(number){
 							'</div>'+
 							'<div class="row">'+
 								'<label class="control-label col-xs-4">Adresse</label>'+
-								'<div class="col-xs-8"><p class="info" style="margin:0;" id="addr'+number+'">-<br><br></p></div>'+
+								'<div class="col-xs-8"><p class="info" style="max-height:47px;margin:0;" id="addr'+number+'">-<br><br></p></div>'+
 							'</div>'+
 
 							'<div class="row">'+
@@ -584,3 +584,7 @@ function clickEventPair(ID){
 
 	}
 }
+
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover(); 
+});

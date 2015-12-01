@@ -11,7 +11,10 @@
 
     <div class="row">
         {% for p in poules %}
-        <div class="col-sm-6 resizePanel">
+        {% if p.newRow %}
+        <div class="row">
+        {% endif %}
+        <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
@@ -33,6 +36,8 @@
                     <b>Leader : </b>{{p.leader.participant.prenom}} {{p.leader.participant.nom}}
                     <br>
                     <b>Status : </b> {{p.status.nom}}<br>
+                    <b>Terrain : </b> {{p.court.id}} - {{p.court.getAdresse}} ({{p.court.user.username}}) <br>
+                    <b>Participants : </b> {{p.paires.all|length}} paires <br>
                     {% for pair in p.SortedPair %}
                     <b>{{ pair.id }}</b> -
                     {{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} &#38;
@@ -46,6 +51,8 @@
                     <b>Leader : </b>{{p.leader.participant.prenom}} {{p.leader.participant.nom}}
                     <br>
                     <b>Status : </b> {{p.status.nom}}<br>
+                    <b>Terrain : </b> {{p.court.id}} - {{p.court.getAdresse}} ({{p.court.user.username}}) <br>
+                    <b>Participants : </b> {{p.paires.all|length}} paires <br>
                     {% for pair in p.paires.all %}
                     <b>{{ pair.id }}</b> -
                     {{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} &#38;
@@ -58,6 +65,9 @@
                 </div>
             </div>
         </div>
+        {% if not p.newRow %}
+        </div>
+        {% endif %}
         {% empty %}
         <p class="info center">Il n'y a pas encore de poules enregistrées pour ce tournoi</p>
         {% endfor %}
@@ -65,9 +75,10 @@
 
     <ul class="list-inline text-center">
         <li>
+            <button class="btn btn-default" data-toggle="modal" data-target="#myModal" type="button">Supprimer les poules</button>
             <form action="{% url "tennis.views.pouleTournoi" tournoi.nom %}" method="post">
                 {% csrf_token %}
-                <button class="btn btn-default">Supprimer les poules</button>
+                <button class="btn btn-default" style="display:none" id="supprimer_poule">Supprimer les poules</button>
             </form>
         </li>
         <li>
@@ -85,15 +96,15 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title center">Confirmation validation</h4>
+          <h4 class="modal-title center">Confirmation suppression</h4>
         </div>
         <div class="modal-body">
 
-            <p></p>
+            <p>Etes-vous sûr de vouloir supprimer ces poules?</p>
 
             <ul class="list-inline text-center">
                 <li>
-                    <button type="button" class="btn btn-default" id="yesModel" onclick="document.getElementById('saveFinite').click()">oui</button>
+                    <button type="button" class="btn btn-default" id="yesModel" onclick="document.getElementById('supprimer_poule').click()">oui</button>
                 </li>
                 <li>
                     <button type="button" class="btn btn-default" data-dismiss="modal">non</button>
