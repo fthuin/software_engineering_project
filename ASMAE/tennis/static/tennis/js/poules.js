@@ -151,8 +151,17 @@ function mySetPoules(nbrPoules, sizePoules) {
 	document.getElementById("poulesDiv").innerHTML = "";
 	//On recupere le nombre de paires
 	for (var i = 0; i < nbrPoules; i++) {
-	    var panel = createPanel(i+1);
-	    document.getElementById("poulesDiv").appendChild(panel);
+	    var row;
+
+		if(i%3 == 0){
+			row = document.createElement("div")
+			row.className = "row"
+			document.getElementById("poulesDiv").appendChild(row);
+		}
+		//Creation du panel de la poule
+		var panel = createPanel(i+1);
+		row.appendChild(panel)
+		//document.getElementById("poulesDiv").appendChild(panel);
 	    var listPair = pairDict[(i+1)]
 	    var j;
 	    for (j=0 ; j < listPair.length ; j++) {
@@ -208,9 +217,18 @@ function setPoules(nbrPoules){
 		var nbr = Math.ceil(v/poules);
 		v = v - nbr;
 		poules = poules - 1;
+
+		var row;
+
+		if(i%3 == 0){
+			row = document.createElement("div")
+			row.className = "row"
+			document.getElementById("poulesDiv").appendChild(row);
+		}
 		//Creation du panel de la poule
 		var panel = createPanel(i+1);
-		document.getElementById("poulesDiv").appendChild(panel);
+		row.appendChild(panel)
+		//document.getElementById("poulesDiv").appendChild(panel);
 
 		//Ajout des pair dans le panel et dans la liste du leader
 		for (var j = 0; j < nbr; j++) {
@@ -491,7 +509,7 @@ function createPanel(number){
 							'</div>'+
 							'<div class="row">'+
 								'<label class="control-label col-xs-4">Adresse</label>'+
-								'<div class="col-xs-8"><p class="info" style="max-height:47px;margin:0;" id="addr'+number+'">-<br><br></p></div>'+
+								'<div class="col-xs-8"><p class="info" style="margin:0;" id="addr'+number+'">-<br><br></p></div>'+
 							'</div>'+
 
 							'<div class="row">'+
