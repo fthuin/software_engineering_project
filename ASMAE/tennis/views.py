@@ -24,9 +24,9 @@ from django.db.models import Q
 # Create your views here.
 def home(request):
 	info = infoTournoi.objects.all()
-	first = info.order_by("edition")[0].edition
 	info = info.order_by("edition")[len(info)-1]
 	edition = info.edition
+	last = edition - 1
 	date = info.date
 	year = date.year
 	month = date.month
@@ -63,6 +63,10 @@ def qcq(request):
 
 def sponsors(request):
 	return render(request,'tennis/sponsors.html',locals())
+
+def allResult(request):
+	info = infoTournoi.objects.all()
+	return render(request,'tennis/resultatAll.html',locals())
 
 def resultat(request,id):
 	info = infoTournoi.objects.get(edition=id)

@@ -1,7 +1,6 @@
 {% extends "tennis/base.html" %}
 
-{% block title %}Résultats{% endblock %}
-{% block nav-resultat %}class="active"{% endblock %}
+{% block title %}Résultats edition {{info.edition}}{% endblock %}
 
 {% block body %}
 
@@ -13,9 +12,10 @@
 
 		<h3 class="center">Il n'y a pas encore de résultats pour cette édition</h3>
 		<h3 class="center">Rendez vous le {{info.date|date:"d F Y"}}</h3>
+		<button class="btn btn-default center-block" onclick="window.open('{% url "tennis.views.allResult" %}','_self')">Tous les résultats</button>
 		{% else %}
 		<h3 class="center">{{info.edition}}ème édition du tournoi de tennis Charles de Lorraine ({{info.date|date:"Y"}})</h3>
-		<button class="btn btn-default" style="float:right" href="">Tous les résultats</button>
+		<button class="btn btn-default pull-right" onclick="window.open('{% url "tennis.views.allResult" %}','_self')">Tous les résultats</button>
 		<h3>Dimanche</h3>
 		<div class="row">
 			<div class="col-lg-6">
@@ -117,11 +117,4 @@
 	</div>
 </div>
 
-{% endblock %}
-
-{% block commande %}
-<script>
-	//Initialisation de la google map
-	google.maps.event.addDomListener(window, 'load', initialize);
-</script>
 {% endblock %}
