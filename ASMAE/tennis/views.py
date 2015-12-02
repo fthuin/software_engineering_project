@@ -22,6 +22,7 @@ from django.template.defaulttags import register
 from django.db.models import Q
 from functools import reduce
 from operator import and_, or_
+from django.db import connection
 
 # Create your views here.
 def home(request):
@@ -1583,6 +1584,8 @@ def staffUser(request):
 			Use = Use.filter(Q(user1__confirm=True) | Q(user2__confirm=True))
 		else:
 			Use = Use.filter( ~(Q(user1__confirm=True) | Q(user2__confirm=True)))
+
+	db_type = connection.vendor
 
 	#recherche firld
 	if(recherche != ""):

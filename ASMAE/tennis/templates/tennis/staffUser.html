@@ -179,6 +179,8 @@
 
 {% block commande %}
 <script>
+
+alert('{{db_type}}')
 {% if sexe %}
 setSelectedIndex(document.getElementById("sex_selector"),'{{sexe}}');
 {% endif %}
