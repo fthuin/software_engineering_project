@@ -10,13 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
-# Variable for mail sending > pas toucher
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'noreply.lecharledelorraine'
-EMAIL_HOST_PASSWORD = 'LeCharleDeLorraine'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-#EMAIL SENDGRID
+#CONTACT VARIABLE
+CONTACT_EMAIL = "noreply.lecharledelorraine@gmail.com"
+CONTACT_EMAIL_PASSWORD = "LeCharleDeLorraine"
+#EMAIL SENDGRID => pas toucher la cle API sinon faut en recrée une
+EMAIL_FROM = 'noreply@lecharledelorraine.com'
 EMAIL_BACKEND = "sgbackend.SendGridBackend"
 SENDGRID_API_KEY = "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"
 

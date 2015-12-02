@@ -12,7 +12,7 @@ from tennis.models import Extra, Participant, Court, Tournoi, Pair, UserInWaitOf
 
 def send_mail_via_thread(subject, message, fromAdresse, mailingList, fail_silently=False):
 	if fromAdresse == "":
-		fromAdresse = settings.EMAIL_HOST_USER
+		fromAdresse = settings.EMAIL_FROM
 	threading.Thread(target=send_mail, args=(subject, message, fromAdresse, mailingList, fail_silently, )).start()
 
 # Send a confirmation email for pair registration
@@ -229,9 +229,9 @@ def thread_send_email_start_tournament(staff):
 def send_email_start_tournament(staff):
     threading.Thread(target=thread_send_email_start_tournament, args=(staff, )).start()
 
-def test_send_mail():
-	staff = Participant.objects.get(nom="istrateur", prenom="Admin")
-	thread_send_email_start_tournament(staff)
+# Envoie un mail a l'adresse de contact du site
+def send_contact_mail(email, subject, message):
+	send_mail(subject, message, email, [settings.CONTACT_EMAIL], fail_silently=False)
     
 def send_prospectus_by_mail(participant):
 	#TODO Envoye un mail contenant les pdf devant etre envoyer. Ne pas créer de pdf dupliquer pour les adresses equivalentes
@@ -248,3 +248,8 @@ def send_prospectus_by_mail(participant):
 	#Send mail
 	
 	pass
+
+#For tests only
+def test_send_mail():
+	staff = Participant.objects.get(nom="istrateur", prenom="Admin")
+	thread_send_email_start_tournament(staff)
