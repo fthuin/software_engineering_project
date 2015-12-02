@@ -63,9 +63,6 @@ var UserList;
 //longueur de la page
 var pageLength;
 
-var user_age;
-var user_sexe;
-
 //On met à jours les infos
 function setUserListInfo(userList,longueur){
 	UserList = userList;
@@ -105,6 +102,8 @@ function selectUser(username,nom,prenom,sexe,age){
 	document.getElementById("username2Value").value = username;
 	document.getElementById("user2").innerHTML = '['+username+'] '+prenom +' '+nom+' '+age+' ans';
 	document.getElementById("InscriptionButton").disabled = false;
+
+
 
 	//Check tournoi et catégorie en fonction de l'user courant
 	tournoi = ""

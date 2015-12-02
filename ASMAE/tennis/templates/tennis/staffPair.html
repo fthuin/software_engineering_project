@@ -154,11 +154,8 @@ setSelectedIndex(document.getElementById("payment_selector"),'{{paiement}}');
 setSelectedIndex(document.getElementById("tournament_selector"),'{{tournoi}}');
 {% endif %}
 
-
-//Nombre d'entrées par page
-var pageLength = 10;
 //Nombre de pages
-var total = Math.max(Math.ceil({{length}}/pageLength), 1);
+var total = Math.max(Math.ceil({{length}}/{{pageLength}}), 1);
 //Notre pagination
 $('#paginationholder').html('');
 $('#paginationholder').html('<ul class="pagination" id="PairPagination"></ul>');

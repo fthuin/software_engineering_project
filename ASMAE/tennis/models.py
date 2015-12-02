@@ -165,7 +165,7 @@ class Court(models.Model):
 		return str(self.id) +" "+ self.rue
 
 	def __unicode__(self):
-		return u'' + self.id + ' '+ self.rue
+		return u'' + repr(self.id) + ' '+ self.rue
 
 	def dispo(self):
 		if self.dispoSamedi and self.dispoDimanche:
@@ -212,7 +212,7 @@ class Arbre(models.Model):
 		return "Arbre n " + str(self.id)
 
 	def __unicode__(self):
-		return u'' + "Arbre n " + self.id
+		return u'' + "Arbre n " + repr(self.id)
 
 	class Meta:
 		verbose_name = "Arbre"
@@ -333,7 +333,7 @@ class Score(models.Model):
 		return "Score " + str(self.paire1.id) + " vs "+ str(self.paire2.id)
 
 	def __unicode__(self):
-		return u'' + "Score " + self.paire1.id + " vs "+ self.paire2.id
+		return u'' + "Score " + repr(self.paire1.id) + " vs "+ repr(self.paire2.id)
 
 class Poule(models.Model):
 	id = models.AutoField(primary_key=True)
@@ -349,7 +349,7 @@ class Poule(models.Model):
 		return "Poule n " + str(self.id)
 
 	def __unicode__(self):
-		return u'' + "Poule n " + self.id
+		return u'' + "Poule n " + repr(self.id)
 
 	class Meta:
 		verbose_name = "Poule"
@@ -377,7 +377,7 @@ class Resultat(models.Model):
 		return "Resultat du " + str(self.tournoi)
 
 	def __unicode__(self):
-		return u'' + "Resultat du " + self.tournoi
+		return u'' + "Resultat du " + repr(self.tournoi)
 
 class infoTournoi(models.Model):
 	prix = models.DecimalField(max_digits=11,decimal_places=2, verbose_name="Prix de l'inscription")
@@ -391,4 +391,4 @@ class infoTournoi(models.Model):
 		return "Edition " + str(self.edition)
 
 	def __unicode__(self):
-		return u'' + "Edition " + self.edition
+		return u'' + "Edition " + repr(self.edition)

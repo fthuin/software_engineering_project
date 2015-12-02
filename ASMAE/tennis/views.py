@@ -20,6 +20,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from tennis.pdfdocument import PDFTerrain, PDFPair, PDFPoule
 from django.template.defaulttags import register
 from django.db.models import Q
+from functools import reduce
+from operator import and_, or_
 
 # Create your views here.
 def home(request):
@@ -121,15 +123,101 @@ def tournoi(request):
 	return redirect(reverse(home))
 
 def inscriptionTournoi(request):
-	Ex = Extra.objects.all()
-	Tour = Tournoi.objects.all()
-	Use = User.objects.all().order_by('username')
+	page = 1
+	pageLength = 10
+	recherche = ""
+	if request.method == 'POST':
+		if request.POST['action'] == "search":
+			page = request.POST['page']
+			recherche = request.POST['rechercheField'].strip()
 
-	#today = date.today()
+	Ex = Extra.objects.only
+	Tour = Tournoi.objects.all()
+	#Liste des user ordered et sans sois meme
+	Use = User.objects.all().order_by('username').exclude(username=request.user.username)
+	#On retire les staff et les admins
+	Use = Use.exclude(is_staff=True).exclude(groups__name="Admin").exclude(groups__name="staff")
+
+	if recherche != "":
+		Use = Use.filter(
+			Q(username__contains=recherche) |
+			Q(participant__nom__contains=recherche) | 
+			Q(participant__prenom__contains=recherche))	
+
+	#Utilisateur courant
+	u = request.user
+
+	print(u.user_permissions.all())
+
+	#Recuperations des infos
 	info = infoTournoi.objects.all()
 	info = info.order_by("edition")[len(info)-1]
 	today = info.date
 
+	#Tri de la liste
+	
+	#Libre samedi/dimanche
+	libre_Samedi = True
+	libre_Dimanche = True
+	for elem in u.user1.all() or u.user2.all():
+		if elem.tournoi.titre.jour == "Samedi":
+			libre_Samedi = False
+		else:
+			libre_Dimanche = False
+
+	famille_25 = yearsago(25, today)
+	famille_15 = yearsago(15, today)
+	
+	querysets = list()
+	#Liste contenant les utilisateurs pour le tournoi des familles
+	famille_list = list()
+	if libre_Samedi:
+		#Check tournoi des familles
+		#- de 15 ans
+		if u.participant.datenaissance >= famille_15:
+			#On garde les utilisateur de + de 25 ans
+			famille_list = Use.filter(participant__datenaissance__lte=famille_25)
+			#On retire ceux qui ne sont pas libre le samedi
+			famille_list = famille_list.exclude(user1__tournoi__titre__jour="Samedi").exclude(user2__tournoi__titre__jour="Samedi")
+			querysets.append(famille_list)
+		#+ de 25 ans
+		elif u.participant.datenaissance <= famille_25:
+			#On garde les utilisateur de - de 15 ans
+			famille_list = Use.filter(participant__datenaissance__gte=famille_15)
+			#On retire ceux qui ne sont pas libre le samedi
+			famille_list = famille_list.exclude(user1__tournoi__titre__jour="Samedi").exclude(user2__tournoi__titre__jour="Samedi")
+			querysets.append(famille_list)
+
+	#Liste du samedi (except tournoi des familles)
+	samedi_list = list()
+	if libre_Samedi:
+		#On prend seulement les joueur du sexe opposé
+		samedi_list = Use.exclude(participant__titre=u.participant.titre)
+		#On retire ceux qui ne sont pas libre samedi
+		samedi_list = samedi_list.exclude(user1__tournoi__titre__jour="Samedi").exclude(user2__tournoi__titre__jour="Samedi")
+		querysets.append(samedi_list)
+
+	#Liste du dimanche
+	dimanche_list = list()
+	if libre_Dimanche:
+		#On prend seulement les joueurs du meme sexe
+		dimanche_list = Use.filter(participant__titre=u.participant.titre)
+		#On retire ceux qui ne sont pas libre dimanche
+		dimanche_list = dimanche_list.exclude(user1__tournoi__titre__jour="Dimanche").exclude(user2__tournoi__titre__jour="Dimanche")
+		querysets.append(dimanche_list)
+
+	debut = ((int(page)-1)*pageLength)+1
+	fin = debut + (pageLength-1)
+	length = 0
+	if len(querysets) > 0:
+		#Merge query sets
+		Use = reduce(or_, querysets[1:], querysets[0])
+		length = len(Use)
+		Use = Use[debut-1:fin]
+	else:
+		Use = list()
+
+	#calcul des ages des users
 	born = request.user.participant.datenaissance
 	request.user.age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
@@ -139,92 +227,90 @@ def inscriptionTournoi(request):
 
 
 	if request.method == "POST":
-		#On recupère les donnée du formualaire
-		username2 = request.POST['username2']
-		comment1 = request.POST['remarque']
-		title_tournoi = request.POST['title_tournoi']
-		categorie_tournoi = request.POST['categorie_tournoi']
-		if categorie_tournoi == "-":
-			categorie_tournoi = title_tournoi
-		#On recupere le tournoi en fonction du titre et de la categorie
-		t = TournoiTitle.objects.get(nom=title_tournoi)
-		c = TournoiCategorie.objects.get(nom=categorie_tournoi)
-		tournois = Tournoi.objects.get(titre=t,categorie=c)
-		extra = request.POST.getlist('extra')
-		#On recupere les extras pris par l'utilisateur
-		extra1 = list()
-		for elem in extra:
-			extra1.append(Extra.objects.get(id=elem))
-		#On en déduit les extras non pris par l'utilisateur
-		extranot1 = list()
-		Ex = Extra.objects.all()
-		for elem in Ex:
-			contained = False
-			for el in extra1:
-				if elem.id == el.id:
-					contained = True
-			if contained == False:
-				extranot1.append(Extra.objects.get(id=elem.id))
+		if request.POST['action'] == "formPair":
+			#On recupère les donnée du formualaire
+			username2 = request.POST['username2']
+			comment1 = request.POST['remarque']
+			title_tournoi = request.POST['title_tournoi']
+			categorie_tournoi = request.POST['categorie_tournoi']
+			if categorie_tournoi == "-":
+				categorie_tournoi = title_tournoi
+			#On recupere le tournoi en fonction du titre et de la categorie
+			t = TournoiTitle.objects.get(nom=title_tournoi)
+			c = TournoiCategorie.objects.get(nom=categorie_tournoi)
+			tournois = Tournoi.objects.get(titre=t,categorie=c)
+			extra = request.POST.getlist('extra')
+			#On recupere les extras pris par l'utilisateur
+			extra1 = list()
+			for elem in extra:
+				extra1.append(Extra.objects.get(id=elem))
+			#On en déduit les extras non pris par l'utilisateur
+			extranot1 = list()
+			Ex = Extra.objects.all()
+			for elem in Ex:
+				contained = False
+				for el in extra1:
+					if elem.id == el.id:
+						contained = True
+				if contained == False:
+					extranot1.append(Extra.objects.get(id=elem.id))
 
-		#On vérifie que l'utilisateur a bien rentré un deuxieme joueur
-		if (username2==""):
-			errorAdd = "Veuillez rajouter un deuxieme joueur pour votre pair"
-			return render(request,'tennis/inscriptionTournoi.html',locals())
-
-		#On véririe qu'il ne s'est pas entré lui meme
-		user1 = User.objects.get(username=request.user.username)
-		user2 = User.objects.get(username=username2)
-
-		if (user1==user2):
-			errorAdd = "Vous ne pouvez pas faire une pair avec vous meme"
-			return render(request,'tennis/inscriptionTournoi.html',locals())
-
-		#Série de vérification pour que l'utilisateur ou son partenaire ne soit pas inscrit dans un tournoi du meme jour
-		user1Tournoi1 = user1.user1.all()
-		user1Tournoi2 = user1.user2.all()
-
-		user2Tournoi1 = user2.user1.all()
-		user2Tournoi2 = user2.user2.all()
-
-		for elem in user1Tournoi1:
-			if(elem.tournoi.titre.jour == tournois.titre.jour):
-				errorAdd = "Vous etes deja inscrit a un tournoi ce jour!"
+			#On vérifie que l'utilisateur a bien rentré un deuxieme joueur
+			if (username2==""):
+				errorAdd = "Veuillez rajouter un deuxieme joueur pour votre pair"
 				return render(request,'tennis/inscriptionTournoi.html',locals())
 
-		for elem in user1Tournoi2:
-			if(elem.tournoi.titre.jour == tournois.titre.jour):
-				errorAdd = "Vous etes deja inscrit a un tournoi ce jour!"
+			#On véririe qu'il ne s'est pas entré lui meme
+			user1 = User.objects.get(username=request.user.username)
+			user2 = User.objects.get(username=username2)
+
+			if (user1==user2):
+				errorAdd = "Vous ne pouvez pas faire une pair avec vous meme"
 				return render(request,'tennis/inscriptionTournoi.html',locals())
 
-		for elem in user2Tournoi1:
-			if(elem.tournoi.titre.jour == tournois.titre.jour and elem.confirm):
-				errorAdd = "Le joueur 2 est deja inscrit dans un tournoi ce jour!"
-				return render(request,'tennis/inscriptionTournoi.html',locals())
+			#Série de vérification pour que l'utilisateur ou son partenaire ne soit pas inscrit dans un tournoi du meme jour
+			user1Tournoi1 = user1.user1.all()
+			user1Tournoi2 = user1.user2.all()
 
-		for elem in user2Tournoi2:
-			if(elem.tournoi.titre.jour == tournois.titre.jour and elem.confirm):
-				errorAdd = "Le joueur 2 est deja inscrit dans un tournoi ce jour!"
-				return render(request,'tennis/inscriptionTournoi.html',locals())
+			user2Tournoi1 = user2.user1.all()
+			user2Tournoi2 = user2.user2.all()
 
-		#On cré la pair
-		pair = Pair(tournoi = tournois,user1=user1,user2=user2,comment1 = comment1,confirm = False,valid = False,pay = False)
-		pair.save()
-		#On rajoute les extras
-		for elem in extra:
-			ext = Extra.objects.get(id=elem)
-			pair.extra1.add(ext)
+			for elem in user1Tournoi1:
+				if(elem.tournoi.titre.jour == tournois.titre.jour):
+					errorAdd = "Vous etes deja inscrit a un tournoi ce jour!"
+					return render(request,'tennis/inscriptionTournoi.html',locals())
 
-		# Send mail
-		send_confirmation_email_pair_registered(Participant.objects.get(user=pair.user1), Participant.objects.get(user=pair.user2))
+			for elem in user1Tournoi2:
+				if(elem.tournoi.titre.jour == tournois.titre.jour):
+					errorAdd = "Vous etes deja inscrit a un tournoi ce jour!"
+					return render(request,'tennis/inscriptionTournoi.html',locals())
 
-		pair.save()
-		return redirect(reverse(tournoi))
+			for elem in user2Tournoi1:
+				if(elem.tournoi.titre.jour == tournois.titre.jour and elem.confirm):
+					errorAdd = "Le joueur 2 est deja inscrit dans un tournoi ce jour!"
+					return render(request,'tennis/inscriptionTournoi.html',locals())
 
-	Use = Use.only('username','participant')
+			for elem in user2Tournoi2:
+				if(elem.tournoi.titre.jour == tournois.titre.jour and elem.confirm):
+					errorAdd = "Le joueur 2 est deja inscrit dans un tournoi ce jour!"
+					return render(request,'tennis/inscriptionTournoi.html',locals())
+
+			#On cré la pair
+			pair = Pair(tournoi = tournois,user1=user1,user2=user2,comment1 = comment1,confirm = False,valid = False,pay = False)
+			pair.save()
+			#On rajoute les extras
+			for elem in extra:
+				ext = Extra.objects.get(id=elem)
+				pair.extra1.add(ext)
+
+			# Send mail
+			send_confirmation_email_pair_registered(Participant.objects.get(user=pair.user1), Participant.objects.get(user=pair.user2))
+
+			pair.save()
+			return redirect(reverse(tournoi))
 
 	if request.user.is_authenticated():
 		extranot1 = Extra.objects.all()
-
 		return render(request,'tennis/inscriptionTournoi.html',locals())
 	return redirect(reverse(home))
 
@@ -1345,9 +1431,11 @@ def staffPerm(request):
 		else:
 			usernamefield = request.POST['username']
 			utilisateur = User.objects.get(username=usernamefield)
+			staff = False
 			if request.POST.__contains__("Tournoi des familles"):
 				perm = Permission.objects.get(codename="TournoiDesFamilles")
 				utilisateur.user_permissions.add(perm)
+				staff = True
 			else:
 				perm = Permission.objects.get(codename="TournoiDesFamilles")
 				utilisateur.user_permissions.remove(perm)
@@ -1355,6 +1443,7 @@ def staffPerm(request):
 			if request.POST.__contains__("Double mixte"):
 				perm = Permission.objects.get(codename="DoubleMixte")
 				utilisateur.user_permissions.add(perm)
+				staff = True
 			else:
 				perm = Permission.objects.get(codename="DoubleMixte")
 				utilisateur.user_permissions.remove(perm)
@@ -1362,6 +1451,7 @@ def staffPerm(request):
 			if request.POST.__contains__("Double hommes"):
 				perm = Permission.objects.get(codename="DoubleHommes")
 				utilisateur.user_permissions.add(perm)
+				staff = True
 			else:
 				perm = Permission.objects.get(codename="DoubleHommes")
 				utilisateur.user_permissions.remove(perm)
@@ -1369,6 +1459,7 @@ def staffPerm(request):
 			if request.POST.__contains__("Double femmes"):
 				perm = Permission.objects.get(codename="DoubleFemmes")
 				utilisateur.user_permissions.add(perm)
+				staff = True
 			else:
 				perm = Permission.objects.get(codename="DoubleFemmes")
 				utilisateur.user_permissions.remove(perm)
@@ -1376,6 +1467,7 @@ def staffPerm(request):
 			if request.POST.__contains__("court"):
 				perm = Permission.objects.get(codename="Court")
 				utilisateur.user_permissions.add(perm)
+				staff = True
 			else:
 				perm = Permission.objects.get(codename="Court")
 				utilisateur.user_permissions.remove(perm)
@@ -1383,6 +1475,7 @@ def staffPerm(request):
 			if request.POST.__contains__("pair"):
 				perm = Permission.objects.get(codename="Pair")
 				utilisateur.user_permissions.add(perm)
+				staff = True
 			else:
 				perm = Permission.objects.get(codename="Pair")
 				utilisateur.user_permissions.remove(perm)
@@ -1390,6 +1483,7 @@ def staffPerm(request):
 			if request.POST.__contains__("extra"):
 				perm = Permission.objects.get(codename="Extra")
 				utilisateur.user_permissions.add(perm)
+				staff = True
 			else:
 				perm = Permission.objects.get(codename="Extra")
 				utilisateur.user_permissions.remove(perm)
@@ -1397,6 +1491,7 @@ def staffPerm(request):
 			if request.POST.__contains__("user"):
 				perm = Permission.objects.get(codename="User")
 				utilisateur.user_permissions.add(perm)
+				staff = True
 			else:
 				perm = Permission.objects.get(codename="User")
 				utilisateur.user_permissions.remove(perm)
@@ -1406,6 +1501,13 @@ def staffPerm(request):
 				utilisateur.groups.add(group)
 			else:
 				group = Group.objects.get(name="Admin")
+				utilisateur.groups.remove(group)
+
+			if staff : 
+				group = Group.objects.get(name="staff")
+				utilisateur.groups.add(group)
+			else:
+				group = Group.objects.get(name="staff")
 				utilisateur.groups.remove(group)
 
 			LogActivity(user=request.user,section="Permissions",details="Changed permission of user "+utilisateur.username).save()

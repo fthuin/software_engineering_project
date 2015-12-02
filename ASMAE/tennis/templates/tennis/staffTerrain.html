@@ -234,10 +234,8 @@ setSelectedIndex(document.getElementById("type_selector"),'{{typeCourt}}');
 {% if veteran %}
 setSelectedIndex(document.getElementById("vet_selector"),'{{veteran}}');
 {% endif %}
-//Nombre d'entrée par page
-var pageLength = 10;
 //Nombre de page
-var total = Math.max(Math.ceil({{length}}/pageLength), 1);
+var total = Math.max(Math.ceil({{length}}/{{pageLength}}), 1);
 //Notre pagination
 $('#paginationholder').html('');
 $('#paginationholder').html('<ul class="pagination" id="CourtPagination"></ul>');
