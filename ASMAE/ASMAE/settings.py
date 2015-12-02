@@ -16,6 +16,9 @@ EMAIL_HOST_USER = 'noreply.lecharledelorraine'
 EMAIL_HOST_PASSWORD = 'LeCharleDeLorraine'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+#EMAIL SENDGRID
+EMAIL_BACKEND = "sgbackend.SendGridBackend"
+SENDGRID_API_KEY = "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"
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os

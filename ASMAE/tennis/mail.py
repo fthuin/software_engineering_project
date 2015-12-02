@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*- 
-import datetime
 import time
-from django.utils.crypto import get_random_string
+import datetime
 import threading
+from django.conf import settings
 from django.core.mail import send_mail
-from tennis.models import Extra, Participant,Court, Tournoi, Pair, UserInWaitOfActivation, Poule
+from django.utils.crypto import get_random_string
+from tennis.models import Extra, Participant, Court, Tournoi, Pair, UserInWaitOfActivation, Poule
 
 #send_mail('Subject here', 'Here is the message.', 'from@example.com', ['to@example.com'], fail_silently=False)
 # From : noreply@leCharleDeLorraine.com
 
-def send_mail_via_thread(subject, message, fromAdresse, mailingList, fail_silently=True):
+def send_mail_via_thread(subject, message, fromAdresse, mailingList, fail_silently=False):
+	if fromAdresse == "":
+		fromAdresse = settings.EMAIL_HOST_USER
 	threading.Thread(target=send_mail, args=(subject, message, fromAdresse, mailingList, fail_silently, )).start()
 
 # Send a confirmation email for pair registration
@@ -232,8 +235,16 @@ def test_send_mail():
     
 def send_prospectus_by_mail(participant):
 	#TODO Envoye un mail contenant les pdf devant etre envoyer. Ne pas créer de pdf dupliquer pour les adresses equivalentes
-	pass
-
-def send_invitation_to_player_of_previous_year(participant):
-	#TODO Envoye un mail aux joueurs ayant participer les années précédentes
+	#Init list of participant per adresse
+	dictionnaryAdresse = {}
+	for participant in Participant.objects.all():
+		addr = articipant.getAdresse()
+		if addr in dictionnaryAdresse:
+			dictionnaryAdresse[addr] = dictionnaryAdresse[addr].append(participant)
+		else:
+			dictionnaryAdresse[addr] = [participant]
+	#Generate one mail for each
+	
+	#Send mail
+	
 	pass
