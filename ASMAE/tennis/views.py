@@ -140,9 +140,9 @@ def inscriptionTournoi(request):
 
 	if recherche != "":
 		Use = Use.filter(
-			Q(username__contains=recherche) |
-			Q(participant__nom__contains=recherche) | 
-			Q(participant__prenom__contains=recherche))	
+			Q(username__icontains=recherche) |
+			Q(participant__nom__icontains=recherche) | 
+			Q(participant__prenom__icontains=recherche))	
 
 	#Utilisateur courant
 	u = request.user
@@ -1163,14 +1163,14 @@ def staffTerrain(request):
 	#Recherche
 	if recherche != "":
 		allCourt = allCourt.filter(
-			Q(id__contains=recherche) |
-			Q(user__username__contains=recherche) | 
-			Q(user__participant__nom__contains=recherche) | 
-			Q(user__participant__prenom__contains=recherche) |
-			Q(numero__contains=recherche) | 
-			Q(rue__contains=recherche) | 
-			Q(localite__contains=recherche) | 
-			Q(codepostal__contains=recherche))	
+			Q(id__icontains=recherche) |
+			Q(user__username__icontains=recherche) | 
+			Q(user__participant__nom__icontains=recherche) | 
+			Q(user__participant__prenom__icontains=recherche) |
+			Q(numero__icontains=recherche) | 
+			Q(rue__icontains=recherche) | 
+			Q(localite__icontains=recherche) | 
+			Q(codepostal__icontains=recherche))	
 
 	if material != "":
 		allCourt = allCourt.filter(matiere=material)
@@ -1251,13 +1251,13 @@ def staffPaire(request):
 
 	if recherche != "":
 		allPair = allPair.filter(
-			Q(id__contains=recherche) |
-			Q(user1__username__contains=recherche) | 
-			Q(user1__participant__nom__contains=recherche) | 
-			Q(user1__participant__prenom__contains=recherche) |
-			Q(user2__username__contains=recherche) | 
-			Q(user2__participant__nom__contains=recherche) | 
-			Q(user2__participant__prenom__contains=recherche))	
+			Q(id__icontains=recherche) |
+			Q(user1__username__icontains=recherche) | 
+			Q(user1__participant__nom__icontains=recherche) | 
+			Q(user1__participant__prenom__icontains=recherche) |
+			Q(user2__username__icontains=recherche) | 
+			Q(user2__participant__nom__icontains=recherche) | 
+			Q(user2__participant__prenom__icontains=recherche))	
 
 	if validation != "":
 		if validation == "True":
@@ -1517,9 +1517,9 @@ def staffPerm(request):
 
 	if recherche != "":
 		Use = Use.filter(
-			Q(username__contains=recherche) |
-			Q(participant__nom__contains=recherche) | 
-			Q(participant__prenom__contains=recherche))	
+			Q(username__icontains=recherche) |
+			Q(participant__nom__icontains=recherche) | 
+			Q(participant__prenom__icontains=recherche))	
 
 	Use = Use.order_by("username")
 	length = len(Use)
@@ -1586,7 +1586,7 @@ def staffUser(request):
 
 	#recherche firld
 	if(recherche != ""):
-		Use = Use.filter(Q(username__contains=recherche) | Q(participant__nom__contains=recherche) | Q(participant__prenom__contains=recherche))
+		Use = Use.filter(Q(username__icontains=recherche) | Q(participant__nom__icontains=recherche) | Q(participant__prenom__icontains=recherche))
 
 	Use = Use.order_by("username")
 	length = len(Use)
