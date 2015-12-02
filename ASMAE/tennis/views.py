@@ -1666,7 +1666,7 @@ def yearsago(years, from_date=None):
         #assert from_date.month == 2 and from_date.day == 29 # can be removed
         return from_date.replace(month=2, day=28, year=from_date.year-years)
 
-@permission_required('tennis.User')
+#Idealement visible que aux membre du groupe staff Todo?
 def viewUser(request,name):
 	rankings = Ranking.objects.all()
 

@@ -60,7 +60,8 @@
 		</div>
 
 		<div class="row">
-			<div class="col-sm-6">
+			<!-- Visible seulement si l'utilisateur à la permission des paires -->
+			<div class="col-sm-6" {% if not perms.tennis.Pair %}style="display:none"{% endif %}>
 				<div class="panel panel-default center-block" style="max-width:600px;">
 					<div class="panel-heading">Tournois</div>
 					<div class="table-responsive">
@@ -103,7 +104,8 @@
 					</div>
 					</div>
 			    </div>
-			<div class="col-sm-6">
+			<!-- Visible seulement si l'utilisateur à la permission des terrains -->
+			<div class="col-sm-6" {% if not perms.tennis.Court %}style="display:none"{% endif %}>
 				<div class="panel panel-default center-block" style="max-width:600px;">
 					<div class="panel-heading">Terrains</div>
 					<div class="table-responsive">
@@ -142,7 +144,8 @@
 			</div>
 			
 		</div>
-		<button class="btn btn-default center-block" data-toggle="modal" data-target="#myModal" type="button" onclick="checkValues()">Modifier informations</button>
+		<!-- Visible seulement si l'utilisateur à la permission des utilisateurs -->
+		<button {% if not perms.auth.User %}style="display:none"{% endif %} class="btn btn-default center-block" data-toggle="modal" data-target="#myModal" type="button" onclick="checkValues()">Modifier informations</button>
 		<h3>Google Map <span id="statusMap" style="color:red;"></span></h3>
 		<div id="map" style="height:250px;"></div>
 	</div>
