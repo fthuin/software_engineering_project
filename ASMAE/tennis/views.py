@@ -24,6 +24,8 @@ from functools import reduce
 from operator import and_, or_
 from django.db import connection
 
+db_type = connection.vendor
+
 # Create your views here.
 def home(request):
 	info = infoTournoi.objects.all()
@@ -140,10 +142,16 @@ def inscriptionTournoi(request):
 	Use = Use.exclude(is_staff=True).exclude(groups__name="Admin").exclude(groups__name="staff")
 
 	if recherche != "":
-		Use = Use.filter(
-			Q(username__icontains=recherche) |
-			Q(participant__nom__icontains=recherche) | 
-			Q(participant__prenom__icontains=recherche))	
+		if db_type == "postgresql":
+			Use = Use.filter(
+				Q(username__unaccent__icontains=recherche) |
+				Q(participant__nom__unaccent__icontains=recherche) | 
+				Q(participant__prenom__unaccent__icontains=recherche))
+		else:
+			Use = Use.filter(
+				Q(username__icontains=recherche) |
+				Q(participant__nom__icontains=recherche) | 
+				Q(participant__prenom__icontains=recherche))	
 
 	#Utilisateur courant
 	u = request.user
@@ -1163,15 +1171,26 @@ def staffTerrain(request):
 
 	#Recherche
 	if recherche != "":
-		allCourt = allCourt.filter(
-			Q(id__icontains=recherche) |
-			Q(user__username__icontains=recherche) | 
-			Q(user__participant__nom__icontains=recherche) | 
-			Q(user__participant__prenom__icontains=recherche) |
-			Q(numero__icontains=recherche) | 
-			Q(rue__icontains=recherche) | 
-			Q(localite__icontains=recherche) | 
-			Q(codepostal__icontains=recherche))	
+		if db_type == "postgresql":
+			allCourt = allCourt.filter(
+				Q(id__icontains=recherche) |
+				Q(user__username__unaccent__icontains=recherche) | 
+				Q(user__participant__nom__unaccent__icontains=recherche) | 
+				Q(user__participant__prenom__unaccent__icontains=recherche) |
+				Q(numero__icontains=recherche) | 
+				Q(rue__unaccent__icontains=recherche) | 
+				Q(localite__unaccent__icontains=recherche) | 
+				Q(codepostal__icontains=recherche))	
+		else:
+			allCourt = allCourt.filter(
+				Q(id__icontains=recherche) |
+				Q(user__username__icontains=recherche) | 
+				Q(user__participant__nom__icontains=recherche) | 
+				Q(user__participant__prenom__icontains=recherche) |
+				Q(numero__icontains=recherche) | 
+				Q(rue__icontains=recherche) | 
+				Q(localite__icontains=recherche) | 
+				Q(codepostal__icontains=recherche))	
 
 	if material != "":
 		allCourt = allCourt.filter(matiere=material)
@@ -1251,14 +1270,24 @@ def staffPaire(request):
 	allPair = Pair.objects.all()
 
 	if recherche != "":
-		allPair = allPair.filter(
-			Q(id__icontains=recherche) |
-			Q(user1__username__icontains=recherche) | 
-			Q(user1__participant__nom__icontains=recherche) | 
-			Q(user1__participant__prenom__icontains=recherche) |
-			Q(user2__username__icontains=recherche) | 
-			Q(user2__participant__nom__icontains=recherche) | 
-			Q(user2__participant__prenom__icontains=recherche))	
+		if db_type == "postgresql":
+			allPair = allPair.filter(
+				Q(id__icontains=recherche) |
+				Q(user1__username__unaccent__icontains=recherche) | 
+				Q(user1__participant__nom__unaccent__icontains=recherche) | 
+				Q(user1__participant__prenom__unaccent__icontains=recherche) |
+				Q(user2__username__unaccent__icontains=recherche) | 
+				Q(user2__participant__nom__unaccent__icontains=recherche) | 
+				Q(user2__participant__prenom__unaccent__icontains=recherche))	
+		else:
+			allPair = allPair.filter(
+				Q(id__icontains=recherche) |
+				Q(user1__username__icontains=recherche) | 
+				Q(user1__participant__nom__icontains=recherche) | 
+				Q(user1__participant__prenom__icontains=recherche) |
+				Q(user2__username__icontains=recherche) | 
+				Q(user2__participant__nom__icontains=recherche) | 
+				Q(user2__participant__prenom__icontains=recherche))	
 
 	if validation != "":
 		if validation == "True":
@@ -1517,10 +1546,16 @@ def staffPerm(request):
 	Use = User.objects.all().order_by('username')
 
 	if recherche != "":
-		Use = Use.filter(
-			Q(username__icontains=recherche) |
-			Q(participant__nom__icontains=recherche) | 
-			Q(participant__prenom__icontains=recherche))	
+		if db_type == "postgresql":
+			Use = Use.filter(
+				Q(username__unaccent__icontains=recherche) |
+				Q(participant__nom__unaccent__icontains=recherche) | 
+				Q(participant__prenom__unaccent__icontains=recherche))
+		else:
+			Use = Use.filter(
+				Q(username__icontains=recherche) |
+				Q(participant__nom__icontains=recherche) | 
+				Q(participant__prenom__icontains=recherche))	
 
 	Use = Use.order_by("username")
 	length = len(Use)
@@ -1585,11 +1620,14 @@ def staffUser(request):
 		else:
 			Use = Use.filter( ~(Q(user1__confirm=True) | Q(user2__confirm=True)))
 
-	db_type = connection.vendor
+	
 
 	#recherche firld
 	if(recherche != ""):
-		Use = Use.filter(Q(username__icontains=recherche) | Q(participant__nom__icontains=recherche) | Q(participant__prenom__icontains=recherche))
+		if db_type == "postgresql":
+			Use = Use.filter(Q(username__unaccent__icontains=recherche) | Q(participant__nom__unaccent__icontains=recherche) | Q(participant__prenom__unaccent__icontains=recherche))
+		else:
+			Use = Use.filter(Q(username__icontains=recherche) | Q(participant__nom__icontains=recherche) | Q(participant__prenom__icontains=recherche))
 
 	Use = Use.order_by("username")
 	length = len(Use)
