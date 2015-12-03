@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
 from tennis.models import Extra, Participant,Court, Tournoi, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, PouleStatus,Arbre, TournoiStatus, TournoiTitle, TournoiCategorie, infoTournoi, Ranking, Resultat
-from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail, send_contact_mail
+from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail, send_contact_mail, send_tournament_invitation_by_mail
 from tennis.classement import validate_classement_thread
 import re, math, copy
 import json
@@ -103,8 +103,10 @@ def contact(request):
 			subject = request.POST['subject']
 			email = request.POST['email']
 			message = request.POST['message']
-			send_contact_mail(email, subject, message)
-			successSendMail = u"Votre message a bien été envoyé"
+			if send_contact_mail(email, subject, message):
+				successSendMail = u"Votre message a bien été envoyé"
+			else:
+				echecSendMail = u"Une erreur s'est produite lors de l'envois de votre message,\nle problème a été signaler au staff et sera résolu dans les plus bref délais. Désole de l'inconvénience, réessayer dans quelques heures"
 	return render(request,'tennis/contact.html',locals())
 
 def tournoi(request):
@@ -556,9 +558,8 @@ def registerTerrain(request):
 
 		# Send confirmation mail
 		send_confirmation_email_court_registered(Participant.objects.get(user=request.user), court)
-
+		
 		court.save()
-
 		return redirect(reverse(terrain))
 
 	if request.user.is_authenticated():
@@ -1973,13 +1974,15 @@ def profil(request):
 	if request.method == "POST":
 		if request.POST['action'] == 'sendMailConfirmationMail':
 			# Send email with code to finish registration and validate account
-			successSendMail = u"Un email vous a été renvoyé sur votre adresse courante. En cas de non-réception, veuillez revérifier l'adresse enregistrée ci-dessous."
 			participant = Participant.objects.get(user = request.user)
 			activationObject = UserInWaitOfActivation.objects.get(participant = participant)
 			activationObject.dayOfRegistration = datetime.datetime.now()
 			activationObject.save()
 			link = "http://" + request.get_host() + "/tennis/emailValidation/"
-			send_register_confirmation_email(activationObject, participant, link)
+			if send_register_confirmation_email(activationObject, participant, link):
+				successSendMail = u"Un email vous a été renvoyé sur votre adresse courante. En cas de non-réception, veuillez revérifier l'adresse enregistrée ci-dessous."
+			else:
+				echecSendMail = u"Une erreur s'est produite lors de l'envois de votre message,\nle problème a été signaler au staff et sera résolu dans les plus bref délais.\nDésole de l'inconvénience, réessayer dans quelques heures"
 			return render(request,'tennis/profil.html',locals())
 		if request.POST['action'] == 'updatePassword':
 
@@ -2236,7 +2239,7 @@ def register(request):
 		validate_classement_thread(participant)
 
 		# Send email with code to finish registration and validate account
-		send_register_confirmation_email(activationObject, participant, link)
+		register_confirmation_email(activationObject, participant, link)
 
 		#On connecte l'utilisateur
 		user2 = authenticate(username=username, password=password)

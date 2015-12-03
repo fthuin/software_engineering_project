@@ -12,9 +12,9 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 #CONTACT VARIABLE
 CONTACT_EMAIL = "noreply.lecharledelorraine@gmail.com"
-CONTACT_EMAIL_PASSWORD = "LeCharleDeLorraine"
+#CONTACT_EMAIL_PASSWORD = "LeCharleDeLorraine" KEEP TO CONNECT TO THE MAIL, USELESS IN APP
 #EMAIL SENDGRID => pas toucher la cle API sinon faut en recrée une
-EMAIL_FROM = 'noreply@lecharledelorraine.com'
+EMAIL_FROM = "noreply@lecharledelorraine.com"
 EMAIL_BACKEND = "sgbackend.SendGridBackend"
 SENDGRID_API_KEY = "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"
 

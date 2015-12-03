@@ -16,6 +16,11 @@
 					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 					<strong>Succès!</strong> {{ successSendMail }}
 				</div>
+				{% elif echecSendMail %}
+				<div class="alert alert-danger">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Error!</strong> {{ echecSendMail }}
+				</div>
 				{% endif %}
 				<form role="form" name="sendContactMail" method="post" action="{% url "tennis.views.contact" %}">
 					{% csrf_token %}

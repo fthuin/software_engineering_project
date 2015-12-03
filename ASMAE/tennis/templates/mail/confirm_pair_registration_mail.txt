@@ -1,0 +1,19 @@
+# Subject balise isn't mandatory, if not present the mail subject will simply be empty
+# The message balise must be present however, the balises <<namePlayerOne>> and <<namePlayerTwo>> must also be present.
+# If they are not, no mail is send and a message is printed in log announcing mail malfunction
+<subject>Confirmation d'inscription au tournoi 'Le Charles de Lorraine'<\subject>
+<message>
+
+Bonjour <<nameOne>>,
+
+Vous avez été enregistré pour jouer en paire avec <<nameTwo>>
+lors du prochain tournoi 'Le Charle de Lorraine'.
+
+Si cet enregistrement a été fait par erreur, sachez qu'il reste possible de modifier les
+informations d'inscription sur notre site jusqu'à l'avant veille du tournoi. Nous sommes
+également disponible en cas de besoin via l'onglet contact du site internet.
+
+Merci encore de votre inscription,
+L'équipe 'Le Charles de Lorraine'
+
+<\message>
