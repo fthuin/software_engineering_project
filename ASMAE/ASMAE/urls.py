@@ -21,6 +21,8 @@ import tennis.views
 urlpatterns = patterns('',
     url(r'^$', tennis.views.home, name='accueil'),
 	url(r'^admin/', include(admin.site.urls)),
-		url(r'^tennis/', include('tennis.urls')),
+	url(r'^tennis/', include('tennis.urls')),
+	url(r'^', include('tennis.urls'))
+		,
 	)
 
