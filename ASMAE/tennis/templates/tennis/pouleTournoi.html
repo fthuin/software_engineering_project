@@ -45,6 +45,7 @@
                     <b>Score : </b>{{pair.score}}
                     <br>
                     {% endfor %}
+                    <button onClick="location.href='{% url "tennis.views.pouleViewScore" p.id %}';" class="btn btn-default center-block" style="margin-top:20px;">Voir les scores</button>
 
                     {% else %}
 
