@@ -57,4 +57,4 @@ def export_csv(modeladmin, request, queryset):
             smart_str(obj.usedLastYear),
         ])
     return response
-export_csv.short_description = u"Export Participants in CSV"
+export_csv.short_description = u"Exporter les terrains vers Excel"
