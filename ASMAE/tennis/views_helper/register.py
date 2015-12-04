@@ -12,7 +12,7 @@ import re
 from django.contrib.auth import authenticate, login
 from django.utils.crypto import get_random_string
 from tennis.classement import validate_classement_thread
-from tennis.mail import register_confirmation_email
+from tennis.mail import send_register_confirmation_email
 from tennis.views import tournoi
 
 def username_present(username):
@@ -117,7 +117,7 @@ def view(request):
         validate_classement_thread(participant)
 
         # Send email with code to finish registration and validate account
-        register_confirmation_email(activationObject, participant, link)
+        send_register_confirmation_email(activationObject, participant, link)
 
         # On connecte l'utilisateur
         user2 = authenticate(username=username, password=password)

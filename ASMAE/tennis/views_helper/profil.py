@@ -13,7 +13,7 @@ from tennis.classement import validate_classement_thread
 from django.core.urlresolvers import reverse
 from tennis.views import home
 
-def profil(request):
+def view(request):
     rankings = Ranking.objects.all()
     today = datetime.date.today()
     yearLoop = range(1900, today.year - 7)
