@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Staff{% endblock %}
+{% block nav-staff %}class="dropdown active"{% endblock %}
+
+{% block body %}
+<div class="container">
+	<!-- Onglet de navigations -->
+	<ul class="nav nav-tabs">
+	    {% if perms.tennis.DoubleMixte or perms.tennis.DoubleHommes or perms.tennis.DoubleFemmes or perms.tennis.TournoiDesFamilles %}<li {% block ongTournoi %}{% endblock %} id="tournoi"><a href="{% url "tennis.views.staffTournoi" %}">
+	    	<span class=" visible-md visible-lg"><i class="fa fa-trophy fa-g"></i> Tournois</span>
+	    	<span class="visible-sm"><i class="fa fa-trophy fa-lg"></i></span>
+	    	<span class="visible-xs"><i class="fa fa-trophy"></i></span>
+		{% endif %}
+	    </a></li>
+	    {% if perms.tennis.Court %}<li {% block ongTerrain %}{% endblock %} id="terrain"><a href="{% url "tennis.views.staffTerrain" %}">
+	    	<span class=" visible-md visible-lg"><i class="fa fa-th-large fa-g"></i> Terrains</span>
+	    	<span class="visible-sm"><i class="fa fa-th-large fa-lg"></i></span>
+	    	<span class="visible-xs"><i class="fa fa-th-large"></i></span>
+		</a></li>{% endif %}
+	    {% if perms.tennis.Pair %}<li {% block ongPaires %}{% endblock %} id="paire"><a href="{% url "tennis.views.staffPaire" %}">
+	    	<span class=" visible-md visible-lg"><i class="fa fa-venus-mars fa-g"></i> Paires</span>
+	    	<span class="visible-sm"><i class="fa fa-venus-mars fa-lg"></i></span>
+	    	<span class="visible-xs"><i class="fa fa-venus-mars"></i></span>
+		</a></li>{% endif %}
+	    {% if perms.tennis.User %}<li {% block ongUser %}{% endblock %} id="user"><a href="{% url "tennis.views.staffUser" %}">
+	    	<span class=" visible-md visible-lg"><i class="fa fa-user fa-g"></i> Utilisateurs</span>
+	    	<span class="visible-sm"><i class="fa fa-user fa-lg"></i></span>
+	    	<span class="visible-xs"><i class="fa fa-user"></i></span>
+		</a></li>{% endif %}
+	    {% if perms.tennis.Extra %}<li {% block ongExtras %}{% endblock %} id="extra"><a href="{% url "tennis.views.staffExtra" %}">
+	    	<span class=" visible-md visible-lg"><i class="fa fa-pencil-square-o fa-g"></i> Inscriptions</span>
+	    	<span class="visible-sm"><i class="fa fa-pencil-square-o fa-lg"></i></span>
+	    	<span class="visible-xs"><i class="fa fa-pencil-square-o"></i></span>
+	    </a></li>{% endif %}
+	    <li {% block ongLog %}{% endblock %} id="log"><a href="{% url "tennis.views.staffLog" %}">
+	    	<span class=" visible-md visible-lg"><i class="fa fa-list-alt fa-g"></i> Historique</span>
+	    	<span class="visible-sm"><i class="fa fa-list-alt fa-lg"></i></span>
+	    	<span class="visible-xs"><i class="fa fa-list-alt"></i></span>
+	    </a></li>
+	    {% if perms.tennis.Droit %}<li {% block ongPerm %}{% endblock %} id="droit"><a href="{% url "tennis.views.staffPerm" %}">
+	    	<span class=" visible-md visible-lg"><i class="fa fa-wrench fa-g"></i> Permissions</span>
+	    	<span class="visible-sm"><i class="fa fa-wrench fa-lg"></i></span>
+	    	<span class="visible-xs"><i class="fa fa-wrench"></i></span>
+	    </a></li>{% endif %}
+  	</ul>
+	{% block bodyStaff %}
+	{% endblock %}
+
+</div>
+
+{% endblock %}

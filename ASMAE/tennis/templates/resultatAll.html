@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Tous les Résultats{% endblock %}
+
+{% block body %}
+
+<div class="container">
+	<div class="content-box">
+		<h2 class="center">Tous les résultats</h2>
+		<hr class="line">
+		{%for elem in info %}
+		<a href="{% url "tennis.views.resultat" elem.edition %}">Résultats de l'édition {{elem.edition}} ({{elem.date|date:"Y"}})</a> <br>
+		{% endfor %}
+
+	</div>
+</div>
+
+{% endblock %}

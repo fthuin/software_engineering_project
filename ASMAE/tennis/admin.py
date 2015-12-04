@@ -2,8 +2,10 @@
 from django.contrib import admin
 from tennis.models import Extra,Participant,Court,Tournoi,Pair, CourtState, CourtSurface, CourtType, LogActivity, Poule, Score, TournoiStatus, PouleStatus, Arbre, TournoiTitle, TournoiCategorie, infoTournoi, Ranking
 # Register your models here.
+from dump_table import participant, court
 
 class ParticipantAdmin(admin.ModelAdmin):
+    actions = [participant.export_csv]
     list_display = ('titre', 'nom', 'prenom', 'rue', 'numero', 'codepostal', 'telephone', 'fax', 'gsm', 'datenaissance', 'classement', 'oldparticipant', 'localite')
     list_display_links = ('nom',)
     list_filter = ('titre',)
@@ -21,6 +23,7 @@ class PairAdmin(admin.ModelAdmin):
     ordering = ('id',)
 
 class CourtAdmin(admin.ModelAdmin):
+    actions = [court.export_csv]
     list_display = ('id', 'user', 'rue', 'numero', 'codepostal', 'localite', 'matiere', 'type', 'dispoSamedi', 'dispoDimanche', 'etat', 'valide')
     ordering = ('id',)
 

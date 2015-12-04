@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Ma page{% endblock %}
+{% block nav-terrain %}class="active"{% endblock %}
+
+{% block body %}
+
+<div class="container">
+	<div class="content-box" {% if court.0 %}style="display:none;"{% endif %}>
+		<h2>Informations</h2>
+		<hr class="line">
+		<p><strong>Vous n'avez actuellement enregistré aucun terrain.</strong> Si vous possédez un terrain,
+			nous vous invitons à l'enregistrer pour permettre à des joueurs du Charles de Lorraine de disputer
+			des matchs sur celui-ci lors du weekend de tournoi.
+		</p>
+		<p>Les informations introduites pourront être modifiées à tout moment et vous serez contactés avant
+		l'utilisation de votre terrain.</p>
+
+		<button onClick="location.href='{% url "tennis.views.registerTerrain" %}';" class="btn btn-default b-center">Enregistrer un nouveau terrain</button>
+
+	</div>
+	<div class="row" {% if not court.0 %}style="display:none;"{% endif %}>
+		<div class="col-lg-7">
+			<!-- Les différents terrains -->
+			<!-- TODO set info -->
+			<div class="content-box">
+				<h2 class="center">Mes terrains</h2>
+				<hr class="line">
+
+
+				<!-- Panel infos -->
+				<div class="panel panel-default">
+					<div class="panel-heading">Mes terrains</div>
+		                <div class="table-responsive">
+		                    <table class="table table-hover">
+		                        <thead>
+                                  <tr>
+                                    <th>ID</th>
+                                    <th>Matière</th>
+                                    <th>Adresse</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    {% for elem in court %}
+                                        <tr onclick="window.document.location='{% url 'tennis.views.editTerrain' elem.id %}'" class="clickable-row">
+                                           <td>{{ elem.id }}</td>
+                                           <td>{{ elem.matiere }}</td>
+                                           <td>{{ elem.rue }} {{ elem.numero}}, {{ elem.codepostal }} {{ elem.localite }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+		                    </table>
+		                </div>
+					</div>
+				<!-- Inscription -->
+				<button onClick="location.href='{% url "tennis.views.registerTerrain" %}';" class="btn btn-default b-center">Enregistrer un nouveau terrain</button>
+			</div>
+		</div>
+		<div class="col-lg-5">
+			<!-- Les activités -->
+			<!-- TODO set info -->
+			<div class="content-box">
+				<h2 class="center">Activités</h2>
+				<hr class="line">
+
+				{% for elem in court %}
+				<!-- Panel infos -->
+				<div class="panel panel-default">
+					<div class="panel-heading">Terrain {{elem.id}} - {{elem.localite}}</div>
+					<div class="table-responsive">
+		                    <table class="table table-hover">
+		                        <thead>
+                                  <tr>
+                                    <th>Poule</th>
+                                    <th>Tournoi</th>
+                                    <th>Jour</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+						{% for p in elem.poule_set.all %}
+						{% if p.tournoi.status.numero >= 2 %}
+								<tr>
+                                    <td>Poule {{p.id}}</td>
+                                    <td>{{p.tournoi}}</td>
+                                    <td>{{p.tournoi.titre.jour}}</td>
+                                  </tr>
+                        {% endif %}
+						{% endfor %}
+								</tbody>
+							</table>
+						</div>
+				</div>
+				{% endfor %}
+
+
+
+			</div>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}

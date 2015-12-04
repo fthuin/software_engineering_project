@@ -1,0 +1,254 @@
+{% extends "staff.html" %}
+
+{% block title %}Gestion des terrains{% endblock %}
+{% block ongTerrain %}class="active"{% endblock %}
+
+{% block bodyStaff %}
+
+<!-- Gestionnaire des terrains -->
+<div class="content-box" id="gestionTerrain">
+	<h2 class="center">Gestionnaire des terrains</h2>
+	<hr class="line">
+
+	<div class="row">
+		<div class="col-lg-4">
+			<!-- Paramètres de recherche avancée -->
+			<form method="post" action="{% url "tennis.views.staffTerrain" %}" class="form-horizontal">
+				{% csrf_token %}
+				<input type="text" name="page" style="display:none;" value="1" id="pageNumber">
+				<!-- Rechercher -->
+				<div class="row" style="margin-bottom:15px;">
+					<div class="col-lg-10 col-lg-offset-1 col-sm-4 col-sm-offset-4">
+						<div class="input-group">
+					      <input type="text" class="form-control" value="{{recherche}}" placeholder="Rechercher" name="rechercheField">
+					      <span class="input-group-btn">
+					        <button class="btn btn-default" type="submit" id="search_court_button"><span class="glyphicon glyphicon-search"></span></button>
+					      </span>
+					    </div>
+					</div>
+				</div>
+				<div class="panel panel-default center-block" style="max-width:300px;">
+				    <div class="panel-heading" onclick="setPlusMoins()" data-toggle="collapse" data-target="#list_criteria" style="cursor:pointer;" href="#list_criteria">Critères d'affichage <span id="plusmoins" class="glyphicon glyphicon-chevron-up pull-right"></span></div>
+				    <div class="list-group panel-collapse collapse in" id="list_criteria">
+
+				    	<li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-5">Matière</label>
+							    <div class="col-sm-7">
+								    <select id="material_selector" class="form-control" name="material">
+								        <option value="" selected>Tous</option>
+								        {% for courtSurface in allCourtSurface %}
+									  	<option value="{{ courtSurface.nom }}">{{ courtSurface.nom }}</option>
+									  	{% endfor %}
+								    </select>
+								</div>
+							</div>
+					    </li>
+					    <li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-5">Validation</label>
+							    <div class="col-sm-7">
+								    <select id="validation_selector" class="form-control" name="validation">
+								        <option value="" selected>Tous</option>
+								        <option value="True">Oui</option>
+								        <option value="False">Non</option>
+								    </select>
+								</div>
+							</div>
+					    </li>
+
+					    <li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-5">Utilisé</label>
+							    <div class="col-sm-7">
+								    <select id="used_selector" class="form-control" name="used">
+								        <option value="" selected>Tous</option>
+								        <option value="True">Oui</option>
+								        <option value="False">Non</option>
+								    </select>
+								</div>
+							</div>
+					    </li>
+
+					    <li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-5">Disponibilité</label>
+							    <div class="col-sm-7">
+								    <select id="availability_selector" class="form-control" name="dispo">
+								        <option value="" selected>Tous</option>
+								        <option value="1">Samedi</option>
+								        <option value="2">Dimanche</option>
+								        <option value="3">Samedi et dimanche</option>
+								    </select>
+								</div>
+							</div>
+					    </li>
+					    <li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-5">Etat du terrain</label>
+							    <div class="col-sm-7">
+								    <select id="state_selector" class="form-control" name="state">
+								        <option value="" selected>Tous</option>
+								        {% for courtState in allCourtState %}
+									  	<option value="{{ courtState.nom }}">{{ courtState.nom }}</option>
+									   	{% endfor %}
+								    </select>
+								</div>
+							</div>
+					    </li>
+					    <li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-5">Type</label>
+							    <div class="col-sm-7">
+								    <select id="type_selector" class="form-control" name="type">
+								        <option value="" selected>Tous</option>
+							      	{% for courtType in allCourtType %}
+							      		<option value="{{ courtType.nom }}">{{ courtType.nom }}</option>
+									{% endfor %}
+								    </select>
+								</div>
+							</div>
+					    </li>
+					    <li class="list-group-item">
+						    <div class="row">
+							    <label class="control-label col-sm-5">Vétéran</label>
+							    <div class="col-sm-7">
+								    <select id="vet_selector" class="form-control" name="veteran">
+								        <option value="" selected>Tous</option>
+								        <option value="True">Oui</option>
+								        <option value="False">Non</option>
+								    </select>
+								</div>
+							</div>
+					    </li>
+					     <li class="list-group-item">
+							<div class="row">
+								<label class="control-label col-sm-5">Résultats</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="number" name="pagelength" value="{{pageLength}}">
+								</div>
+							</div>
+						</li>
+				    </div>
+				</div>
+			</form>
+		</div>
+
+		<div class="col-lg-8">
+			<!-- Liste des terrains -->
+			<div class="panel panel-default center-block" style="max-width:750px;">
+				<div class="panel-heading">Terrains</div>
+				<div class="table-responsive">
+				<table class="table table-hover">
+				<thead>
+		          <tr>
+		            <th>ID</th>
+		            <th>Matière</th>
+		            <th style="text-align:center">Valide</th>
+		            <th style="text-align:center">Utilisé</th>
+		            <th>Disponibilité</th>
+		            <th>Nom d'utilisateur</th>
+		            <th>Adresse</th>
+		            <th style="text-align:center">Vétéran</th>
+		          </tr>
+		          </thead>
+		          <tbody>
+		          	{% for court in allCourt %}
+		          	<tr onclick="window.open('{% url "tennis.views.validateTerrain" court.id %}','_blank');" class="clickable-row">
+		          		<td>{{court.id}}</td>
+		          		<td>{{court.matiere}}</td>
+		          		<td style="text-align:center">
+		          			{% if court.valide %}
+		        			<span class="glyphicon glyphicon-ok" style="color:green;"></span>
+		        			{% else %}
+		        			<span class="glyphicon glyphicon-remove" style="color:red;"></span>
+		        			{% endif %}
+		          		</td>
+		          		<td style="text-align:center">
+		          			{% if court.used %}
+		        			<span class="glyphicon glyphicon-ok" style="color:green;"></span>
+		        			{% else %}
+		        			<span class="glyphicon glyphicon-remove" style="color:red;"></span>
+		        			{% endif %}
+		          		</td>
+		          		<td>{{court.dispo}}</td>
+		          		<td>{{court.user.participant.codeName}}</td>
+		          		<td>{{court.user.participant.getAdresse}}</td>
+		          		<td style="text-align:center">
+		          			{% if court.usedLastYear %}
+		        			<span class="glyphicon glyphicon-ok" style="color:green;"></span>
+		        			{% else %}
+		        			<span class="glyphicon glyphicon-remove" style="color:red;"></span>
+		        			{% endif %}
+		          		</td>
+		          	</tr>
+		          	{% endfor %}
+		          </tbody>
+				</table>
+				</div>
+			</div>
+
+			<!-- Info -->
+			<p class="center" id="">{{debut}}-{{fin}} sur {{pageLength}} résultats ({{length}} au total)</p>
+
+			<!-- Bottom pagination -->
+			<div class="text-center">
+				<div id="paginationholder">
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+</div>
+{% endblock %}
+
+{% block commande %}
+<script>
+{% if material %}
+setSelectedIndex(document.getElementById("material_selector"),'{{material}}');
+{% endif %}
+
+{% if validation %}
+setSelectedIndex(document.getElementById("validation_selector"),'{{validation}}');
+{% endif %}
+
+{% if used %}
+setSelectedIndex(document.getElementById("used_selector"),'{{used}}');
+{% endif %}
+
+{% if dispo %}
+setSelectedIndex(document.getElementById("availability_selector"),'{{dispo}}');
+{% endif %}
+
+{% if state %}
+setSelectedIndex(document.getElementById("state_selector"),'{{state}}');
+{% endif %}
+
+{% if typeCourt %}
+setSelectedIndex(document.getElementById("type_selector"),'{{typeCourt}}');
+{% endif %}
+
+{% if veteran %}
+setSelectedIndex(document.getElementById("vet_selector"),'{{veteran}}');
+{% endif %}
+//Nombre de page
+var total = Math.max(Math.ceil({{length}}/{{pageLength}}), 1);
+//Notre pagination
+$('#paginationholder').html('');
+$('#paginationholder').html('<ul class="pagination" id="CourtPagination"></ul>');
+$('#CourtPagination').twbsPagination({
+    totalPages: total,
+    visiblePages: Math.min(total, 5),
+    startPage: {{page}},
+    onPageClick: function (event, page) {
+        //Lorsqu'on click sur une page, on met à jours le contenu
+        document.getElementById("pageNumber").value = page;
+		document.getElementById("search_court_button").click();
+    }
+});
+
+</script>
+{% endblock %}

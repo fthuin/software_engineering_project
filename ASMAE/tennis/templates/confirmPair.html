@@ -1,0 +1,137 @@
+{% extends "tournoi.html" %}
+
+{% block title %}Confirmer Pair {{ pair.id }}{% endblock %}
+
+{% block body %}
+
+<div class="container">
+	<div class="content-box">
+		<h2 class="center">Confirmer Paire {{ pair.id }}</h2>
+		<hr class="line">
+
+		<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.confirmPair" pair.id %}"onsubmit="" >
+		{% csrf_token %}
+
+			<div class="row">
+				<div class="col-sm-4 col-sm-offset-0">
+					<h4 class="center">Tournoi : {{ pair.tournoi }}</h4>
+				</div>
+				<div class="col-sm-7">
+					<p class="info">{{ pair.tournoi.description }}</p>
+				</div>
+			</div>
+
+			<div class="row">
+
+				<div class="col-sm-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">Joueur 1</div>
+						<div class="panel-body">
+							<h4 class="center">{{ pair.user1.participant.prenom }} {{ pair.user1.participant.nom }} ({{ pair.user1.username }})</h4>
+						    <!-- Extra -->
+							<div class="form-group">
+						      <label class="control-label col-sm-4" for="username">Extras : </label>
+						      <div class="col-sm-8">
+						      	{% for extra in extra1 %}
+						      	<div class="checkbox">
+							      <label><input type="checkbox" value="{{ extra.id }}" disabled checked>{{ extra.nom }} ({{ extra.prix }} €)</label>
+							    </div>
+							    {% endfor %}
+							{% for extra in extranot1 %}
+						      	<div class="checkbox">
+							      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
+							    </div>
+							    {% endfor %}
+						      </div>
+						    </div>
+						    <!-- Info -->
+							<div class="form-group">
+						      <label class="info control-label col-sm-4" for="username">Informations : </label>
+						      <div class="col-sm-8">
+						      	<p class="info">{% if pair.comment1 %}{{ pair.comment1 }}{% else %} - {% endif %}</p>
+						      </div>
+						    </div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">Joueur 2</div>
+						<div class="panel-body">
+							<h4 class="center">{{ pair.user2.participant.prenom }} {{ pair.user2.participant.nom }} ({{ pair.user2.username }})</h4>
+						    <!-- Extra -->
+							<div class="form-group">
+						      <label class="control-label col-sm-4" for="username">Extras : </label>
+						      <div class="col-sm-8">
+						      	{% for extra in extra1 %}
+						      	<div class="checkbox">
+							      <label><input type="checkbox" name="extra" value="{{ extra.id }}" >{{ extra.nom }} ({{ extra.prix }} €)</label>
+							    </div>
+							    {% endfor %}
+							{% for extra in extranot1 %}
+						      	<div class="checkbox">
+							      <label><input type="checkbox" name="extra" value="{{ extra.id }}" >{{ extra.nom }} ({{ extra.prix }} €)</label>
+							    </div>
+							    {% endfor %}
+						      </div>
+						    </div>
+						    <!-- Info -->
+							<div class="form-group">
+						      <label class="info control-label col-sm-4" for="username">Informations : </label>
+						      <div class="col-sm-8">
+						      	<textarea class="form-control" rows="3" name="remarque" id="remarque" placeholder="Ajouter une remarque et/ou souhaits ..."></textarea>
+						      </div>
+						    </div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Inscription button -->
+			<ul class="list-inline text-center">
+				<li>
+					<button class="btn btn-default center-block" name="action" value="validate" style="margin-top:20px;">Valider</button>
+				</li>
+				<li>
+					<button class="btn-default btn" type="button" data-toggle="modal" data-target="#myModal">Refuser</button>
+					<button class="btn btn-default center-block" id="refusePair" name="action" value="refuse" style="margin-top:20px;display:none;">Refuser</button>
+				</li>
+			</ul>
+
+
+
+		</form>
+
+	</div>
+</div>
+
+<!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title center">Confirmation de refus</h4>
+        </div>
+        <div class="modal-body">
+          <p>Etes-vous sûr de vouloir refuser cette demande d'inscription?</p>
+
+	    	<ul class="list-inline text-center">
+				<li>
+					<button type="button" class="btn btn-default" onclick="document.getElementById('refusePair').click();">oui</button>
+				</li>
+				<li>
+					<button type="button" class="btn btn-default" data-dismiss="modal">non</button>
+				</li>
+			</ul>
+		</div>
+      </div>
+
+    </div>
+  </div>
+
+
+{% endblock %}
