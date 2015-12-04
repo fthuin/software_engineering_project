@@ -24,3 +24,4 @@ urlpatterns = patterns('',
 		url(r'^tennis/', include('tennis.urls')),
 	)
 
+handler404 = 'tennis.views.qcq'
