@@ -708,75 +708,8 @@ def staffTerrain(request):
 
 @permission_required('tennis.Pair')
 def staffPaire(request):
-    page = 1
-    pageLength = 10
-    recherche = ""
-    validation = ""
-    paiement = ""
-    tournoi = ""
-    if request.method == 'POST':
-        page = request.POST['page']
-        pageLength = int(request.POST['pagelength'])
-        recherche = request.POST['rechercheField'].strip()
-        validation = request.POST['validation']
-        paiement = request.POST['paiement']
-        tournoi = request.POST['tournoi']
-
-    allPair = Pair.objects.all()
-
-    if recherche != "":
-        if db_type == "postgresql":
-            allPair = allPair.filter(
-                Q(id__icontains=recherche) |
-                Q(user1__username__unaccent__icontains=recherche) |
-                Q(user1__participant__nom__unaccent__icontains=recherche) |
-                Q(user1__participant__prenom__unaccent__icontains=recherche) |
-                Q(user2__username__unaccent__icontains=recherche) |
-                Q(user2__participant__nom__unaccent__icontains=recherche) |
-                Q(user2__participant__prenom__unaccent__icontains=recherche))
-        else:
-            allPair = allPair.filter(
-                Q(id__icontains=recherche) |
-                Q(user1__username__icontains=recherche) |
-                Q(user1__participant__nom__icontains=recherche) |
-                Q(user1__participant__prenom__icontains=recherche) |
-                Q(user2__username__icontains=recherche) |
-                Q(user2__participant__nom__icontains=recherche) |
-                Q(user2__participant__prenom__icontains=recherche))
-
-    if validation != "":
-        if validation == "True":
-            allPair = allPair.filter(valid=True)
-        else:
-            allPair = allPair.filter(valid=False)
-
-    if paiement != "":
-        if paiement == "True":
-            allPair = allPair.filter(pay=True)
-        else:
-            allPair = allPair.filter(pay=False)
-
-    if tournoi != "":
-        title = tournoi
-        cat = tournoi
-        if "_" in tournoi:
-            title = tournoi.split("_")[0]
-            cat = tournoi.split("_")[1]
-        t = TournoiTitle.objects.get(nom=title)
-        c = TournoiCategorie.objects.get(nom=cat)
-        new_tournoi = Tournoi.objects.get(titre=t, categorie=c)
-        allPair = allPair.filter(tournoi=new_tournoi)
-
-    allPair = allPair.order_by("id")
-    length = len(allPair)
-    debut = ((int(page) - 1) * pageLength) + 1
-    fin = debut + (pageLength - 1)
-    allPair = allPair[debut - 1:fin]
-    Tour = Tournoi.objects.all()
-
-    if request.user.is_authenticated():
-        return render(request, 'staffPair.html', locals())
-    return redirect(reverse(home))
+    from views_helper import staff_paires
+    return staff_paires.view(request)
 
 
 @permission_required('tennis.Extra')
@@ -1269,169 +1202,14 @@ def pairPDF(request, id):
 
 @permission_required('tennis.Court')
 def editTerrainStaff(request, id):
-    allCourtSurface = CourtSurface.objects.all()
-    allCourtType = CourtType.objects.all()
-    allCourtState = CourtState.objects.all()
-    court = Court.objects.get(id=id)
-    if request.method == "POST":
-        if request.POST['action'] == "modifyCourt":
-            rue = request.POST['street']
-            numero = request.POST['number']
-            boite = request.POST['boite']
-            postalcode = request.POST['postalcode']
-            locality = request.POST['locality']
-            lat = request.POST['lat']
-            lng = request.POST['lng']
-            acces = request.POST['acces']
-            matiere = (u'' + request.POST['matiere']).encode('utf-8')
-            type = request.POST['type']
-            etat = (u'' + request.POST['etat']).encode('utf-8')
-            commentaire = request.POST['comment']
-            if request.POST.__contains__("dispoSamedi"):
-                dispoSamedi = True
-            else:
-                dispoSamedi = False
-            if request.POST.__contains__("dispoDimanche"):
-                dispoDimanche = True
-            else:
-                dispoDimanche = False
-
-            if (rue == "" or numero == "" or postalcode == "" or locality == "" or matiere == "" or type == "" or etat == ""):
-                errorAdd = "Veuillez remplir tous les champs obligatoires !"
-                return render(request, 'registerTerrain.html', locals())
-
-            court.rue = rue
-            court.numero = numero
-            court.boite = boite
-            court.codepostal = postalcode
-            court.localite = locality
-            court.acces = acces
-            court.matiere = CourtSurface.objects.get(nom=matiere)
-            court.type = CourtType.objects.get(nom=type)
-            court.dispoDimanche = dispoDimanche
-            court.dispoSamedi = dispoSamedi
-            court.etat = CourtState.objects.get(nom=etat)
-            court.commentaire = commentaire
-            court.longitude = lng
-            court.latitude = lat
-            court.save()
-            LogActivity(user=request.user, section="Terrain",
-                        details="Terrain " + id + " edite").save()
-            #successEdit = "Terrain "+str(id)+" bien édité!"
-            return redirect(reverse(validateTerrain, args={id}))
-
-        if request.POST['action'] == "deleteCourt":
-            court.delete()
-            LogActivity(user=request.user, section="Terrain",
-                        details="Terrain " + id + " delete").save()
-            return redirect(reverse(staffTerrain))
-    if request.user.is_authenticated():
-        return render(request, 'editTerrainStaff.html', locals())
-    return redirect(reverse(home))
+    from views_helper import staff_terrain_edition
+    return staff_terrain_edition.view(request, id)
 
 
 @permission_required('tennis.Pair')
 def validatePair(request, id):
-    pair = Pair.objects.get(id=id)
-
-    allTournoi = Tournoi.objects.all()
-
-    # Check si la paire fait deja partie d'une poule
-    noPoule = True
-    for elem in Poule.objects.all():
-        if pair in elem.paires.all():
-            noPoule = False
-            break
-
-    info = infoTournoi.objects.all()
-    info = info.order_by("edition")[len(info) - 1]
-    today = info.date
-    born = pair.user1.participant.datenaissance
-    age1 = today.year - born.year - \
-        ((today.month, today.day) < (born.month, born.day))
-
-    born = pair.user2.participant.datenaissance
-    age2 = today.year - born.year - \
-        ((today.month, today.day) < (born.month, born.day))
-
-    if request.method == "POST":
-        if request.POST['action'] == "editPair":
-            valid = request.POST['valid']
-            paid = request.POST['pay']
-            tournoi = request.POST['tournoi']
-            title = tournoi
-            cat = tournoi
-            if "_" in tournoi:
-                title = tournoi.split("_")[0]
-                cat = tournoi.split("_")[1]
-
-            t = TournoiTitle.objects.get(nom=title)
-            c = TournoiCategorie.objects.get(nom=cat)
-            new_tournoi = Tournoi.objects.get(titre=t, categorie=c)
-
-            if new_tournoi != pair.tournoi:
-                pair.tournoi = new_tournoi
-                LogActivity(user=request.user, section="Pair", details="Pair " +
-                            id + " tournoi = " + str(new_tournoi)).save()
-            if valid == "Oui":
-                valider = True
-                if valider != pair.valid:
-                    LogActivity(user=request.user, section="Pair",
-                                details="Pair " + id + " valide").save()
-            else:
-                valider = False
-                if valider != pair.valid:
-                    LogActivity(user=request.user, section="Pair",
-                                details="Pair " + id + " non valide").save()
-            if paid == "Oui":
-                payer = True
-                if payer != pair.pay:
-                    LogActivity(user=request.user, section="Pair",
-                                details="Pair " + id + " paye").save()
-            else:
-                payer = False
-                if payer != pair.pay:
-                    LogActivity(user=request.user, section="Pair",
-                                details="Pair " + id + " non paye").save()
-            pair.valid = valider
-            pair.pay = payer
-            pair.save()
-            return redirect(reverse(validatePair, args={id}))
-
-        if request.POST['action'] == "deletePair":
-            pair.delete()
-            LogActivity(user=request.user, section="Pair",
-                        details="Pair " + id + " delete").save()
-            return redirect(reverse(staffPaire))
-
-    Ex = Extra.objects.all()
-    extra1 = pair.extra1.all()
-    extranot1 = list()
-    for elem in Ex:
-        contained = False
-        for el in extra1:
-            if elem.id == el.id:
-                contained = True
-        if contained == False:
-            extranot1.append(Extra.objects.get(id=elem.id))
-
-    extra2 = pair.extra2.all()
-    extranot2 = list()
-    for elem in Ex:
-        contained = False
-        for el in extra2:
-            if elem.id == el.id:
-                contained = True
-        if contained == False:
-            extranot2.append(Extra.objects.get(id=elem.id))
-
-    birthdate1 = pair.user1.participant.datenaissance
-    formatedBirthdate1 = birthdate1.strftime('%d/%m/%Y')
-    birthdate2 = pair.user2.participant.datenaissance
-    formatedBirthdate2 = birthdate2.strftime('%d/%m/%Y')
-    if request.user.is_authenticated():
-        return render(request, 'validatePair.html', locals())
-    return redirect(reverse(home))
+    from views_helper import staff_validation_paire
+    return staff_validation_paire.view(request, id)
 
 
 def profil(request):
@@ -1440,37 +1218,8 @@ def profil(request):
 
 
 def connect(request):
-    if request.method == "POST":
-        # Recuperation des donnees
-        username = request.POST['username']
-        password = request.POST['password']
-
-        # check email
-        if username == "":
-            error = "Veuillez entrer un nom d'utilisateur valide !"
-            return render(request, 'login.html', locals())
-
-        # check password
-        if password == "":
-            error = "Veuillez entrer un mot de passe !"
-            return render(request, 'login.html', locals())
-
-        # Connection
-        user = authenticate(username=username, password=password)
-        # Si l'utilisateur existe et qu'il est actif on le connecte sinon on
-        # affiche un message d'erreur
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return redirect(reverse(tournoi))
-            else:
-                error = "Ce compte a été désactivé !"
-                return render(request, 'login.html', locals())
-        else:
-            # invalide login
-            error = "Nom d'utilisateur ou mot de passe non conforme !"
-            return render(request, 'login.html', locals())
-    return render(request, 'login.html', locals())
+    from views_helper import connexion
+    return connexion.view(request)
 
 
 def deconnect(request):
