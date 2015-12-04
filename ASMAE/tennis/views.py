@@ -37,16 +37,16 @@ def home(request):
 
 
 def qcq(request):
-    return render(request, 'tennis/404.html', {})
+    return render(request, '404.html', {})
 
 
 def sponsors(request):
-    return render(request, 'tennis/sponsors.html', {})
+    return render(request, 'sponsors.html', {})
 
 
 def allResult(request):
     info = infoTournoi.objects.all()
-    return render(request, 'tennis/resultatAll.html', locals())
+    return render(request, 'resultatAll.html', locals())
 
 
 def resultat(request, id):
@@ -71,7 +71,7 @@ def resultat(request, id):
 
     ti = None
 
-    return render(request, 'tennis/resultat.html', locals())
+    return render(request, 'resultat.html', locals())
 
 
 def contact(request):
@@ -84,244 +84,17 @@ def contact(request):
                 successSendMail = u"Votre message a bien été envoyé"
             else:
                 echecSendMail = u"Une erreur s'est produite lors de l'envois de votre message,\nle problème a été signaler au staff et sera résolu dans les plus bref délais. Désole de l'inconvénience, réessayer dans quelques heures"
-    return render(request, 'tennis/contact.html', locals())
+    return render(request, 'contact.html', locals())
 
 
 def tournoi(request):
-    if request.user.is_authenticated():
-        if Participant.objects.get(user=request.user).isAccountActivated:
-            nonComfirme = request.user.user1.filter(confirm=False)
-            demande = request.user.user2.filter(confirm=False)
-            inscrit1 = request.user.user1.filter(confirm=True)
-            inscrit2 = request.user.user2.filter(confirm=True)
-            inscrit = list(chain(inscrit1, inscrit2))
-            agenda = False
-            info = infoTournoi.objects.all()
-            info = info.order_by("edition")[len(info) - 1]
-            date1 = info.date
-            date2 = date1 + datetime.timedelta(days=1)
-            for elem in inscrit:
-                if elem.tournoi.titre.jour == "Samedi":
-                    elem.date = date1.strftime('%d/%m/%Y')
-                else:
-                    elem.date = date2.strftime('%d/%m/%Y')
-                if elem.valid and elem.tournoi.status.numero >= 2:
-                    agenda = True
-            return render(request, 'tennis/tournoi.html', locals())
-        else:
-            return render(request, 'tennis/tournoiUserNotValidated.html', locals())
-    return redirect(reverse(home))
+    from views_helper import tournoi as tournoipage
+    return tournoipage.view(request)
 
 
 def inscriptionTournoi(request):
-    page = 1
-    pageLength = 10
-    recherche = ""
-    if request.method == 'POST':
-        if request.POST['action'] == "search":
-            page = request.POST['page']
-            recherche = request.POST['rechercheField'].strip()
-
-    Ex = Extra.objects.only
-    Tour = Tournoi.objects.all()
-    # Liste des user ordered et sans sois meme
-    Use = User.objects.all().order_by('username').exclude(
-        username=request.user.username)
-    # On retire les staff et les admins
-    Use = Use.exclude(is_staff=True).exclude(
-        groups__name="Admin").exclude(groups__name="staff")
-
-    if recherche != "":
-        if db_type == "postgresql":
-            Use = Use.filter(
-                Q(username__unaccent__icontains=recherche) |
-                Q(participant__nom__unaccent__icontains=recherche) |
-                Q(participant__prenom__unaccent__icontains=recherche))
-        else:
-            Use = Use.filter(
-                Q(username__icontains=recherche) |
-                Q(participant__nom__icontains=recherche) |
-                Q(participant__prenom__icontains=recherche))
-
-    # Utilisateur courant
-    u = request.user
-
-    print(u.user_permissions.all())
-
-    # Recuperations des infos
-    info = infoTournoi.objects.all()
-    info = info.order_by("edition")[len(info) - 1]
-    today = info.date
-
-    # Tri de la liste
-
-    # Libre samedi/dimanche
-    libre_Samedi = True
-    libre_Dimanche = True
-    for elem in u.user1.all() or u.user2.all():
-        if elem.tournoi.titre.jour == "Samedi":
-            libre_Samedi = False
-        else:
-            libre_Dimanche = False
-
-    famille_25 = yearsago(25, today)
-    famille_15 = yearsago(15, today)
-
-    querysets = list()
-    # Liste contenant les utilisateurs pour le tournoi des familles
-    famille_list = list()
-    if libre_Samedi:
-        # Check tournoi des familles
-        #- de 15 ans
-        if u.participant.datenaissance >= famille_15:
-            # On garde les utilisateur de + de 25 ans
-            famille_list = Use.filter(
-                participant__datenaissance__lte=famille_25)
-            # On retire ceux qui ne sont pas libre le samedi
-            famille_list = famille_list.exclude(user1__tournoi__titre__jour="Samedi").exclude(
-                user2__tournoi__titre__jour="Samedi")
-            querysets.append(famille_list)
-        #+ de 25 ans
-        elif u.participant.datenaissance <= famille_25:
-            # On garde les utilisateur de - de 15 ans
-            famille_list = Use.filter(
-                participant__datenaissance__gte=famille_15)
-            # On retire ceux qui ne sont pas libre le samedi
-            famille_list = famille_list.exclude(user1__tournoi__titre__jour="Samedi").exclude(
-                user2__tournoi__titre__jour="Samedi")
-            querysets.append(famille_list)
-
-    # Liste du samedi (except tournoi des familles)
-    samedi_list = list()
-    if libre_Samedi:
-        # On prend seulement les joueur du sexe opposé
-        samedi_list = Use.exclude(participant__titre=u.participant.titre)
-        # On retire ceux qui ne sont pas libre samedi
-        samedi_list = samedi_list.exclude(user1__tournoi__titre__jour="Samedi").exclude(
-            user2__tournoi__titre__jour="Samedi")
-        querysets.append(samedi_list)
-
-    # Liste du dimanche
-    dimanche_list = list()
-    if libre_Dimanche:
-        # On prend seulement les joueurs du meme sexe
-        dimanche_list = Use.filter(participant__titre=u.participant.titre)
-        # On retire ceux qui ne sont pas libre dimanche
-        dimanche_list = dimanche_list.exclude(user1__tournoi__titre__jour="Dimanche").exclude(
-            user2__tournoi__titre__jour="Dimanche")
-        querysets.append(dimanche_list)
-
-    debut = ((int(page) - 1) * pageLength) + 1
-    fin = debut + (pageLength - 1)
-    length = 0
-    if len(querysets) > 0:
-        # Merge query sets
-        Use = reduce(or_, querysets[1:], querysets[0])
-        length = len(Use)
-        Use = Use[debut - 1:fin]
-    else:
-        Use = list()
-
-    # calcul des ages des users
-    born = request.user.participant.datenaissance
-    request.user.age = today.year - born.year - \
-        ((today.month, today.day) < (born.month, born.day))
-
-    for u in Use:
-        born = u.participant.datenaissance
-        u.age = today.year - born.year - \
-            ((today.month, today.day) < (born.month, born.day))
-
-    if request.method == "POST":
-        if request.POST['action'] == "formPair":
-            # On recupère les donnée du formualaire
-            username2 = request.POST['username2']
-            comment1 = request.POST['remarque']
-            title_tournoi = request.POST['title_tournoi']
-            categorie_tournoi = request.POST['categorie_tournoi']
-            if categorie_tournoi == "-":
-                categorie_tournoi = title_tournoi
-            # On recupere le tournoi en fonction du titre et de la categorie
-            t = TournoiTitle.objects.get(nom=title_tournoi)
-            c = TournoiCategorie.objects.get(nom=categorie_tournoi)
-            tournois = Tournoi.objects.get(titre=t, categorie=c)
-            extra = request.POST.getlist('extra')
-            # On recupere les extras pris par l'utilisateur
-            extra1 = list()
-            for elem in extra:
-                extra1.append(Extra.objects.get(id=elem))
-            # On en déduit les extras non pris par l'utilisateur
-            extranot1 = list()
-            Ex = Extra.objects.all()
-            for elem in Ex:
-                contained = False
-                for el in extra1:
-                    if elem.id == el.id:
-                        contained = True
-                if contained == False:
-                    extranot1.append(Extra.objects.get(id=elem.id))
-
-            # On vérifie que l'utilisateur a bien rentré un deuxieme joueur
-            if (username2 == ""):
-                errorAdd = "Veuillez rajouter un deuxieme joueur pour votre pair"
-                return render(request, 'tennis/inscriptionTournoi.html', locals())
-
-            # On véririe qu'il ne s'est pas entré lui meme
-            user1 = User.objects.get(username=request.user.username)
-            user2 = User.objects.get(username=username2)
-
-            if (user1 == user2):
-                errorAdd = "Vous ne pouvez pas faire une pair avec vous meme"
-                return render(request, 'tennis/inscriptionTournoi.html', locals())
-
-            # Série de vérification pour que l'utilisateur ou son partenaire ne
-            # soit pas inscrit dans un tournoi du meme jour
-            user1Tournoi1 = user1.user1.all()
-            user1Tournoi2 = user1.user2.all()
-
-            user2Tournoi1 = user2.user1.all()
-            user2Tournoi2 = user2.user2.all()
-
-            for elem in user1Tournoi1:
-                if(elem.tournoi.titre.jour == tournois.titre.jour):
-                    errorAdd = "Vous etes deja inscrit a un tournoi ce jour!"
-                    return render(request, 'tennis/inscriptionTournoi.html', locals())
-
-            for elem in user1Tournoi2:
-                if(elem.tournoi.titre.jour == tournois.titre.jour):
-                    errorAdd = "Vous etes deja inscrit a un tournoi ce jour!"
-                    return render(request, 'tennis/inscriptionTournoi.html', locals())
-
-            for elem in user2Tournoi1:
-                if(elem.tournoi.titre.jour == tournois.titre.jour and elem.confirm):
-                    errorAdd = "Le joueur 2 est deja inscrit dans un tournoi ce jour!"
-                    return render(request, 'tennis/inscriptionTournoi.html', locals())
-
-            for elem in user2Tournoi2:
-                if(elem.tournoi.titre.jour == tournois.titre.jour and elem.confirm):
-                    errorAdd = "Le joueur 2 est deja inscrit dans un tournoi ce jour!"
-                    return render(request, 'tennis/inscriptionTournoi.html', locals())
-
-            # On cré la pair
-            pair = Pair(tournoi=tournois, user1=user1, user2=user2,
-                        comment1=comment1, confirm=False, valid=False, pay=False)
-            pair.save()
-            # On rajoute les extras
-            for elem in extra:
-                ext = Extra.objects.get(id=elem)
-                pair.extra1.add(ext)
-
-            # Send mail
-            send_confirmation_email_pair_registered(Participant.objects.get(
-                user=pair.user1), Participant.objects.get(user=pair.user2))
-
-            pair.save()
-            return redirect(reverse(tournoi))
-
-    if request.user.is_authenticated():
-        extranot1 = Extra.objects.all()
-        return render(request, 'tennis/inscriptionTournoi.html', locals())
-    return redirect(reverse(home))
+    from views_helper import inscription_tournoi as inscriptionpage
+    return inscriptionpage.view(request)
 
 
 def confirmPair(request, id):
@@ -367,7 +140,7 @@ def confirmPair(request, id):
             if contained == False:
                 extranot1.append(Extra.objects.get(id=elem.id))
 
-        return render(request, 'tennis/confirmPair.html', locals())
+        return render(request, 'confirmPair.html', locals())
     return redirect(reverse(home))
 
 
@@ -395,7 +168,7 @@ def cancelPair(request, id):
             if contained == False:
                 extranot1.append(Extra.objects.get(id=elem.id))
 
-        return render(request, 'tennis/cancelPair.html', locals())
+        return render(request, 'cancelPair.html', locals())
     return redirect(reverse(home))
 
 
@@ -431,7 +204,7 @@ def viewPair(request, id):
                     contained = True
             if contained == False:
                 extranot2.append(Extra.objects.get(id=elem.id))
-        return render(request, 'tennis/viewPair.html', locals())
+        return render(request, 'viewPair.html', locals())
     return redirect(reverse(home))
 
 
@@ -464,7 +237,7 @@ def payPair(request, id):
             extraList.append((extra.nom, extra.prix, count))
             totalprice += float(count * extra.prix)
 
-        return render(request, 'tennis/payPair.html', locals())
+        return render(request, 'payPair.html', locals())
     return redirect(reverse(home))
 
 
@@ -508,7 +281,7 @@ def enterScore(request, id):
             scoreValues = scoreValues + repr(sco.paire1.id) + "-" + repr(sco.paire2.id) + "," + repr(
                 sco.point1) + "." + repr(sco.paire2.id) + "-" + repr(sco.paire1.id) + "," + repr(sco.point2) + "."
         scoreValues = scoreValues[:-1]
-        return render(request, 'tennis/playerScore.html', locals())
+        return render(request, 'playerScore.html', locals())
     return redirect(reverse(home))
 
 
@@ -516,9 +289,9 @@ def terrain(request):
     if request.user.is_authenticated():
         if Participant.objects.get(user=request.user).isAccountActivated:
             court = Court.objects.filter(user=request.user)
-            return render(request, 'tennis/terrain.html', locals())
+            return render(request, 'terrain.html', locals())
         else:
-            return render(request, 'tennis/terrainUserNotValidated.html', locals())
+            return render(request, 'terrainUserNotValidated.html', locals())
     return redirect(reverse(home))
 
 
@@ -550,7 +323,7 @@ def registerTerrain(request):
 
         if (rue == "" or numero == "" or postalcode == "" or locality == "" or matiere == "" or type == "" or etat == ""):
             errorAdd = "Veuillez remplir tous les champs obligatoires !"
-            return render(request, 'tennis/registerTerrain.html', locals())
+            return render(request, 'registerTerrain.html', locals())
 
         # Create court object
         court = Court(rue=rue, numero=numero, boite=boite, codepostal=postalcode, localite=locality, acces=acces, matiere=CourtSurface.objects.get(nom=matiere), type=CourtType.objects.get(
@@ -564,7 +337,7 @@ def registerTerrain(request):
         return redirect(reverse(terrain))
 
     if request.user.is_authenticated():
-        return render(request, 'tennis/registerTerrain.html', locals())
+        return render(request, 'registerTerrain.html', locals())
     return redirect(reverse(home))
 
 
@@ -605,7 +378,7 @@ def editTerrain(request, id):
 
             if (rue == "" or numero == "" or postalcode == "" or locality == "" or matiere == "" or type == "" or etat == ""):
                 errorAdd = "Veuillez remplir tous les champs obligatoires !"
-                return render(request, 'tennis/registerTerrain.html', locals())
+                return render(request, 'registerTerrain.html', locals())
 
             court.rue = rue
             court.numero = numero
@@ -634,13 +407,13 @@ def editTerrain(request, id):
     if request.user.is_authenticated():
 
         if request.user == court.user:
-            return render(request, 'tennis/editTerrain.html', locals())
+            return render(request, 'editTerrain.html', locals())
     return redirect(reverse(home))
 
 '''
 def staff(request):
 	if request.user.is_authenticated():
-		return render(request,'tennis/staff.html',locals())
+		return render(request,'staff.html',locals())
 	return redirect(reverse(home))
 '''
 
@@ -656,7 +429,7 @@ def staffTournoi(request):
             tourn.np = nbrPair
             pouleLength = len(Poule.objects.filter(tournoi=tourn))
             tourn.pl = pouleLength
-        return render(request, 'tennis/staffTournoi.html', locals())
+        return render(request, 'staffTournoi.html', locals())
     return redirect(reverse(home))
 
 
@@ -721,7 +494,7 @@ def pouleTournoi(request, name):
                     pai.score = sc
                     poule.SortedPair.append(pai)
 
-        return render(request, 'tennis/pouleTournoi.html', locals())
+        return render(request, 'pouleTournoi.html', locals())
     return redirect(reverse(home))
 
 # TODO permissions QUENTIN GUSBIN
@@ -894,7 +667,7 @@ def knockOff(request, name):
                     x = x + 1
         if tournoi.arbre is not None:
             arbre = tournoi.arbre
-        return render(request, 'tennis/knockOff.html', locals())
+        return render(request, 'knockOff.html', locals())
     return redirect(reverse(home))
 
 # TODO permission QUENTIN GUSBIN
@@ -921,7 +694,7 @@ def pouleViewScore(request, id):
             scoreValues = scoreValues + repr(sco.paire1.id) + "-" + repr(sco.paire2.id) + "," + repr(
                 sco.point1) + "." + repr(sco.paire2.id) + "-" + repr(sco.paire1.id) + "," + repr(sco.point2) + "."
         scoreValues = scoreValues[:-1]
-        return render(request, 'tennis/viewScore.html', locals())
+        return render(request, 'viewScore.html', locals())
     return redirect(reverse(home))
 
 
@@ -987,224 +760,15 @@ def pouleScore(request, id):
             scoreValues = scoreValues + repr(sco.paire1.id) + "-" + repr(sco.paire2.id) + "," + repr(
                 sco.point1) + "." + repr(sco.paire2.id) + "-" + repr(sco.paire1.id) + "," + repr(sco.point2) + "."
         scoreValues = scoreValues[:-1]
-        return render(request, 'tennis/pouleScore.html', locals())
+        return render(request, 'pouleScore.html', locals())
     return redirect(reverse(home))
 
 # TODO permission QUENTIN GUSBIN
 
 
 def generatePool(request, name):
-    title = name
-    cat = name
-    if "_" in name:
-        title = name.split("_")[0]
-        cat = name.split("_")[1]
-    ti = TournoiTitle.objects.get(nom=title)
-    ca = TournoiCategorie.objects.get(nom=cat)
-    tournoi = Tournoi.objects.get(titre=ti, categorie=ca)
-    terrains = Court.objects.filter(valide=True)
-    allPair = Pair.objects.filter(tournoi=tournoi, valid=True)
-    poules = Poule.objects.filter(tournoi=tournoi)
-
-    info = infoTournoi.objects.all()
-    info = info.order_by("edition")[len(info) - 1]
-    infTournoi = info
-    infLng = infTournoi.longitude
-    infLat = infTournoi.latitude
-
-    jour = tournoi.titre.jour
-    if(jour == "Samedi"):
-        terrains = terrains.filter(dispoSamedi=True)
-    else:
-        terrains = terrains.filter(dispoDimanche=True)
-
-    terrains.order_by('id')
-
-    if request.method == "POST":
-
-        terrainsList = request.POST['assignTerrains'].split('-')
-        terrainsList.pop()
-
-        leadersList = request.POST['assignLeaders'].split('/')
-        leadersList.pop()
-
-        pairspoulesList = request.POST['assignPairPoules'].split('-')
-        pairspoulesList.pop()
-
-        if request.POST['action'] == 'save':
-            tournoi.status = TournoiStatus.objects.get(numero=1)
-            tournoi.save()
-        elif request.POST['action'] == 'saveFinite':
-            tournoi.status = TournoiStatus.objects.get(numero=2)
-            tournoi.save()
-            LogActivity(user=request.user, section="Tournoi",
-                        details="Generation des poules du tournoi : " + tournoi.nom()).save()
-
-        i = 0
-        j = -1
-        pouleDict = {}
-        while (i < len(pairspoulesList)):
-            if pairspoulesList[i].startswith('[') and pairspoulesList[i].endswith(']'):
-                j += 1
-                pouleDict[j] = {}
-                pouleDict[j]['pairList'] = []
-                if terrainsList[j] != '':
-                    pouleDict[j]['terrain'] = Court.objects.get(
-                        id=terrainsList[j])
-                pouleDict[j]['leaderName'] = leadersList[j]
-            else:
-                pair = Pair.objects.get(id=pairspoulesList[i])
-                pouleDict[j]['pairList'].append(pair)
-                user1fullname = pair.user1.participant.prenom + ' ' + pair.user1.participant.nom
-                user2fullname = pair.user2.participant.prenom + ' ' + pair.user2.participant.nom
-                if user1fullname == pouleDict[j]['leaderName']:
-                    pouleDict[j]['leader'] = pair.user1
-                elif user2fullname == pouleDict[j]['leaderName']:
-                    pouleDict[j]['leader'] = pair.user2
-
-            i += 1
-        i = 0
-
-        # Au lieu de delete on parcours la liste
-        # Poule.objects.filter(tournoi=tournoi).delete()
-        score_list = list()
-        # On parcours et on garde les scores
-        for elem in Poule.objects.filter(tournoi=tournoi):
-            p2 = Poule(tournoi=tournoi)
-            p2.status = elem.status
-            p2.save()
-            for p in elem.paires.all():
-                p2.paires.add(p)
-            for p in elem.score.all():
-                p2.score.add(p)
-            score_list.append(p2)
-            elem.delete()
-
-        finali = True
-        while (i <= j):
-            p = Poule(tournoi=tournoi)
-            p.status = PouleStatus.objects.get(numero=0)
-            p.save()
-            if 'leader' in pouleDict[i]:
-                p.leader = pouleDict[i]['leader']
-            if 'terrain' in pouleDict[i]:
-                p.court = pouleDict[i]['terrain']
-            for pair in pouleDict[i]['pairList']:
-                p.paires.add(pair)
-
-            p.save()
-            # check si c'est les meme pair qu'une des liste
-            for elem in score_list:
-                pair_list = sorted(elem.paires.all(), key=lambda x: x.id)
-                pair_list2 = sorted(p.paires.all(), key=lambda x: x.id)
-                if pair_list == pair_list2:
-                    p.score = elem.score.all()
-                    p.status = elem.status
-                    if p.status.numero < 2:
-                        finali = False
-                    break
-                else:
-                    finali = False
-            i += 1
-            p.save()
-
-        for elem in score_list:
-            elem.delete()
-
-        if finali:
-            tournoi.status = TournoiStatus.objects.get(numero=3)
-            tournoi.save()
-        else:
-            tournoi.status = TournoiStatus.objects.get(numero=2)
-            tournoi.save()
-
-        if request.POST['action'] == 'save':
-            tournoi.status = TournoiStatus.objects.get(numero=1)
-            tournoi.save()
-            return redirect(reverse(generatePool, args={tournoi.nom()}))
-            #request.method = "GET"
-            # return generatePool(request,tournoi.nom)
-            # return
-            # HttpResponseRedirect('/tennis/staff/tournois/%s'%tournoi.nom)
-        else:
-            return redirect(reverse(staffTournoi))
-    if request.user.is_authenticated():
-
-        listTerrains = list(terrains)
-        listTerrainSaved = list()
-        listLeaderSaved = list()
-        nbrTerrains = len(listTerrains)
-
-        # TODO Restaurer la sauvergarde
-        listPoules = list(poules)
-
-        if len(listPoules) == 0:
-            saved = False
-
-            defaultSize = 6.0
-            defaultValue = int(math.ceil((len(allPair) / defaultSize)))
-            poolRange = range(0, defaultValue)
-            pairListAll = dict()
-            for x in range(0, defaultValue):
-                index = int(x * defaultSize)
-                pairListAll[x + 1] = (allPair[index:index + int(defaultSize)])
-                if x == defaultValue - 1:
-                    v = int(defaultSize) - len(pairListAll[x + 1])
-            today = date.today()
-            for elem in allPair:
-                u1 = elem.user1
-                born = u1.participant.datenaissance
-                u1.age = today.year - born.year - \
-                    ((today.month, today.day) < (born.month, born.day))
-                u2 = elem.user2
-                born = u2.participant.datenaissance
-                u2.age = today.year - born.year - \
-                    ((today.month, today.day) < (born.month, born.day))
-                c1 = ""
-                c2 = ""
-                if elem.comment1:
-                    c1 = str(elem.comment1)
-                if elem.comment2:
-                    c2 = str(elem.comment2)
-                if c1 != "" or c2 != "":
-                    elem.commentaires = c1 + "<hr>" + c2
-            return render(request, 'tennis/generatePool.html', locals())
-        else:
-            saved = True
-
-            defaultValue = len(listPoules)
-            defaultSize = 0
-            pairListAll = dict()
-            today = date.today()
-            i = 0
-            for poule in listPoules:
-                pairListAll[i + 1] = []
-                listTerrainSaved.append(poule.court)
-                listLeaderSaved.append(poule.leader)
-                if defaultSize < len(poule.paires.all()):
-                    defaultSize = len(poule.paires.all())
-                for elem in poule.paires.all():
-                    u1 = elem.user1
-                    born = u1.participant.datenaissance
-                    u1.age = today.year - born.year - \
-                        ((today.month, today.day) < (born.month, born.day))
-                    u2 = elem.user2
-                    born = u2.participant.datenaissance
-                    u2.age = today.year - born.year - \
-                        ((today.month, today.day) < (born.month, born.day))
-                    c1 = ""
-                    c2 = ""
-                    if elem.comment1:
-                        c1 = str(elem.comment1)
-                    if elem.comment2:
-                        c2 = str(elem.comment2)
-                    if c1 != "" or c2 != "":
-                        elem.commentaires = c1 + "<hr>" + c2
-                    pairListAll[i + 1].append(elem)
-                i += 1
-            poolRange = range(0, defaultValue)
-            return render(request, 'tennis/generatePool.html', locals())
-    return redirect(reverse(home))
+    from views_helper import generation_poules
+    return generation_poules.view(request, name)
 
 
 @permission_required('tennis.Court')
@@ -1311,7 +875,7 @@ def staffTerrain(request):
     allCourtType = CourtType.objects.all()
     allCourtState = CourtState.objects.all()
     if request.user.is_authenticated():
-        return render(request, 'tennis/staffTerrain.html', locals())
+        return render(request, 'staffTerrain.html', locals())
     return redirect(reverse(home))
 
 
@@ -1384,7 +948,7 @@ def staffPaire(request):
     Tour = Tournoi.objects.all()
 
     if request.user.is_authenticated():
-        return render(request, 'tennis/staffPair.html', locals())
+        return render(request, 'staffPair.html', locals())
     return redirect(reverse(home))
 
 
@@ -1441,7 +1005,7 @@ def staffExtra(request):
             prix_inscription = info.prix
             date_inscription = info.date
             formated_date = date_inscription.strftime('%d/%m/%Y')
-            return render(request, 'tennis/staffExtra.html', locals())
+            return render(request, 'staffExtra.html', locals())
 
         if request.POST['action'] == "addExtra":
             nom = request.POST['name'].strip()
@@ -1450,13 +1014,13 @@ def staffExtra(request):
 
             if nom == "":
                 errorAdd = "Veuillez rajouter un nom à l'extra!"
-                return render(request, 'tennis/staffExtra.html', locals())
+                return render(request, 'staffExtra.html', locals())
 
             if not is_number(prix):
                 prix = prix.replace(",", ".")
                 if not is_number(prix):
                     errorAdd = "Le prix n'a pas le bon format"
-                    return render(request, 'tennis/staffExtra.html', locals())
+                    return render(request, 'staffExtra.html', locals())
 
             extra = Extra(nom=nom, prix=prix, commentaires=message)
             extra.save()
@@ -1475,13 +1039,13 @@ def staffExtra(request):
 
             if nom == "":
                 errorEdit = u"Veuillez rajouter un nom à l'extra!"
-                return render(request, 'tennis/staffExtra.html', locals())
+                return render(request, 'staffExtra.html', locals())
 
             if not is_number(prix):
                 prix = prix.replace(",", ".")
                 if not is_number(prix):
                     errorEdit = u"Le prix n'a pas le bon format"
-                    return render(request, 'tennis/staffExtra.html', locals())
+                    return render(request, 'staffExtra.html', locals())
 
             extra.nom = nom
             extra.prix = prix
@@ -1507,14 +1071,14 @@ def staffExtra(request):
         e.count = a
 
     if request.user.is_authenticated():
-        return render(request, 'tennis/staffExtra.html', locals())
+        return render(request, 'staffExtra.html', locals())
     return redirect(reverse(home))
 
 
 def staffLog(request):
     logs = LogActivity.objects.order_by('-date')
     if request.user.is_authenticated():
-        return render(request, 'tennis/staffLog.html', locals())
+        return render(request, 'staffLog.html', locals())
     return redirect(reverse(home))
 
 
@@ -1639,7 +1203,7 @@ def staffPerm(request):
         fb = bd.strftime('%d/%m/%Y')
         u.fb = fb
     if request.user.is_authenticated():
-        return render(request, 'tennis/staffPerm.html', locals())
+        return render(request, 'staffPerm.html', locals())
     return redirect(reverse(home))
 
 
@@ -1724,7 +1288,7 @@ def staffUser(request):
         u.inpaire = inPair
 
     if request.user.is_authenticated():
-        return render(request, 'tennis/staffUser.html', locals())
+        return render(request, 'staffUser.html', locals())
     return redirect(reverse(home))
 
 
@@ -1775,12 +1339,12 @@ def viewUser(request, name):
         # check champs
         if (firstname == "" or lastname == "" or (tel == "" and gsm == "") or street == "" or number == "" or locality == "" or postalcode == "" or birthdate == ""):
             errorEdit = "Veuillez remplir tous les champs obligatoires !"
-            return render(request, 'tennis/profil.html', locals())
+            return render(request, 'profil.html', locals())
 
         # check format date
         if re.match(r"^[0-3][0-9]/[0-1][0-9]/[1-2][0-9]{3}$", birthdate) is None:
             errorEdit = "La date de naissance n'a pas le bon format"
-            return render(request, 'tennis/profil.html', locals())
+            return render(request, 'profil.html', locals())
 
         # On formate la date
         birthdate2 = birthdate.split("/")
@@ -1825,7 +1389,7 @@ def viewUser(request, name):
     tournoi = list(chain(tournoi1, tournoi2))
 
     if request.user.is_authenticated():
-        return render(request, 'tennis/viewUser.html', locals())
+        return render(request, 'viewUser.html', locals())
     return redirect(reverse(home))
 
 
@@ -1850,7 +1414,7 @@ def validateTerrain(request, id):
         successEdit = "Terrain bien édité!"
 
     if request.user.is_authenticated():
-        return render(request, 'tennis/validateTerrain.html', locals())
+        return render(request, 'validateTerrain.html', locals())
     return redirect(reverse(home))
 
 
@@ -1907,7 +1471,7 @@ def editTerrainStaff(request, id):
 
             if (rue == "" or numero == "" or postalcode == "" or locality == "" or matiere == "" or type == "" or etat == ""):
                 errorAdd = "Veuillez remplir tous les champs obligatoires !"
-                return render(request, 'tennis/registerTerrain.html', locals())
+                return render(request, 'registerTerrain.html', locals())
 
             court.rue = rue
             court.numero = numero
@@ -1935,7 +1499,7 @@ def editTerrainStaff(request, id):
                         details="Terrain " + id + " delete").save()
             return redirect(reverse(staffTerrain))
     if request.user.is_authenticated():
-        return render(request, 'tennis/editTerrainStaff.html', locals())
+        return render(request, 'editTerrainStaff.html', locals())
     return redirect(reverse(home))
 
 
@@ -2039,121 +1603,13 @@ def validatePair(request, id):
     birthdate2 = pair.user2.participant.datenaissance
     formatedBirthdate2 = birthdate2.strftime('%d/%m/%Y')
     if request.user.is_authenticated():
-        return render(request, 'tennis/validatePair.html', locals())
+        return render(request, 'validatePair.html', locals())
     return redirect(reverse(home))
 
 
 def profil(request):
-    rankings = Ranking.objects.all()
-    today = date.today()
-    yearLoop = range(1900, today.year - 7)
-    birthdate = request.user.participant.datenaissance
-    formatedBirthdate = birthdate.strftime('%d/%m/%Y')
-    if request.method == "POST":
-        if request.POST['action'] == 'sendMailConfirmationMail':
-            # Send email with code to finish registration and validate account
-            participant = Participant.objects.get(user=request.user)
-            activationObject = UserInWaitOfActivation.objects.get(
-                participant=participant)
-            activationObject.dayOfRegistration = datetime.datetime.now()
-            activationObject.save()
-            link = "http://" + request.get_host() + "/tennis/emailValidation/"
-            if send_register_confirmation_email(activationObject, participant, link):
-                successSendMail = u"Un email vous a été renvoyé sur votre adresse courante. En cas de non-réception, veuillez revérifier l'adresse enregistrée ci-dessous."
-            else:
-                echecSendMail = u"Une erreur s'est produite lors de l'envois de votre message,\nle problème a été signaler au staff et sera résolu dans les plus bref délais.\nDésole de l'inconvénience, réessayer dans quelques heures"
-            return render(request, 'tennis/profil.html', locals())
-        if request.POST['action'] == 'updatePassword':
-
-            password1 = request.POST['password1']
-            password2 = request.POST['password2']
-
-            # On vérifie que les password sont les memes
-            if password1 != password2:
-                errorMDP = "Les mots de passes sont différents !"
-                return render(request, 'tennis/profil.html', locals())
-
-            # On vérifie la longeur du password
-            if(len(password1) < 2):
-                errorMDP = "Votre mot de passe doit contenir au moins 3 caractères"
-                return render(request, 'tennis/profil.html', locals())
-
-            request.user.set_password(password1)
-            request.user.save()
-            successMDP = "Le mot de passe a bien été changé"
-            user2 = authenticate(username=request.user, password=password1)
-            login(request, user2)
-            return render(request, 'tennis/profil.html', locals())
-
-        if request.POST['action'] == 'editProfil':
-
-            firstname = request.POST['firstname']
-            lastname = request.POST['lastname']
-            gsm = request.POST['gsm']
-            tel = request.POST['tel']
-            fax = request.POST['fax']
-            title = request.POST['title']
-            boite = request.POST['boite']
-            street = request.POST['street']
-            number = request.POST['number']
-            locality = request.POST['locality']
-            postalcode = request.POST['postalcode']
-            birthdate = request.POST['birthdate']
-            classement = request.POST['classement']
-            lat = request.POST['lat']
-            lng = request.POST['lng']
-
-            if request.POST.__contains__("participated"):
-                oldparticipant = True
-            else:
-                oldparticipant = False
-
-            # check champs
-            if (firstname == "" or lastname == "" or (tel == ""
-                                                      and gsm == "") or street == "" or number == "" or locality == "" or postalcode == "" or birthdate == ""):
-                errorEdit = "Veuillez remplir tous les champs obligatoires !"
-                return render(request, 'tennis/profil.html', locals())
-
-            # check format date
-            if re.match(r"^[0-3][0-9]/[0-1][0-9]/[1-2][0-9]{3}$", birthdate) is None:
-                errorEdit = "La date de naissance n'a pas le bon format"
-                return render(request, 'tennis/profil.html', locals())
-
-            # On formate la date
-            birthdate2 = birthdate.split("/")
-            datenaissance = datetime.datetime(
-                int(birthdate2[2]), int(birthdate2[1]), int(birthdate2[0]))
-
-            formatedBirthdate = birthdate
-            participant = request.user.participant
-            participant.titre = title
-            participant.nom = lastname
-            participant.prenom = firstname
-            participant.rue = street
-            participant.numero = number
-            participant.boite = boite
-            participant.codepostal = postalcode
-            participant.localite = locality
-            participant.telephone = tel
-            participant.fax = fax
-            participant.gsm = gsm
-            participant.datenaissance = datenaissance
-            participant.classement = Ranking.objects.get(nom=classement)
-            participant.oldparticipant = oldparticipant
-            participant.latitude = lat
-            participant.longitude = lng
-            participant.save()
-
-            # Validate classement
-            validate_classement_thread(participant)
-
-            successEdit = "Le profil a bien été changé"
-            return render(request, 'tennis/profil.html', locals())
-
-    if request.user.is_authenticated():
-
-        return render(request, 'tennis/profil.html', locals())
-    return redirect(reverse(home))
+    from views_helper import profil as profilpage
+    return profil.view(request)
 
 
 def connect(request):
@@ -2165,12 +1621,12 @@ def connect(request):
         # check email
         if username == "":
             error = "Veuillez entrer un nom d'utilisateur valide !"
-            return render(request, 'tennis/login.html', locals())
+            return render(request, 'login.html', locals())
 
         # check password
         if password == "":
             error = "Veuillez entrer un mot de passe !"
-            return render(request, 'tennis/login.html', locals())
+            return render(request, 'login.html', locals())
 
         # Connection
         user = authenticate(username=username, password=password)
@@ -2182,31 +1638,17 @@ def connect(request):
                 return redirect(reverse(tournoi))
             else:
                 error = "Ce compte a été désactivé !"
-                return render(request, 'tennis/login.html', locals())
+                return render(request, 'login.html', locals())
         else:
             # invalide login
             error = "Nom d'utilisateur ou mot de passe non conforme !"
-            return render(request, 'tennis/login.html', locals())
-    return render(request, 'tennis/login.html', locals())
+            return render(request, 'login.html', locals())
+    return render(request, 'login.html', locals())
 
 
 def deconnect(request):
     logout(request)
     return redirect(reverse(home))
-
-
-def username_present(username):
-    if User.objects.filter(username=username).exists():
-        return True
-
-    return False
-
-
-def email_present(email):
-    if User.objects.filter(email=email).exists():
-        return True
-
-    return False
 
 
 def emailValidation(request, key):
@@ -2236,118 +1678,20 @@ def emailValidation(request, key):
         compteToValidate.delete()
         # Print succes
         successValidate = "Votre adresse mail est désormais validée, merci de votre coopération."
-    return render(request, 'tennis/emailValidation.html', locals())
+    return render(request, 'emailValidation.html', locals())
 
 
 def register(request):
-    today = date.today()
-    yearLoop = range(1900, today.year - 7)
-    rankings = Ranking.objects.all()
-    if request.method == "POST":
-        # Recuperation des donnees
-        username = request.POST['username']
-        password = request.POST['password']
-        firstname = request.POST['firstname']
-        lastname = request.POST['lastname']
-        email = request.POST['email']
-        gsm = request.POST['gsm']
-        tel = request.POST['tel']
-        fax = request.POST['fax']
-        title = request.POST['title']
-        boite = request.POST['boite']
-        street = request.POST['street']
-        number = request.POST['number']
-        locality = request.POST['locality']
-        postalcode = request.POST['postalcode']
-        birthdate = request.POST['birthdate']
-        classement = request.POST['classement']
-        lat = request.POST['lat']
-        lng = request.POST['lng']
-
-        if request.POST.__contains__("participated"):
-            oldparticipant = True
-        else:
-            oldparticipant = False
-
-        # check champs
-        if (username == "" or password == "" or firstname == "" or lastname == "" or email == "" or (tel == ""
-                                                                                                     and gsm == "") or street == "" or number == "" or locality == "" or postalcode == "" or birthdate == ""):
-            error = "Veuillez remplir tous les champs obligatoires !"
-            return render(request, 'tennis/register.html', locals())
-
-        # Check username et email already taken
-        if(username_present(username)):
-            error = "Ce nom d'utilisateur n'est plus disponible !"
-            return render(request, 'tennis/register.html', locals())
-
-        # On vérifie si l'email est deja dans la db
-        if(email_present(email)):
-            error = "Un compte avec cette addresse email existe déjà !"
-            return render(request, 'tennis/register.html', locals())
-
-        # check username length
-        if(len(username) < 2):
-            error = "Votre nom d'utilisateur doit contenir au moins 3 caractères"
-            return render(request, 'tennis/register.html', locals())
-
-        # check password length
-        if(len(password) < 2):
-            error = "Votre mot de passe doit contenir au moins 3 caractères"
-            return render(request, 'tennis/register.html', locals())
-
-        # check format date
-        if re.match(r"^[0-3][0-9]/[0-1][0-9]/[1-2][0-9]{3}$", birthdate) is None:
-            error = "La date de naissance n'a pas le bon format"
-            return render(request, 'tennis/register.html', locals())
-
-        # On format la date
-        birthdate2 = birthdate.split("/")
-        datenaissance = datetime.datetime(
-            int(birthdate2[2]), int(birthdate2[1]), int(birthdate2[0]))
-
-        # Account creation & redirect
-        user = User.objects.create_user(username, email, password)
-        user.save()
-        # TODO verfied = FALSE
-        participant = Participant(user=user, titre=title, nom=lastname, prenom=firstname, rue=street, numero=number, boite=boite, codepostal=postalcode, localite=locality, telephone=tel, fax=fax, gsm=gsm,
-                                  classement=Ranking.objects.get(nom=classement), oldparticipant=oldparticipant, datenaissance=datenaissance, isClassementVerified=True, isAccountActivated=False, latitude=lat, longitude=lng)
-        participant.save()
-
-        # Create UserInWaitOfActivation object to keep track of the activation
-        today = datetime.datetime.now()
-        key = get_random_string(
-            20, allowed_chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
-        while len(UserInWaitOfActivation.objects.filter(confirmation_key=key)) > 0:
-            # Key already in user, generate new one
-            key = get_random_string(
-                20, allowed_chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
-        activationObject = UserInWaitOfActivation(
-            participant=participant, dayOfRegistration=today, confirmation_key=key)
-        activationObject.save()
-        link = "http://" + request.get_host() + "/tennis/emailValidation/"
-
-        # Verify user classement
-        validate_classement_thread(participant)
-
-        # Send email with code to finish registration and validate account
-        register_confirmation_email(activationObject, participant, link)
-
-        # On connecte l'utilisateur
-        user2 = authenticate(username=username, password=password)
-        login(request, user2)
-        return redirect(reverse(tournoi))
-
-    if request.user.is_authenticated():
-        return redirect(reverse(tournoi))
-    return render(request, 'tennis/register.html', locals())
+    from views_helper import register as registerpage
+    return registerpage.view(request)
 
 
 def group(request):
-    return render(request, 'tennis/group.html', locals())
+    return render(request, 'group.html', locals())
 
 
 def recover(request):
-    return render(request, 'tennis/recover.html', locals())
+    return render(request, 'recover.html', locals())
 
 
 def printScoreBoard(request, pouleId):

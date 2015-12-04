@@ -36,4 +36,4 @@ def view(request):
     elif month == 12:
         month_text = "decembre"
     day = date.day
-    return render(request, 'tennis/home.html', {'edition':edition, 'last':last, 'year':year, 'month_text':month_text, 'day':day})
+    return render(request, 'home.html', {'edition':edition, 'last':last, 'year':year, 'month_text':month_text, 'day':day})
