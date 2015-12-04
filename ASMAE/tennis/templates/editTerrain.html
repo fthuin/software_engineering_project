@@ -1,0 +1,182 @@
+{% extends "terrain.html" %}
+
+{% block title %}Editer terrain{% endblock %}
+
+{% block body %}
+<div class="container">
+	<div class="content-box">
+		<h2 class="center">Editer terrain</h2>
+		<hr class="line">
+		<h4 class="center">Terrain {{ court.id }}</h4>
+		<form class="form-horizontal" name="editForm" role="form" method="post" action="{% url "tennis.views.editTerrain" court.id %}" >
+		{% csrf_token %}
+			<div class="row">
+				<div class="panel panel-default">
+					<div class="panel-heading">Terrain</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-6">
+								<!-- Rue -->
+								<div class="form-group">
+							      <label class="control-label col-sm-4" for="rue">Rue *</label>
+							      <div class="col-sm-8" style="max-width:600px;">
+							      	<input type="text" class="form-control" name="street" id="street" placeholder="Nom de rue" value="{{ court.rue }}">
+							      	<p class="hint" id="hint-street"></p>
+							      </div>
+							    </div>
+							    <!-- Numero -->
+								<div class="form-group">
+							      <label class="control-label col-sm-4" for="numero">Numero *</label>
+							      <div class="col-sm-8" style="max-width:600px;">
+							      	<input type="text" class="form-control" name="number" id="number" placeholder="Numero" value="{{ court.numero }}">
+							      	<p class="hint" id="hint-number"></p>
+							      </div>
+							    </div>
+							    <!-- Boite -->
+								<div class="form-group">
+							      <label class="control-label col-sm-4" for="boite">Boite</label>
+							      <div class="col-sm-8" style="max-width:600px;">
+							      	<input type="text" class="form-control" name="boite" id="boite" placeholder="Boite" value="{{ court.boite }}">
+							      	<p class="hint" id="hint-boite"></p>
+							      </div>
+							    </div>
+							    <!-- Code Postal -->
+								<div class="form-group">
+							      <label class="control-label col-sm-4" for="postalcode">Code postal *</label>
+							      <div class="col-sm-8" style="max-width:600px;">
+							      	<input type="text" class="form-control" name="postalcode" id="postalcode" placeholder="Code postal" value="{{ court.codepostal }}">
+							      	<p class="hint" id="hint-postalcode"></p>
+							      </div>
+							    </div>
+							    <!-- Localité -->
+								<div class="form-group">
+							      <label class="control-label col-sm-4" for="locality">Localité *</label>
+							      <div class="col-sm-8" style="max-width:600px;">
+							      	<input type="text" class="form-control" name="locality" id="locality" placeholder="Localité" value="{{ court.localite }}">
+							      	<p class="hint" id="hint-locality"></p>
+							      </div>
+							    </div>
+							</div>
+							<div class="col-lg-6">
+								<!-- Accès -->
+								<div class="form-group">
+							      <label class="control-label col-sm-4" for="acces">Accès *</label>
+							      <div class="col-sm-8" style="max-width:600px;">
+							      	<textarea class="form-control" rows="5" name="acces" id="acces" placeholder="Acces au terrain">{% if court.acces %} {{court.acces}} {% endif %}</textarea>
+							      	<p class="hint" id="hint-loclity"></p>
+							      </div>
+							    </div>
+							    <!-- Matière -->
+								<div class="form-group">
+							      <label class="control-label col-sm-4" for="matiere">Matière *</label>
+							      <div class="col-sm-8" style="max-width:600px;">
+							      	<select class="form-control" name="matiere" id="matiere">
+								        {% for courtSurface in allCourtSurface %}
+									  	<option value="{{ courtSurface.nom }}">{{ courtSurface.nom }}</option>
+									  	{% endfor %}
+
+									</select>
+							      </div>
+							    </div>
+							    <!-- Type -->
+								<div class="form-group">
+							      <label class="control-label col-sm-4" for="matiere">Type *</label>
+							      <div class="col-sm-8" style="max-width:600px;">
+							      	<select class="form-control" name="type" id="type">
+							      	{% for courtType in allCourtType %}
+							      		<option value="{{ courtType.nom }}">{{ courtType.nom }}</option>
+									{% endfor %}
+									</select>
+							      </div>
+							    </div>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="panel panel-default">
+					<div class="panel-heading">Informations pour le tournoi de cette année</div>
+					<div class="panel-body">
+						<!-- Disponibilité -->
+						<div class="form-group">
+					      <label class="control-label col-sm-4" for="dispo">Disponibilité *</label>
+					      <div class="col-sm-8" style="max-width:600px;">
+					      	<label style="margin-right:20px;padding-top:7px;"><input type="checkbox" name="dispoSamedi" {% if court.dispoSamedi %} checked {% endif %}> Samedi</label>
+					      	<label><input type="checkbox" name="dispoDimanche" {% if court.dispoDimanche %} checked {% endif %}> Dimanche</label>
+					      	<p class="hint" id="hint-dispo"></p>
+					      </div>
+					    </div>
+					    <!-- Etat -->
+						<div class="form-group">
+					      <label class="control-label col-sm-4" for="etat">Etat du terrain *</label>
+					      <div class="col-sm-8" style="max-width:600px;">
+					      	<select class="form-control" name="etat" id="etat">
+						        {% for courtState in allCourtState %}
+							  	<option value="{{ courtState.nom }}">{{ courtState.nom }}</option>
+							   	{% endfor %}
+							</select>
+					      </div>
+					    </div>
+					    <!-- Commentaire Proprio -->
+						<div class="form-group">
+					      <label class="control-label col-sm-4" for="comment">Commentaire</label>
+					      <div class="col-sm-8" style="max-width:600px;">
+					      	<textarea class="form-control" rows="3" name="comment" id="comment" placeholder="Commentaire">{% if court.commentaire %} {{court.commentaire}} {% endif %}</textarea>
+					      	<p class="hint" id="hint-comment"></p>
+					      </div>
+					    </div>
+					</div>
+				</div>
+			</div>
+			<input type="text" id="latitude" name="lat" value="" style="display:none">
+			<input type="text" id="longitude" name="lng" value="" style="display:none">
+			<ul class="list-inline text-center">
+				<li>
+					<button class="btn-default btn" name="action" id="registerButton" style="display:none" value="modifyCourt">Editer</button>
+					<button type="button" onclick="validateRegisterCourt()" class="btn btn-default">Editer</button>
+				</li>
+				<li>
+					<button class="btn-default btn" {% if court.valide %}style="display:none"{% endif %}type="button" data-toggle="modal" data-target="#myModal">Supprimer</button>
+					<button class="btn-default btn" style="display:none" id="deleteCourt" name="action" value="deleteCourt">Supprimer</button>
+				</li>
+			</ul>
+		</form>
+	</div>
+</div>
+
+<!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title center">Confirmation de suppression</h4>
+        </div>
+        <div class="modal-body">
+          <p>Etes-vous sûr de vouloir supprimer ce terrain?</p>
+
+	    	<ul class="list-inline text-center">
+				<li>
+					<button type="button" class="btn btn-default" onclick="document.getElementById('deleteCourt').click();">oui</button>
+				</li>
+				<li>
+					<button type="button" class="btn btn-default" data-dismiss="modal">non</button>
+				</li>
+			</ul>
+		</div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}
+{% block commande %}
+<script>
+preselectSelectOption('{{court.matiere}}','{{court.type}}','{{court.etat}}');
+</script>
+{% endblock%}

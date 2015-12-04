@@ -1,0 +1,63 @@
+{% extends "staff.html" %}
+
+{% block title %}Gestion des tournois{% endblock %}
+{% block ongTournoi %}class="active"{% endblock %}
+
+{% block bodyStaff %}
+<!-- Gestionnaire des groupes -->
+<div class="content-box" id="gestionTournoi">
+    <h2 class="center">Gestionnaire des tournois</h2>
+    <hr class="line">
+
+    {% for title in allTitre %}
+	{% if perms.tennis.DoubleMixte and title.nom == "Double mixte" or perms.tennis.DoubleHommes and title.nom == "Double hommes" or perms.tennis.DoubleFemmes and title.nom == "Double femmes" or perms.tennis.TournoiDesFamilles and title.nom == "Tournoi des familles"%}
+
+
+    <div class="panel panel-default center-block" style="max-width:90%;">
+        <div class="panel-heading">{{title}} - {{title.jour}}</div>
+        <div class="table-responsive">
+            <table class="table ">
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th style="text-align:center">Paires</th>
+                    <th style="text-align:center">Poules</th>
+                    <th style="text-align:center">Status</th>
+                    <th style="text-align:center">Générer Poules</th>
+                    <th style="text-align:center">Scores</th>
+                    <th style="text-align:center">Arbre de Tournoi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for tournoi in allTournoi %}
+
+                    {% if tournoi.titre == title %}
+                    <tr>
+                        <td style="width:18%;vertical-align: middle;">{{ tournoi.categorie }}</td>
+                        <td style="text-align:center;vertical-align: middle;">{{ tournoi.np }}</td>
+                        <td style="text-align:center;vertical-align: middle;">{{ tournoi.pl }}</td>
+                        <td style="text-align:center;vertical-align: middle;">{{ tournoi.status.nom }}</td>
+
+                        <td style="text-align:center;vertical-align: middle;">
+                            <button class="btn btn-default" onclick="location.href='{% url "tennis.views.generatePool" tournoi.nom %}';" {% if tournoi.status.numero <= 1 and tournoi.np > 1 %}{% else %}disabled{% endif %}><i class="fa fa-th fa-lg"></i></button>
+                        </td>
+                        <td style="text-align:center;vertical-align: middle;">
+                            <button class="btn btn-default" onclick="location.href='{% url "tennis.views.pouleTournoi" tournoi.nom %}';" {% if tournoi.status.numero >= 2 %}{% else %}disabled{% endif %}><i class="fa fa-trophy fa-lg"></i></button>
+                        </td>
+                        <td style="text-align:center;vertical-align: middle;">
+                            <button class="btn btn-default" onclick="location.href='{% url "tennis.views.knockOff" tournoi.nom %}';" {% if tournoi.status.numero >= 3 %}{% else %}disabled{% endif %}><i class="fa fa-sitemap fa-lg"></i></button>
+                        </td>
+                    </tr>
+
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+	{% endif %}
+    {% endfor %}
+
+</div>
+
+{% endblock %}

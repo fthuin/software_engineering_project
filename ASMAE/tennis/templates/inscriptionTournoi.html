@@ -1,0 +1,204 @@
+{% extends "tournoi.html" %}
+
+{% block title %}Inscription Tournoi{% endblock %}
+
+{% block body %}
+<div class="container">
+	<div class="content-box">
+		{% if errorAdd %}
+		<div class="alert alert-danger">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		<strong>Error!</strong> {{ errorAdd }}
+		</div>
+		{% endif %}
+		<h2 class="center">Inscription au tournoi</h2>
+		<hr class="line">
+		<form class="form-horizontal" name="registerForm" role="form" method="post" action="{% url "tennis.views.inscriptionTournoi" %}">
+			{% csrf_token %}
+            <input type="text" name="page" style="display:none;" value="1" id="pageNumber">
+			<div class="row">
+				<div class="col-sm-6">
+
+						<!-- Rechercher -->
+						<div class="row" style="margin-bottom:15px;">
+							<div class="col-sm-8 col-sm-offset-2">
+								<div class="input-group">
+							      <input type="text" class="form-control" name="rechercheField" placeholder="Rechercher un utilisateur" id="user_search_value" value="{{recherche}}">
+
+							      <span class="input-group-btn">
+							        <button class="btn btn-default" id="search_participant" name="action" value="search"><span class="glyphicon glyphicon-search"></span></button>
+							      </span>
+							    </div>
+							</div>
+						</div>
+
+					<!-- Liste des users -->
+					<div class="panel panel-default center-block" style="max-width:600px;">
+						<div class="panel-heading">Utilisateurs</div>
+						<div class="table-responsive">
+						<table class="table table-hover">
+							<thead>
+					          <tr>
+					          	<th style="text-align:center">Sexe</th>
+					            <th>Nom d'utilisateur</th>
+					            <th>Prénom</th>
+					            <th>Nom</th>
+					            <th style="text-align:center">Age</th>
+					            <th style="text-align:center">Cls</th>
+					          </tr>
+					        </thead>
+					        <tbody>
+					        	{% for u in Use %}
+					        	<tr class="clickable-row" onClick="selectUser('{{u.username}}','{{u.participant.nom}}','{{u.participant.prenom}}','{{u.participant.titre}}','{{u.age}}');">
+					        		<td style="text-align:center">
+					        			{% if u.participant.titre == "Mr" %}
+					        			<i class="fa fa-male" style="color:blue"></i>
+					        			{% else %}
+					        			<i class="fa fa-female" style="color:#ff0066"></i>
+					        			{% endif %}
+					        		</td>
+					        		<td>{{u.username}}</td>
+					        		<td>{{u.participant.prenom}}</td>
+					        		<td>{{u.participant.nom}}</td>
+					        		<td style="text-align:center">{{u.age}}</td>
+					        		<td style="text-align:center">{{u.participant.classement}}</td>
+					        	</tr>
+					        	{% empty %}
+					        	<tr>
+					        		<td style="text-align:center">-</td>
+					        		<td>-</td>
+					        		<td>-</td>
+					        		<td>-</td>
+					        		<td style="text-align:center">-</td>
+					        		<td style="text-align:center">-</td>
+					        	</tr>
+					        	{% endfor %}
+					        </tbody>
+						</table>
+						</div>
+					</div>
+
+					<!-- Info -->
+            		<p class="center" id="">{{debut}}-{{fin}} sur {{pageLength}} résultats ({{length}} au total)</p>
+
+					<!-- Bottom pagination -->
+					<div class="text-center" id="paginationholder">
+					</div>
+
+				</div>
+
+				<div class="col-sm-6">
+					<!-- Tournoi -->
+					<div class="form-group" style="margin-bottom:0">
+				      <label class="control-label col-sm-4">Tournoi : </label>
+				      <div class="col-sm-8">
+				      	<input id="tournoiLabel" name="title_tournoi" value="-" readonly style="font-weight:bold;padding-top:7px;border:0;color:#D4542D; background-color:transparent;">
+				      </div>
+
+				    </div>
+
+				    <div class="form-group" style="margin-bottom:0">
+				      <label class="control-label col-sm-4">Jour : </label>
+				      <div class="col-sm-8">
+				      	<input id="jourLabel" value="-" readonly style="font-weight:bold;padding-top:7px;border:0;color:#D4542D; background-color:transparent;">
+				      </div>
+				    </div>
+
+				    <div class="form-group">
+				      <label class="control-label col-sm-4">Catégorie : </label>
+				      <div class="col-sm-8">
+				      	<input id="categorieLabel" name="categorie_tournoi" value="-" readonly style="font-weight:bold;padding-top:7px;border:0;color:#D4542D; background-color:transparent;">
+				      </div>
+				    </div>
+
+					<!-- Joueur 1 -->
+				    <div class="panel panel-default">
+						<div class="panel-heading">Joueur 1</div>
+						<div class="panel-body">
+							<h4 class="center">[{{ user.username }}] {{ user.participant.prenom }} {{ user.participant.nom }} {{ user.age}} ans</h4>
+						    <!-- Extra -->
+							<div class="form-group">
+						      <label class="control-label col-sm-4" for="username">Extras : </label>
+						      <div class="col-sm-8">
+						      	{% for extra in extra1 %}
+						      	<div class="checkbox">
+
+							      <label><input type="checkbox" name = "extra" value="{{ extra.id }}" checked>{{ extra.nom }} ({{ extra.prix }} €)</label>
+							    </div>
+							    {% endfor %}
+							{% for extra in extranot1 %}
+						      	<div class="checkbox">
+
+							      <label><input type="checkbox" name = "extra" value="{{ extra.id }}" >{{ extra.nom }} ({{ extra.prix }} €)</label>
+							    </div>
+							    {% endfor %}
+						      </div>
+						    </div>
+						</div>
+					</div>
+
+					<!-- Joueur 2 -->
+					<div class="panel panel-default">
+						<div class="panel-heading">Joueur 2</div>
+						<div class="panel-body">
+							<input type="text" name="username2" id="username2Value" value="" style="display:none">
+							<h4 class="center" id="user2"> Coéquipier </h4>
+						    <!-- Extra -->
+							<div class="form-group">
+						      <label class="control-label col-sm-4" for="username">Extras : </label>
+						      <div class="col-sm-8">
+						      	{% for extra in Ex %}
+						      	<div class="checkbox">
+							      <label><input type="checkbox" value="{{ extra.id }}" disabled>{{ extra.nom }} ({{ extra.prix }} €)</label>
+							    </div>
+							    {% endfor %}
+						      </div>
+						    </div>
+						</div>
+					</div>
+
+					<!-- Info -->
+					<label>Informations additionnelles (souhaits, remarques, ...) : </label>
+					<textarea class="form-control" rows="3" name="remarque" id="remarque" placeholder="Remarque et/ou souhaits ..." style="margin-bottom:15px;">{{ comment1}}</textarea>
+
+				</div>
+			</div>
+
+			<!-- Inscription button -->
+			<button class="btn btn-default center-block" name="action" value="formPair" id="InscriptionButton" style="margin-top:20px;" disabled>Inscription</button>
+
+		</form>
+
+	</div>
+</div>
+
+{% endblock %}
+
+
+{% block commande %}
+<script>
+var user_age;
+var user_sexe;
+
+user_age = '{{user.age}}';
+user_sexe = '{{user.participant.titre}}';
+//Nombre de page
+var total = Math.max(Math.ceil({{length}}/{{pageLength}}), 1);
+//Notre pagination
+$('#paginationholder').html('');
+$('#paginationholder').html('<ul class="pagination" id="UserPagination"></ul>');
+$('#UserPagination').twbsPagination({
+  totalPages: total,
+  visiblePages: Math.min(total, 5),
+  startPage: {{page}},
+  onPageClick: function (event, page) {
+  	//Lorsqu'on clique sur une page, on met à jour le contenu
+    //On met à jour la page en fonction du tournoi selectionné
+    document.getElementById("pageNumber").value = page;
+    document.getElementById("user_search_value").value = '{{recherche}}';
+    document.getElementById("search_participant").click();
+  }
+});
+
+</script>
+{% endblock %}

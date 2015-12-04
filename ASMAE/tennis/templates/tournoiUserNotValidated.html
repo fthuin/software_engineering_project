@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Tournoi{% endblock %}
+{% block nav-tournoi %}class="active"{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+	<!-- Affichage Normal : Inscription - Historique - Agenda -->
+	<!-- Les différents tournoi -->
+	<!-- TODO set info -->
+	<div class="content-box">
+		<h2 class="center">Inscription</h2>
+		<hr class="line">
+		<div class="alert alert-danger">
+		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			Veuillez valider votre <strong>adresse email</strong> avant de vous inscrire au tournoi. <br>
+			Dans le cas ou aucun mail de validation n'est reçu, il est possible d'en redemander l'envoi depuis votre profil
+		</div>
+	</div>
+</div>
+
+{% endblock %}

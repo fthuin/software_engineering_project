@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Contact{% endblock %}
+{% block nav-contact %}class="active"{% endblock %}
+
+{% block body %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-5">
+			<div class="content-box">
+				<h2 class="center">Formulaire de contact</h2>
+				<hr class="line">
+				{% if successSendMail %}
+				<div class="alert alert-success">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Succès!</strong> {{ successSendMail }}
+				</div>
+				{% elif echecSendMail %}
+				<div class="alert alert-danger">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Error!</strong> {{ echecSendMail }}
+				</div>
+				{% endif %}
+				<form role="form" name="sendContactMail" method="post" action="{% url "tennis.views.contact" %}">
+					{% csrf_token %}
+
+        <div class="form-group">
+      <label for="text">Sujet *</label>
+      <input type="text" class="form-control" name="subject" placeholder="Entrer votre sujet">
+    </div>
+
+    <div class="form-group">
+      <label for="text">Email *</label>
+      <input type="email" class="form-control" name="email" placeholder="Entrer votre email">
+    </div>
+
+    <div class="form-group">
+      <label for="text">Votre message *</label>
+      <textarea class="form-control" rows="5" name="message" placeholder="Entrer votre message"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-default center-block" name="action" value="sendConcactMail">Envoyez le message</button>
+  </form>
+			</div>
+		</div>
+		<div class="col-lg-7">
+			<div class="content-box">
+				<h2 class="center">Nos coordonnées complètes :</h2>
+				<hr class="line">
+				<div class="row">
+					<div class="col-sm-6">
+						<h3>Adresse</h3>
+						<address>
+					        Place des Carabiniers, 5<br>
+							1030 Bruxelles<br>
+							Tél : 32 (0)2 / 742 03 01 <br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;32 (0)2 / 742 03 06<br>
+							Fax : 32 (0)2 / 742 03 13<br>
+         				 </address>
+					</div>
+					<div class="col-sm-6">
+						<h3>Siège régional Wallon</h3>
+						<address>
+							Clos des Quatre Vents, 21<br>
+							1332 Genval<br>
+							Tél: 32 (0)2 / 654 26 54<br>
+         				 </address>
+					</div>
+				</div>
+
+				<p><b>Site internet : </b><a href="http://www.asmae.org/">www.asmae.org</a> <br>
+					<b>N° d'entreprise :</b> 0422618013 <br>
+				   <b>Comptes bancaires :</b> BE10-5230-8053-2004 ou BE32-2100-1574-7802</p>
+				<h3>Google Map</h3>
+				<div id="map" style="height:250px;"></div>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}
+
+{% block commande %}
+<script>
+	//Initialisation de la google map
+	google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+{% endblock %}

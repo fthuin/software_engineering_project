@@ -1,0 +1,150 @@
+{% extends "staff.html" %}
+
+{% block title %}Validation terrain{% endblock %}
+
+{% block body %}
+<div class="container">
+	<div class="row">
+		<div class="col-lg-7">
+			<div class="content-box">
+				<h2 class="center">Terrain {{ court.id }}</h2>
+				<hr class="line">
+				<div class="row">
+					<div class="col-sm-6">
+						<h3>Propriétaire</h3>
+						<address>
+							<a href="{% url "tennis.views.viewUser" court.user.username %}">{{ court.user.participant.titre }} {{ court.user.participant.prenom }} {{ court.user.participant.nom }}</a> <br>
+							{{ court.user.participant.rue }}, {{ court.user.participant.numero }} {% if court.user.participant.boite %}
+							bte {{ court.user.participant.boite }} {% endif %}<br>
+							{{ court.user.participant.codepostal }} {{ court.user.participant.localite }}<br>
+							Tél : {% if court.user.participant.telephone %}{{ court.user.participant.telephone }}{% else %} - {% endif %}<br>
+							GSM : {% if court.user.participant.gsm %}{{ court.user.participant.gsm }}{% else %} - {% endif %} <br>
+							Fax : {% if court.user.participant.fax %}{{ court.user.participant.fax }}{% else %} - {% endif %}<br>
+         				 </address>
+					</div>
+					<div class="col-sm-6">
+						<h3>Adresse du terrain</h3>
+						<address>
+					        {{ court.rue }}, {{ court.numero }}<br>
+							{{ court.codepostal }} {{ court.localite }}<br>
+							<b>Accès : </b> {% if court.acces %}{{ court.acces }}{% else %} - {% endif %} <br>
+         				 </address>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<p>
+							<b>Disponibilité : </b> {% if court.dispoSamedi and court.dispoDimanche %}Samedi et Dimanche{% elif court.dispoSamedi %}Samedi{% elif court.dispoDimanche %}Dimanche{% endif %} <br>
+							<b>Etat : </b> {{ court.etat }}
+						</p>
+					</div>
+					<div class="col-sm-6">
+						<p>
+							<b>Matière :</b> {{ court.matiere }} <br>
+							<b>Type :</b> {{ court.type }}
+						</p>
+					</div>
+				</div>
+
+				<ul class="list-inline text-center" style="padding-top:10px">
+				<li>
+					<button onclick="location.href='{% url "tennis.views.terrainPDF" court.id %}';" class="btn btn-default center-block no-print">Version PDF</button>
+				</li>
+				<li>
+					<button onClick="location.href='{% url "tennis.views.editTerrainStaff" court.id %}';" class="btn btn-default center-block no-print">Editer info</button>
+				</li>
+			</ul>
+
+
+				<h3 >Google Map <span id="statusMap" style="color:red;"></span></h3>
+				<div id="map" style="height:225px;"></div>
+
+			</div>
+		</div>
+		<div class="col-lg-5">
+			<div class="content-box">
+				{% if successEdit %}
+				<div class="alert alert-success">
+				    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				    <strong>Succès!</strong> {{ successEdit }}
+				</div>
+				{% endif %}
+				<h2 class="center">Commentaires</h2>
+				<hr class="line">
+				<form role="form" method="post" action="{% url "tennis.views.validateTerrain" court.id %}">
+{% csrf_token %}
+			      <div class="form-group">
+			      <label for="text">Commentaires du propriétaire : </label>
+			      <p>{% if court.commentaire %}{{ court.commentaire }}{% else %} - {% endif %}</p>
+			    </div>
+
+			    <div class="form-group">
+			      <label for="text">Votre Commentaire</label>
+			      <textarea class="form-control" rows="5" name="message" placeholder="Entrer votre commentaire">{%if court.commentaireStaff %}{{ court.commentaireStaff }}{% endif %}</textarea>
+			    </div>
+
+			    <!-- Validé -->
+			    <div class="checkbox ">
+			      <label><input type="checkbox" name="valide" {% if court.valide %} checked {% endif %} > Terrain validé</label>
+			    </div>
+
+			    <button type="submit" class="btn btn-default center-block no-print">Sauver</button>
+			  </form>
+			</div>
+		</div>
+	</div>
+
+	<div class="content-box" {%if court.poule_set.all %}{% else %}style="display:none;"{% endif %}>
+		<h2 class="center">Utilisation</h2>
+		<hr class="line">
+		{% for poule in court.poule_set.all %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{{ poule.tournoi }} - Poule {{ poule.id }}
+			</div>
+			<div class="panel-body">
+				<b>Status : </b> {{ poule.tournoi.status }} <br>
+				<b>Leader : </b>
+				{% if poule.leader %}
+				<a href="{% url "tennis.views.viewUser" poule.leader.username %}">{{ poule.leader.participant.fullName }}</a>
+				{% endif %}
+				<br>
+				<b>Participant : </b> {{ poule.paires.all|length }} paires<br>
+				{% for p in poule.paires.all %}
+				<b>{{ p.id }} : </b> <a href="{% url "tennis.views.viewUser" p.user1.username %}">{{ p.user1.participant.fullName }}</a> &#38; <a href="{% url "tennis.views.viewUser" p.user2.username %}">{{ p.user2.participant.fullName }}</a> <br>
+				{% endfor %}
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+
+</div>
+
+{% endblock %}
+
+{% block commande %}
+<script>
+var geocoder = new google.maps.Geocoder();
+var address = "{{ court.rue }}, {{ court.numero }} + {{ court.codepostal }} {{ court.localite }}, Belgium";
+
+geocoder.geocode( { 'address': address}, function(results, status) {
+
+if (status == google.maps.GeocoderStatus.OK) {
+    var latitude = results[0].geometry.location.lat();
+    var longitude = results[0].geometry.location.lng();
+    setMap(latitude,longitude,16)
+    }else{
+    	geocoder.geocode( { 'address': '{{ court.codepostal }} {{ court.localite }}, Belgium'}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+		    var latitude = results[0].geometry.location.lat();
+		    var longitude = results[0].geometry.location.lng();
+		    setMap(latitude,longitude,10)
+		    document.getElementById("statusMap").innerHTML = "(rue non trouvée)"
+		    }else{
+		    	document.getElementById("statusMap").innerHTML = "(adresse non trouvée)"
+		    }
+		});
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Page 404{% endblock %}
+
+{% block body %}
+{% load static from staticfiles %}
+<div class="container">
+	<div class="content-box">
+		<h2 class="center">Oups, cette page n'a pas pu être trouvée</h2>
+		<hr class="line">
+		<img class="img-responsive center-block" src="{% static 'tennis/img/404.png' %}" alt="404">
+	</div>
+</div>
+</div>
+{% endblock %}
