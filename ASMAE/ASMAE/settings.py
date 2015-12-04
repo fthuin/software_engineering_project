@@ -1,3 +1,4 @@
+#coding: utf-8
 """
 Django settings for ASMAE project.
 
@@ -10,12 +11,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
-# Variable for mail sending > pas toucher
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'noreply.lecharledelorraine'
-EMAIL_HOST_PASSWORD = 'LeCharleDeLorraine'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+#CONTACT VARIABLE
+CONTACT_EMAIL = "noreply.lecharledelorraine@gmail.com"
+#CONTACT_EMAIL_PASSWORD = "LeCharleDeLorraine" KEEP TO CONNECT TO THE MAIL, USELESS IN APP
+#EMAIL SENDGRID => pas toucher la cle API sinon faut en recrée une
+EMAIL_FROM = "noreply@lecharledelorraine.com"
+EMAIL_BACKEND = "sgbackend.SendGridBackend"
+SENDGRID_API_KEY = "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"
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os

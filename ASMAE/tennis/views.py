@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from tennis.forms import LoginForm
 from tennis.models import Extra, Participant,Court, Tournoi, Pair, CourtState, CourtSurface, CourtType,LogActivity, UserInWaitOfActivation, Poule,Score, PouleStatus,Arbre, TournoiStatus, TournoiTitle, TournoiCategorie, infoTournoi, Ranking, Resultat
-from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail
+from tennis.mail import send_confirmation_email_court_registered, send_confirmation_email_pair_registered, send_email_start_tournament, send_register_confirmation_email, test_send_mail, send_contact_mail, send_tournament_invitation_by_mail
 from tennis.classement import validate_classement_thread
 import re, math, copy
 import json
@@ -23,6 +23,8 @@ from django.db.models import Q
 from functools import reduce
 from operator import and_, or_
 from django.db import connection
+
+db_type = connection.vendor
 
 # Create your views here.
 def home(request):
@@ -96,6 +98,15 @@ def resultat(request,id):
 	return render(request,'tennis/resultat.html',locals())
 
 def contact(request):
+	if request.method == "POST":
+		if request.POST['action'] == "sendConcactMail":
+			subject = request.POST['subject']
+			email = request.POST['email']
+			message = request.POST['message']
+			if send_contact_mail(email, subject, message):
+				successSendMail = u"Votre message a bien été envoyé"
+			else:
+				echecSendMail = u"Une erreur s'est produite lors de l'envois de votre message,\nle problème a été signaler au staff et sera résolu dans les plus bref délais. Désole de l'inconvénience, réessayer dans quelques heures"
 	return render(request,'tennis/contact.html',locals())
 
 def tournoi(request):
@@ -140,10 +151,16 @@ def inscriptionTournoi(request):
 	Use = Use.exclude(is_staff=True).exclude(groups__name="Admin").exclude(groups__name="staff")
 
 	if recherche != "":
-		Use = Use.filter(
-			Q(username__icontains=recherche) |
-			Q(participant__nom__icontains=recherche) | 
-			Q(participant__prenom__icontains=recherche))	
+		if db_type == "postgresql":
+			Use = Use.filter(
+				Q(username__unaccent__icontains=recherche) |
+				Q(participant__nom__unaccent__icontains=recherche) | 
+				Q(participant__prenom__unaccent__icontains=recherche))
+		else:
+			Use = Use.filter(
+				Q(username__icontains=recherche) |
+				Q(participant__nom__icontains=recherche) | 
+				Q(participant__prenom__icontains=recherche))	
 
 	#Utilisateur courant
 	u = request.user
@@ -469,6 +486,8 @@ def enterScore(request,id):
 			return False
 	poule = Poule.objects.get(id=id)
 	if request.method == "POST":
+		poule.status = PouleStatus.objects.get(numero=1)
+		poule.save()
 		poule.score.all().delete()
 		pairList = poule.paires.all()
 		dictionnaire = dict()
@@ -485,6 +504,9 @@ def enterScore(request,id):
 						score.save()
 						poule.score.add(score)
 
+		if len(poule.score.all()) == 0:
+			poule.status = PouleStatus.objects.get(numero=0)
+			poule.save()
 		return redirect(reverse(tournoi))
 
 	if request.user.is_authenticated():
@@ -541,9 +563,8 @@ def registerTerrain(request):
 
 		# Send confirmation mail
 		send_confirmation_email_court_registered(Participant.objects.get(user=request.user), court)
-
+		
 		court.save()
-
 		return redirect(reverse(terrain))
 
 	if request.user.is_authenticated():
@@ -866,6 +887,31 @@ def knockOff(request,name):
 	return redirect(reverse(home))
 
 #TODO permission QUENTIN GUSBIN
+def pouleViewScore(request,id):
+	def is_number(s):
+		try:
+			float(s)
+			return True
+		except ValueError:
+			return False
+	poule = Poule.objects.get(id=id)
+	if request.method == "POST":
+		poule.score.all().delete()
+		poule.status = PouleStatus.objects.get(numero=0)
+		poule.save()
+		return redirect(reverse(pouleTournoi,args={poule.tournoi.nom()}))
+
+	if request.user.is_authenticated():
+		scoreList = poule.score.all()
+		scoreValues = ""
+		for sco in scoreList:
+			scoreValues = scoreValues + repr(sco.paire1.id)+"-"+repr(sco.paire2.id)+","+repr(sco.point1)+"."+repr(sco.paire2.id)+"-"+repr(sco.paire1.id)+","+repr(sco.point2)+"."
+		scoreValues = scoreValues[:-1]
+		return render(request,'tennis/viewScore.html',locals())
+	return redirect(reverse(home))
+
+
+#TODO permission QUENTIN GUSBIN
 def pouleScore(request,id):
 	def is_number(s):
 		try:
@@ -907,6 +953,10 @@ def pouleScore(request,id):
 						score = Score(paire1 = id1,paire2=id2,point1=int(request.POST[str(id1.id)+"-"+str(id2.id)]),point2=int(request.POST[str(id2.id)+"-"+str(id1.id)]))
 						score.save()
 						poule.score.add(score)
+
+		if len(poule.score.all()) == 0:
+			poule.status = PouleStatus.objects.get(numero=0)
+			poule.save()
 
 		if request.POST['action'] == 'save':
 			return redirect(reverse(pouleScore,args={id}))
@@ -1163,15 +1213,26 @@ def staffTerrain(request):
 
 	#Recherche
 	if recherche != "":
-		allCourt = allCourt.filter(
-			Q(id__icontains=recherche) |
-			Q(user__username__icontains=recherche) | 
-			Q(user__participant__nom__icontains=recherche) | 
-			Q(user__participant__prenom__icontains=recherche) |
-			Q(numero__icontains=recherche) | 
-			Q(rue__icontains=recherche) | 
-			Q(localite__icontains=recherche) | 
-			Q(codepostal__icontains=recherche))	
+		if db_type == "postgresql":
+			allCourt = allCourt.filter(
+				Q(id__icontains=recherche) |
+				Q(user__username__unaccent__icontains=recherche) | 
+				Q(user__participant__nom__unaccent__icontains=recherche) | 
+				Q(user__participant__prenom__unaccent__icontains=recherche) |
+				Q(numero__icontains=recherche) | 
+				Q(rue__unaccent__icontains=recherche) | 
+				Q(localite__unaccent__icontains=recherche) | 
+				Q(codepostal__icontains=recherche))	
+		else:
+			allCourt = allCourt.filter(
+				Q(id__icontains=recherche) |
+				Q(user__username__icontains=recherche) | 
+				Q(user__participant__nom__icontains=recherche) | 
+				Q(user__participant__prenom__icontains=recherche) |
+				Q(numero__icontains=recherche) | 
+				Q(rue__icontains=recherche) | 
+				Q(localite__icontains=recherche) | 
+				Q(codepostal__icontains=recherche))	
 
 	if material != "":
 		allCourt = allCourt.filter(matiere=material)
@@ -1251,14 +1312,24 @@ def staffPaire(request):
 	allPair = Pair.objects.all()
 
 	if recherche != "":
-		allPair = allPair.filter(
-			Q(id__icontains=recherche) |
-			Q(user1__username__icontains=recherche) | 
-			Q(user1__participant__nom__icontains=recherche) | 
-			Q(user1__participant__prenom__icontains=recherche) |
-			Q(user2__username__icontains=recherche) | 
-			Q(user2__participant__nom__icontains=recherche) | 
-			Q(user2__participant__prenom__icontains=recherche))	
+		if db_type == "postgresql":
+			allPair = allPair.filter(
+				Q(id__icontains=recherche) |
+				Q(user1__username__unaccent__icontains=recherche) | 
+				Q(user1__participant__nom__unaccent__icontains=recherche) | 
+				Q(user1__participant__prenom__unaccent__icontains=recherche) |
+				Q(user2__username__unaccent__icontains=recherche) | 
+				Q(user2__participant__nom__unaccent__icontains=recherche) | 
+				Q(user2__participant__prenom__unaccent__icontains=recherche))	
+		else:
+			allPair = allPair.filter(
+				Q(id__icontains=recherche) |
+				Q(user1__username__icontains=recherche) | 
+				Q(user1__participant__nom__icontains=recherche) | 
+				Q(user1__participant__prenom__icontains=recherche) |
+				Q(user2__username__icontains=recherche) | 
+				Q(user2__participant__nom__icontains=recherche) | 
+				Q(user2__participant__prenom__icontains=recherche))	
 
 	if validation != "":
 		if validation == "True":
@@ -1517,10 +1588,16 @@ def staffPerm(request):
 	Use = User.objects.all().order_by('username')
 
 	if recherche != "":
-		Use = Use.filter(
-			Q(username__icontains=recherche) |
-			Q(participant__nom__icontains=recherche) | 
-			Q(participant__prenom__icontains=recherche))	
+		if db_type == "postgresql":
+			Use = Use.filter(
+				Q(username__unaccent__icontains=recherche) |
+				Q(participant__nom__unaccent__icontains=recherche) | 
+				Q(participant__prenom__unaccent__icontains=recherche))
+		else:
+			Use = Use.filter(
+				Q(username__icontains=recherche) |
+				Q(participant__nom__icontains=recherche) | 
+				Q(participant__prenom__icontains=recherche))	
 
 	Use = Use.order_by("username")
 	length = len(Use)
@@ -1585,11 +1662,14 @@ def staffUser(request):
 		else:
 			Use = Use.filter( ~(Q(user1__confirm=True) | Q(user2__confirm=True)))
 
-	db_type = connection.vendor
+	
 
 	#recherche firld
 	if(recherche != ""):
-		Use = Use.filter(Q(username__icontains=recherche) | Q(participant__nom__icontains=recherche) | Q(participant__prenom__icontains=recherche))
+		if db_type == "postgresql":
+			Use = Use.filter(Q(username__unaccent__icontains=recherche) | Q(participant__nom__unaccent__icontains=recherche) | Q(participant__prenom__unaccent__icontains=recherche))
+		else:
+			Use = Use.filter(Q(username__icontains=recherche) | Q(participant__nom__icontains=recherche) | Q(participant__prenom__icontains=recherche))
 
 	Use = Use.order_by("username")
 	length = len(Use)
@@ -1628,7 +1708,7 @@ def yearsago(years, from_date=None):
         #assert from_date.month == 2 and from_date.day == 29 # can be removed
         return from_date.replace(month=2, day=28, year=from_date.year-years)
 
-@permission_required('tennis.User')
+#Idealement visible que aux membre du groupe staff Todo?
 def viewUser(request,name):
 	rankings = Ranking.objects.all()
 
@@ -1928,13 +2008,15 @@ def profil(request):
 	if request.method == "POST":
 		if request.POST['action'] == 'sendMailConfirmationMail':
 			# Send email with code to finish registration and validate account
-			successSendMail = u"Un email vous a été renvoyé sur votre adresse courante. En cas de non-réception, veuillez revérifier l'adresse enregistrée ci-dessous."
 			participant = Participant.objects.get(user = request.user)
 			activationObject = UserInWaitOfActivation.objects.get(participant = participant)
 			activationObject.dayOfRegistration = datetime.datetime.now()
 			activationObject.save()
 			link = "http://" + request.get_host() + "/tennis/emailValidation/"
-			send_register_confirmation_email(activationObject, participant, link)
+			if send_register_confirmation_email(activationObject, participant, link):
+				successSendMail = u"Un email vous a été renvoyé sur votre adresse courante. En cas de non-réception, veuillez revérifier l'adresse enregistrée ci-dessous."
+			else:
+				echecSendMail = u"Une erreur s'est produite lors de l'envois de votre message,\nle problème a été signaler au staff et sera résolu dans les plus bref délais.\nDésole de l'inconvénience, réessayer dans quelques heures"
 			return render(request,'tennis/profil.html',locals())
 		if request.POST['action'] == 'updatePassword':
 
@@ -2191,7 +2273,7 @@ def register(request):
 		validate_classement_thread(participant)
 
 		# Send email with code to finish registration and validate account
-		send_register_confirmation_email(activationObject, participant, link)
+		register_confirmation_email(activationObject, participant, link)
 
 		#On connecte l'utilisateur
 		user2 = authenticate(username=username, password=password)

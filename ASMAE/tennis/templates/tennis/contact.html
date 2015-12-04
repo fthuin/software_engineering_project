@@ -11,7 +11,19 @@
 			<div class="content-box">
 				<h2 class="center">Formulaire de contact</h2>
 				<hr class="line">
-				<form role="form">
+				{% if successSendMail %}
+				<div class="alert alert-success">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Succès!</strong> {{ successSendMail }}
+				</div>
+				{% elif echecSendMail %}
+				<div class="alert alert-danger">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Error!</strong> {{ echecSendMail }}
+				</div>
+				{% endif %}
+				<form role="form" name="sendContactMail" method="post" action="{% url "tennis.views.contact" %}">
+					{% csrf_token %}
 
         <div class="form-group">
       <label for="text">Sujet *</label>
@@ -20,7 +32,7 @@
 
     <div class="form-group">
       <label for="text">Email *</label>
-      <input type="text" class="form-control" name="email" placeholder="Entrer votre email">
+      <input type="email" class="form-control" name="email" placeholder="Entrer votre email">
     </div>
     
     <div class="form-group">
@@ -28,7 +40,7 @@
       <textarea class="form-control" rows="5" name="message" placeholder="Entrer votre message"></textarea>
     </div>
 
-    <button type="submit" class="btn btn-default center-block">Envoyez le message</button>
+    <button type="submit" class="btn btn-default center-block" name="action" value="sendConcactMail">Envoyez le message</button>
   </form>
 			</div>
 		</div>

@@ -307,6 +307,7 @@ div.panel{
 
 .panel-default{
     border: solid 2px #BF4C28 !important;
+    border-radius: 7px !important;
 }
 
 /* Used in profile section */

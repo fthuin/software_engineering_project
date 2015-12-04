@@ -19,6 +19,11 @@
 		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 		    <strong>Succès!</strong> {{ successMDP }}
 		</div>
+		{% elif echecSendMail %}
+		<div class="alert alert-danger">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Error!</strong> {{ echecSendMail }}
+		</div>
 		{% elif successSendMail %}
 		<div class="alert alert-success">
 		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>

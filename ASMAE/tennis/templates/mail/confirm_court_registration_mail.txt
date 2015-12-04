@@ -1,0 +1,29 @@
+# Subject balise isn't mandatory, if not present the mail subject will simply be empty
+# The message balise must be present however, the balises <<namePlayerOne>> and <<namePlayerTwo>> must also be present.
+# If they are not, no mail is send and a message is printed in log announcing mail malfunction
+# The following four balises are necessary for working email and allows to set what will be print if the court is available samedi/dimanche or both in the courtDisponibility balises
+<availableWeekEnd>samedi et dimanche<\availableWeekEnd>
+<availableSaturday>uniquement le dimanche<\availableSaturday>
+<availableSunday>uniquement le samedi<\availableSunday>
+<notAvailable>non disponible<\notAvailable>
+<subject>Confirmation de l'enregistrement de votre terrain<\subject>
+<message>
+
+Bonjour <<nameOne>>,
+
+Merci d'avoir mis à disposition votre terrain de tennis pour le prochain tournoi
+'Le Charles de Lorraine'. Veuillez s'il vous plait re-vérifier que les
+informations ci-dessous correspondent bien à votre terrain.
+
+Adresse : <<courtAdresse>>
+Type : <<courtType>>
+Disponibilité : <<courtDisponibility>>
+
+Si une quelconque erreur reste présente dans l'enregistrement, sachez qu'il reste possible
+de modifier les informations d'inscription sur notre site. Nous sommes également disponible
+en cas de besoin via l'onglet contact du site internet.
+
+Merci encore de votre soutien,
+L'équipe 'Le Charles de Lorraine'
+
+<\message>
