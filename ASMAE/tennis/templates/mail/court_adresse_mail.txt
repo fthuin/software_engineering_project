@@ -6,15 +6,15 @@
 
 Bonjour <<nameOne>>,
 
-Le tournoi approche à grand pas et l'endroit où se deroulera
-votre premier match a été décidé. Veuillez donc vous rendre a
+Le tournoi approche Ã  grand pas et l'endroit oÃ¹ se deroulera
+votre premier match a Ã©tÃ© dÃ©cidÃ©. Veuillez donc vous rendre a
 l'adresse suivante :
 
 <<courtAdresse>>
 
-En cas de problème, nous restons disponible via l'onglet contact du site internet.
+En cas de problÃ¨me, nous restons disponible via l'onglet contact du site internet.
 
 Merci encore de votre soutien et bons matchs,
-<<staffName>> de l'équipe 'Le charle de Lorraine'
+<<staffName>> de l'Ã©quipe 'Le charle de Lorraine'
 
 <\message>

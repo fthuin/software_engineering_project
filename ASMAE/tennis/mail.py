@@ -3,18 +3,27 @@ import sys
 import time
 import datetime
 import threading
-import traceback 
-from django.conf import settings
+import traceback
 from django.core.mail import send_mail
 from django.utils.crypto import get_random_string
 from django.core.mail import EmailMultiAlternatives
 from tennis.models import Extra, Participant, Court, Tournoi, Pair, UserInWaitOfActivation, Poule
 
+#Variables
+CONTACT_EMAIL = "noreply.lecharledelorraine@gmail.com"
+EMAIL_FROM = "noreply@lecharledelorraine.com"
+#CONTACT_EMAIL_PASSWORD = "LeCharleDeLorraine" KEEP TO CONNECT TO THE MAIL, USELESS IN APP
+#EMAIL SENDGRID => pas toucher la cle API sinon faut en recrée une
+#COMMAND = heroku config:add SENDGRID_USERNAME=Asmae SENDGRID_PASSWORD=LeCharleDeLorraine2016 EMAIL_BACKEND=sgbackend.SendGridBackend SENDGRID_API_KEY=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 -a asmae
+
 # MAIL FUNCTION:
 def readTemplateFile(fileName):
+	# The two next line allows the program to avoid encoding error on some OS, don't touch
+	reload(sys)
+	sys.setdefaultencoding('utf8')
 	try:
 		file = open(u'./tennis/templates/mail/'+ fileName+ u'.txt', u'r')
-		data = file.read()
+		data = u""+file.read()
 		return data
 	except:
 		print(u"Cannot open mail template " + fileName)
@@ -43,7 +52,7 @@ def send_email_with_attachement(subject, message, fromAdresse, mailingList, file
 
 def send_mail_via_thread(subject, message, fromAdresse, mailingList, fail_silently=False):
 	if fromAdresse == "":
-		fromAdresse = settings.EMAIL_FROM
+		fromAdresse = EMAIL_FROM
 	try:
 		threading.Thread(target=send_mail, args=(subject, message, fromAdresse, mailingList, fail_silently, )).start()
 	except:
@@ -74,8 +83,8 @@ def send_confirmation_email_pair_registered(participantOne, participantTwo):
 		messagePlayerTwo = replaceVariableBaliseByValue(message, "nameOne", playerTwoFullName)
 		messagePlayerTwo = replaceVariableBaliseByValue(message, "nameTwo", playerOneFullName)
 	except ValueError as err:
-		signal_error_in_mail_template_by_mail(template, err.args[0])
-		print(err.args[0])
+		signal_error_in_mail_template_by_mail(template, err.args)
+		print("Error in template modification ", err.args)
 		return False
 	# Send
 	if send_mail_via_thread(subject, messagePlayerOne, "", [playerOneAdresseMail]):
@@ -114,8 +123,8 @@ def send_confirmation_email_court_registered(participant, court):
 		else:
 			message = replaceVariableBaliseByValue(message, "courtDisponibility", readBalise(data, "notAvailable"))
 	except ValueError as err:
-		signal_error_in_mail_template_by_mail(template, err.args[0])
-		print(err.args[0])
+		signal_error_in_mail_template_by_mail(template, err.args)
+		print("Error in template modification ", err.args)
 		return False
 	# Send
 	return send_mail_via_thread(subject, message, "", [mail])
@@ -141,8 +150,8 @@ def send_email_court_adress(participant, court, staff):
 		message = replaceVariableBaliseByValue(message, "courtAdresse", courtAdresse)
 		message = replaceVariableBaliseByValue(message, "StaffName", staffName)
 	except ValueError as err:
-		signal_error_in_mail_template_by_mail(template, err.args[0])
-		print(err.args[0])
+		signal_error_in_mail_template_by_mail(template, err.args)
+		print("Error in template modification ", err.args)
 		return False
 	# Send
 	return send_mail_via_thread(subject, message, "", [mail])
@@ -172,8 +181,8 @@ def send_email_payment_issue(participant, extras, staff):
 		message = replaceVariableBaliseByValue(message, "Adresse", adresseHQ)
 		message = replaceVariableBaliseByValue(message, "StaffName", staffName)
 	except ValueError as err:
-		signal_error_in_mail_template_by_mail(template, err.args[0])
-		print(err.args[0])
+		signal_error_in_mail_template_by_mail(template, err.args)
+		print("Error in template modification ", err.args)
 		return False
 	# Send
 	return send_mail_via_thread(subject, message, "", [mail])
@@ -196,8 +205,8 @@ def send_register_confirmation_email(activationObject, participant, link):
 		message = replaceVariableBaliseByValue(message, "nameOne", fullName)
 		message = replaceVariableBaliseByValue(message, "link", lien)
 	except ValueError as err:
-		signal_error_in_mail_template_by_mail(template, err.args[0])
-		print(err.args[0])
+		signal_error_in_mail_template_by_mail(template, err.args)
+		print("Error in template modification ", err.args)
 		return False
 	# Send
 	return send_mail_via_thread(subject, message, "", [mail])
@@ -223,8 +232,8 @@ def send_email_score_board(participant, staff):
 		message = replaceVariableBaliseByValue(message, "Adresse", adresseHQ)
 		message = replaceVariableBaliseByValue(message, "StaffName", staffName)
 	except ValueError as err:
-		signal_error_in_mail_template_by_mail(template, err.args[0])
-		print(err.args[0])
+		signal_error_in_mail_template_by_mail(template, err.args)
+		print("Error in template modification ", err.args)
 		return False
 	# Send
 	return send_mail_via_thread(subject, message, "", [mail])
@@ -245,8 +254,8 @@ def send_tournament_invitation_by_mail(participant):
 		message = readBalise(data, "message")
 		message = replaceVariableBaliseByValue(message, "nameOne", fullName)
 	except ValueError as err:
-		signal_error_in_mail_template_by_mail(template, err.args[0])
-		print(err.args[0])
+		signal_error_in_mail_template_by_mail(template, err.args)
+		print("Error in template modification ", err.args)
 		return False
 	# Send
 	return send_mail_via_thread(subject, message, "", [mail])
@@ -302,11 +311,12 @@ def send_email_start_tournament(staff):
 # CONTACT MAIL
 # Envoie un mail a l'adresse de contact du site
 def send_contact_mail(email, subject, message):
-	return send_mail(subject, message, email, [settings.CONTACT_EMAIL], fail_silently=False)
+	return send_mail(subject, message, email, [CONTACT_EMAIL], fail_silently=False)
 
 def signal_error_in_mail_template_by_mail(template, error):
-	message = u"Le template de mail '" +  template + u"' est au moin particialement incorrect. Aucun message n'a put etre envoyé a l'utilisateur.\n\nErreur recue par le programme :  " + error
-	return send_mail("ERROR IN MAIL TEMPLATE", message, settings.CONTACT_EMAIL, [settings.CONTACT_EMAIL], fail_silently=False)
+	message = u"Le template de mail '" +  template + u"' est au moin particialement incorrect. Aucun message n'a put etre envoyé a l'utilisateur.\n\nErreur recue par le programme :  "
+	message.join()
+	return send_mail("ERROR IN MAIL TEMPLATE", message, CONTACT_EMAIL, [CONTACT_EMAIL], fail_silently=False)
 
 # TEST MAIL
 # For tests only

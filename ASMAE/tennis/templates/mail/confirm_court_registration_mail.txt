@@ -11,19 +11,19 @@
 
 Bonjour <<nameOne>>,
 
-Merci d'avoir mis à disposition votre terrain de tennis pour le prochain tournoi
-'Le Charles de Lorraine'. Veuillez s'il vous plait re-vérifier que les
-informations ci-dessous correspondent bien à votre terrain.
+Merci d'avoir mis Ã  disposition votre terrain de tennis pour le prochain tournoi
+'Le Charles de Lorraine'. Veuillez s'il vous plait re-vÃ©rifier que les
+informations ci-dessous correspondent bien Ã  votre terrain.
 
 Adresse : <<courtAdresse>>
 Type : <<courtType>>
-Disponibilité : <<courtDisponibility>>
+DisponibilitÃ© : <<courtDisponibility>>
 
-Si une quelconque erreur reste présente dans l'enregistrement, sachez qu'il reste possible
-de modifier les informations d'inscription sur notre site. Nous sommes également disponible
+Si une quelconque erreur reste prÃ©sente dans l'enregistrement, sachez qu'il reste possible
+de modifier les informations d'inscription sur notre site. Nous sommes Ã©galement disponible
 en cas de besoin via l'onglet contact du site internet.
 
 Merci encore de votre soutien,
-L'équipe 'Le Charles de Lorraine'
+L'Ã©quipe 'Le Charles de Lorraine'
 
 <\message>
