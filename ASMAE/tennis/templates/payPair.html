@@ -1,8 +1,4 @@
-{% extends "tournoi.html" %}
-
-{% block title %}Paiement Pair {{ pair.id }}{% endblock %}
-
-{% block body %}
+{% extends "tournoi.html" %} {% block title %}Paiement Pair {{ pair.id }}{% endblock %} {% block body %}
 
 <div class="container">
 	<div class="content-box">
@@ -14,39 +10,39 @@
 					<div class="panel-heading">Factures</div>
 					<div class="panel-body">
 						<div class="table-responsive">
-						  <table class="table">
-						    <thead>
-						      <tr>
-						        <th>Nom</th>
-						        <th>Prix</th>
-						        <th>Quantité</th>
-						      </tr>
-						    </thead>
-						    <tbody>
-						      <tr>
-						        <td>Inscription</td>
-						        <td>{{prix}} €</td>
-						        <td>2</td>
-						      </tr>
-						      {% for extra in extraList %}
-						      <tr>
-						        <td>{{ extra.0 }}</td>
-						        <td>{{ extra.1 }} €</td>
-						        <td>{{ extra.2 }}</td>
-						      </tr>
-						      {% endfor %}
-						      <tr>
-						      	<td></td>
-						        <td></td>
-						        <td></td>
-						      </tr>
-						      <tr>
-						        <td><b>Total</b></td>
-						        <td>{{ totalprice }} €</td>
-						        <td></td>
-						      </tr>
-						    </tbody>
-						   </table>
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Nom</th>
+										<th>Prix</th>
+										<th>Quantité</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Inscription</td>
+										<td>{{prix}} €</td>
+										<td>2</td>
+									</tr>
+									{% for extra in extraList %}
+									<tr>
+										<td>{{ extra.0 }}</td>
+										<td>{{ extra.1 }} €</td>
+										<td>{{ extra.2 }}</td>
+									</tr>
+									{% endfor %}
+									<tr>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td><b>Total</b></td>
+										<td>{{ totalprice }} €</td>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
@@ -56,10 +52,22 @@
 					<div class="panel-heading">Type de paiement</div>
 					<div class="panel-body">
 						<ul class="list-inline text-center">
-							<li style="padding:5px;"><button onClick="selectMasterCard()"class="btn btn-default">MasterCard <br><i class="fa fa-4x fa-cc-mastercard"></i></button></li>
-							<li style="padding:5px;"><button onClick="selectVisa()" class="btn btn-default">Visa <br><i class="fa fa-4x fa-cc-visa"></i></button></li>
-							<li style="padding:5px;"><button onClick="selectPaypal()" class="btn btn-default">Paypal <br><i class="fa fa-4x fa-cc-paypal"></i></button></li>
-							<li style="padding:5px;"><button onClick="selectVirement()" class="btn btn-default">Virement <br><i class="fa fa-4x fa-envelope-o"></i></button></li>
+							<li style="padding:5px;">
+								<button onClick="selectMasterCard()" class="btn btn-default">MasterCard
+									<br><i class="fa fa-4x fa-cc-mastercard"></i></button>
+							</li>
+							<li style="padding:5px;">
+								<button onClick="selectVisa()" class="btn btn-default">Visa
+									<br><i class="fa fa-4x fa-cc-visa"></i></button>
+							</li>
+							<li style="padding:5px;">
+								<button onClick="selectPaypal()" class="btn btn-default">Paypal
+									<br><i class="fa fa-4x fa-cc-paypal"></i></button>
+							</li>
+							<li style="padding:5px;">
+								<button onClick="selectVirement()" class="btn btn-default">Virement
+									<br><i class="fa fa-4x fa-envelope-o"></i></button>
+							</li>
 
 						</ul>
 					</div>
@@ -68,164 +76,153 @@
 					<div class="panel-heading">Information paiement</div>
 					<!-- MASTERCARD PANEL -->
 					<div class="panel-body" id="mastercard">
-						<form class="form-horizontal" name="payForm" role="form" method="post" action="" onsubmit="" >
-						{% csrf_token %}
+						<form class="form-horizontal" name="payForm" role="form" method="post" action="" onsubmit="">
+							{% csrf_token %}
 
-						<h4 class="center">MasterCard</h4>
-						<hr class="line">
+							<h4 class="center">MasterCard</h4>
+							<hr class="line">
 
-						<!-- Numero de carte -->
-					    <div class="form-group">
-					      <label class="control-label col-sm-4" for="numero">Numéro carte</label>
-					      <div class="col-sm-8">
-					      	<input type="text" class="form-control" name="numero" id="numero" placeholder="ex : 5500 000 5555 5559">
-					      </div>
-					    </div>
+							<!-- Numero de carte -->
+							<div class="form-group">
+								<label class="control-label col-sm-4" for="numero">Numéro carte</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" name="numero" id="numero" placeholder="ex : 5500 000 5555 5559">
+								</div>
+							</div>
 
-					    <!-- Propriétaire -->
-					    <div class="form-group">
-					      <label class="control-label col-sm-4" for="proprio">Propriétaire</label>
-					      <div class="col-sm-8">
-					      	<input type="text" class="form-control" name="proprio" id="proprio" placeholder="Nom Prénom">
-					      </div>
-					    </div>
+							<!-- Propriétaire -->
+							<div class="form-group">
+								<label class="control-label col-sm-4" for="proprio">Propriétaire</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" name="proprio" id="proprio" placeholder="Nom Prénom">
+								</div>
+							</div>
 
-					    <!-- Date expi -->
-					    <div class="form-group">
-					      <label class="control-label col-sm-4" for="date">Date d'expiration</label>
-					      <div class="col-sm-8">
-					      	<input type="text" class="form-control" name="date" id="date" placeholder="jj/mm">
-					      </div>
-					    </div>
+							<!-- Date expi -->
+							<div class="form-group">
+								<label class="control-label col-sm-4" for="date">Date d'expiration</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" name="date" id="date" placeholder="jj/mm">
+								</div>
+							</div>
 
-					    <!-- code -->
-					    <div class="form-group">
-					      <label class="control-label col-sm-4" for="code">Code</label>
-					      <div class="col-sm-8">
-					      	<input type="text" class="form-control" name="code" id="code" placeholder="ex : 000">
-					      </div>
-					    </div>
-					  </form>
+							<!-- code -->
+							<div class="form-group">
+								<label class="control-label col-sm-4" for="code">Code</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" name="code" id="code" placeholder="ex : 000">
+								</div>
+							</div>
+						</form>
 					</div>
 					<!-- VISA PANEL -->
 					<div class="panel-body" id="visa" style="display:none;">
-						<form class="form-horizontal" name="payForm" role="form" method="post" action="" onsubmit="" >
-						{% csrf_token %}
+						<form class="form-horizontal" name="payForm" role="form" method="post" action="" onsubmit="">
+							{% csrf_token %}
 
-						<h4 class="center">Visa</h4>
-						<hr class="line">
+							<h4 class="center">Visa</h4>
+							<hr class="line">
 
-						<!-- Numero de carte -->
-					    <div class="form-group">
-					      <label class="control-label col-sm-4" for="numero">Numéro carte</label>
-					      <div class="col-sm-8">
-					      	<input type="text" class="form-control" name="numero" id="numero" placeholder="ex : 4111 1111 1111 1111">
-					      </div>
-					    </div>
+							<!-- Numero de carte -->
+							<div class="form-group">
+								<label class="control-label col-sm-4" for="numero">Numéro carte</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" name="numero" id="numero" placeholder="ex : 4111 1111 1111 1111">
+								</div>
+							</div>
 
-					    <!-- Propriétaire -->
-					    <div class="form-group">
-					      <label class="control-label col-sm-4" for="proprio">Propriétaire</label>
-					      <div class="col-sm-8">
-					      	<input type="text" class="form-control" name="proprio" id="proprio" placeholder="Nom Prénom">
-					      </div>
-					    </div>
+							<!-- Propriétaire -->
+							<div class="form-group">
+								<label class="control-label col-sm-4" for="proprio">Propriétaire</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" name="proprio" id="proprio" placeholder="Nom Prénom">
+								</div>
+							</div>
 
-					    <!-- Date expi -->
-					    <div class="form-group">
-					      <label class="control-label col-sm-4" for="date">Date d'expiration</label>
-					      <div class="col-sm-8">
-					      	<input type="text" class="form-control" name="date" id="date" placeholder="jj/mm">
-					      </div>
-					    </div>
+							<!-- Date expi -->
+							<div class="form-group">
+								<label class="control-label col-sm-4" for="date">Date d'expiration</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" name="date" id="date" placeholder="jj/mm">
+								</div>
+							</div>
 
-					    <!-- code -->
-					    <div class="form-group">
-					      <label class="control-label col-sm-4" for="code">Code</label>
-					      <div class="col-sm-8">
-					      	<input type="text" class="form-control" name="code" id="code" placeholder="ex : 000">
-					      </div>
-					    </div>
-					  </form>
+							<!-- code -->
+							<div class="form-group">
+								<label class="control-label col-sm-4" for="code">Code</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" name="code" id="code" placeholder="ex : 000">
+								</div>
+							</div>
+						</form>
 					</div>
 					<!-- PAYPAL PANEL -->
 					<div class="panel-body" id="paypal" style="display:none;">
-						<form class="form-horizontal" name="payForm" role="form" method="post" action="" onsubmit="" >
-						{% csrf_token %}
+						<form class="form-horizontal" name="payForm" role="form" method="post" action="" onsubmit="">
+							{% csrf_token %}
 
-						<h4 class="center">Paypal</h4>
-						<hr class="line">
+							<h4 class="center">Paypal</h4>
+							<hr class="line">
 
-						<h5 class="center">Login</h5>
+							<div class="center">
+								<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+									<input type="hidden" name="cmd" value="_s-xclick">
+									<input type="hidden" name="hosted_button_id" value="L4P3DWVBMBUGA">
+									<input type="image" src="https://www.paypalobjects.com/fr_FR/BE/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal, le réflexe sécurité pour payer en ligne">
+									<img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
+								</form>
+							</div>
 
-						<!-- Compte -->
-					    <div class="form-group">
-					      <label class="control-label col-sm-4" for="compte">Compte</label>
-					      <div class="col-sm-8">
-					      	<input type="text" class="form-control" name="compte" id="compte" placeholder="exemple@paypal.com">
-					      </div>
-					    </div>
-
-					    <!-- Password -->
-					    <div class="form-group">
-					      <label class="control-label col-sm-4" for="password">Mot de passe</label>
-					      <div class="col-sm-8">
-					      	<input type="password" class="form-control" name="password" id="password">
-					      </div>
-					    </div>
-
-					    <button class="btn btn-default center-block">Connexion</button>
-
-					  </form>
+						</form>
 					</div>
 					<!-- VIREMENT PANEL -->
 					<div class="panel-body" id="virement" style="display:none;">
-						<form class="form-horizontal" name="payForm" role="form" method="post" action="" onsubmit="" >
-						{% csrf_token %}
+						<form class="form-horizontal" name="payForm" role="form" method="post" action="" onsubmit="">
+							{% csrf_token %}
 
-						<h4 class="center">Virement</h4>
-						<hr class="line">
+							<h4 class="center">Virement</h4>
+							<hr class="line">
 
-						<!-- Montant -->
-					    <div class="form-group" style="margin:0">
-					      <label class="control-label col-sm-4">Montant</label>
-					      <div class="col-sm-8">
-					      	<p class="info">{{ totalprice }} €</p>
-					      </div>
-					    </div>
+							<!-- Montant -->
+							<div class="form-group" style="margin:0">
+								<label class="control-label col-sm-4">Montant</label>
+								<div class="col-sm-8">
+									<p class="info">{{ totalprice }} €</p>
+								</div>
+							</div>
 
-					    <!-- Bénéficiaire -->
-					    <div class="form-group" style="margin:0">
-					      <label class="control-label col-sm-4">Bénéficiaire</label>
-					      <div class="col-sm-8">
-					      	<p class="info">Asmae asbl</p>
-					      </div>
-					    </div>
+							<!-- Bénéficiaire -->
+							<div class="form-group" style="margin:0">
+								<label class="control-label col-sm-4">Bénéficiaire</label>
+								<div class="col-sm-8">
+									<p class="info">Asmae asbl</p>
+								</div>
+							</div>
 
-					    <!-- Compte -->
-					    <div class="form-group" style="margin:0">
-					      <label class="control-label col-sm-4">Compte</label>
-					      <div class="col-sm-8">
-					      	<p class="info">BE10-5230-8053-2004</p>
-					      </div>
-					    </div>
+							<!-- Compte -->
+							<div class="form-group" style="margin:0">
+								<label class="control-label col-sm-4">Compte</label>
+								<div class="col-sm-8">
+									<p class="info">BE10-5230-8053-2004</p>
+								</div>
+							</div>
 
-					    <!-- Adresse -->
-					    <div class="form-group" style="margin:0">
-					      <label class="control-label col-sm-4">Adresse</label>
-					      <div class="col-sm-8">
-					      	<p class="info">Place des Carabiniers 5, 1030 Bruxelles</p>
-					      </div>
-					    </div>
+							<!-- Adresse -->
+							<div class="form-group" style="margin:0">
+								<label class="control-label col-sm-4">Adresse</label>
+								<div class="col-sm-8">
+									<p class="info">Place des Carabiniers 5, 1030 Bruxelles</p>
+								</div>
+							</div>
 
-					    <!-- Communication -->
-					    <div class="form-group" style="margin:0">
-					      <label class="control-label col-sm-4">Communication</label>
-					      <div class="col-sm-8">
-					      	<p class="info">Inscription paire {{ pair.id }}</p>
-					      </div>
-					    </div>
-					  </form>
+							<!-- Communication -->
+							<div class="form-group" style="margin:0">
+								<label class="control-label col-sm-4">Communication</label>
+								<div class="col-sm-8">
+									<p class="info">Inscription paire {{ pair.id }}</p>
+								</div>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
