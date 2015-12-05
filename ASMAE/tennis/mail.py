@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*- 
+import sys
 import time
 import datetime
 import threading
@@ -43,7 +44,12 @@ def send_email_with_attachement(subject, message, fromAdresse, mailingList, file
 def send_mail_via_thread(subject, message, fromAdresse, mailingList, fail_silently=False):
 	if fromAdresse == "":
 		fromAdresse = settings.EMAIL_FROM
-	threading.Thread(target=send_mail, args=(subject, message, fromAdresse, mailingList, fail_silently, )).start()
+	try:
+		threading.Thread(target=send_mail, args=(subject, message, fromAdresse, mailingList, fail_silently, )).start()
+	except:
+		print "Unexpected error in mail sending:", sys.exc_info()[0]
+		return False
+	return True
 
 # MAIL CREATION
 # Send a confirmation email for pair registration
@@ -72,9 +78,9 @@ def send_confirmation_email_pair_registered(participantOne, participantTwo):
 		print(err.args[0])
 		return False
 	# Send
-	send_mail_via_thread(subject, messagePlayerOne, "", [playerOneAdresseMail])
-	send_mail_via_thread(subject, messagePlayerTwo, "", [playerTwoAdresseMail])
-	return True
+	if send_mail_via_thread(subject, messagePlayerOne, "", [playerOneAdresseMail]):
+		return send_mail_via_thread(subject, messagePlayerTwo, "", [playerTwoAdresseMail])
+	return False
 
 
 # Send a confirmation email for court registration
@@ -112,8 +118,7 @@ def send_confirmation_email_court_registered(participant, court):
 		print(err.args[0])
 		return False
 	# Send
-	send_mail_via_thread(subject, message, "", [mail])
-	return True
+	return send_mail_via_thread(subject, message, "", [mail])
 
 # A tout les joueurs (excepte les iregularité de payment et les groups leader), envoyé le court sur lequels ils va jouer
 def send_email_court_adress(participant, court, staff):
@@ -140,8 +145,7 @@ def send_email_court_adress(participant, court, staff):
 		print(err.args[0])
 		return False
 	# Send
-	send_mail(subject, message, "", [mail], fail_silently=False)
-	return True
+	return send_mail_via_thread(subject, message, "", [mail])
 
 # Envoye a tout les player en irregularite de payment
 def send_email_payment_issue(participant, extras, staff):
@@ -172,8 +176,7 @@ def send_email_payment_issue(participant, extras, staff):
 		print(err.args[0])
 		return False
 	# Send
-	send_mail(subject, message, "", [mail], fail_silently=False)
-	return True
+	return send_mail_via_thread(subject, message, "", [mail])
 	
 def send_register_confirmation_email(activationObject, participant, link): 
 	# Init Mail variable
@@ -197,8 +200,7 @@ def send_register_confirmation_email(activationObject, participant, link):
 		print(err.args[0])
 		return False
 	# Send
-	send_mail_via_thread(subject, message, "", [mail])
-	return True
+	return send_mail_via_thread(subject, message, "", [mail])
 
 # Envoye a tout les groupes leader TODO
 def send_email_score_board(participant, staff):
@@ -225,8 +227,7 @@ def send_email_score_board(participant, staff):
 		print(err.args[0])
 		return False
 	# Send
-	send_mail_via_thread(subject, message, "", [mail])
-	return True
+	return send_mail_via_thread(subject, message, "", [mail])
 	
 def send_tournament_invitation_by_mail(participant):
 	# Read template from file
@@ -248,8 +249,7 @@ def send_tournament_invitation_by_mail(participant):
 		print(err.args[0])
 		return False
 	# Send
-	send_mail_via_thread(subject, message, "", [mail])
-	return True
+	return send_mail_via_thread(subject, message, "", [mail])
 	
 def send_prospectus_by_mail():
 	#TODO Envoye un mail contenant les pdf devant etre envoyer. Ne pas créer de pdf dupliquer pour les adresses equivalentes
@@ -264,8 +264,7 @@ def send_prospectus_by_mail():
 	#Generate one mail for each
 	file = open('./tennis/templates/mail/tournament_invitation_mail.txt', 'r')
 	#Send mail
-	send_email_with_attachement(subject, message, fromAdresse, mailingList, files)
-	return True
+	return send_email_with_attachement(subject, message, fromAdresse, mailingList, files, )
 
 # BULK MAILING TOURNAMENT START
 def send_tournament_invite_to_all_player():
@@ -303,12 +302,11 @@ def send_email_start_tournament(staff):
 # CONTACT MAIL
 # Envoie un mail a l'adresse de contact du site
 def send_contact_mail(email, subject, message):
-	send_mail(subject, message, email, [settings.CONTACT_EMAIL], fail_silently=False)
-	return True
+	return send_mail(subject, message, email, [settings.CONTACT_EMAIL], fail_silently=False)
 
 def signal_error_in_mail_template_by_mail(template, error):
 	message = u"Le template de mail '" +  template + u"' est au moin particialement incorrect. Aucun message n'a put etre envoyé a l'utilisateur.\n\nErreur recue par le programme :  " + error
-	send_mail("ERROR IN MAIL TEMPLATE", message, settings.CONTACT_EMAIL, [settings.CONTACT_EMAIL], fail_silently=False)
+	return send_mail("ERROR IN MAIL TEMPLATE", message, settings.CONTACT_EMAIL, [settings.CONTACT_EMAIL], fail_silently=False)
 
 # TEST MAIL
 # For tests only
