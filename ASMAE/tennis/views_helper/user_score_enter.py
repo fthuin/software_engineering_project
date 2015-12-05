@@ -1,8 +1,8 @@
 # /usr/bin/env python
 # coding: utf8
 '''
-Implémentation de la view qui permet d'encoder les scores relatifs à une
-poule.
+Implémentation de la view qui permet à un joueur d'encoder ses points
+dans sa poule
 '''
 
 from django.shortcuts import render, redirect
@@ -11,6 +11,7 @@ from tennis.models import Poule, PouleStatus, Score
 from tennis.views import home, tournoi
 
 def view(request, id):
+    print 'yolo'
     def is_number(s):
         try:
             float(s)
