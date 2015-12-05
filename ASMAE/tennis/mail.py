@@ -304,6 +304,7 @@ def send_email_start_tournament(staff):
 # Envoie un mail a l'adresse de contact du site
 def send_contact_mail(email, subject, message):
 	send_mail(subject, message, email, [settings.CONTACT_EMAIL], fail_silently=False)
+	return True
 
 def signal_error_in_mail_template_by_mail(template, error):
 	message = u"Le template de mail '" +  template + u"' est au moin particialement incorrect. Aucun message n'a put etre envoyé a l'utilisateur.\n\nErreur recue par le programme :  " + error
