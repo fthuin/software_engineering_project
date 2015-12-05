@@ -6,11 +6,11 @@
 {% block body %}
 <div class="container">
 	<!-- Onglet de navigations -->
-	<ul class="nav nav-tabs">
+	<ul class="nav nav-tabs no-print">
 	    {% if perms.tennis.DoubleMixte or perms.tennis.DoubleHommes or perms.tennis.DoubleFemmes or perms.tennis.TournoiDesFamilles %}<li {% block ongTournoi %}{% endblock %} id="tournoi"><a href="{% url "tennis.views.staffTournoi" %}">
-	    	<span class=" visible-md visible-lg"><i class="fa fa-trophy fa-g"></i> Tournois</span>
-	    	<span class="visible-sm"><i class="fa fa-trophy fa-lg"></i></span>
-	    	<span class="visible-xs"><i class="fa fa-trophy"></i></span>
+	    	<span class="visible-md visible-lg no-print"><i class="fa fa-trophy fa-g no-print"></i> Tournois</span>
+	    	<span class="visible-sm no-print"><i class="fa fa-trophy fa-lg no-print"></i></span>
+	    	<span class="visible-xs no-print"><i class="fa fa-trophy no-print"></i></span>
 		{% endif %}
 	    </a></li>
 	    {% if perms.tennis.Court %}<li {% block ongTerrain %}{% endblock %} id="terrain"><a href="{% url "tennis.views.staffTerrain" %}">
