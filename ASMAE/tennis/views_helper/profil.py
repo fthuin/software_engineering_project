@@ -12,11 +12,20 @@ import re
 from tennis.classement import validate_classement_thread
 from django.core.urlresolvers import reverse
 from tennis.views import home
+from django.core.exceptions import ObjectDoesNotExist
 
 def view(request):
     rankings = Ranking.objects.all()
     today = datetime.date.today()
     yearLoop = range(1900, today.year - 7)
+    try:
+        request.user.participant
+    except ObjectDoesNotExist:
+        Participant(user=request.user, titre = "Mr", nom="", prenom="", rue="",
+        numero="", boite="", codepostal="", localite="", telephone="", fax="",
+        gsm="", classement=rankings.first(), oldparticipant=False,
+        datenaissance=today, latitude=0.0, isClassementVerified=False,
+         longitude=0.0).save()
     birthdate = request.user.participant.datenaissance
     formatedBirthdate = birthdate.strftime('%d/%m/%Y')
     if request.method == "POST":

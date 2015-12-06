@@ -42,7 +42,7 @@ class Participant(models.Model):
     classement = models.ForeignKey(Ranking)
     oldparticipant = models.BooleanField(default=False)
     isClassementVerified = models.BooleanField(default=False)
-    isAccountActivated = models.BooleanField(default=True)
+    isAccountActivated = models.BooleanField(default=True, verbose_name="Compte activé")
 
     def __str__(self):
         return self.prenom + " " + self.nom
@@ -175,7 +175,7 @@ class Court(models.Model):
     commentaireStaff = models.TextField(null=True, blank=True)
     valide = models.BooleanField(default=False, verbose_name='Validé')
     user = models.ForeignKey(User, verbose_name='Utilisateur')
-    usedLastYear = models.BooleanField(default=False)
+    usedLastYear = models.BooleanField(default=False, verbose_name='Vétéran')
 
     def __str__(self):
         return str(self.id) + " " + self.rue

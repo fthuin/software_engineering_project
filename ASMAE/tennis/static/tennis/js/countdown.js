@@ -60,12 +60,12 @@ var CountdownWidth = 200;
 var CountdownHeight = 30;
 
 var CountdownLabels = {
-	second 	: "SECONDS",
+	second 	: "SECONDeS",
 	minute 	: "MINUTES",
-	hour	: "HOURS",
-	day 	: "DAYS",
-	month 	: "MONTHS",
-	year 	: "YEARS"	
+	hour	: "HEURES",
+	day 	: "JOURS",
+	month 	: "MOIS",
+	year 	: "ANNEE"	
 };
 
 var CountdownInterval = 76;
@@ -179,7 +179,7 @@ hour:c._kHour,day:c._kDay,month:c._kMonth,year:c._kYear};var b=c.prototype;b._do
 this._timeEnd,o=k.getTime()-a.getTime(),p=Math.floor,v=false;if(o>0){var z=c._MS_HOUR,n=this._rangeLo,m=this._rangeHi;this._truncate&&(n=-1,m=10);var q=c._kMs,s=c._kSecond,r=c._kMinute,w=c._kHour,t=c._kDay,y=c._kMonth,l=o/1E3,u=l/60,x=u/60,B=x/24;n<t&&(m>=q&&(b=p(m==q?o:o%1E3)),m>=s&&(e=p(m==s?l:l%60)),m>=r&&(d=p(m==r?u:u%60)),m>=w&&(f=p(m==w?x:x%24)));o=a.getUTCFullYear();n=a.getUTCMonth();l=a.getUTCDate();q=k.getUTCFullYear();s=k.getUTCMonth();r=k.getUTCDate();w=l;u=0;if(m>=t)if(m==t)i=p(B);else{var i=
 a.getUTCHours(),t=a.getUTCMinutes(),a=a.getUTCSeconds(),B=k.getUTCHours(),u=k.getUTCMinutes(),A=k.getUTCSeconds(),k=s+(s==n?0:-1);k<0&&(k+=12);x=c.getMonthDays(k,q);x=x<l?c.getMonthDays(k-1,q):x;x=x<r?r:x;k=0;r>l?k=r-l-1:r<l&&(k=l-r-1);u=(c._MS_DAY-(a+t*60+i*3600)*1E3+(A+u*60+B*3600)*1E3)/z;u<24&&l++;l+=k;i=p((x-l+r+k)%x)}m>=y&&(j=0,g=(q-o)*12,g<0||o==q&&n==s?g=0:(n++,s++,k=0,s==n?w<=r&&k--:s>n?k=s-n-1:s<n&&(k=12-n+s,j--),u<24&&w++,n>=s&&w>r?k--:s>=n&&w<=r&&k++,g+=k,g<0&&(g=0),g>11&&(j+=p(g/12),g%=
 12),m==y&&(g+=j*12,j=0)))}else v=true;b={ms:b,second:e,minute:d,hour:f,day:i,month:g,year:j};c.pad(b,this._digits);if(v&&!this._doneFired&&this._onComplete)this._doneFired=this._done=true,this._onComplete(this._timeEnd);return b};c._daysInMonth=[31,28,31,30,31,30,31,31,30,31,30,31];c.getMonthDays=function(a,b){return a==1?b%400==0||b%4==0&&b%100!=0?29:28:c._daysInMonth[a]};c.pad=function(a,b){if(b)for(var c in a){for(var d=String(a[c]),f=c=="ms"?3:b;d.length<f;)d="0"+d;a[c]=d}};Object.defineProperty(b,
-"rangeHi",{get:function(){return this._rangeHi},set:function(a){this._rangeHi=c._kRange[a]?c._kRange[a]:c._kYear}});Object.defineProperty(b,"rangeLo",{get:function(){return this._rangeLo},set:function(a){this._rangeLo=c._kRange[a]?c._kRange[a]:c._kSecond}});jbeeb.TimeDiff=c})();var EXTRACT_START=1,CountdownImageFolder="images/",CountdownImageBasename="flipper",CountdownImageExt="png",CountdownImagePhysicalWidth=41,CountdownImagePhysicalHeight=60,CountdownWidth=400,CountdownHeight=60,CountdownLabels={ms:"MS",second:"SECONDS",minute:"MINUTES",hour:"HOURS",day:"DAYS",month:"MONTHS",year:"YEARS"},CountdownInterval=76,EXTRACT_END=1;
+"rangeHi",{get:function(){return this._rangeHi},set:function(a){this._rangeHi=c._kRange[a]?c._kRange[a]:c._kYear}});Object.defineProperty(b,"rangeLo",{get:function(){return this._rangeLo},set:function(a){this._rangeLo=c._kRange[a]?c._kRange[a]:c._kSecond}});jbeeb.TimeDiff=c})();var EXTRACT_START=1,CountdownImageFolder="images/",CountdownImageBasename="flipper",CountdownImageExt="png",CountdownImagePhysicalWidth=41,CountdownImagePhysicalHeight=60,CountdownWidth=400,CountdownHeight=60,CountdownLabels={ms:"MS",second:"SECONDES",minute:"MINUTES",hour:"HEURES",day:"JOURS",month:"MOIS",year:"ANNEE"},CountdownInterval=76,EXTRACT_END=1;
 (function(){var c=function(a){this.imageFolder=CountdownImageFolder;this.imageBasename=CountdownImageBasename;this.imageExt=CountdownImageExt;this.imagePhysicalWidth=CountdownImagePhysicalWidth;this.imagePhysicalHeight=CountdownImagePhysicalHeight;this.totalFlipDigits=2;this._params=a||{};var b,c,d,f;if(a.bkgd){var i=a.bkgd;if(i.color)b=i.color;i.stroke&&i.strokeColor&&(c={weight:i.stroke||1,color:i.strokeColor,alpha:i.strokeAlpha});if(i.shadow)d=i.shadow;if(i.rounded)f=i.rounded}this._stage=new jbeeb.Stage({target:a.target,
 inline:a.inline||false,w:a.w||a.width||CountdownWidth,h:a.h||a.height||CountdownHeight,rounded:f||null,fill:b||null,stroke:c||null,shadow:d||null});jbeeb.register(this)},b=c.prototype;b._params=null;b._stage=null;b._done=false;b._onComplete=null;b.id=null;b._initDone=false;b._style=null;b.totalFlipDigits=null;b.imageFolder=null;b.imageBasename="flipper";b.imageExt="png";b._blocks=null;b._store=null;b._maxDisplayName="second";b._hideLabels=false;b._labelText=null;b._hideLine=false;b._defaultBlockWidth=
 0;b._digitWidth=0;b._blockSpacing=0;b._doublePadding=0;b._orderedBlockList=[];b._previousSizes={};b._interval=0;b._intervalCounter=0;b._timeRunnerNow=null;b.init=function(){this.id=jbeeb.getUID();var a=this._params;this._initDone=this._done=false;this._style=a.style||"boring";this.width=a.w||a.width||CountdownWidth;this.height=a.h||a.height||CountdownHeight;this._onComplete=a.onComplete;this._hideLabels=a.hideLabels;this._hideLine=a.hideLine;this._labelText=a.labelText||CountdownLabels;this._interval=

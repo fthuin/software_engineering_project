@@ -13,6 +13,7 @@ class Command(BaseCommand):
         os.system("python manage.py fill_typeTerrain")
         os.system("python manage.py fill_extra")
         os.system("python manage.py fill_tournoi")
+        os.system("python manage.py fill_ranking")
         os.system("python manage.py fill_resultat")
         os.system("python manage.py create_admingroup")
         os.system("python manage.py create_staff")

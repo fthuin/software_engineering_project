@@ -13,6 +13,7 @@ list_rankings = ["NC", "C30.5", "C30.4", "C30.3", "C30.2", "C30.1", "C30", "C15.
 
 class Command(BaseCommand):
     def addRankings(self):
+        print("Ajout des classements")
         for elem in list_rankings:
             r = Ranking(nom=elem)
             r.save()

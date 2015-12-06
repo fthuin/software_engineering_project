@@ -13,7 +13,7 @@ import datetime
 from django.contrib.auth.decorators import permission_required,  user_passes_test
 from django.contrib.auth.models import Permission, Group
 from django.http import HttpResponse
-from tennis.pdfdocument import PDFTerrain, PDFPair, PDFPoule
+from tennis.pdfdocument import PDFTerrain, PDFPair, PDFPoule, PDF_all_poules
 from django.db.models import Q
 from functools import reduce
 from django.db import connection
@@ -375,3 +375,19 @@ def resetDbForNextYear(request):
     i = infoTournoi(prix=20, date=datetime.date(date.today().year + 1, 9, 10),
                     addr="Place des Carabiniers, 5, 1030 Bruxelles", edition=43)
     i.save()
+
+def knockoff_print(request, name):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment;filename="poules ' + \
+        name + '.pdf"'
+    title = name
+    cat = name
+    if "_" in name:
+        title = name.split("_")[0]
+        cat = name.split("_")[1]
+    ti = TournoiTitle.objects.get(nom=title)
+    ca = TournoiCategorie.objects.get(nom=cat)
+    tournoi = Tournoi.objects.get(titre=ti, categorie=ca)
+    all_poules = Poule.objects.filter(tournoi=tournoi)
+    PDF_all_poules(response, all_poules, request.user)
+    return response
