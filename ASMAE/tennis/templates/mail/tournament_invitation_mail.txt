@@ -6,10 +6,10 @@
 
 Bonjour <<nameOne>>,
 
-Vous êtes cordialement invité a participer a notre prochaine
+Vous Ãªtes cordialement invitÃ© a participer a notre prochaine
 edition du tournoi LeCharleDeLorraine en septembre prochain.
 
 En esperant vous revoir participer,
-L'équipe 'Le Charles de Lorraine'
+L'Ã©quipe 'Le Charles de Lorraine'
 
 <\message>

@@ -10,6 +10,7 @@ def view(request):
     date = info.date
     year = date.year
     month = date.month
+    print(month)
     month_text = ""
     if month == 1:
         month_text = "janvier"
@@ -36,4 +37,4 @@ def view(request):
     elif month == 12:
         month_text = "decembre"
     day = date.day
-    return render(request, 'home.html', {'edition':edition, 'last':last, 'year':year, 'month_text':month_text, 'day':day})
+    return render(request, 'home.html', {'edition':edition, 'last':last, 'year':year, 'month_text':month_text, 'day':day, 'month':month})

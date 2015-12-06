@@ -1,23 +1,23 @@
 # Subject balise isn't mandatory, if not present the mail subject will simply be empty
 # The message balise must be present however, the balises <<namePlayerOne>> and <<namePlayerTwo>> must also be present.
 # If they are not, no mail is send and a message is printed in log announcing mail malfunction
-<subject>Le Charles de Lorraine : Problème de payment<\subject>
+<subject>Le Charles de Lorraine : ProblÃ¨me de payment<\subject>
 <message>
 
 Bonjour <<nameOne>>,
 
-Il semblerait que vous soyez toujours en irrégularité de payment pour le tournoi.
-Veuillez donc vous présenter samedi matin afin de régulariser votre situation et
-d'obtenier l'adresse a laquelle vous pourrez jouer. L'adresse du quartier général
-a laquelle vous devez vous présenter ainsi que le montant a fournir peuvent etre
+Il semblerait que vous soyez toujours en irrÃ©gularitÃ© de payment pour le tournoi.
+Veuillez donc vous prÃ©senter samedi matin afin de rÃ©gulariser votre situation et
+d'obtenier l'adresse a laquelle vous pourrez jouer. L'adresse du quartier gÃ©nÃ©ral
+a laquelle vous devez vous prÃ©senter ainsi que le montant a fournir peuvent etre
 trouver ci-dessous :
 
 Montant : <<Prix>> euros
 Adresse : <<Adresse>>
 
-En cas de problème, nous restons disponible via l'onglet contact du site internet.
+En cas de problÃ¨me, nous restons disponible via l'onglet contact du site internet.
 
 Merci encore de votre soutien
-<<StaffName>> de l'équipe 'Le charle de Lorraine'
+<<StaffName>> de l'Ã©quipe 'Le charle de Lorraine'
 
 <\message>

@@ -6,14 +6,14 @@
 
 Bonjour <<nameOne>>,
 
-Vous avez été enregistré pour jouer en paire avec <<nameTwo>>
+Vous avez Ã©tÃ© enregistrÃ© pour jouer en paire avec <<nameTwo>>
 lors du prochain tournoi 'Le Charle de Lorraine'.
 
-Si cet enregistrement a été fait par erreur, sachez qu'il reste possible de modifier les
-informations d'inscription sur notre site jusqu'à l'avant veille du tournoi. Nous sommes
-également disponible en cas de besoin via l'onglet contact du site internet.
+Si cet enregistrement a Ã©tÃ© fait par erreur, sachez qu'il reste possible de modifier les
+informations d'inscription sur notre site jusqu'Ã  l'avant veille du tournoi. Nous sommes
+Ã©galement disponible en cas de besoin via l'onglet contact du site internet.
 
 Merci encore de votre inscription,
-L'équipe 'Le Charles de Lorraine'
+L'Ã©quipe 'Le Charles de Lorraine'
 
 <\message>
