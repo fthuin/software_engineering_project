@@ -362,11 +362,11 @@ class Score(models.Model):
 
 
 class Poule(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True, verbose_name="ID")
     tournoi = models.ForeignKey(Tournoi)
     paires = models.ManyToManyField(Pair)
     leader = models.ForeignKey(User, null=True, blank=True)
-    court = models.ForeignKey(Court, null=True, blank=True)
+    court = models.ForeignKey(Court, null=True, blank=True, verbose_name = "Terrain")
     score = models.ManyToManyField(Score, blank=True)
     status = models.ForeignKey(PouleStatus, null=True, blank=True)
 
