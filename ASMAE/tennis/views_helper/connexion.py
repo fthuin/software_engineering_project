@@ -38,6 +38,6 @@ def view(request):
                 return render(request, 'login.html', locals())
         else:
             # invalide login
-            error = "Nom d'utilisateur ou mot de passe non conforme !"
+            error = "Nom d'utilisateur ou mot de passe incorrect !"
             return render(request, 'login.html', locals())
     return render(request, 'login.html', locals())
