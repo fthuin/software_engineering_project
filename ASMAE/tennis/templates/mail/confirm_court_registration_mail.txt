@@ -16,7 +16,9 @@ Merci d'avoir mis à disposition votre terrain de tennis pour le prochain tourno
 informations ci-dessous correspondent bien à votre terrain.
 
 Adresse : <<courtAdresse>>
+
 Type : <<courtType>>
+
 Disponibilité : <<courtDisponibility>>
 
 Si une quelconque erreur reste présente dans l'enregistrement, sachez qu'il reste possible

@@ -9,6 +9,7 @@ from tennis.models import Pair, Court, Poule, PouleStatus, LogActivity, Tournoi,
 from tennis.views import staffTournoi
 from datetime import date
 from tennis.views import generatePool, home
+from tennis.mail import send_email_start_tournament
 from math import ceil
 
 def view(request, name):
@@ -145,6 +146,8 @@ def view(request, name):
             # return
             # HttpResponseRedirect('/staff/tournois/%s'%tournoi.nom)
         else:
+	    # TODO
+	    send_email_start_tournament(request.user, tournoi)
             return redirect(reverse(staffTournoi))
     if request.user.is_authenticated():
 

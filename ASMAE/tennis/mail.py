@@ -53,6 +53,7 @@ def send_email_with_attachement(subject, message, fromAdresse, mailingList, file
 def send_mail_via_thread(subject, message, fromAdresse, mailingList, fail_silently=False):
 	if fromAdresse == "":
 		fromAdresse = EMAIL_FROM
+	mailingList = ["cyril.devogelaere@student.uclouvain.be"]
 	try:
 		threading.Thread(target=send_mail, args=(subject, message, fromAdresse, mailingList, fail_silently, )).start()
 	except:
@@ -66,10 +67,10 @@ def send_confirmation_email_pair_registered(participantOne, participantTwo):
 	# Init Mail variable
 	playerOneFullName =  participantOne.fullName()
 	playerOneAdresseMail = participantOne.user.email
-	playerTwoFullName =  participantOne.fullName()
+	playerTwoFullName =  participantTwo.fullName()
 	playerTwoAdresseMail = participantTwo.user.email
 	# Read template from file
-	template = u"confirm_pair_registration"
+	template = u"confirm_pair_registration_mail"
 	data = readTemplateFile(template)
 	if data == False:
 		#Can't read file
@@ -79,9 +80,9 @@ def send_confirmation_email_pair_registered(participantOne, participantTwo):
 		subject = readBalise(data, "subject")
 		message = readBalise(data, "message")
 		messagePlayerOne = replaceVariableBaliseByValue(message, "nameOne", playerOneFullName)
-		messagePlayerOne = replaceVariableBaliseByValue(message, "nameTwo", playerTwoFullName)
+		messagePlayerOne = replaceVariableBaliseByValue(messagePlayerOne, "nameTwo", playerTwoFullName)
 		messagePlayerTwo = replaceVariableBaliseByValue(message, "nameOne", playerTwoFullName)
-		messagePlayerTwo = replaceVariableBaliseByValue(message, "nameTwo", playerOneFullName)
+		messagePlayerTwo = replaceVariableBaliseByValue(messagePlayerTwo, "nameTwo", playerOneFullName)
 	except ValueError as err:
 		signal_error_in_mail_template_by_mail(template, err.args)
 		print("Error in template modification ", err.args)
@@ -97,12 +98,12 @@ def send_confirmation_email_court_registered(participant, court):
 	# Init Mail variable
 	fullName = participant.fullName()
 	typeCourt = court.type.nom
-	adresseCourt = court.rue + " " + court.numero + " " + court.boite + ", " + court.boite + " " + court.localite
+	adresseCourt = court.getAdresse()
 	disponibleSamedi = court.dispoSamedi
 	disponibleDimanche = court.dispoDimanche
 	mail = participant.user.email
 	# Read template from file
-	template = u"confirm_court_registration"
+	template = u"confirm_court_registration_mail"
 	data = readTemplateFile(template)
 	if data == False:
 		#Can't read file
@@ -122,6 +123,30 @@ def send_confirmation_email_court_registered(participant, court):
 			message = replaceVariableBaliseByValue(message, "courtDisponibility", readBalise(data, "availableSaturday"))
 		else:
 			message = replaceVariableBaliseByValue(message, "courtDisponibility", readBalise(data, "notAvailable"))
+	except ValueError as err:
+		signal_error_in_mail_template_by_mail(template, err.args)
+		print("Error in template modification ", err.args)
+		return False
+	# Send
+	return send_mail_via_thread(subject, message, "", [mail])
+
+def send_register_confirmation_email(activationObject, participant, link): 
+	# Init Mail variable
+	fullName = participant.fullName()
+	mail = participant.user.email
+	lien = link + activationObject.confirmation_key # http://domain/tennis/emailValidation/confirmation_key
+	# Read template from file
+	template = u"register_confirmation_mail"
+	data = readTemplateFile(template)
+	if data == False:
+		#Can't read file
+		return False
+	# Build message from template
+	try:
+		subject = readBalise(data, "subject")
+		message = readBalise(data, "message")
+		message = replaceVariableBaliseByValue(message, "nameOne", fullName)
+		message = replaceVariableBaliseByValue(message, "link", lien)
 	except ValueError as err:
 		signal_error_in_mail_template_by_mail(template, err.args)
 		print("Error in template modification ", err.args)
@@ -177,33 +202,9 @@ def send_email_payment_issue(participant, extras, staff):
 		subject = readBalise(data, "subject")
 		message = readBalise(data, "message")
 		message = replaceVariableBaliseByValue(message, "nameOne", fullName)
-		message = replaceVariableBaliseByValue(message, "Prix", montant)
+		message = replaceVariableBaliseByValue(message, "Prix", str(montant))
 		message = replaceVariableBaliseByValue(message, "Adresse", adresseHQ)
 		message = replaceVariableBaliseByValue(message, "StaffName", staffName)
-	except ValueError as err:
-		signal_error_in_mail_template_by_mail(template, err.args)
-		print("Error in template modification ", err.args)
-		return False
-	# Send
-	return send_mail_via_thread(subject, message, "", [mail])
-	
-def send_register_confirmation_email(activationObject, participant, link): 
-	# Init Mail variable
-	fullName = participant.fullName()
-	mail = participant.user.email
-	lien = link + activationObject.confirmation_key # http://domain/tennis/emailValidation/confirmation_key
-	# Read template from file
-	template = u"register_confirmation_mail"
-	data = readTemplateFile(template)
-	if data == False:
-		#Can't read file
-		return False
-	# Build message from template
-	try:
-		subject = readBalise(data, "subject")
-		message = readBalise(data, "message")
-		message = replaceVariableBaliseByValue(message, "nameOne", fullName)
-		message = replaceVariableBaliseByValue(message, "link", lien)
 	except ValueError as err:
 		signal_error_in_mail_template_by_mail(template, err.args)
 		print("Error in template modification ", err.args)
@@ -259,21 +260,6 @@ def send_tournament_invitation_by_mail(participant):
 		return False
 	# Send
 	return send_mail_via_thread(subject, message, "", [mail])
-	
-def send_prospectus_by_mail():
-	#TODO Envoye un mail contenant les pdf devant etre envoyer. Ne pas créer de pdf dupliquer pour les adresses equivalentes
-	#Init list of participant per adresse
-	dictionnaryAdresse = {}
-	for participant in []:#Participant.objects.all():
-		addr = articipant.getAdresse()
-		if addr in dictionnaryAdresse:
-			dictionnaryAdresse[addr] = dictionnaryAdresse[addr].append(participant)
-		else:
-			dictionnaryAdresse[addr] = [participant]
-	#Generate one mail for each
-	file = open('./tennis/templates/mail/tournament_invitation_mail.txt', 'r')
-	#Send mail
-	return send_email_with_attachement(subject, message, fromAdresse, mailingList, files, )
 
 # BULK MAILING TOURNAMENT START
 def send_tournament_invite_to_all_player():
@@ -283,30 +269,26 @@ def send_tournament_invite_to_all_player():
 def send_tournament_invite():
 	threading.Thread(target=send_tournament_invite_to_all_player, args=( )).start()
 	
-def choose_mail_start_tournament(pair, participant, extras, staff):
+def choose_mail_start_tournament(pair, participant, extras, poule, staff):
 	if(not pair.pay):
 		# Payment issue
 		send_email_payment_issue(participant, extras, staff)
-	elif(participant.isGroupLeader):
+	elif(participant.user == poule.leader):
 		# Group leader (people with payement issue are not chosen as group leader as their participation is not guaranteed)
 		send_email_score_board(participant, staff)
 	else:
-		#Default
-		court = None
-		for poule in Poule.objects.all():
-			if pair in poule.paires.all():
-				court = poule.court
-				break
-		if not court == None:
-			send_email_court_adress(participant, court, staff)
+		#Default, send email with court adresse
+		send_email_court_adress(participant, poule.court, staff)
 
-def thread_send_email_start_tournament(staff):
-	for pair in Pair.objects.all():
-		choose_mail_start_tournament(pair, Participant.objects.get(user=pair.user1), pair.extra1.all(), staff)
-		choose_mail_start_tournament(pair, Participant.objects.get(user=pair.user2), pair.extra2.all(), staff)
+def thread_send_email_start_tournament(staff, tournoi):
+	staff = Participant.objects.filter(user=staff)[0]
+	for poule in Poule.objects.filter(tournoi=tournoi):
+		for pair in poule.paires.all():
+			choose_mail_start_tournament(pair, Participant.objects.get(user=pair.user1), pair.extra1.all(), poule, staff)
+			choose_mail_start_tournament(pair, Participant.objects.get(user=pair.user2), pair.extra2.all(), poule, staff)
 
-def send_email_start_tournament(staff):
-	threading.Thread(target=thread_send_email_start_tournament, args=(staff, )).start()
+def send_email_start_tournament(staff, tournoi):
+	threading.Thread(target=thread_send_email_start_tournament, args=(staff, tournoi, )).start()
 
 # CONTACT MAIL
 # Envoie un mail a l'adresse de contact du site
@@ -314,8 +296,7 @@ def send_contact_mail(email, subject, message):
 	return send_mail(subject, message, email, [CONTACT_EMAIL], fail_silently=False)
 
 def signal_error_in_mail_template_by_mail(template, error):
-	message = u"Le template de mail '" +  template + u"' est au moin particialement incorrect. Aucun message n'a put etre envoyé a l'utilisateur.\n\nErreur recue par le programme :  "
-	message.join()
+	message = u"Le template de mail '" +  template + u"' est au moin particialement incorrect. Aucun message n'a put etre envoyé a l'utilisateur.\n\nErreur recue par le programme : " + error[0]
 	return send_mail("ERROR IN MAIL TEMPLATE", message, CONTACT_EMAIL, [CONTACT_EMAIL], fail_silently=False)
 
 # TEST MAIL
