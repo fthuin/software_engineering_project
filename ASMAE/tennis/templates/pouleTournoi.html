@@ -73,7 +73,6 @@
         <p class="info center">Il n'y a pas encore de poules enregistrées pour ce tournoi</p>
         {% endfor %}
     </div>
-
     <ul class="list-inline text-center">
         <li>
             <button class="btn btn-default" data-toggle="modal" data-target="#myModal" type="button">Supprimer les poules</button>
@@ -83,11 +82,13 @@
             </form>
         </li>
         <li>
+            <button id="treeButton" class="btn btn-default" onClick="location.href='{% url "tennis.views.knockoff_print" tournoi.nom %}';">Version PDF</button>
+        </li>
+        <li>
           <button id="treeButton" class="btn btn-default" onClick="location.href='{% url "tennis.views.knockOff" tournoi.nom %}';" disabled>Arbre de Tournoi</button>
         </li>
     </ul>
 </div>
-
 
 <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
