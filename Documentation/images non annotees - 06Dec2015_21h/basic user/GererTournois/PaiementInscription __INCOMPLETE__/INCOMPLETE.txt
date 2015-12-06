@@ -1,0 +1,9 @@
+Détail de l’incomplétude:
+
+- pas de traitement du formulaire
+- non fait car pénible à réaliser (créer un compte de test, faire des transactions financiers, …)
+
+
+Remarques:
+
+- le futur développeur doit finaliser cette partie s’il souhaite avoir un système de paiement automatisé
