@@ -1,4 +1,8 @@
 # coding: utf-8
+'''
+Implémentation de l'exportation sous forme de CSV des terrains depuis
+l'interface administrateur
+'''
 from django.http import HttpResponse
 
 def export_csv(modeladmin, request, queryset):
@@ -28,6 +32,7 @@ def export_csv(modeladmin, request, queryset):
         smart_str(u"Comm. staff"),
         smart_str(u"Validé"),
         smart_str(u"Username"),
+        smart_str(u"email"),
         smart_str(u"Prénom du propriétaire"),
         smart_str(u"Nom du propriétaire"),
         smart_str(u"Utilisé l'année passée"),
@@ -52,6 +57,7 @@ def export_csv(modeladmin, request, queryset):
             smart_str(obj.commentaireStaff),
             smart_str(obj.valide),
             smart_str(obj.user.username),
+            smart_str(obj.user.email),
             smart_str(obj.user.participant.prenom),
             smart_str(obj.user.participant.nom),
             smart_str(obj.usedLastYear),

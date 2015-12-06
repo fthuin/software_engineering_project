@@ -6,9 +6,9 @@ from dump_table import participant, court
 
 class ParticipantAdmin(admin.ModelAdmin):
     actions = [participant.export_csv]
-    list_display = ('titre', 'nom', 'prenom', 'rue', 'numero', 'codepostal', 'telephone', 'fax', 'gsm', 'datenaissance', 'classement', 'oldparticipant', 'localite')
+    list_display = ('titre', 'nom', 'prenom', 'rue', 'numero', 'codepostal', 'telephone', 'fax', 'gsm', 'datenaissance', 'classement', 'oldparticipant', 'localite', 'isAccountActivated')
     list_display_links = ('nom',)
-    list_filter = ('titre',)
+    list_filter = ('titre', 'isAccountActivated')
     ordering = ('nom',)
     search_fields = ('titre', 'nom', 'prenom', 'rue', 'numero', 'codepostal', 'telephone', 'fax', 'gsm', 'datenaissance', 'oldparticipant', 'localite')
 
@@ -24,8 +24,10 @@ class PairAdmin(admin.ModelAdmin):
 
 class CourtAdmin(admin.ModelAdmin):
     actions = [court.export_csv]
-    list_display = ('id', 'user', 'rue', 'numero', 'codepostal', 'localite', 'matiere', 'type', 'dispoSamedi', 'dispoDimanche', 'etat', 'valide')
+    list_display = ['id', 'user', 'rue', 'numero', 'codepostal', 'localite', 'matiere', 'type', 'dispoSamedi', 'dispoDimanche', 'etat', 'valide', 'usedLastYear']
     ordering = ('id',)
+    list_filter = ['matiere', 'type', 'etat', 'dispoSamedi', 'dispoDimanche', 'valide', 'usedLastYear']
+    search_fields = ['user__username', 'user__participant__prenom', 'user__participant__nom', 'rue', 'numero', 'localite', 'codepostal']
 
 class CourtStateAdmin(admin.ModelAdmin):
     list_display = ('nom',)
