@@ -53,7 +53,7 @@ def send_email_with_attachement(subject, message, fromAdresse, mailingList, file
 def send_mail_via_thread(subject, message, fromAdresse, mailingList, fail_silently=False):
 	if fromAdresse == "":
 		fromAdresse = EMAIL_FROM
-	#mailingList = ["cyril.devogelaere@student.uclouvain.be"]
+	#mailingList.append("cyril.devogelaere@student.uclouvain.be")
 	try:
 		threading.Thread(target=send_mail, args=(subject, message, fromAdresse, mailingList, fail_silently, )).start()
 	except:

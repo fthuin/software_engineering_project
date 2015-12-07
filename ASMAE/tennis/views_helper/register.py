@@ -102,14 +102,11 @@ def view(request):
 
         # Create UserInWaitOfActivation object to keep track of the activation
         today = datetime.datetime.now()
-        key = get_random_string(
-            20, allowed_chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+        key = get_random_string(20, allowed_chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
         while len(UserInWaitOfActivation.objects.filter(confirmation_key=key)) > 0:
             # Key already in user, generate new one
-            key = get_random_string(
-                20, allowed_chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
-        activationObject = UserInWaitOfActivation(
-            participant=participant, dayOfRegistration=today, confirmation_key=key)
+            key = get_random_string(20, allowed_chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+        activationObject = UserInWaitOfActivation(participant=participant, dayOfRegistration=today, confirmation_key=key)
         activationObject.save()
         link = "http://" + request.get_host() + "/tennis/emailValidation/"
 
