@@ -31,7 +31,7 @@ def view(request):
             #TODO Florian
             pass
         if request.POST['action'] == "addr_list":
-            #TODO Florian
+            #TODO Florian export sous CSV la listes de toutes les adresses uniques
             pass
 
     Use = User.objects.all().order_by('username')
