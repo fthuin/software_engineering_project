@@ -23,16 +23,21 @@ def view(request):
     typeCourt = ""
     veteran = ""
     if request.method == 'POST':
-        page = request.POST['page']
-        pageLength = int(request.POST['pagelength'])
-        recherche = request.POST['rechercheField'].strip()
-        material = request.POST['material']
-        validation = request.POST['validation']
-        used = request.POST['used']
-        dispo = request.POST['dispo']
-        state = request.POST['state']
-        typeCourt = request.POST['type']
-        veteran = request.POST['veteran']
+        if request.POST['action'] == "search":
+            page = request.POST['page']
+            pageLength = int(request.POST['pagelength'])
+            recherche = request.POST['rechercheField'].strip()
+            material = request.POST['material']
+            validation = request.POST['validation']
+            used = request.POST['used']
+            dispo = request.POST['dispo']
+            state = request.POST['state']
+            typeCourt = request.POST['type']
+            veteran = request.POST['veteran']
+        if request.POST['action'] == "CSV":
+            print("Jsuis un ouf")
+            #TODO FLorian
+
 
     allCourt = Court.objects.all()
 
