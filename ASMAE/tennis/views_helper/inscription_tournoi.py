@@ -32,16 +32,10 @@ def view(request):
         groups__name="Admin").exclude(groups__name="staff")
 
     if recherche != "":
-        if db_type == "postgresql":
-            Use = Use.filter(
-                Q(username__unaccent__icontains=recherche) |
-                Q(participant__nom__unaccent__icontains=recherche) |
-                Q(participant__prenom__unaccent__icontains=recherche))
-        else:
-            Use = Use.filter(
-                Q(username__icontains=recherche) |
-                Q(participant__nom__icontains=recherche) |
-                Q(participant__prenom__icontains=recherche))
+        Use = Use.filter(
+            Q(username__icontains=recherche) |
+            Q(participant__nom__icontains=recherche) |
+            Q(participant__prenom__icontains=recherche))
 
     # Utilisateur courant
     u = request.user

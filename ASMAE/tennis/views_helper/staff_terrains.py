@@ -38,18 +38,7 @@ def view(request):
 
     # Recherche
     if recherche != "":
-        if db_type == "postgresql":
-            allCourt = allCourt.filter(
-                Q(id__icontains=recherche) |
-                Q(user__username__unaccent__icontains=recherche) |
-                Q(user__participant__nom__unaccent__icontains=recherche) |
-                Q(user__participant__prenom__unaccent__icontains=recherche) |
-                Q(numero__icontains=recherche) |
-                Q(rue__unaccent__icontains=recherche) |
-                Q(localite__unaccent__icontains=recherche) |
-                Q(codepostal__icontains=recherche))
-        else:
-            allCourt = allCourt.filter(
+        allCourt = allCourt.filter(
                 Q(id__icontains=recherche) |
                 Q(user__username__icontains=recherche) |
                 Q(user__participant__nom__icontains=recherche) |

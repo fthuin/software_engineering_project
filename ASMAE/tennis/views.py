@@ -340,11 +340,13 @@ def printScoreBoard(request, pouleId):
 @user_passes_test(lambda u: u.groups.filter(name='admin').exists)
 def resetDbForNextYear(request):
 
+    #Tous les participants set a no old participant
     listParticipant = Participant.objects.all()
     for participant in listParticipant:
         participant.oldparticipant = False
         participant.save()
 
+    #Reset des court
     listCourt = Court.objects.all()
     for court in listCourt:
         if len(court.poule_set.all()) > 0:
@@ -357,6 +359,7 @@ def resetDbForNextYear(request):
         court.commentaireStaff = None
         court.save()
 
+    #Mise a jours des old participant sur les utilisateurs
     listPair = Pair.objects.all()
     for pair in listPair:
         user1 = pair.user1
@@ -366,15 +369,30 @@ def resetDbForNextYear(request):
         user1.save()
         user2.save()
 
+    #Suppressions des extras
     Extra.objects.all().delete()
+    #Suppressions des arbres
     Arbre.objects.all().delete()
+    #Suppressions des paires
     Pair.objects.all().delete()
+    #Suppressions des scores
     Score.objects.all().delete()
+    #Suppressions des poules
     Poule.objects.all().delete()
+    #Suppressions du log activity
     LogActivity.objects.all().delete()
 
+    #Status des tournois
+    for elem in Tournoi.objects.all():
+        elem.status = TournoiStatus.objects.get(numero=0)
+        elem.save()
+
+    #Ajout d'une nouvelle edition
+    info = infoTournoi.objects.all()
+    info = info.order_by("edition")[len(info) - 1]
+    ed = info.edition
     i = infoTournoi(prix=20, date=datetime.date(date.today().year + 1, 9, 10),
-                    addr="Place des Carabiniers, 5, 1030 Bruxelles", edition=43)
+                    addr="Place des Carabiniers, 5, 1030 Bruxelles", edition=ed+1)
     i.save()
 
 def knockoff_print(request, name):

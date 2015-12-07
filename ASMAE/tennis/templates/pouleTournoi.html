@@ -85,7 +85,7 @@
             <button id="treeButton" class="btn btn-default" onClick="location.href='{% url "tennis.views.knockoff_print" tournoi.nom %}';">Version PDF</button>
         </li>
         <li>
-          <button id="treeButton" class="btn btn-default" onClick="location.href='{% url "tennis.views.knockOff" tournoi.nom %}';" disabled>Arbre de Tournoi</button>
+          <button id="treeButton" class="btn btn-default" onClick="location.href='{% url "tennis.views.knockOff" tournoi.nom %}';" {% if tournoi.status.numero >= 3 %}{% else %}disabled {% endif %}>Arbre de Tournoi</button>
         </li>
     </ul>
 </div>
@@ -122,33 +122,5 @@
 
 
 {% block commande %}
-
-
-<script>
-//Resize des panels
-var mesPanel = document.getElementsByClassName("resizePanel");
-var size = 0;
-for (var i = 0; i < mesPanel.length; i++) {
-    var s = mesPanel[i].offsetHeight;
-    if(size < s){
-        size = s;
-    }
-};
-for (var i = 1; i < mesPanel.length; i++) {
-    mesPanel[i].style.height = size + "px";
-};
-
-//Enable tree button if all status are ok
-var valid = true;
-{% for p in poules %}
-if('{{p.status.numero}}' != 2){
-    valid = false;
-}
-{% endfor %}
-
-if(valid){
-    document.getElementById("treeButton").disabled = false;
-}
-</script>
 
 {% endblock %}

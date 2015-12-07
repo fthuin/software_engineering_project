@@ -25,24 +25,14 @@ def view(request):
     allPair = Pair.objects.all()
 
     if recherche != "":
-        if db_type == "postgresql":
-            allPair = allPair.filter(
-                Q(id__icontains=recherche) |
-                Q(user1__username__unaccent__icontains=recherche) |
-                Q(user1__participant__nom__unaccent__icontains=recherche) |
-                Q(user1__participant__prenom__unaccent__icontains=recherche) |
-                Q(user2__username__unaccent__icontains=recherche) |
-                Q(user2__participant__nom__unaccent__icontains=recherche) |
-                Q(user2__participant__prenom__unaccent__icontains=recherche))
-        else:
-            allPair = allPair.filter(
-                Q(id__icontains=recherche) |
-                Q(user1__username__icontains=recherche) |
-                Q(user1__participant__nom__icontains=recherche) |
-                Q(user1__participant__prenom__icontains=recherche) |
-                Q(user2__username__icontains=recherche) |
-                Q(user2__participant__nom__icontains=recherche) |
-                Q(user2__participant__prenom__icontains=recherche))
+        allPair = allPair.filter(
+            Q(id__icontains=recherche) |
+            Q(user1__username__icontains=recherche) |
+            Q(user1__participant__nom__icontains=recherche) |
+            Q(user1__participant__prenom__icontains=recherche) |
+            Q(user2__username__icontains=recherche) |
+            Q(user2__participant__nom__icontains=recherche) |
+            Q(user2__participant__prenom__icontains=recherche))
 
     if validation != "":
         if validation == "True":

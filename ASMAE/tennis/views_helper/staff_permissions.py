@@ -108,16 +108,10 @@ def view(request):
     Use = User.objects.all().order_by('username')
 
     if recherche != "":
-        if db_type == "postgresql":
-            Use = Use.filter(
-                Q(username__unaccent__icontains=recherche) |
-                Q(participant__nom__unaccent__icontains=recherche) |
-                Q(participant__prenom__unaccent__icontains=recherche))
-        else:
-            Use = Use.filter(
-                Q(username__icontains=recherche) |
-                Q(participant__nom__icontains=recherche) |
-                Q(participant__prenom__icontains=recherche))
+        Use = Use.filter(
+            Q(username__icontains=recherche) |
+            Q(participant__nom__icontains=recherche) |
+            Q(participant__prenom__icontains=recherche))
 
     Use = Use.order_by("username")
     length = len(Use)
