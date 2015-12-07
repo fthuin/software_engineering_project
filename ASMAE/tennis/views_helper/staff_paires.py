@@ -15,12 +15,16 @@ def view(request):
     paiement = ""
     tournoi = ""
     if request.method == 'POST':
-        page = request.POST['page']
-        pageLength = int(request.POST['pagelength'])
-        recherche = request.POST['rechercheField'].strip()
-        validation = request.POST['validation']
-        paiement = request.POST['paiement']
-        tournoi = request.POST['tournoi']
+        if request.POST['action'] == "search":
+            page = request.POST['page']
+            pageLength = int(request.POST['pagelength'])
+            recherche = request.POST['rechercheField'].strip()
+            validation = request.POST['validation']
+            paiement = request.POST['paiement']
+            tournoi = request.POST['tournoi']
+        if request.POST['action'] == "CSV":
+            #TODO florian
+            pass
 
     allPair = Pair.objects.all()
 

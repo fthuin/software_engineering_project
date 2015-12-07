@@ -18,14 +18,21 @@ def view(request):
     in_paire = ""
     veteran = ""
     if request.method == 'POST':
-        page = request.POST['page']
-        pageLength = int(request.POST['pagelength'])
-        recherche = request.POST['rechercheField'].strip()
-        sexe = request.POST['sex_selector']
-        in_paire = request.POST['inpair']
-        veteran = request.POST['veteran']
-        age_min = int(request.POST['agemin'])
-        age_max = int(request.POST['agemax'])
+        if request.POST['action'] == "search":
+            page = request.POST['page']
+            pageLength = int(request.POST['pagelength'])
+            recherche = request.POST['rechercheField'].strip()
+            sexe = request.POST['sex_selector']
+            in_paire = request.POST['inpair']
+            veteran = request.POST['veteran']
+            age_min = int(request.POST['agemin'])
+            age_max = int(request.POST['agemax'])
+        if request.POST['action'] == "CSV":
+            #TODO Florian
+            pass
+        if request.POST['action'] == "addr_list":
+            #TODO Florian
+            pass
 
     Use = User.objects.all().order_by('username')
 

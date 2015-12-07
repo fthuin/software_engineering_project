@@ -23,7 +23,7 @@
 						<div class="input-group">
 					      <input type="text" class="form-control" value="{{recherche}}" name="rechercheField" placeholder="Rechercher" id="search_value">
 					      <span class="input-group-btn">
-					        <button class="btn btn-default" type="submit" id="search_user_button"><span class="glyphicon glyphicon-search"></span></button>
+					        <button class="btn btn-default" name="action" value="search" type="submit" id="search_user_button"><span class="glyphicon glyphicon-search"></span></button>
 					      </span>
 					    </div>
 					</div>
@@ -106,6 +106,8 @@
 
 					</div>
 				</div>
+				<button class="btn btn-default center-block" name="action" value="CSV">Exporter sous CSV</button>
+				<button class="btn btn-default center-block" name="action" value="addr_list">Liste des adresses</button>
 			</form>
 		</div>
 		<div class="col-lg-8">
