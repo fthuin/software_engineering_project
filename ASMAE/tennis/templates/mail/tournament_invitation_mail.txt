@@ -1,5 +1,5 @@
 # Subject balise isn't mandatory, if not present the mail subject will simply be empty
-# The message balise must be present however, the balises <<nameOne>> and <<nameTwo>> must also be present.
+# The message balise must be present aswell as the balise <<nameOne>>.
 # If they are not, no mail is send and a message is printed in log announcing mail malfunction
 <subject>Confirmation d'inscription au tournoi 'Le Charles de Lorraine'<\subject>
 <message>

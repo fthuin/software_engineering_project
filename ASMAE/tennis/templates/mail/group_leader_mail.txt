@@ -1,5 +1,5 @@
 # Subject balise isn't mandatory, if not present the mail subject will simply be empty
-# The message balise must be present however, the balises <<namePlayerOne>> and <<namePlayerTwo>> must also be present.
+# The message balise must be present however, the balises <<nameOne>>, <<Adresse>> and <<StaffName>>
 # If they are not, no mail is send and a message is printed in log announcing mail malfunction
 <subject>Le Charles de lorraine : récuperation de la feuille de résultats<\subject>
 <message>
