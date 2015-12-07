@@ -168,12 +168,14 @@
           </div>
         </div>
       </div>
+      <ul class="list-inline text-center no-print">
+          <li>
+              <button class="btn btn-default" onclick="window.print()">Version PDF</button>
+          </li>
+      </ul>
 		<form action="{% url "tennis.views.knockOff" tournoi.nom %}" method="post">
 		{% csrf_token %}
       <ul class="list-inline text-center no-print">
-        <li>
-            <button class="btn btn-default" onclick="window.print()">Version PDF</button>
-        </li>
         <li>
           <button class="btn btn-default" onclick="sendTree()" value="save" name="action">Enregistrer</button>
         </li>

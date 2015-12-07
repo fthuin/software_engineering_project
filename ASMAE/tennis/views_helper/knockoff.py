@@ -90,12 +90,12 @@ def view(request, name):
                 # Save des resultats
                 for elem in Resultat.objects.filter(tournoi=tournoi):
                     elem.delete()
-                ga = str(pair_g.user1.participant.prenom) + " " + str(pair_g.user1.participant.nom).upper() + \
-                    " et " + str(pair_g.user2.participant.prenom) + \
-                    " " + str(pair_g.user2.participant.nom).upper()
-                fi = str(pair_f.user1.participant.prenom) + " " + str(pair_f.user1.participant.nom).upper() + \
-                    " et " + str(pair_f.user2.participant.prenom) + \
-                    " " + str(pair_f.user2.participant.nom).upper()
+                ga = pair_g.user1.participant.prenom + u" " + pair_g.user1.participant.nom.upper() + \
+                    u" et " + pair_g.user2.participant.prenom + \
+                    u" " + pair_g.user2.participant.nom.upper()
+                fi = pair_f.user1.participant.prenom + u" " + pair_f.user1.participant.nom.upper() + \
+                    u" et " + pair_f.user2.participant.prenom + \
+                    u" " + pair_f.user2.participant.nom.upper()
                 r = Resultat(tournoi=tournoi, gagnants_alt=ga,
                              finalistes_alt=fi)
                 r.save()
