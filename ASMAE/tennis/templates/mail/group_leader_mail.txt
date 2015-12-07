@@ -15,7 +15,8 @@ Adresse : <<Adresse>>
 
 En cas de problème, nous restons disponible via l'onglet contact du site internet.
 
-Merci encore de votre soutien
+Merci encore de votre soutien,
+
 <<StaffName>> de l'équipe 'Le charle de Lorraine'
 
 <\message>

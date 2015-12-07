@@ -12,6 +12,7 @@ merci de cliquer sur le lien suivant afin de validervotre adresse email.
 <<link>>
 	
 Merci de votre cooperation,
+
 L'équipe 'Le Charles de Lorraine'
 
 <\message>

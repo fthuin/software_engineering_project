@@ -15,6 +15,7 @@ l'adresse suivante :
 En cas de problème, nous restons disponible via l'onglet contact du site internet.
 
 Merci encore de votre soutien et bons matchs,
+
 <<StaffName>> de l'équipe 'Le charle de Lorraine'
 
 <\message>
