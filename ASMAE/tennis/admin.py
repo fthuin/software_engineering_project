@@ -2,7 +2,7 @@
 from django.contrib import admin
 from tennis.models import Extra,Participant,Court,Tournoi,Pair, CourtState, CourtSurface, CourtType, LogActivity, Poule, Score, TournoiStatus, PouleStatus, Arbre, TournoiTitle, TournoiCategorie, infoTournoi, Ranking
 # Register your models here.
-from dump_table import participant, court
+from dump_table import participant, court, paires
 
 class ParticipantAdmin(admin.ModelAdmin):
     actions = [participant.export_csv]
@@ -19,6 +19,7 @@ class ExtraAdmin(admin.ModelAdmin):
     list_editable = ('prix',)
 
 class PairAdmin(admin.ModelAdmin):
+    actions = [paires.export_csv]
     def first_fullname(self, obj):
         return obj.user1.participant.codeName()
     first_fullname.short_description = 'Joueur 1'

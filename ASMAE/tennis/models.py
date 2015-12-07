@@ -70,7 +70,7 @@ class Participant(models.Model):
         return u'' + self.prenom[0:1].upper() + ". " + nom
 
     def getAdresse(self):
-        return u"" + self.numero + " " + self.rue + ", " + self.codepostal + " " + self.localite
+        return u"" + self.numero + u" " + self.rue + u", " + self.codepostal + u" " + self.localite
 
     def shortAdresse(self):
         return self.localite + " Belgium"
