@@ -13,6 +13,7 @@ a laquelle vous devez vous présenter ainsi que le montant a fournir peuvent etr
 trouver ci-dessous :
 
 Montant : <<Prix>> euros
+
 Adresse : <<Adresse>>
 
 En cas de problème, nous restons disponible via l'onglet contact du site internet.
