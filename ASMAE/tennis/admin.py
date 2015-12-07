@@ -19,12 +19,25 @@ class ExtraAdmin(admin.ModelAdmin):
     list_editable = ('prix',)
 
 class PairAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user1', 'user2', 'confirm', 'valid', 'pay')
+    def first_fullname(self, obj):
+        return obj.user1.participant.codeName()
+    first_fullname.short_description = 'Joueur 1'
+    def second_fullname(self, obj):
+        return obj.user2.participant.codeName()
+    second_fullname.short_description = 'Joueur 2'
+
+    list_display = ('id', 'first_fullname', 'second_fullname', 'confirm', 'valid', 'pay')
     ordering = ('id',)
+    list_filter = ['confirm', 'valid', 'pay']
+    search_fields = ['id', 'user1__participant__prenom', 'user1__participant__nom', 'user2__participant__prenom', 'user2__participant__nom', 'user1__username', 'user2__username']
 
 class CourtAdmin(admin.ModelAdmin):
+    def owner_fullname(self, obj):
+        return obj.user.participant.codeName()
+    owner_fullname.short_description = 'Propriétaire'
+
     actions = [court.export_csv]
-    list_display = ['id', 'user', 'rue', 'numero', 'codepostal', 'localite', 'matiere', 'type', 'dispoSamedi', 'dispoDimanche', 'etat', 'valide', 'usedLastYear']
+    list_display = ['id', 'owner_fullname', 'rue', 'numero', 'codepostal', 'localite', 'matiere', 'type', 'dispoSamedi', 'dispoDimanche', 'etat', 'valide', 'usedLastYear']
     ordering = ('id',)
     list_filter = ['matiere', 'type', 'etat', 'dispoSamedi', 'dispoDimanche', 'valide', 'usedLastYear']
     search_fields = ['user__username', 'user__participant__prenom', 'user__participant__nom', 'rue', 'numero', 'localite', 'codepostal']
@@ -44,10 +57,18 @@ class CourtTypeAdmin(admin.ModelAdmin):
 class LogActivityAdmin(admin.ModelAdmin):
     list_display = ('date', 'user', 'section', 'details')
     ordering = ('date',)
+    list_filter = ['section']
 
 class PouleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'tournoi', 'leader', 'court')
+    def leader_fullname(self, obj):
+        try:
+            return obj.leader.participant.codeName()
+        except AttributeError:
+            return 'Non défini'
+    leader_fullname.short_description = 'Leader'
+    list_display = ('id', 'tournoi', 'leader_fullname', 'court')
     ordering = ('id',)
+    search_fields = ['id', 'leader__participant__prenom', 'leader__participant__nom', 'leader__username', 'court__rue', 'court__localite', 'court__codepostal']
 
 class TournoiAdmin(admin.ModelAdmin):
     list_display = ('id', 'titre','categorie')

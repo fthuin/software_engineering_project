@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+'''
+Ce fichier contient les méthodes qui créent toutes les views pour le site,
+toutes les requêtes HTTP au serveur sont traitées ici.
+'''
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
@@ -19,9 +23,6 @@ from functools import reduce
 from django.db import connection
 
 db_type = connection.vendor
-
-# Create your views here.
-
 
 def home(request):
     from views_helper import home as homepage

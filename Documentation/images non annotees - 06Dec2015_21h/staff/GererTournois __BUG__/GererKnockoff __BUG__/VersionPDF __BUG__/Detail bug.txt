@@ -1,0 +1,1 @@
+- bug au moment d’annuler l’impression

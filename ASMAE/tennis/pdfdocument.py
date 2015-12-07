@@ -1,4 +1,11 @@
 # coding=utf-8
+'''
+Cette classe gère la création de PDF à partir de données sur le serveur en
+utilisant reportlab.
+
+Cette classe requiert l'installation de reportlab :
+pip install reportlab
+'''
 from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Paragraph, Table, TableStyle, Image, PageBreak
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_LEFT, TA_CENTER
