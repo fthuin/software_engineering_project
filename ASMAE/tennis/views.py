@@ -251,7 +251,7 @@ def terrainPDF(request, id):
 def pairPDF(request, id):
     pair = Pair.objects.get(id=id)
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment;filename="paire' + id + '"'
+    response['Content-Disposition'] = 'attachment;filename="paire' + id + '.pdf"'
 
     PDFPair(response, pair, request.user.participant)
 
