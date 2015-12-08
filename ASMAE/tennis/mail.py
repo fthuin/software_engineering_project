@@ -2,6 +2,7 @@
 import sys
 import time
 import datetime
+import sendgrid
 import threading
 import traceback
 from django.core.mail import send_mail
@@ -10,11 +11,13 @@ from django.core.mail import EmailMultiAlternatives
 from tennis.models import Extra, Participant, Court, Tournoi, Pair, UserInWaitOfActivation, Poule
 
 #Variables
+SENDGRID_USERNAME = "Asmae"
+SENDGRID_PASSWORD = "LeCharleDeLorraine2016"
+SENDGRID_API_KEY = "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"
 CONTACT_EMAIL = "noreply.lecharledelorraine@gmail.com"
 EMAIL_FROM = "noreply@lecharledelorraine.com"
 #CONTACT_EMAIL_PASSWORD = "LeCharleDeLorraine" KEEP TO CONNECT TO THE MAIL, USELESS IN APP
 #EMAIL SENDGRID => pas toucher la cle API sinon faut en recrée une
-#COMMAND = heroku config:add SENDGRID_USERNAME=Asmae SENDGRID_PASSWORD=LeCharleDeLorraine2016 EMAIL_BACKEND=sgbackend.SendGridBackend SENDGRID_API_KEY=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 -a asmae
 
 # MAIL FUNCTION:
 def readTemplateFile(fileName):
@@ -44,18 +47,22 @@ def replaceVariableBaliseByValue(data, variableName, value):
 	return data[:startIndex] + value + data[endIndex:]
 
 # THREAD SEND MAIL
-def send_email_with_attachement(subject, message, fromAdresse, mailingList, files, fail_silently=False):
-	msg = EmailMultiAlternatives(subject, message, fromAdresse, mailingList, [], [])
-	for file in files:
-		msg.attach_file(file.name, file.read(), file.content_type)
-	threading.Thread(target=msg.send, args=( )).start()
+def send_mail_sendgrid(subject, body, fromAdd, toAddList, fail_silently):
+	sg = sendgrid.SendGridClient(SENDGRID_API_KEY)
+	message = sendgrid.Mail()
+	for mail in toAddList:
+		message.add_to(mail)
+	message.set_subject(subject)
+	message.set_text(body)
+	message.set_from(fromAdd)
+	status, msg = sg.send(message)
 
 def send_mail_via_thread(subject, message, fromAdresse, mailingList, fail_silently=False):
 	if fromAdresse == "":
 		fromAdresse = EMAIL_FROM
 	#mailingList.append("cyril.devogelaere@student.uclouvain.be")
 	try:
-		threading.Thread(target=send_mail, args=(subject, message, fromAdresse, mailingList, fail_silently, )).start()
+		threading.Thread(target=send_mail_sendgrid, args=(subject, message, fromAdresse, mailingList, fail_silently, )).start()
 	except:
 		print "Unexpected error in mail sending:", sys.exc_info()[0]
 		return False
