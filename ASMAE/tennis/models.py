@@ -75,6 +75,11 @@ class Participant(models.Model):
     def shortAdresse(self):
         return self.localite + " Belgium"
 
+    def age(self):
+        today = date.today()
+        born = self.datenaissance
+        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
     # def __eq__(self, other):
     #	return self.username == other.user.username
 

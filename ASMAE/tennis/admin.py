@@ -27,9 +27,9 @@ class PairAdmin(admin.ModelAdmin):
         return obj.user2.participant.codeName()
     second_fullname.short_description = 'Joueur 2'
 
-    list_display = ('id', 'first_fullname', 'second_fullname', 'confirm', 'valid', 'pay')
+    list_display = ('id', 'first_fullname', 'second_fullname', 'confirm', 'valid', 'pay', 'tournoi')
     ordering = ('id',)
-    list_filter = ['confirm', 'valid', 'pay']
+    list_filter = ['confirm', 'valid', 'pay', 'tournoi']
     search_fields = ['id', 'user1__participant__prenom', 'user1__participant__nom', 'user2__participant__prenom', 'user2__participant__nom', 'user1__username', 'user2__username']
 
 class CourtAdmin(admin.ModelAdmin):
