@@ -297,7 +297,7 @@ def emailValidation(request, key):
         else:
 			# Delete participant, user and account
             account.participant.user.delete()
-			account.participant.delete()
+	    account.participant.delete()
             account.delete()
     # End of cleaning, if account to validate has been found, validate it and
     # return succes, else failure
