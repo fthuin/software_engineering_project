@@ -170,8 +170,10 @@ function mySetPoules(nbrPoules, sizePoules) {
 
 			var nom1 = listPair[j].user1;
 			var nom2 = listPair[j].user2;
-			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1));
-			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2));
+            var smallName1 = listPair[j].smallName1;
+            var smallName2 = listPair[j].smallName2;
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1, smallName1));
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2, smallName2));
 			document.getElementById("Leader"+(i+1)).appendChild(getSpaceOption());
 	    }
 	    while (j < sizePoules) {
@@ -239,8 +241,10 @@ function setPoules(nbrPoules){
 			//List
 			var nom1 = pairList[count].user1;
 			var nom2 = pairList[count].user2;
-			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1));
-			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2));
+            var smallName1 = pairList[count].smallName1;
+            var smallName2 = pairList[count].smallName2;
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1, smallName1));
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2, smallName2));
 			document.getElementById("Leader"+(i+1)).appendChild(getSpaceOption());
 
 			count = count + 1;
@@ -295,8 +299,10 @@ function setPoules2(taillePoule){
 			//List
 			var nom1 = pairList[count].user1;
 			var nom2 = pairList[count].user2;
-			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1));
-			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2));
+            var smallName1 = pairList[count].smallName1;
+            var smallName2 = pairList[count].smallName2;
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1, smallName1));
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2, smallName2));
 			document.getElementById("Leader"+(i+1)).appendChild(getSpaceOption());
 
 			count = count + 1;
@@ -328,8 +334,8 @@ function updatePanel(numero, contenu){
 		var id = c[i].childNodes[0].childNodes[0].id;
 		if(id.indexOf("bidon")<0){
 			var pair = getPairbyId(id);
-			list.appendChild(getOption(pair.user1));
-			list.appendChild(getOption(pair.user2));
+			list.appendChild(getOption(pair.user1, pair.smallName1));
+			list.appendChild(getOption(pair.user2, pair.smallName2));
 			list.appendChild(getSpaceOption());
 		}
 	}
@@ -443,10 +449,10 @@ function setInfoTerrainNoUpdateKm(user,matiere,type,addr,id,poules,ID){
 }
 
 //Return une option avec comme nom et valeur le name
-function getOption(name){
+function getOption(name, smallName){
 	var o = document.createElement("option");
 	o.value = name;
-	o.innerHTML = name;
+	o.innerHTML = smallName;
 
 	return o;
 }
@@ -544,7 +550,21 @@ function createPair(pair){
 		comm = '<a href="javascript:void(0);" data-toggle="popover" data-html="true" data-placement="left" data-content="'+pair.comment+'" onclick="clickEventPair('+pair.id+')"><b style="color:#222;"><i class="fa fa-file-text-o fa-2x"></i></b></a>';
 	}
 
-	p.innerHTML = '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;"><div id="'+pair.id+'" draggable="true" ondragstart="drag(event)"><div onclick="clickEventPair('+pair.id+')" id="zone'+pair.id+'" class="zone"><div class="row"><div class="col-xs-10"><b style="color:#222">'+gender1+'</b> '+pair.user1+' ('+pair.age1+' ans)'+'<br><b style="color:#222">'+gender2+'</b> '+pair.user2+' ('+pair.age2+' ans)'+'</div><div class="col-xs-2">'+comm+'</div></div></div></div></div>';
+	p.innerHTML = '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">' +
+                        '<div id="'+pair.id+'" draggable="true" ondragstart="drag(event)">'+
+                            '<div onclick="clickEventPair('+pair.id+')" id="zone'+pair.id+'" class="zone">'+
+                                '<div class="row">'+
+                                    '<div class="col-xs-10">'+
+                                        '<b style="color:#222">'+gender1+'</b> '+ pair.smallName1 + ' - '+pair.age1+' ans' +
+                                        '<br>'+
+                                        '<b style="color:#222">'+gender2+'</b> '+ pair.smallName2 + ' - '+pair.age2+' ans' +
+                                    '</div>'+
+                                    '<div class="col-xs-2">'+comm+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>';
 
 	return p;
 }
@@ -604,5 +624,5 @@ function clickEventPair(ID){
 }
 
 $(document).ready(function(){
-    $('[data-toggle="popover"]').popover(); 
+    $('[data-toggle="popover"]').popover();
 });

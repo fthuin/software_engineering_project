@@ -63,6 +63,9 @@ class Participant(models.Model):
     def smallName(self):
         return u'' + self.prenom[0:1].upper() + ". " + self.nom
 
+    def small_name_classement(self):
+        return self.smallName() + u' (' +self.classement.nom+ u')'
+
     def limitName(self):
         nom = self.nom
         if len(self.nom) >= 16:

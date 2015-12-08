@@ -34,13 +34,13 @@ def allowedTournaments(participant1, participant2):
         else:
             tournoi = "Double mixte"
             jour = "Dimanche"
-        
+
         ageMax = 0
         if age1 > age2:
             ageMax = age1
         else:
             ageMax = age2
-        
+
         if ageMax >= 41:
             categorie = "Elites"
         elif ageMax >= 20:
@@ -55,13 +55,13 @@ def allowedTournaments(participant1, participant2):
             categorie = "Minimes"
         elif ageMax >= 9:
             categorie = "Pre minimes"
-    
+
     print(tournoi)
     t = TournoiTitle.objects.get(nom=tournoi)
     print(categorie)
     c = TournoiCategorie.objects.get(nom=categorie)
     tour = Tournoi.objects.get(titre=t, categorie=c)
-    
+
     return tour
 
 class Command(BaseCommand):
@@ -75,7 +75,7 @@ class Command(BaseCommand):
             username1 = pair.user1.username
             username2 = pair.user2.username
             toRemove = []
-            
+
             for participant in alone_participants:
                 user = participant.user
                 if username1 == user.username:
@@ -83,25 +83,28 @@ class Command(BaseCommand):
                 if username2 == user.username:
                     toRemove.append(participant)
             for e in toRemove:
-                alone_participants.remove(e)
-        i = 0
-        while i < len(alone_participants) - 2:
-            print(repr(i) + "/" + repr(len(alone_participants)))
-            participant1=alone_participants[i] 
-            participant2=alone_participants[i+1]
-            #print(repr(participant1.user))
-            #print(repr(participant2.user))
+                try:
+                    alone_participants.remove(e)
+                except ValueError:
+                    pass
+
+        while len(alone_participants) > 1:
+            print("\r Il reste " +repr(len(alone_participants))+ " à assigner")
+            participant1 = alone_participants[0]
+            participant2 = alone_participants[1]
+            while participant1.user.username == participant2.user.username:
+                participant2 = random.choice(alone_participants)
             pair = Pair(tournoi=allowedTournaments(participant1, participant2), user1=participant1.user, user2=participant2.user, valid=random.choice([True, False]), pay=random.choice([False,True]),confirm=True)
             pair.save()
-            i += 2
+            alone_participants.remove(participant1)
+            alone_participants.remove(participant2)
 
     def handle(self, *args, **options):
         # On récupère toute la base de données
-        self.Participants = Participant.objects.all()
+        self.Participants = Participant.objects.all().order_by('datenaissance')
         #self.Extras = Extra.objects.all()
         #self.Courts = Court.objects.all()
         self.Tournois = Tournoi.objects.all()
         self.Pairs = Pair.objects.all()
 
         self.createPairs()
-
