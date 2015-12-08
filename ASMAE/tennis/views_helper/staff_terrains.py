@@ -113,7 +113,7 @@ def view(request):
             import csv
             from django.utils.encoding import smart_str
             response = HttpResponse(content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename=Participants.csv'
+            response['Content-Disposition'] = 'attachment; filename=Terrains.csv'
             writer = csv.writer(response, csv.excel)
             # BOM (optional...Excel needs it to open UTF-8 file properly)
             response.write(u'\ufeff'.encode('utf8'))
