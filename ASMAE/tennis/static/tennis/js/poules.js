@@ -170,10 +170,8 @@ function mySetPoules(nbrPoules, sizePoules) {
 
 			var nom1 = listPair[j].user1;
 			var nom2 = listPair[j].user2;
-            var smallName1 = listPair[j].smallName1;
-            var smallName2 = listPair[j].smallName2;
-			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1, smallName1));
-			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2, smallName2));
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1));
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2));
 			document.getElementById("Leader"+(i+1)).appendChild(getSpaceOption());
 	    }
 	    while (j < sizePoules) {
@@ -241,10 +239,8 @@ function setPoules(nbrPoules){
 			//List
 			var nom1 = pairList[count].user1;
 			var nom2 = pairList[count].user2;
-            var smallName1 = pairList[count].smallName1;
-            var smallName2 = pairList[count].smallName2;
-			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1, smallName1));
-			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2, smallName2));
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1));
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2));
 			document.getElementById("Leader"+(i+1)).appendChild(getSpaceOption());
 
 			count = count + 1;
@@ -299,10 +295,8 @@ function setPoules2(taillePoule){
 			//List
 			var nom1 = pairList[count].user1;
 			var nom2 = pairList[count].user2;
-            var smallName1 = pairList[count].smallName1;
-            var smallName2 = pairList[count].smallName2;
-			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1, smallName1));
-			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2, smallName2));
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1));
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2));
 			document.getElementById("Leader"+(i+1)).appendChild(getSpaceOption());
 
 			count = count + 1;
@@ -334,8 +328,8 @@ function updatePanel(numero, contenu){
 		var id = c[i].childNodes[0].childNodes[0].id;
 		if(id.indexOf("bidon")<0){
 			var pair = getPairbyId(id);
-			list.appendChild(getOption(pair.user1, pair.smallName1));
-			list.appendChild(getOption(pair.user2, pair.smallName2));
+			list.appendChild(getOption(pair.user1));
+			list.appendChild(getOption(pair.user2));
 			list.appendChild(getSpaceOption());
 		}
 	}
@@ -449,10 +443,10 @@ function setInfoTerrainNoUpdateKm(user,matiere,type,addr,id,poules,ID){
 }
 
 //Return une option avec comme nom et valeur le name
-function getOption(name, smallName){
+function getOption(name){
 	var o = document.createElement("option");
 	o.value = name;
-	o.innerHTML = smallName;
+	o.innerHTML = name;
 
 	return o;
 }
