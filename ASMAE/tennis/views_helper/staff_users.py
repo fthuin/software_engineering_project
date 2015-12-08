@@ -122,32 +122,32 @@ def view(request):
             ])
             for obj in Use:
                 writer.writerow([
-                    smart_str(obj.user.username),
-                    smart_str(obj.titre),
-                    smart_str(obj.nom),
-                    smart_str(obj.prenom),
-                    smart_str(obj.rue),
-                    smart_str(obj.numero),
-                    smart_str(obj.boite),
-                    smart_str(obj.codepostal),
-                    smart_str(obj.localite),
-                    smart_str(obj.latitude),
-                    smart_str(obj.longitude),
-                    smart_str(obj.telephone),
-                    smart_str(obj.fax),
-                    smart_str(obj.gsm),
-                    smart_str(obj.datenaissance),
-                    smart_str(obj.classement),
-                    smart_str(obj.oldparticipant),
-                    smart_str(obj.isClassementVerified),
-                    smart_str(obj.isAccountActivated),
+                    smart_str(obj.username),
+                    smart_str(obj.participant.titre),
+                    smart_str(obj.participant.nom),
+                    smart_str(obj.participant.prenom),
+                    smart_str(obj.participant.rue),
+                    smart_str(obj.participant.numero),
+                    smart_str(obj.participant.boite),
+                    smart_str(obj.participant.codepostal),
+                    smart_str(obj.participant.localite),
+                    smart_str(obj.participant.latitude),
+                    smart_str(obj.participant.longitude),
+                    smart_str(obj.participant.telephone),
+                    smart_str(obj.participant.fax),
+                    smart_str(obj.participant.gsm),
+                    smart_str(obj.participant.datenaissance),
+                    smart_str(obj.participant.classement),
+                    smart_str(obj.participant.oldparticipant),
+                    smart_str(obj.participant.isClassementVerified),
+                    smart_str(obj.participant.isAccountActivated),
                 ])
             return response
         if request.POST['action'] == "addr_list":
             import csv
             from django.utils.encoding import smart_str
             response = HttpResponse(content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename=Participants.csv'
+            response['Content-Disposition'] = 'attachment; filename=Adresses.csv'
             writer = csv.writer(response, csv.excel)
             # BOM (optional...Excel needs it to open UTF-8 file properly)
             response.write(u'\ufeff'.encode('utf8'))
