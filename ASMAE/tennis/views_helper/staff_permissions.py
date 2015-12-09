@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Permission, Group
 from django.contrib.auth.models import User
 from django.db.models import Q
-from tennis.views import home, db_type
+from tennis.views import home
 from tennis.models import TournoiTitle, LogActivity
 
 def view(request):
@@ -102,10 +102,11 @@ def view(request):
                 group = Group.objects.get(name="staff")
                 utilisateur.groups.remove(group)
 
-            LogActivity(user=request.user, section="Permissions",
-                        details="Changed permission of user " + utilisateur.username).save()
+            LogActivity(user=request.user, section="Permissions", target=utilisateur.username,
+                        details="Changement des permissions de " + utilisateur.username).save()
 
     Use = User.objects.all().order_by('username')
+    logs_permissions = LogActivity.objects.filter(section="Permissions").order_by('-date')[:15]
 
     if recherche != "":
         Use = Use.filter(

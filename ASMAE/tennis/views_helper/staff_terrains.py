@@ -8,7 +8,7 @@ enregistrés sur le système.
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
-from tennis.models import Court, CourtSurface, CourtType, CourtState
+from tennis.models import Court, CourtSurface, CourtType, CourtState, LogActivity
 from tennis.views import home
 from django.http import HttpResponse
 
@@ -38,6 +38,7 @@ def view(request):
 
 
     allCourt = Court.objects.all()
+    terrains_logs = LogActivity.objects.filter(section="Terrain").order_by('-date')[:15]
 
     # Recherche
     if recherche != "":

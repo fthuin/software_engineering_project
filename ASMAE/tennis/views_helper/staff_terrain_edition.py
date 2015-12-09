@@ -1,5 +1,9 @@
 # /usr/bin/env python
 # coding: utf8
+'''
+Implémentation de la view contenant un formulaire de modification des
+informations relatives à un terrain.
+'''
 
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
@@ -53,14 +57,14 @@ def view(request, id):
             court.longitude = lng
             court.latitude = lat
             court.save()
-            LogActivity(user=request.user, section="Terrain",
-                        details="Terrain " + id + " edite").save()
+            LogActivity(user=request.user, section="Terrain", target=""+id,
+                        details=u"Terrain " + id + u" édité").save()
             #successEdit = "Terrain "+str(id)+" bien édité!"
             return redirect(reverse(validateTerrain, args={id}))
 
         if request.POST['action'] == "deleteCourt":
             court.delete()
-            LogActivity(user=request.user, section="Terrain",
+            LogActivity(user=request.user, section="Terrain", target=""+id,
                         details="Terrain " + id + " delete").save()
             return redirect(reverse(staffTerrain))
     if request.user.is_authenticated():

@@ -2,6 +2,7 @@
 # coding: utf8
 
 from tennis.views import home, yearsago, db_type
+from tennis.models import LogActivity
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
@@ -27,14 +28,9 @@ def view(request):
         veteran = request.POST['veteran']
         age_min = int(request.POST['agemin'])
         age_max = int(request.POST['agemax'])
-        if request.POST['action'] == "CSV":
-            #TODO Florian
-            pass
-        if request.POST['action'] == "addr_list":
-            #TODO Florian export sous CSV la listes de toutes les adresses uniques
-            pass
 
     Use = User.objects.all().order_by('username')
+    users_logs = LogActivity.objects.filter(section="Utilisateur").order_by('-date')[:15]
 
     # recherche sexe
     if sexe != "":
@@ -152,8 +148,8 @@ def view(request):
             # BOM (optional...Excel needs it to open UTF-8 file properly)
             response.write(u'\ufeff'.encode('utf8'))
             writer.writerow([
-                smart_str(u"Personnes"),
-                smart_str(u"Adresse")
+                smart_str(u"Adresses"),
+                smart_str(u"Personnes")
             ])
             adresses_personnes = {}
             for usr in Use:

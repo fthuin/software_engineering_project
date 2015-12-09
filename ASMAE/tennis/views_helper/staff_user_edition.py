@@ -7,7 +7,7 @@ informations sur une personne et de les modifier
 
 from itertools import chain
 import datetime
-from tennis.models import Court, Pair, Ranking
+from tennis.models import Court, Pair, Ranking, LogActivity
 from django.contrib.auth.models import User
 import re
 from django.shortcuts import render, redirect
@@ -27,6 +27,8 @@ def view(request, name):
     tournoi1 = Pair.objects.filter(user1=use, confirm=True)
     tournoi2 = Pair.objects.filter(user2=use, confirm=True)
     tournoi = list(chain(tournoi1, tournoi2))
+
+    user_logs = LogActivity.objects.filter(section="Utilisateur", target=use.username).order_by('-date')[:10]
 
     if request.method == "POST":
         email = request.POST['email']
@@ -85,7 +87,8 @@ def view(request, name):
 
         # Validate classement
         validate_classement_thread(participant)
-
+        LogActivity(user=request.user, section="Utilisateur",
+                target=""+use.username, details=u"Profil de " + use.username + u" modifié").save()
         successEdit = "Le profil a bien été changé"
 
     use = User.objects.get(username=name)

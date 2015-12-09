@@ -56,7 +56,7 @@ class CourtTypeAdmin(admin.ModelAdmin):
     ordering = ('nom',)
 
 class LogActivityAdmin(admin.ModelAdmin):
-    list_display = ('date', 'user', 'section', 'details')
+    list_display = ('date', 'user', 'section', 'target', 'details')
     ordering = ('date',)
     list_filter = ['section']
 

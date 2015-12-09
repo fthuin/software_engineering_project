@@ -71,17 +71,17 @@
                   <tr>
                     <th>Date</th>
                     <th>Staff</th>
-                    <th>Tournoi</th>
+                    <th>Poule</th>
                     <th>Détails</th>
                   </tr>
                 </thead>
                 <tbody>
-                    {% for elem in extraLog %}
+                    {% for elem in logs_tournois %}
                     <tr>
                         <td>{{ elem.date }}</td>
-                        <td>{{ elem.staff }}</td>
+                        <td>{{ elem.user.username }}</td>
                         <td>{{ elem.target }}</td>
-                        <td>{{ elem.detail }}</td>
+                        <td>{{ elem.details }}</td>
                     </tr>
                     {% empty %}
                     <tr>
