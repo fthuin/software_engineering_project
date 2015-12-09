@@ -122,7 +122,8 @@ def view(request, name):
                 arbre.court = terrain
                 arbre.save()
                 LogActivity(user=request.user, section="Tournoi",
-                            details="Mise a jour de l'abre du tournoi : " + tournoi.nom()).save()
+                    target=""+arbre.id,
+                    details="Mise a jour de l'abre du tournoi : " + tournoi.nom()).save()
 
         elif request.POST['action'] == "deleteTree":
             s = TournoiStatus.objects.get(numero=3)
@@ -138,7 +139,7 @@ def view(request, name):
                 arbre.data = None
                 arbre.label = None
                 arbre.save()
-                LogActivity(user=request.user, section="Tournoi",
+                LogActivity(user=request.user, section="Tournoi", target=""+arbre.id,
                             details="Suppression de l'abre du tournoi : " + tournoi.nom()).save()
                 return redirect(reverse(knockOff, args={name}))
 

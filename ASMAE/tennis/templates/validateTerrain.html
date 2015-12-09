@@ -133,11 +133,11 @@
 		          </tr>
 		      	</thead>
 	         	<tbody>
-	         		{% for elem in userLog %}
+	         		{% for elem in terrain_logs %}
 	         		<tr>
 	         			<td>{{ elem.date }}</td>
-	         			<td>{{ elem.staff }}</td>
-	         			<td>{{ elem.detail }}</td>
+	         			<td>{{ elem.user }}</td>
+	         			<td>{{ elem.details }}</td>
 	         		</tr>
 	         		{% empty %}
 	         		<tr>

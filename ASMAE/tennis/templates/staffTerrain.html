@@ -212,17 +212,15 @@
 		          <tr>
 		            <th>Date</th>
 		            <th>Staff</th>
-		            <th>Terrain</th>
 		            <th>Détails</th>
 		          </tr>
 		      	</thead>
 	         	<tbody>
-	         		{% for elem in extraLog %}
+	         		{% for elem in terrains_logs %}
 	         		<tr>
 	         			<td>{{ elem.date }}</td>
-	         			<td>{{ elem.staff }}</td>
-	         			<td>{{ elem.target }}</td>
-	         			<td>{{ elem.detail }}</td>
+	         			<td>{{ elem.user.username }}</td>
+	         			<td>{{ elem.details }}</td>
 	         		</tr>
 	         		{% empty %}
 	         		<tr>

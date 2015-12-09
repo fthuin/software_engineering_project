@@ -29,7 +29,7 @@ def view(request, name):
         a = tournoi.arbre
         tournoi.arbre = None
         tournoi.save()
-        LogActivity(user=request.user, section="Poules",
+        LogActivity(user=request.user, section="Poules", target=""+tournoi.nom(),
                     details="Suppression des poules du tournoi : " + tournoi.nom()).save()
         return redirect(reverse(generatePool, args={name}))
 

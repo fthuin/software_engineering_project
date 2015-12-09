@@ -5,6 +5,7 @@ Implémentation de la view qui permet au staff de gérer les extras, les frais
 d'inscription, la date de tournoi,...
 '''
 
+from itertools import chain
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from tennis.models import Extra, LogActivity, infoTournoi
@@ -18,6 +19,10 @@ def view(request):
             return True
         except ValueError:
             return False
+
+    logs_inscription = LogActivity.objects.filter(section="InfoTournoi")
+    logs_inscription = logs_inscription | LogActivity.objects.filter(section="Extra")
+    logs_inscription = logs_inscription.order_by('-date')[:15]
 
     extras = Extra.objects.all()
     info = infoTournoi.objects.all()
@@ -41,10 +46,10 @@ def view(request):
             prixTournoi = prixTournoi.replace(",", ".")
             if(float(prixTournoi) >= 0.0):
                 info.prix = prixTournoi
-                LogActivity(user=request.user, section="InfoTournoi",
-                            details=u"Prix du tournoi modifié").save()
+                LogActivity(user=request.user, section="InfoTournoi", target=""+repr(info.edition),
+                            details=u"Prix de l'édition "+ repr(info.edition) + u" modifié").save()
             else:
-                errorInfoPrix = "Le prix doit etre plus grand ou égale a zéro"
+                errorInfoPrix = u"Le prix doit être plus grand ou égal a zéro"
 
             splitedDateInfoTournoi = dateInfoTournoi.split("/")
             datetoEnreg = datetime.datetime(int(splitedDateInfoTournoi[2]), int(
@@ -52,10 +57,10 @@ def view(request):
             now = datetime.datetime.now()
             if(now < datetoEnreg):
                 info.date = datetoEnreg
-                LogActivity(user=request.user, section="InfoTournoi",
-                            details=u"Date du tournoi modifiée").save()
+                LogActivity(user=request.user, section="InfoTournoi", target=""+repr(info.edition),
+                            details=u"Date de l'edition " + repr(info.edition) +u" modifiée").save()
             else:
-                errorInfoDate = "La date doit etre plus tard que maintenant"
+                errorInfoDate = u"La date doit être plus tard que maintenant"
 
             info.save()
             info = infoTournoi.objects.all()
@@ -82,7 +87,7 @@ def view(request):
 
             extra = Extra(nom=nom, prix=prix, commentaires=message)
             extra.save()
-            LogActivity(user=request.user, section="Extra",
+            LogActivity(user=request.user, section="Extra", target=""+extra.id,
                         details=u"Extra " + nom + u" ajouté").save()
 
             successAdd = u"Extra " + nom + u" bien ajouté!"
@@ -109,7 +114,7 @@ def view(request):
             extra.prix = prix
             extra.commentaires = message
             extra.save()
-            LogActivity(user=request.user, section="Extra",
+            LogActivity(user=request.user, section="Extra", target=""+repr(extra.id),
                         details=u"Extra " + nom + u" modifié").save()
             successEdit = u"Extra " + nom + u" bien modifié !"
 
@@ -117,8 +122,8 @@ def view(request):
             id = request.POST['id']
             extra = Extra.objects.get(id=id)
             extra.delete()
-            LogActivity(user=request.user, section="Extra",
-                        details=u"Extra " + extra.nom + u" delete").save()
+            LogActivity(user=request.user, section="Extra",target=""+repr(extra.id),
+                        details=u"Extra " + extra.nom + u" supprimé").save()
             successDelete = u"Extra bien supprimé!"
 
     extras = Extra.objects.all()

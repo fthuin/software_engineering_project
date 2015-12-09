@@ -8,6 +8,7 @@ from tennis.views import home, validatePair, staffPaire
 
 def view(request, id):
     pair = Pair.objects.get(id=id)
+    paire_logs = LogActivity.objects.filter(section="Paire", target=""+id).order_by('-date')[:10]
 
     allTournoi = Tournoi.objects.all()
 
@@ -46,28 +47,29 @@ def view(request, id):
 
             if new_tournoi != pair.tournoi:
                 pair.tournoi = new_tournoi
-                LogActivity(user=request.user, section="Pair", details="Pair " +
-                            id + " tournoi = " + str(new_tournoi)).save()
+                LogActivity(user=request.user, section="Paire", details="Paire " +
+                            id + " tournoi = " + str(new_tournoi), target=""+id
+                            ).save()
             if valid == "Oui":
                 valider = True
                 if valider != pair.valid:
-                    LogActivity(user=request.user, section="Pair",
-                                details="Pair " + id + " valide").save()
+                    LogActivity(user=request.user, section="Paire", target=""+id,
+                                details=u"Paire " + id + u" validée").save()
             else:
                 valider = False
                 if valider != pair.valid:
-                    LogActivity(user=request.user, section="Pair",
-                                details="Pair " + id + " non valide").save()
+                    LogActivity(user=request.user, section="Paire",target=""+id,
+                                details=u"Paire " + id + u" invalidée").save()
             if paid == "Oui":
                 payer = True
                 if payer != pair.pay:
-                    LogActivity(user=request.user, section="Pair",
-                                details="Pair " + id + " paye").save()
+                    LogActivity(user=request.user, section="Paire",target=""+id,
+                                details=u"Paire " + id + u" payée").save()
             else:
                 payer = False
                 if payer != pair.pay:
-                    LogActivity(user=request.user, section="Pair",
-                                details="Pair " + id + " non paye").save()
+                    LogActivity(user=request.user, section="Paire",target=""+id,
+                                details=u"Paire " + id + u" non payée").save()
             pair.valid = valider
             pair.pay = payer
             pair.save()
@@ -75,8 +77,8 @@ def view(request, id):
 
         if request.POST['action'] == "deletePair":
             pair.delete()
-            LogActivity(user=request.user, section="Pair",
-                        details="Pair " + id + " delete").save()
+            LogActivity(user=request.user, section="Paire", target=""+id,
+                        details=u"Pair " + id + u" supprimée").save()
             return redirect(reverse(staffPaire))
 
     Ex = Extra.objects.all()

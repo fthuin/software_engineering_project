@@ -59,8 +59,8 @@ def view(request, name):
         elif request.POST['action'] == 'saveFinite':
             tournoi.status = TournoiStatus.objects.get(numero=2)
             tournoi.save()
-            LogActivity(user=request.user, section="Tournoi",
-                        details="Generation des poules du tournoi : " + tournoi.nom()).save()
+            LogActivity(user=request.user, section="Tournoi", target=""+tournoi.nom(),
+                        details=u"Génération des poules du tournoi : " + tournoi.nom()).save()
 
         i = 0
         j = -1

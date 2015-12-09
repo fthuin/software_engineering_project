@@ -3,9 +3,9 @@
 
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
-from tennis.models import Pair, Tournoi, TournoiCategorie, TournoiTitle
+from tennis.models import Pair, Tournoi, TournoiCategorie, TournoiTitle, LogActivity
 from django.db.models import Q
-from tennis.views import home, db_type
+from tennis.views import home
 
 def view(request):
     page = 1
@@ -22,11 +22,9 @@ def view(request):
         validation = request.POST['validation']
         paiement = request.POST['paiement']
         tournoi = request.POST['tournoi']
-        if request.POST['action'] == "CSV":
-            #TODO florian
-            pass
 
     allPair = Pair.objects.filter(confirm=True)
+    logs_paires = LogActivity.objects.filter(section="Paire")
 
     if recherche != "":
         allPair = allPair.filter(
