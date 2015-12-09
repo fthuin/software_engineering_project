@@ -19,7 +19,7 @@ EMAIL_FROM = "noreply@lecharledelorraine.com"
 #CONTACT_EMAIL_PASSWORD = "LeCharleDeLorraine" KEEP TO CONNECT TO THE MAIL, USELESS IN APP
 #EMAIL SENDGRID => pas toucher la cle API sinon faut en recrée une
 
-# MAIL FUNCTION:
+# MAIL TEMPLATE FUNCTIONS:
 def readTemplateFile(fileName):
 	# The two next line allows the program to avoid encoding error on some OS, don't touch
 	reload(sys)
@@ -46,7 +46,7 @@ def replaceVariableBaliseByValue(data, variableName, value):
 		raise ValueError('<<' + variableName + '>> variable seems to be missing in file')
 	return data[:startIndex] + value + data[endIndex:]
 
-# THREAD SEND MAIL
+# SEND MAIL BY THREAD 
 def send_mail_sendgrid(subject, body, fromAdd, toAddList, fail_silently):
 	sg = sendgrid.SendGridClient(SENDGRID_API_KEY)
 	message = sendgrid.Mail()
@@ -268,7 +268,7 @@ def send_tournament_invitation_by_mail(participant):
 	# Send
 	return send_mail_via_thread(subject, message, "", [mail])
 
-# BULK MAILING TOURNAMENT START
+# BULK MAILING AT TOURNAMENT START FUNCTIONS
 def send_tournament_invite_to_all_player():
 	for participant in Participant.objects.all():
 		send_tournament_invitation_by_mail(participant)
@@ -302,12 +302,12 @@ def send_email_start_tournament(staff, tournoi):
 def send_contact_mail(email, subject, message):
 	return send_mail(subject, message, email, [CONTACT_EMAIL], fail_silently=False)
 
+# Envoie un message signifiant une erreur dans les templates a l'adresse de contact du site
 def signal_error_in_mail_template_by_mail(template, error):
 	message = u"Le template de mail '" +  template + u"' est au moin particialement incorrect. Aucun message n'a put etre envoyé a l'utilisateur.\n\nErreur recue par le programme : " + error[0]
 	return send_mail("ERROR IN MAIL TEMPLATE", message, CONTACT_EMAIL, [CONTACT_EMAIL], fail_silently=False)
 
 # TEST MAIL
-# For tests only
 def test_send_mail():
 	pass
 	
