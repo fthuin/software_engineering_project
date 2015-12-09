@@ -293,12 +293,12 @@ def emailValidation(request, key):
         if account.isStillValid():
             # Keep in memory
             if account.isKeyValid(key):
-                compteToValidate = account
+				compteToValidate = account
         else:
 			# Delete participant, user and account
-            account.participant.user.delete()
-	    account.participant.delete()
-            account.delete()
+			account.participant.user.delete()
+			account.participant.delete()
+			account.delete()
     # End of cleaning, if account to validate has been found, validate it and
     # return succes, else failure
     if compteToValidate == None:
