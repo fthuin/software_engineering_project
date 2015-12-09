@@ -63,6 +63,9 @@ class Participant(models.Model):
     def smallName(self):
         return u'' + self.prenom[0:1].upper() + ". " + self.nom
 
+    def small_name_classement(self):
+        return self.smallName() + u' (' +self.classement.nom+ u')'
+
     def limitName(self):
         nom = self.nom
         if len(self.nom) >= 16:
@@ -74,6 +77,11 @@ class Participant(models.Model):
 
     def shortAdresse(self):
         return self.localite + " Belgium"
+
+    def age(self):
+        today = date.today()
+        born = self.datenaissance
+        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
     # def __eq__(self, other):
     #	return self.username == other.user.username

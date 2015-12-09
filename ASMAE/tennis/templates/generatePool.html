@@ -129,7 +129,7 @@ var PairDict = {};
 		var Lat2 = '{{elem.user2.participant.latitude}}'
 		var Lng2 = '{{elem.user2.participant.longitude}}'
 
-        var p = {id:'{{elem.id}}', user1:nom1,user2:nom2, age1:'{{elem.user1.age}}', age2:'{{elem.user2.age}}', comment:'{{elem.commentaires}}', titre1:'{{elem.user1.participant.titre}}', titre2:'{{elem.user2.participant.titre}}',lat1:Lat1,lng1:Lng1,lat2:Lat2,lng2:Lng2};
+        var p = {id:'{{elem.id}}', user1:nom1,user2:nom2, smallName1:'{{elem.smallName1}}', smallName2:'{{elem.smallName2}}', age1:'{{elem.user1.age}}', age2:'{{elem.user2.age}}', comment:'{{elem.commentaires}}', titre1:'{{elem.user1.participant.titre}}', titre2:'{{elem.user2.participant.titre}}',lat1:Lat1,lng1:Lng1,lat2:Lat2,lng2:Lng2};
         PairDict[{{key}}].push(p);
         PairList.push(p);
     {% endfor %}

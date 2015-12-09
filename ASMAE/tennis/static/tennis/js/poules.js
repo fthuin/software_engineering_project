@@ -544,7 +544,21 @@ function createPair(pair){
 		comm = '<a href="javascript:void(0);" data-toggle="popover" data-html="true" data-placement="left" data-content="'+pair.comment+'" onclick="clickEventPair('+pair.id+')"><b style="color:#222;"><i class="fa fa-file-text-o fa-2x"></i></b></a>';
 	}
 
-	p.innerHTML = '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;"><div id="'+pair.id+'" draggable="true" ondragstart="drag(event)"><div onclick="clickEventPair('+pair.id+')" id="zone'+pair.id+'" class="zone"><div class="row"><div class="col-xs-10"><b style="color:#222">'+gender1+'</b> '+pair.user1+' ('+pair.age1+' ans)'+'<br><b style="color:#222">'+gender2+'</b> '+pair.user2+' ('+pair.age2+' ans)'+'</div><div class="col-xs-2">'+comm+'</div></div></div></div></div>';
+	p.innerHTML = '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">' +
+                        '<div id="'+pair.id+'" draggable="true" ondragstart="drag(event)">'+
+                            '<div onclick="clickEventPair('+pair.id+')" id="zone'+pair.id+'" class="zone">'+
+                                '<div class="row">'+
+                                    '<div class="col-xs-10">'+
+                                        '<b style="color:#222">'+gender1+'</b> '+ pair.smallName1 + ' - '+pair.age1+' ans' +
+                                        '<br>'+
+                                        '<b style="color:#222">'+gender2+'</b> '+ pair.smallName2 + ' - '+pair.age2+' ans' +
+                                    '</div>'+
+                                    '<div class="col-xs-2">'+comm+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>';
 
 	return p;
 }
@@ -604,5 +618,5 @@ function clickEventPair(ID){
 }
 
 $(document).ready(function(){
-    $('[data-toggle="popover"]').popover(); 
+    $('[data-toggle="popover"]').popover();
 });

@@ -23,6 +23,9 @@ def view(request, name):
     tournoi = Tournoi.objects.get(titre=ti, categorie=ca)
     terrains = Court.objects.filter(valide=True)
     allPair = Pair.objects.filter(tournoi=tournoi, valid=True)
+    for my_pair in allPair:
+        my_pair.smallName1 = my_pair.user1.participant.small_name_classement()
+        my_pair.smallName2 = my_pair.user2.participant.small_name_classement()
     poules = Poule.objects.filter(tournoi=tournoi)
 
     info = infoTournoi.objects.all()
@@ -93,6 +96,8 @@ def view(request, name):
             p2.status = elem.status
             p2.save()
             for p in elem.paires.all():
+                p.smallName1 = p.user1.participant.small_name_classement()
+                p.smallName2 = p.user2.participant.small_name_classement()
                 p2.paires.add(p)
             for p in elem.score.all():
                 p2.score.add(p)
@@ -215,6 +220,8 @@ def view(request, name):
                         ((today.month, today.day) < (born.month, born.day))
                     c1 = ""
                     c2 = ""
+                    elem.smallName1 = elem.user1.participant.small_name_classement()
+                    elem.smallName2 = elem.user2.participant.small_name_classement()
                     if elem.comment1:
                         c1 = str(elem.comment1)
                     if elem.comment2:

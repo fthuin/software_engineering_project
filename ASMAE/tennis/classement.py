@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*- 
 import threading    
 import time
+import os
 from selenium import webdriver
 from tennis.models import Ranking
 from selenium.common.exceptions import NoSuchElementException
 
 def validateClassementOfParticipant(participant):
 	name = participant.prenom.upper() + " " + participant.nom.upper()
-	driver	= webdriver.PhantomJS("./phantomjs")
+	driver = webdriver.PhantomJS("./phantomjs")
 	driver.set_window_size(1120, 550)
 	driver.get('http://www.classement-tennis.be/calcul.html')
 	try:

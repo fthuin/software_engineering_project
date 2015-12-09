@@ -1,9 +1,42 @@
 \section{Architecture choices}
 \label{sec:Architecture choices}
 
-\todo[inline]{Il faudrait refaire les choix d'architecture et du framework
-rapidement en expliquant pourquoi on l'a choisit et pourquoi ça a été facile
-pour nous. SI VOUS REPRENEZ CE QUI A ETE FAIT DANS LE RAPPORT 2, prenez en
-compte les remarques reçues dans le mail !!! FAITES SIMPLE mais efficace, pas
-de blabla, juste expliquer comment ça marche. Dès que ça devient trop compliqué,
-renvoyez vers la doc !}
+\todo[inline]{Relire, j'ai tone down mais c'est ptet encore trop technique}
+
+In this first section, we will present de various architectural choices that me made while deploying our application. To make it more digest, we separated those choices in two category. The back-end category regrouping everything related to the web server and the database, and the front-end category which regroup tools handling the design of the website.
+
+\subsection{Back-End architecture}
+
+First we choose to use the the framework \textbf{Django}, an open-source (thus free to use)
+framework which is known for it's security, it's complete administrator, it's easy of
+database management, and finally, it's fairly large community. This framework is fairly
+recent in comparison to the less secure PHP, while also not at the bleeding edge of new technology where error support are not guaranteed. It is thus a good choice overall and your
+website technology will not become outdated before good period of time as past.\newline
+
+This framework uses python as programming language, language which happen to be easy to
+learn should the application need to be modified. \textbf{Django} being relatively simple of
+utilisation, any programmer should be able to make modification in the shortest time with
+the help of our development documentation, which explains what to find where in our code.\newline
+
+For the database, we choose to use PostgreSQL which is an open-source database recognised
+for it's reliability. Should you want to change the database to an sqLite or mySQL database
+for whatever reason, it would require next to no effort on the code as django's database
+management writes database queries by itself, just specify the type of database you are
+using and \textbf{Django} will handle the queries on it's own.\newline
+
+\subsection{Front-End architecture}
+
+We choose to use a lot of tools to build the website design. The three main tools are HTML
+(which creates the website elements), CSS (which customizes elements with color, placement,
+and more) and JavaScript (which uses are for validation, animation, forms, etc). Like for
+the back-end, there are frameworks built around those tools, making the work on the design
+easier, better, and faster. \newline
+
+One of those is \textbf{Bootstrap}, a framework using HTML, CSS and JavaScript for
+developing responsive website for desktop and mobile. \textbf{Bootstrap} alone is not enough
+to build the whole website design. Another framework we choose to use was \textbf{Angular
+JS} which extends HTML with new attributes to handle events, forms, inputs, validations, and
+more.\newline
+
+With those framework and a bit of work, we were able to develop a design which could rather
+easily be modified by any competent programmer should the need arise.
