@@ -380,7 +380,7 @@ def resetDbForNextYear(request):
     #Suppressions des poules
     Poule.objects.all().delete()
     #Suppressions du log activity
-    LogActivity.objects.all().delete()
+    #LogActivity.objects.all().delete()
 
     #Status des tournois
     for elem in Tournoi.objects.all():
