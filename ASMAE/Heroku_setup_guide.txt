@@ -7,3 +7,5 @@ heroku config:set SENDGRID_API_KEY=SG.IIiAvwh5SoOPU_5V6zhC6Q.cRI4Zr8YbSXKxk_gk7V
 
 type heroku config and check if they are all correctly present !
 If they aren't email won't be send and error will only appear in the log.
+
+For the classement functionnality to work, the phantomjs file should be at the same position as the manage.py file.
