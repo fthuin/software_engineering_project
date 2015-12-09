@@ -113,6 +113,9 @@ def staffTournoi(request):
     if request.user.is_authenticated():
         allTitre = TournoiTitle.objects.all()
         allTournoi = Tournoi.objects.all()
+        logs_tournois = LogActivity.objects.filter(section="Tournoi")
+        logs_tournois = logs_tournois | LogActivity.objects.filter(section="Poules")
+        logs_tournois = logs_tournois.order_by('-date')[:15]
         for tourn in allTournoi:
             nbrPair = len(Pair.objects.filter(tournoi=tourn, valid=True))
             tourn.np = nbrPair
@@ -266,8 +269,8 @@ def editTerrainStaff(request, id):
 
 @permission_required('tennis.Pair')
 def validatePair(request, id):
-    from views_helper import staff_validation_paire
-    return staff_validation_paire.view(request, id)
+    from views_helper import staff_paire_validation
+    return staff_paire_validation.view(request, id)
 
 
 def profil(request):
