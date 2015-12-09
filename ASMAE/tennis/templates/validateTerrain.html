@@ -118,6 +118,40 @@
 		{% endfor %}
 	</div>
 
+	<div class="content-box">
+	<h2 class="center">Historique</h2>
+	<hr class="line">
+	<div class="panel panel-default">
+		<div class="panel-heading">Historique des modifications</div>
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+		          <tr>
+		            <th>Date</th>
+		            <th>Staff</th>
+		            <th>Détails</th>
+		          </tr>
+		      	</thead>
+	         	<tbody>
+	         		{% for elem in userLog %}
+	         		<tr>
+	         			<td>{{ elem.date }}</td>
+	         			<td>{{ elem.staff }}</td>
+	         			<td>{{ elem.detail }}</td>
+	         		</tr>
+	         		{% empty %}
+	         		<tr>
+	         			<td>-</td>
+	         			<td>-</td>
+	         			<td>-</td>
+	         		</tr>
+	         		{% endfor %}
+	          	</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
 </div>
 
 {% endblock %}
