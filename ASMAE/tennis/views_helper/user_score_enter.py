@@ -11,7 +11,6 @@ from tennis.models import Poule, PouleStatus, Score
 from tennis.views import home, tournoi
 
 def view(request, id):
-    print 'yolo'
     def is_number(s):
         try:
             float(s)

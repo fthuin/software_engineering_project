@@ -107,8 +107,6 @@ def view(request):
     allCourtType = CourtType.objects.all()
     allCourtState = CourtState.objects.all()
 
-    print(repr(len(allCourt)))
-
     if request.method == 'POST':
         if request.POST['action'] == "CSV":
             import csv

@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from tennis.models import Pair, Tournoi, Extra, infoTournoi, Participant, TournoiTitle, TournoiCategorie
 from django.db.models import Q
-from tennis.views import db_type, yearsago, tournoi, home
+from tennis.views import yearsago, tournoi, home
 from tennis.mail import send_confirmation_email_pair_registered
 from operator import or_
 
@@ -39,8 +39,6 @@ def view(request):
 
     # Utilisateur courant
     u = request.user
-
-    print(u.user_permissions.all())
 
     # Recuperations des infos
     info = infoTournoi.objects.all()

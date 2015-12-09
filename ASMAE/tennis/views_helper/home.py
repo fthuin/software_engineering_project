@@ -1,4 +1,7 @@
 #coding: utf8
+'''
+Implémentation de la view de la page d'accueil
+'''
 from tennis.models import infoTournoi
 from django.shortcuts import render
 
@@ -10,7 +13,6 @@ def view(request):
     date = info.date
     year = date.year
     month = date.month
-    print(month)
     month_text = ""
     if month == 1:
         month_text = "janvier"
