@@ -250,7 +250,7 @@
 
 		<!-- Information personnelle Edit-->
 		<!-- TODO set info du mec connecté -->
-		<form class="form-horizontal" name="registerForm" id="editInfo" role="form" method="post" action="" onsubmit="" {% if errorEdit %}{% else %}style="display:none"{% endif %}>
+		<form class="form-horizontal" onkeypress="return event.keyCode != 13;" name="registerForm" id="editInfo" role="form" method="post" action="" onsubmit="" {% if errorEdit %}{% else %}style="display:none"{% endif %}>
 			{% csrf_token %}
 			<!-- Information personnelle-->
 			<div class="panel panel-default">
