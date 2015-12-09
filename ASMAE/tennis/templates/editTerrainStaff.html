@@ -194,5 +194,11 @@
 {% block commande %}
 <script>
 preselectSelectOption('{{court.matiere}}','{{court.type}}','{{court.etat}}');
+
+$(document).on("keypress", ":input:not(textarea)", function(event) {
+    if (event.keyCode == 13) {
+        event.preventDefault();
+    }
+});
 </script>
 {% endblock%}
