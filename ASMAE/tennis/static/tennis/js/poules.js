@@ -109,6 +109,10 @@ function drop (ev) {
 	setKm();
 	leaderAssignement();
 
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
+
 }
 
 function allowDrop(ev) {
@@ -539,16 +543,16 @@ function createPair(pair){
 	}
 
 
-	var comm = "" ;
+	var comm = '<i class="fa fa-comment-o fa-2x">';
 	if(pair.comment != ""){
-		comm = '<a href="javascript:void(0);" data-toggle="tooltip" data-container="body" data-placement="left" data-html="true" title="'+pair.comment+'" onclick="clickEventPair('+pair.id+')"><b style="color:#222;"><i class="fa fa-file-text-o fa-2x"></i></b></a>';
+		comm = '<a href="javascript:void(0);" data-toggle="tooltip" data-container="body" data-placement="left" data-html="true" title="'+pair.comment+'"><b style="color:#222;"><i class="fa fa-commenting-o fa-2x"></i></b></a>';
 	}
 
 	p.innerHTML = '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">' +
                         '<div id="'+pair.id+'" draggable="true" ondragstart="drag(event)">'+
-                            '<div onclick="clickEventPair('+pair.id+')" id="zone'+pair.id+'" class="zone">'+
+                            '<div  id="zone'+pair.id+'" class="zone">'+
                                 '<div class="row">'+
-                                    '<div class="col-xs-10">'+
+                                    '<div class="col-xs-10" onclick="clickEventPair('+pair.id+')" style="border-right:solid 2px red">'+
                                         '<b style="color:#222">'+gender1+'</b> '+ pair.smallName1 + ' - '+pair.age1+' ans' +
                                         '<br>'+
                                         '<b style="color:#222">'+gender2+'</b> '+ pair.smallName2 + ' - '+pair.age2+' ans' +
@@ -605,6 +609,10 @@ function clickEventPair(ID){
 
 			setKm();
 			leaderAssignement();
+
+			$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
 
 
 
