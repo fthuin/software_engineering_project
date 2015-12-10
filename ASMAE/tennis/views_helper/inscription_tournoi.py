@@ -56,8 +56,8 @@ def view(request):
         else:
             libre_Dimanche = False
 
-    famille_25 = yearsago(25, today)
-    famille_15 = yearsago(15, today)
+    famille_25 = yearsago(25, today.replace(month=1,day=1))
+    famille_15 = yearsago(15, today.replace(month=1,day=1))
 
     querysets = list()
     # Liste contenant les utilisateurs pour le tournoi des familles
@@ -116,13 +116,11 @@ def view(request):
 
     # calcul des ages des users
     born = request.user.participant.datenaissance
-    request.user.age = today.year - born.year - \
-        ((today.month, today.day) < (born.month, born.day))
+    request.user.age = today.year - born.year
 
     for u in Use:
         born = u.participant.datenaissance
-        u.age = today.year - born.year - \
-            ((today.month, today.day) < (born.month, born.day))
+        u.age = today.year - born.year
 
     if request.method == "POST":
         if request.POST['action'] == "formPair":
