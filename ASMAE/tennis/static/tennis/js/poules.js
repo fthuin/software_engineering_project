@@ -988,7 +988,7 @@ for(var i =0;i<nbrPoule;i++)
 		var p = createEmptyPair(i+"-"+j);
 		document.getElementById("list"+(i+1)).appendChild(p);
 	}
-
+    
 }
 setTerrains(nbrPoule);
 
@@ -1004,90 +1004,6 @@ $(document).ready(function(){
 
 //document.getElementById("save_button").click()
 
-}
-function leaderAssignement(){
-
-	/* DEBUT COPIER COLLER */
-    document.getElementById("assignTerrains").value = ""
-    document.getElementById("assignPairPoules").value = ""
-    document.getElementById("assignLeaders").value = ""
-    var nbr = document.getElementById("poulesNumber").value;
-    var poulesDict = {};
-    for (var i = 0; i < nbr ; i++) {
-        var poule = {}
-        poule['leader'] = document.getElementById("Leader"+(i+1)).value;
-        poule['terrainID'] = document.getElementById("ID"+(i+1)).textContent;
-        poule['pairList'] = [];
-        poulesDict[''+i] = poule;
-        // TODO : Check si le leader et le terrainID sont valides
-    }
-    for (var i = 0; i < PairList.length ; i++) {
-        // On link les paires aux ID des poules
-        var id = "" + document.getElementById(""+PairList[i].id).parentNode.parentNode.parentNode.id;
-        id = id.replace("list", "");
-        poulesDict[''+(id-1)]['pairList'].push(PairList[i]);
-    }
-    for (var i = 0; i < nbr ; i++) {
-         document.getElementById("assignTerrains").value += poulesDict[''+i]['terrainID'] + '-';
-         document.getElementById("assignPairPoules").value += '[' + i + ']-'
-         for (var j = 0 ; j < poulesDict[''+i]['pairList'].length ; j++) {
-            document.getElementById("assignPairPoules").value += poulesDict[''+i]['pairList'][j].id + '-';
-         }
-         document.getElementById("assignLeaders").value += poulesDict[''+i]['leader'] + '/';
-    }
-	/* FIN COPIER COLLER */
-	/* Accéder à la première paire de la première poule */
-	// poulesDict['1']['pairList'][0]
-	/* Fin accéder à la premiere ... */
-	//alert(poulesDict['1']['pairList'][0].u2addr);
-
-	var terrainLat = '{{ infLat }}'
-	var terrainLng = '{{ infLng }}'
-
-	for(var key in poulesDict){
-	var minDist = Number.MAX_VALUE;
-	var minNom = ""
-
-
-
-		for(var i=0;i<poulesDict[key]['pairList'].length;i++){
-			var user1Lat = poulesDict[key]['pairList'][i].lat1;
-			var user1Lng = poulesDict[key]['pairList'][i].lng1;
-			var user2Lat = poulesDict[key]['pairList'][i].lat2;
-			var user2Lng = poulesDict[key]['pairList'][i].lng2;
-			var latLng1 = new google.maps.LatLng(parseFloat(user1Lat.replace(",", ".")), parseFloat(user1Lng.replace(",", ".")));
-			var latLng2 = new google.maps.LatLng(parseFloat(user2Lat.replace(",", ".")), parseFloat(user2Lng.replace(",", ".")));
-
-			var terrainlatLng = new google.maps.LatLng(parseFloat(terrainLat.replace(",", ".")), parseFloat(terrainLng.replace(",", ".")));
-
-			var distance1 = google.maps.geometry.spherical.computeDistanceBetween(latLng1, terrainlatLng);
-			var distance2 = google.maps.geometry.spherical.computeDistanceBetween(latLng2, terrainlatLng);
-			if(distance1 < minDist){
-				minDist = distance1;
-				minNom = minNom = poulesDict[key]['pairList'][i].user1
-			}
-			if(distance2 < minDist){
-				minDist = distance2;
-				minNom = poulesDict[key]['pairList'][i].user2
-			}
-
-
-
-
-		}
-
-		setSelectedIndex(document.getElementById("Leader"+(parseInt(key)+1)),minNom);
-	}
-
-}
-function setSelectedIndex(s, v) {
-	for ( var i = 0; i < s.options.length; i++ ) {
-
-		if ( s.options[i].text == v ) {
-			s.options[i].selected = true;
-			return;
-		}
-	}
 }
 
 $(document).ready(function(){
