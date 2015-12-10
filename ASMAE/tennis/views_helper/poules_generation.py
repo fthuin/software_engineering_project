@@ -193,7 +193,7 @@ def view(request, name):
                 if elem.comment2:
                     c2 = str(elem.comment2)
                 if c1 != "" or c2 != "":
-                    elem.commentaires = c1 + "<hr>" + c2
+                    elem.commentaires = c1 + '<hr style="margin:1px">' + c2
             return render(request, 'generatePool.html', locals())
         else:
             saved = True
