@@ -54,22 +54,22 @@ def view(request, id):
                 valider = True
                 if valider != pair.valid:
                     LogActivity(user=request.user, section="Paire", target=""+id,
-                                details=u"Paire " + id + u" validée").save()
+                                details=u"Paire validée").save()
             else:
                 valider = False
                 if valider != pair.valid:
                     LogActivity(user=request.user, section="Paire",target=""+id,
-                                details=u"Paire " + id + u" invalidée").save()
+                                details=u"Paire invalidée").save()
             if paid == "Oui":
                 payer = True
                 if payer != pair.pay:
                     LogActivity(user=request.user, section="Paire",target=""+id,
-                                details=u"Paire " + id + u" payée").save()
+                                details=u"Paire payée").save()
             else:
                 payer = False
                 if payer != pair.pay:
                     LogActivity(user=request.user, section="Paire",target=""+id,
-                                details=u"Paire " + id + u" non payée").save()
+                                details=u"Paire non payée").save()
             pair.valid = valider
             pair.pay = payer
             pair.save()
@@ -78,7 +78,7 @@ def view(request, id):
         if request.POST['action'] == "deletePair":
             pair.delete()
             LogActivity(user=request.user, section="Paire", target=""+id,
-                        details=u"Pair " + id + u" supprimée").save()
+                        details=u"Paire supprimée").save()
             return redirect(reverse(staffPaire))
 
     Ex = Extra.objects.all()

@@ -58,14 +58,14 @@ def view(request, id):
             court.latitude = lat
             court.save()
             LogActivity(user=request.user, section="Terrain", target=""+id,
-                        details=u"Terrain " + id + u" édité").save()
+                        details=u"Terrain édité").save()
             #successEdit = "Terrain "+str(id)+" bien édité!"
             return redirect(reverse(validateTerrain, args={id}))
 
         if request.POST['action'] == "deleteCourt":
             court.delete()
             LogActivity(user=request.user, section="Terrain", target=""+id,
-                        details="Terrain " + id + " delete").save()
+                        details=u"Terrain supprimé").save()
             return redirect(reverse(staffTerrain))
     if request.user.is_authenticated():
         return render(request, 'editTerrainStaff.html', locals())
