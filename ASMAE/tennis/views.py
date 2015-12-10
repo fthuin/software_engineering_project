@@ -216,10 +216,8 @@ def staffExtra(request):
 
 
 def staffLog(request):
-    logs = LogActivity.objects.order_by('-date')
-    if request.user.is_authenticated():
-        return render(request, 'staffLog.html', locals())
-    return redirect(reverse(home))
+    from views_helper import staff_historique
+    return staff_historique.view(request)
 
 
 @permission_required('tennis.Droit')
