@@ -4,6 +4,8 @@
 \todo[inline]{Faire une introduction qui dit que tous ces requirements sont
 ceux du client, qu'ils ont été la base de notre travail, etc.}
 
+In this second section, we will present the various requirements on which we based the development of the website. All the requirements used were the ones given by the client in the different papers and sessions, and we tried our best to fulfil them. Because of their number, we will only develop the more interesting and time consuming ones.
+
 \subsection{Players registration}
 \label{sub:Players registration}
 
@@ -17,12 +19,20 @@ Dire que la géolocalisation se calcule ici. Dire que certains champs sont
 limités par l'administrateur (sexe, classement,\ldots). Dire que tous ces
 champs sont modifiables plus tard par l'utilisateur.}
 
+The first requirement was to allow each participant of the tournaments to register on the website. This is done through the player registration form, accessible from the front page of the website. In this form, the participant is asked to fill in all the informations needed to create an account (such as the email address used or the password) but also their personal informations (required to be enlisted into the tournament). Some of these fields are limited by the administrator in charge of the registration process, such as the gender or the player's ranking. Each field is then verified to be sure that everything has the good format and nothing is missing. \newline
+
+Once everything is checked, a mail containing a confirmation link is sent to the specified address to complete the registration process. It is important to notice that neither the enrolment to a tournament nor the registration of a court will be accessible until the confirmation link is clicked on. All the informations entered in this form is modifiable later on by the user, through the edit profile process. \newline
+
+We chose to work with accounts instead of the old registration process because it appeared to us that is was way more easier to manipulate the player's data, but also to create pairs of players, groups and the tournaments in general.
+
 \subsubsection{Player management}
 \label{subs:Player management}
 
 \todo[inline]{Dire qu'il y a une interface staff réservée à la gestion des
 utilisateurs dans la partie staff qui permet au staff de gérer les informations
 des joueurs, de faire des recherches selon différents critères, etc.}
+
+After the player's registration, it was important to be able to manage all the players registered on the website. This is possible through the staff interface of the website (the user management tab) only accessible to authorized staff members. In this tab, all the users registered on the website are displayed and their informations are accessible with a single click. These informations can be modified if needed by the staff members themselves. It is also possible to perform a research on one or several fields (such as the name, address or the payment status), to display specific users or informations.
 
 \subsection{Pair registration}
 \label{sub:Pair registration}
@@ -36,6 +46,13 @@ proposés par le staff. Des checks automatisés sont faits pour assigner les
 joueurs à des tournois en fonction des critères donnés par le client. Dire
 qu'un mail récapitulatif est envoyé lorsqu'une paire est validée.}
 
+Once a player is registered on the website, he has to form a pair to compete in a given tournament. Since each player only creates an account for himself, he should be able to create a pair with another player of the website. This is done through the pair registration form, accessible once the user received the confirmation mail and activated his account. In this form, the user can go through all the others players and select the one he wants to pair with. To make this process easier, the user also has the possibility to perform a research on several fields (such as the last name or first name) to find the second member of his pair. \newline
+
+Once the pair is selected, the user can choose between several extra services, such as a place for the barbecue organized by the ASMAE team. He also has the opportunity to leave additional informations (wishes, remarks, ...) in a special dialogue box at the end of the page. Several automated checks are then performed to assign the pairs to the correct tournament. These checks are based on the criteria given by the client for each tournament (such as the age of the players or gender). \newline
+
+Once the pair is created and correctly assigned to a tournament, a summary mail is sent to each player of the pair with all the informations.
+
+
 \subsubsection{Payment methods}
 \label{subs:Payment methods}
 
@@ -43,6 +60,10 @@ qu'un mail récapitulatif est envoyé lorsqu'une paire est validée.}
 implémentée mais que les méthodes de paiement ne le sont pas car de toute
 façon elles devraient être mises à jour par le client; ça n'avait donc pas
 de sens de faire des faux comptes si le client doit tout réinstaller derrière}
+
+The payment methods are available to a pair after the enlistment to one of the tournaments. Each member of the pair can chose to pay for the inscription and extra fees, with several payment methods (MasterCard, Visa, Paypal or credit transfer). After the payment of the fees, the status of the pair is updated, with the field \textit{Pair payment validated by the staff} ticked.\newline
+
+The payment methods page is implemented, but the methods themselves aren't. This is explained by the fact that these methods required the actual accounts and informations of the client to be fully functional, which we were of course not given. We thus decided not to implement the payment process with false accounts, which would have been replaced anyway by the client. At the end, everything is in place for the payment to be operational, exception made for the setup of the client's accounts.
 
 \subsubsection{Extra management}
 \label{subs:Extra management}
