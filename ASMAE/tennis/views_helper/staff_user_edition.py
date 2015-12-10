@@ -88,7 +88,7 @@ def view(request, name):
         # Validate classement
         validate_classement_thread(participant)
         LogActivity(user=request.user, section="Utilisateur",
-                target=""+use.username, details=u"Profil de " + use.username + u" modifié").save()
+                target=""+use.username, details=u"Profil modifié").save()
         successEdit = "Le profil a bien été changé"
 
     use = User.objects.get(username=name)
