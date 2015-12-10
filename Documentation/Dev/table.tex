@@ -1,6 +1,6 @@
 Pour ajouter une table dans la base de données, il est nécessaire de modifier le fichier models.py, contenant l'ensemble des tables. Pour ce faire, il suffit d'ouvrir le fichier à l'aide de n'importe quel IDE ou éditeur de code, et de créer une nouvelle classe à la fin de celui-ci en respectant l'indentation et syntaxe python class ClassName (models.Model) : . Il faut ensuite définir l'ensemble des variables de classe (représentant les différentes informations à stocker dans la base de données), en spécifiant leurs types et les éventuelles relations. 
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.4]{Classe.png}
 \caption{Représentation d'une table de la base de données}
@@ -34,13 +34,13 @@ Une fois l'ensemble des variables définies, il est également possible de défi
 
 Une fois terminé, il ne reste qu'à sauvegarder les modifications apportées au fichier, le fermer, et effectuer la migration de la base de données (afin que ceux-ci soient bien effectués) grâce aux commandes (dans cet ordre) : python manage.py makemigrations et python manage.py migrate. Un nouveau fichier contenant les modifications apportées à la base de données sera créé dans le dossier ASMAE/tennis/migrations, ce qui permet d'avoir une vue d'ensemble de l'évolution de la base de données mais surtout de pouvoir effectuer des restaurations à des versions antérieures (rollbacks) si besoin est.\\
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.4]{Migration1.png}
 \caption{Migration}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.4]{Migration2.png}
 \caption{Migration}
@@ -50,7 +50,7 @@ L'ensemble de la documentation se rapportant aux commandes de migration de la ba
 
 Une fois la migration effectuée, il est possible de directement aller vérifier sur la nouvelle table a correctement été ajoutée, ou si la ou les modifications ont bien été apportées à la base de données via l'interface administration de Django. Il suffit pour cela de se connecter à l'adresse du site web suivi de "/admin" avec les identifiants d'administrateur, et de se rendre dans l'onglet "Tennis".\\
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.4]{Admin.png}
 \caption{Interface administrateur}
@@ -64,7 +64,7 @@ Afin de rajouter du nouveau contenu sur le site internet, il est utile de pouvoi
 
 Pour ce faire, il faut dans un premier temps créer le template, c'est à dire la structure de la page en HTML. Une fois le fichier représentant la page créé, il faut l'ajouter au dossier contenant l'ensemble des pages HTML du site, c'est-à-dire "ASMAE/tennis/templates". Il est intéressant de noter que les différents éléments statiques (tels qu'un style css, police particulière, ...) doivent être ajoutés dans le sous-dossier correspondant, présent dans le répertoire "ASMAE/tennis/static/tennis".\\
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.3]{Html.png}
 \caption{Exemple d'une page HTML}
@@ -72,7 +72,7 @@ Pour ce faire, il faut dans un premier temps créer le template, c'est à dire l
 
 Une fois fait, il est nécessaire de créer une view dans le fichier views.py se trouvant dans le dossier "ASMAE/tennis", qui reprendra la page à renvoyer quand un utilisateur fera une requête pour obtenir la page. Le format le plus classique et simpliste d'une telle requête est le suivant: on définit le nom de la requête, ainsi que la page à rendre quand celle-ci est effectuée.\\
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.4]{Views.png}
 \caption{Fichier views.py}
@@ -80,7 +80,7 @@ Une fois fait, il est nécessaire de créer une view dans le fichier views.py se
 
 Enfin, il reste à ajouter au fichier urls.py (également présent dans le dossier "ASMAE/tennis") qui contient tous les liens URL disponibles sur le site, ainsi que le lien vers le nom des views concernées. Pour ce faire, il suffit de rajouter une nouvelle ligne dans le fichier, en respectant le format suivant : url(NouveauLienUrl, NomDeLaViews), .
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.4]{Url.png}
 \caption{Fichier urls.py}
