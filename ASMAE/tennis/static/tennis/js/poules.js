@@ -541,7 +541,7 @@ function createPair(pair){
 
 	var comm = "" ;
 	if(pair.comment != ""){
-		comm = '<a href="javascript:void(0);" data-toggle="popover" data-html="true" data-placement="left" data-content="'+pair.comment+'" onclick="clickEventPair('+pair.id+')"><b style="color:#222;"><i class="fa fa-file-text-o fa-2x"></i></b></a>';
+		comm = '<a href="javascript:void(0);" data-toggle="tooltip" data-container="body" data-placement="left" data-html="true" title="'+pair.comment+'" onclick="clickEventPair('+pair.id+')"><b style="color:#222;"><i class="fa fa-file-text-o fa-2x"></i></b></a>';
 	}
 
 	p.innerHTML = '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">' +
@@ -618,5 +618,5 @@ function clickEventPair(ID){
 }
 
 $(document).ready(function(){
-    $('[data-toggle="popover"]').popover();
+    $('[data-toggle="tooltip"]').tooltip(); 
 });

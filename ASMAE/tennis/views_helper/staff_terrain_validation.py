@@ -19,11 +19,11 @@ def view(request, id):
         if request.POST.__contains__("valide"):
             valide = True
             LogActivity(user=request.user, section="Terrain", target=""+id,
-                        details=u"Terrain " + id + u" validé").save()
+                        details=u"Terrain validé").save()
         else:
             valide = False
             LogActivity(user=request.user, section="Terrain", target=""+id,
-                        details=u"Terrain " + id + u" désactivé").save()
+                        details=u"Terrain désactivé").save()
 
         court.commentaireStaff = message
         court.valide = valide
