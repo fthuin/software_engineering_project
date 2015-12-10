@@ -216,8 +216,10 @@ def staffExtra(request):
 
 
 def staffLog(request):
-    from views_helper import staff_historique
-    return staff_historique.view(request)
+    if(len(request.user.groups.filter(name="staff")) > 0 or len(request.user.groups.filter(name="Admin")) > 0):
+        from views_helper import staff_historique
+        return staff_historique.view(request)
+    return redirect(reverse(home))
 
 
 @permission_required('tennis.Droit')
