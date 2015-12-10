@@ -192,6 +192,9 @@ $('#poulesNumber').on('input', function() {
     }
 
     setPoules(nbr);
+    $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
 
 
 });
@@ -209,6 +212,9 @@ $('#poulesSize').on('input', function() {
     }
 
     setPoules2(nbr)
+    $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
 });
 </script>
 {% endblock %}
