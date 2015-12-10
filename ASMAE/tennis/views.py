@@ -115,8 +115,6 @@ def editTerrain(request, id):
 def staffTournoi(request):
     userPermissions = request.user.user_permissions.all()
     userGroups = request.user.groups.all()
-    print(userPermissions)
-    print(userGroups)
     #On vérifie que l'utilisateur a au moins une permission de tournoi ou fait partie du groupe admin
     if len(userPermissions.filter(codename="DoubleHommes")) > 0 or len(userPermissions.filter(codename="DoubleFemmes")) > 0 or len(userPermissions.filter(codename="DoubleMixte")) > 0 or len(userPermissions.filter(codename="TournoiDesFamilles")) > 0 or len(userGroups.filter(name="Admin")) > 0:
         if request.user.is_authenticated():
