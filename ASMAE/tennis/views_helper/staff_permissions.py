@@ -103,7 +103,7 @@ def view(request):
                 utilisateur.groups.remove(group)
 
             LogActivity(user=request.user, section="Permissions", target=utilisateur.username,
-                        details="Changement des permissions de " + utilisateur.username).save()
+                        details="Changement des permissions").save()
 
     Use = User.objects.all().order_by('username')
     logs_permissions = LogActivity.objects.filter(section="Permissions").order_by('-date')[:15]
