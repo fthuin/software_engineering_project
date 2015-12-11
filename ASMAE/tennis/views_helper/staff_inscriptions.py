@@ -33,15 +33,10 @@ def view(request):
     yearLoop = range(datetime.date.today().year, datetime.date.today().year + 5)
     isAdmin = request.user.groups.filter(name="Admin").exists()
 
-    #On compte les extras
-    for e in extras:
-        a = len(Extra.objects.filter(id=e.id, extra1__valid=True)) + \
-            len(Extra.objects.filter(id=e.id, extra2__valid=True))
-        e.count = a
-
     if request.method == "POST":
         if request.POST['action'] == "cleanDb":
             resetDbForNextYear(request)
+            extras = Extra.objects.all()
 
         if request.POST['action'] == "modifyInfoTournoi":
             prixTournoi = request.POST['prixInscription'].strip()
@@ -97,6 +92,7 @@ def view(request):
                         details=u"Extra " + nom + u" ajouté").save()
 
             successAdd = u"Extra " + nom + u" bien ajouté!"
+            extras = Extra.objects.all()
 
         if request.POST['action'] == "modifyExtra":
             id = request.POST['id']
@@ -123,6 +119,7 @@ def view(request):
             LogActivity(user=request.user, section="Extra", target=""+repr(extra.id),
                         details=u"Extra " + nom + u" modifié").save()
             successEdit = u"Extra " + nom + u" bien modifié !"
+            extras = Extra.objects.all()
 
         if request.POST['action'] == "deleteExtra":
             id = request.POST['id']
@@ -131,7 +128,15 @@ def view(request):
             LogActivity(user=request.user, section="Extra",target=""+repr(extra.id),
                         details=u"Extra " + extra.nom + u" supprimé").save()
             successDelete = u"Extra bien supprimé!"
+            extras = Extra.objects.all()
 
+
+    #On compte les extras
+    for e in extras:
+        a = len(Extra.objects.filter(id=e.id, extra1__valid=True)) + \
+            len(Extra.objects.filter(id=e.id, extra2__valid=True))
+        e.count = a
+    
     if request.user.is_authenticated():
         return render(request, 'staffExtra.html', locals())
     return redirect(reverse(home))
