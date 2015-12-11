@@ -12,6 +12,7 @@ from django.db.models import Q
 from tennis.views import yearsago, tournoi, home
 from tennis.mail import send_confirmation_email_pair_registered
 from operator import or_
+from functools import reduce
 
 def view(request):
     page = 1
