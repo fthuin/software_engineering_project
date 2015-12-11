@@ -458,12 +458,50 @@ a.UserLink{
 {
     @page
     {
-        size: auto;
-        margin: 0mm;
+	margin: 0mm 0mm 0mm 0mm !important;
+        zoom: 0.75 !important;
+    }
+    body
+    {
+        margin: 0mm 0mm 0mm 0mm !important;
+        zoom: 0.75 !important;
+    }
+    #gestionTournoi
+    {
+        margin: 0mm 0mm 0mm 0mm !important;
+        zoom: 0.75 !important;
+        transform: scale(0.6);
+    }
+    #my_gracket
+    {
+        margin: 0mm 0mm 0mm 0mm !important;
+        zoom: 0.75 !important;
+    }
+    #arbre_graket
+    {
+        margin: 0mm 0mm 0mm 0mm !important;
+        zoom: 0.75 !important;
+    }
+    .g_canvas
+    {
+        margin: 0mm 0mm 0mm 0mm !important;
+        zoom: 0.75 !important;
+    }
+    .table-responsive
+    {
+        margin: 0mm 0mm 0mm 0mm !important;
+        zoom: 0.75 !important;
+        width: 1000px !important;
+        page-break-after: always;
+    }
+    .demo
+    {
+        margin: 0mm 0mm 0mm 0mm !important;
+        zoom: 0.75 !important;
     }
     .no-print, .no-print *
     {
-        margin: 0mm;
+        margin: 0mm !important;
         display: none !important;
     }
 }
