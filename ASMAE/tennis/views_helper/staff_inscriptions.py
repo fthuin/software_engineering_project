@@ -93,7 +93,7 @@ def view(request):
 
             extra = Extra(nom=nom, prix=prix, commentaires=message)
             extra.save()
-            LogActivity(user=request.user, section="Extra", target=""+extra.id,
+            LogActivity(user=request.user, section="Extra", target=""+repr(extra.id),
                         details=u"Extra " + nom + u" ajouté").save()
 
             successAdd = u"Extra " + nom + u" bien ajouté!"

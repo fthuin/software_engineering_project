@@ -139,7 +139,7 @@ def view(request, name):
                 arbre.data = None
                 arbre.label = None
                 arbre.save()
-                LogActivity(user=request.user, section="Tournoi", target=""+arbre.id,
+                LogActivity(user=request.user, section="Tournoi", target=""+repr(arbre.id),
                             details="Suppression de l'abre du tournoi : " + tournoi.nom()).save()
                 return redirect(reverse(knockOff, args={name}))
 
