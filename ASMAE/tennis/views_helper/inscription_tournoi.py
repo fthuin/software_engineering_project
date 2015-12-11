@@ -12,7 +12,7 @@ from django.db.models import Q
 from tennis.views import yearsago, tournoi, home
 from tennis.mail import send_confirmation_email_pair_registered
 from operator import or_
-from functools import reduce
+from itertools import chain
 
 def view(request):
     page = 1
@@ -62,7 +62,7 @@ def view(request):
 
     querysets = list()
     # Liste contenant les utilisateurs pour le tournoi des familles
-    famille_list = list()
+    famille_list = User.objects.none()
     if libre_Samedi:
         # Check tournoi des familles
         #- de 15 ans
@@ -85,7 +85,7 @@ def view(request):
             querysets.append(famille_list)
 
     # Liste du samedi (except tournoi des familles)
-    samedi_list = list()
+    samedi_list = User.objects.none()
     if libre_Samedi:
         # On prend seulement les joueur du sexe opposé
         samedi_list = Use.exclude(participant__titre=u.participant.titre)
@@ -95,7 +95,7 @@ def view(request):
         querysets.append(samedi_list)
 
     # Liste du dimanche
-    dimanche_list = list()
+    dimanche_list = User.objects.none()
     if libre_Dimanche:
         # On prend seulement les joueurs du meme sexe
         dimanche_list = Use.filter(participant__titre=u.participant.titre)
@@ -107,13 +107,14 @@ def view(request):
     debut = ((int(page) - 1) * pageLength) + 1
     fin = debut + (pageLength - 1)
     length = 0
-    if len(querysets) > 0:
-        # Merge query sets
-        Use = reduce(or_, querysets[1:], querysets[0])
-        length = len(Use)
-        Use = Use[debut - 1:fin]
-    else:
-        Use = list()
+    print repr(len(querysets))
+    print repr(type(famille_list))
+    print repr(len(famille_list))
+    print repr(type(samedi_list))
+    print repr(len(samedi_list))
+    print repr(type(dimanche_list))
+    print repr(len(dimanche_list))
+    result_list = list(chain(famille_list, samedi_list, dimanche_list))
 
     # calcul des ages des users
     born = request.user.participant.datenaissance
