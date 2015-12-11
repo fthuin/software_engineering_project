@@ -1,3 +1,5 @@
+\section{Interface classique}
+
 Pour accéder à l’interface d’administration du site, il suffit d’entrer l’adresse de celui-ci accompagné de "/admin". Exemple : \href{http://asmae.herokuapp.com/admin}{http://asmae.herokuapp.com/admin}\\
 Vous êtes alors redirigé vers une page qui vous invite à entrer votre login et mot de passe (administrateur) telle que celle-ci :
 
@@ -55,3 +57,21 @@ Cette fenêtre reprend les différentes informations concernant l’entrée sél
 \caption{Historique des modifications de l'entrée choisie}
 \end{figure}
 \end{enumerate}
+
+\section{Particularités}
+
+Sur les tables composées d'une grande quantité de données, des filtres peuvent être sélectionnés afin de parcourir plus facilement les entrées. On peut observer cela sur la capture ci-dessous : 
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.3]{filtre.png}
+\caption{Entrées de la table "Paire" correspondant aux filtres sélectionnés}
+\end{figure}
+
+Enfin, il est également possible de supprimer des entrées sélectionnées (possible sur toutes les tables) et/ou de les exporter en fichier .csv (uniquement possible sur la table "Paire") :
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{export.png}
+\caption{Actions possibles sur les entrées de la table "Paire"}
+\end{figure}
