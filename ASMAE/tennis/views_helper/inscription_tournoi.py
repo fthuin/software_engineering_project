@@ -12,7 +12,7 @@ from django.db.models import Q
 from tennis.views import yearsago, tournoi, home
 from tennis.mail import send_confirmation_email_pair_registered
 from operator import or_
-from itertools import chain
+import itertools
 
 def view(request):
     page = 1
@@ -107,14 +107,15 @@ def view(request):
     debut = ((int(page) - 1) * pageLength) + 1
     fin = debut + (pageLength - 1)
     length = 0
-    print repr(len(querysets))
-    print repr(type(famille_list))
-    print repr(len(famille_list))
-    print repr(type(samedi_list))
-    print repr(len(samedi_list))
-    print repr(type(dimanche_list))
-    print repr(len(dimanche_list))
-    result_list = list(chain(famille_list, samedi_list, dimanche_list))
+
+    if len(querysets) > 0:
+        # Merge query sets
+        Use = list(set(list(itertools.chain(*querysets))))
+        Use.sort(key=lambda x:x.username)
+        length = len(Use)
+        Use = Use[debut - 1:fin]
+    else:
+        Use = list()
 
     # calcul des ages des users
     born = request.user.participant.datenaissance
