@@ -13,6 +13,7 @@ from tennis.views import yearsago, tournoi, home
 from tennis.mail import send_confirmation_email_pair_registered
 from operator import or_
 from functools import reduce
+import itertools
 
 def view(request):
     page = 1
@@ -109,7 +110,8 @@ def view(request):
     length = 0
     if len(querysets) > 0:
         # Merge query sets
-        Use = reduce(or_, querysets[1:], querysets[0])
+        Use = list(set(list(itertools.chain(*querysets))))
+        Use.sort(key=lambda x:x.username)
         length = len(Use)
         Use = Use[debut - 1:fin]
     else:
