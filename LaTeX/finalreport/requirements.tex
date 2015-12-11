@@ -81,15 +81,13 @@ Once every field is checked and validated, the new court is created and displaye
 \subsection{Group creation}
 \label{sub:Group creation}
 
-\todo[inline]{Expliquer la gestion des poules, dire qu'on peut faire du
-drag\& drop, du click\& swap, qu'on peut générer automatiquement toutes les
-poules grâce à la géolocalisation pour diminuer l'empreinte écologique. Dire
-que si le staff modifie la génération automatique, il peut quand même diminuer
-l'empreinte écologique en assignant les terrains les plus proches des joueurs
-ou en assignant le joueur le plus proche du quartier général en tant que group
-leader. On leur affiche les commentaires sur le terrain et les commentaires des
-joueurs sur cette page. Dire qu'un mail est envoyé lorsqu'un groupe est validé
-par un staff.}
+\todo[inline]{Relire et/ou corriger}
+
+One of the biggest and more challenging requirement of this project was the group creation. Each tournament had to be composed of several different groups, where players were dispatched according to their rank, age, or even their ecological footprint (meaning the distance between their house and the court they have to play on) using the geo-location. This is achieved on the tournament tab, available to authorized staff members. On this page, all the groups for each tournament can be automatically generated according to the previous criteria. The number of groups and the number of players per groups can also be adjusted using the corresponding fields. Once everything is set, one click on the generate button creates the groups. \newline
+
+After the groups are generated, it is still possible to modify them, by swapping two players of different groups. This can be done by drag and dropping the desired player onto the other one, or by clicking on the first player then on the second one. Each group also has to have a leader and a court to play on. This is made possible by clicking on the corresponding buttons that automatically assign one, or they can be picked by hand by using the corresponding fields. The non-automated method can be used to reduce even more the ecological footprint, by picking a leader living the closest to the headquarters, or by assigning the courts the closest to the players houses. Finally, all the requests and comments made by the players and the court owners are displayed, leaving indications for the staff. \newline
+
+Once everything is set, the groups can be either saved (and modified later on) or registered, meaning that they can no longer be adjusted. A mail is then sent when a group is validated by an authorized member of the staff.
 
 \subsubsection{Group scores}
 \label{subs:Group scores}
@@ -134,12 +132,13 @@ se remplit automatiquement avec les prochains matchs à jouer.}
 \subsubsection{History management}
 \label{subs:History management}
 
-\todo[inline]{Dire que les actions des staffs sont affichées sur une page
-spécifique de l'interface staff et elle permet de voir qui a modifié quoi}
+\todo[inline]{Relire et/ou modifier}
+
+When several members of the staff are working on the same part of the website, it can be useful to know who modified a given value, or what has been modified. This was implemented on the history tab, accessible by the staff members. On this page, the date, name of the staff member, section of the website, data modified and details are displayed.
 
 \subsubsection{Permissions management}
 \label{subs:Permissions management}
 
-\todo[inline]{Expliquer qu'on peut assigner des permissions à chaque utilisateur
-qui a créé un compte sur le site pour lui permettre d'accéder à certaines
-parties de l'interface staff.}
+\todo[inline]{Relire et/ou Modifier}
+
+On such an extensive project with various position (managing the courts, the players, the pairs, creating the groups, and so on), assigning each member of the staff to a precise job can be a convenient way to work with. We choose to make this possible, by allowing the administrator to assign by hand which part of the website is attributed to which member of the staff. On the permission tab, every member of the staff is displayed and can be selected. Once a staff member is picked, the intended permissions can be ticked on the right panel, giving him the authorization to operate on certain parts of the website.
