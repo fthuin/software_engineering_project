@@ -150,6 +150,7 @@
 		          <tr>
 		            <th>Date</th>
 		            <th>Staff</th>
+					<th>Paire</th>
 		            <th>Détails</th>
 		          </tr>
 		      	</thead>
@@ -157,7 +158,8 @@
 	         		{% for elem in logs_paires %}
 	         		<tr>
 	         			<td>{{ elem.date }}</td>
-	         			<td>{{ elem.user }}</td>
+	         			<td>{{ elem.user.username }}</td>
+						<td>Paire {{ elem.target}}</td>
 	         			<td>{{ elem.details }}</td>
 	         		</tr>
 	         		{% empty %}

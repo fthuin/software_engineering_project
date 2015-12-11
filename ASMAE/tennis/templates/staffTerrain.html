@@ -212,6 +212,7 @@
 		          <tr>
 		            <th>Date</th>
 		            <th>Staff</th>
+					<th>Terrain</th>
 		            <th>Détails</th>
 		          </tr>
 		      	</thead>
@@ -220,6 +221,7 @@
 	         		<tr>
 	         			<td>{{ elem.date }}</td>
 	         			<td>{{ elem.user.username }}</td>
+						<td>Terrain {{ elem.target }}</td>
 	         			<td>{{ elem.details }}</td>
 	         		</tr>
 	         		{% empty %}

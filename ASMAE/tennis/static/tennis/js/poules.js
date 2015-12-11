@@ -109,6 +109,10 @@ function drop (ev) {
 	setKm();
 	leaderAssignement();
 
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
+
 }
 
 function allowDrop(ev) {
@@ -539,16 +543,16 @@ function createPair(pair){
 	}
 
 
-	var comm = "" ;
+	var comm = '<i class="fa fa-comment-o fa-2x">';
 	if(pair.comment != ""){
-		comm = '<a href="javascript:void(0);" data-toggle="popover" data-html="true" data-placement="left" data-content="'+pair.comment+'" onclick="clickEventPair('+pair.id+')"><b style="color:#222;"><i class="fa fa-file-text-o fa-2x"></i></b></a>';
+		comm = '<a href="javascript:void(0);" data-toggle="tooltip" data-container="body" data-placement="left" data-html="true" title="'+pair.comment+'"><b style="color:#222;"><i class="fa fa-commenting-o fa-2x"></i></b></a>';
 	}
 
 	p.innerHTML = '<div class="dropBox" ondragover="allowDrop(event)" ondrop="drop(event)" style="padding-left:10px;padding-right:10px;padding-top:3px; padding-bottom:3px;">' +
                         '<div id="'+pair.id+'" draggable="true" ondragstart="drag(event)">'+
-                            '<div onclick="clickEventPair('+pair.id+')" id="zone'+pair.id+'" class="zone">'+
+                            '<div  id="zone'+pair.id+'" class="zone">'+
                                 '<div class="row">'+
-                                    '<div class="col-xs-10">'+
+                                    '<div class="col-xs-10" onclick="clickEventPair('+pair.id+')" style="border-right:solid 2px red">'+
                                         '<b style="color:#222">'+gender1+'</b> '+ pair.smallName1 + ' - '+pair.age1+' ans' +
                                         '<br>'+
                                         '<b style="color:#222">'+gender2+'</b> '+ pair.smallName2 + ' - '+pair.age2+' ans' +
@@ -606,6 +610,10 @@ function clickEventPair(ID){
 			setKm();
 			leaderAssignement();
 
+			$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
+
 
 
 		}else{
@@ -617,6 +625,400 @@ function clickEventPair(ID){
 	}
 }
 
+function save() {
+    document.getElementById("assignTerrains").value = ""
+    document.getElementById("assignPairPoules").value = ""
+    document.getElementById("assignLeaders").value = ""
+    var nbr = document.getElementById("poulesNumber").value;
+    var poulesDict = {};
+    for (var i = 0; i < nbr ; i++) {
+        var poule = {}
+        poule['leader'] = document.getElementById("Leader"+(i+1)).value;
+        poule['terrainID'] = document.getElementById("ID"+(i+1)).textContent;
+        poule['pairList'] = [];
+        poulesDict[''+i] = poule;
+        // TODO : Check si le leader et le terrainID sont valides
+    }
+    for (var i = 0; i < PairList.length ; i++) {
+        // On link les paires aux ID des poules
+        var id = "" + document.getElementById(""+PairList[i].id).parentNode.parentNode.parentNode.id;
+        id = id.replace("list", "");
+        poulesDict[''+(id-1)]['pairList'].push(PairList[i]);
+    }
+    for (var i = 0; i < nbr ; i++) {
+         document.getElementById("assignTerrains").value += poulesDict[''+i]['terrainID'] + '-';
+         document.getElementById("assignPairPoules").value += '[' + i + ']-'
+         for (var j = 0 ; j < poulesDict[''+i]['pairList'].length ; j++) {
+            document.getElementById("assignPairPoules").value += poulesDict[''+i]['pairList'][j].id + '-';
+         }
+         document.getElementById("assignLeaders").value += poulesDict[''+i]['leader'] + '/';
+    }
+   /* for (var i = 0; i < nbr ; i++) {
+        alert("Poule " + i);
+        alert("Leader : " +poulesDict[''+i]['leader']);
+        alert("Terrain : " + poulesDict[''+i]['terrainID']);
+        alert("Premier joueur " + poulesDict[''+i]['pairList'][0]['user1']);
+    }*/
+    // TODO : Faire les e-mails
+}
+function checkValues()
+{
+	document.getElementById("textModalIconDisplay").style.display = "none";
+	document.getElementById("textModalSameTerrain").style.display = "none";
+	document.getElementById("textModalTerrain").style.display = "none";
+	document.getElementById("textModalLeader").style.display = "none";
+	document.getElementById("textModalConfirm").style.display = "inherit";
+	document.getElementById("yesModel").disabled = false;
+
+	 var nbr = document.getElementById("poulesNumber").value;
+    var poulesDict = {};
+	var pouleID = new Array();
+    for (var i = 0; i < nbr ; i++) {
+        var poule = {}
+        poule['leader'] = document.getElementById("Leader"+(i+1)).value;
+        poule['terrainID'] = document.getElementById("ID"+(i+1)).textContent;
+        poule['pairList'] = [];
+        poulesDict[''+i] = poule;
+		if(poule['terrainID'] == '-')
+		{
+			document.getElementById("textModalTerrain").style.display = "inherit";
+			document.getElementById("textModalConfirm").style.display = "none";
+			document.getElementById("yesModel").disabled = true;
+		}
+		else
+		{
+			for(var j=0;j<pouleID.length;j++)
+			{
+				if(pouleID[j] == poule['terrainID'])
+				{
+					document.getElementById("textModalSameTerrain").style.display = "inherit";
+				}
+			}
+
+			pouleID.push(document.getElementById("ID"+(i+1)).textContent);
+		}
+		if(document.getElementById("errorTerrain"+(i+1)).style.display != 'none'){
+			document.getElementById("textModalIconDisplay").style.display = "inherit";
+		}
+		if(poule['leader'] == "Choisir un leader" || poule['leader'] == "")
+		{
+			document.getElementById("textModalLeader").style.display = "inherit";
+			document.getElementById("textModalConfirm").style.display = "none";
+			document.getElementById("yesModel").disabled = true;
+		}
+
+    }
+}
+
+function terrainAssignement()
+{
+
+	/* DEBUT COPIER COLLER */
+    document.getElementById("assignTerrains").value = ""
+    document.getElementById("assignPairPoules").value = ""
+    document.getElementById("assignLeaders").value = ""
+    var nbr = document.getElementById("poulesNumber").value;
+    var poulesDict = {};
+    for (var i = 0; i < nbr ; i++) {
+        var poule = {}
+        poule['leader'] = document.getElementById("Leader"+(i+1)).value;
+        poule['terrainID'] = document.getElementById("ID"+(i+1)).textContent;
+        poule['pairList'] = [];
+        poulesDict[''+i] = poule;
+        // TODO : Check si le leader et le terrainID sont valides
+    }
+    for (var i = 0; i < PairList.length ; i++) {
+        // On link les paires aux ID des poules
+        var id = "" + document.getElementById(""+PairList[i].id).parentNode.parentNode.parentNode.id;
+        id = id.replace("list", "");
+        poulesDict[''+(id-1)]['pairList'].push(PairList[i]);
+    }
+    for (var i = 0; i < nbr ; i++) {
+         document.getElementById("assignTerrains").value += poulesDict[''+i]['terrainID'] + '-';
+         document.getElementById("assignPairPoules").value += '[' + i + ']-'
+         for (var j = 0 ; j < poulesDict[''+i]['pairList'].length ; j++) {
+            document.getElementById("assignPairPoules").value += poulesDict[''+i]['pairList'][j].id + '-';
+         }
+         document.getElementById("assignLeaders").value += poulesDict[''+i]['leader'] + '/';
+    }
+	/* FIN COPIER COLLER */
+	/* Accéder à la première paire de la première poule */
+	// poulesDict['1']['pairList'][0]
+	/* Fin accéder à la premiere ... */
+	//alert(poulesDict['1']['pairList'][0].u2addr);
+
+	dico = {};
+	for(var j=0;j<TerrainList.length;j++){
+				dico[j] = {};
+				totalDistanceTerrain = 0;
+				var terrainLat = TerrainList[j].lat;
+				var terrainLng = TerrainList[j].lng;
+				var terrainlatLng = new google.maps.LatLng(parseFloat(terrainLat.replace(",", ".")), parseFloat(terrainLng.replace(",", ".")))
+					for(var key in poulesDict){
+
+						var totalDistanceTerrain = 0;
+
+						for(var i = 0;i<poulesDict[key]['pairList'].length;i++){
+
+							var user1Lat = poulesDict[key]['pairList'][i].lat1;
+							var user1Lng = poulesDict[key]['pairList'][i].lng1;
+							var user2Lat = poulesDict[key]['pairList'][i].lat2;
+							var user2Lng = poulesDict[key]['pairList'][i].lng2;
+							var latLng1 = new google.maps.LatLng(parseFloat(user1Lat.replace(",", ".")), parseFloat(user1Lng.replace(",", ".")));
+							var latLng2 = new google.maps.LatLng(parseFloat(user2Lat.replace(",", ".")), parseFloat(user2Lng.replace(",", ".")));
+							var distance1 = google.maps.geometry.spherical.computeDistanceBetween(latLng1, terrainlatLng);
+							var distance2 = google.maps.geometry.spherical.computeDistanceBetween(latLng2, terrainlatLng);
+							totalDistanceTerrain = totalDistanceTerrain + distance1 + distance2;
+							//alert(distance1);
+							//alert(distance2);
+						}
+					//alert("total");
+					//alert(totalDistanceTerrain);
+					dico[j][key] = totalDistanceTerrain;
+
+					}
+
+	}
+
+
+	//On a toutes les distance des poules au terrainmatieannt on va assigner les terrains
+
+	alreadyTaken = [];
+	firstkey = Object.keys(dico)[0];
+	for(var key in dico[firstkey]){
+
+		var minDistance =  Number.MAX_VALUE;
+		var index = -1;
+		for (var key2 in dico){
+
+
+			if(minDistance > dico[key2][key] && (alreadyTaken.indexOf(key2) ==-1 || alreadyTaken.length == TerrainList.length)){
+
+				minDistance = dico[key2][key];
+				index = key2;
+
+			}
+		}
+		//Assigner le terrain index a la poule key par html brole
+
+		setInfoTerrainNoUpdateKm(TerrainList[index].user,TerrainList[index].matiere,TerrainList[index].type,TerrainList[index].addr,TerrainList[index].id,TerrainList[index].poules,parseInt(key)+1);
+		document.getElementById("empreinte"+(parseInt(key)+1)).innerHTML = Math.round(minDistance)/1000;
+
+		alreadyTaken.push(index);
+
+
+		if(alreadyTaken.length >= Object.keys(dico).length){
+
+			alreadyTaken = [];
+		}
+	}
+
+}
+function autogen(){
+
+	/* DEBUT COPIER COLLER */
+    document.getElementById("assignTerrains").value = ""
+    document.getElementById("assignPairPoules").value = ""
+    document.getElementById("assignLeaders").value = ""
+    var nbr = document.getElementById("poulesNumber").value;
+    var poulesDict = {};
+    for (var i = 0; i < nbr ; i++) {
+        var poule = {}
+        poule['leader'] = document.getElementById("Leader"+(i+1)).value;
+        poule['terrainID'] = document.getElementById("ID"+(i+1)).textContent;
+        poule['pairList'] = [];
+        poulesDict[''+i] = poule;
+        // TODO : Check si le leader et le terrainID sont valides
+    }
+    for (var i = 0; i < PairList.length ; i++) {
+        // On link les paires aux ID des poules
+        var id = "" + document.getElementById(""+PairList[i].id).parentNode.parentNode.parentNode.id;
+        id = id.replace("list", "");
+        poulesDict[''+(id-1)]['pairList'].push(PairList[i]);
+    }
+    for (var i = 0; i < nbr ; i++) {
+         document.getElementById("assignTerrains").value += poulesDict[''+i]['terrainID'] + '-';
+         document.getElementById("assignPairPoules").value += '[' + i + ']-'
+         for (var j = 0 ; j < poulesDict[''+i]['pairList'].length ; j++) {
+            document.getElementById("assignPairPoules").value += poulesDict[''+i]['pairList'][j].id + '-';
+         }
+         document.getElementById("assignLeaders").value += poulesDict[''+i]['leader'] + '/';
+    }
+	/* FIN COPIER COLLER */
+	/* Accéder à la première paire de la première poule */
+	// poulesDict['1']['pairList'][0]
+	/* Fin accéder à la premiere ... */
+	//alert(poulesDict['1']['pairList'][0].u2addr);
+	var distanceMatrix = new Array(PairList.length);
+	for(var i=0;i<PairList.length;i++){
+		distanceMatrix[i] = new Array(TerrainList.length);
+		var user1Lat = PairList[i].lat1;
+		var user1Lng = PairList[i].lng1;
+		var user2Lat = PairList[i].lat2;
+		var user2Lng = PairList[i].lng2;
+		var latLng1 = new google.maps.LatLng(parseFloat(user1Lat.replace(",", ".")), parseFloat(user1Lng.replace(",", ".")));
+		var latLng2 = new google.maps.LatLng(parseFloat(user2Lat.replace(",", ".")), parseFloat(user2Lng.replace(",", ".")));
+		for(var j=0;j<TerrainList.length;j++){
+			var terrainLat = TerrainList[j].lat;
+			var terrainLng = TerrainList[j].lng;
+			var terrainlatLng = new google.maps.LatLng(parseFloat(terrainLat.replace(",", ".")), parseFloat(terrainLng.replace(",", ".")));
+
+			var distance1 = google.maps.geometry.spherical.computeDistanceBetween(latLng1, terrainlatLng);
+			var distance2 = google.maps.geometry.spherical.computeDistanceBetween(latLng2, terrainlatLng);
+			var totalDistancePair = distance1+distance2;
+
+			distanceMatrix[i][j] = totalDistancePair;
+
+		 }
+
+	}
+	greedySolution(distanceMatrix,document.getElementById("poulesNumber").value);
+
+}
+
+function greedySolution(matrix,nbrPoule){
+	//On calcule le nombre de pair dans chaque poule. Et si le nombre de pai par divible par le nombre poule on calcule le nombre de pair dans la derniere poule
+	var pairParPoule = Math.ceil(matrix.length/nbrPoule);
+	var lastpoule = matrix.length-(pairParPoule * (nbrPoule-1));
+	var nPairInPoule = new Array(parseInt(nbrPoule));
+	for(var i =0;i<nPairInPoule.length;i++){
+		nPairInPoule[i] = 0;
+	}
+	var indexTab = 0;
+	for(var i =0;i<matrix.length;i++){
+
+		nPairInPoule[indexTab % nPairInPoule.length]++;
+		indexTab++;
+	}
+
+
+
+	var closestCourt = new Array(matrix.length);
+	for(var i = 0;i<matrix.length;i++){
+		closestCourt[i] = new Array(matrix[i].length);
+
+		for(var j =0;j<matrix[i].length;j++){
+			closestCourt[i].push([j,matrix[i][j]]);
+
+		}
+			closestCourt[i].sort(function(a, b){return a[1]-b[1]});
+
+	}
+
+	var valueCourt = new Array(matrix[0].length);
+	for(var i=0;i<valueCourt.length;i++){
+		valueCourt[i] = [i,0];
+	}
+	for(var i =0;i<matrix.length;i++){
+		for(var j=0;j<matrix[i].length;j++){
+
+			valueCourt[closestCourt[i][j][0]][1] += j;
+
+
+		}
+	}
+
+	listTerrain = new Array(nbrPoule);
+	valueCourt.sort(function(a, b){return a[1]-b[1]});
+
+	for(var i=0;i<valueCourt.length;i++)
+	{
+		listTerrain[i] = valueCourt[i][0];
+	}
+
+
+
+	//On rajoute les pairs aux terrains choisis
+	pairInPoule = new Array(parseInt(nbrPoule));
+	kmParPoule = new Array(parseInt(nbrPoule));
+
+	for(var i=0;i<kmParPoule.length;i++){
+		kmParPoule[i] =0;
+	}
+
+	alreadyIn = [];
+
+
+	for(var i =0;i<nbrPoule;i++){
+
+		var nInPoule = nPairInPoule[i];
+
+		pairInPoule[i] = [];
+		for(var j=0;j<matrix[0].length;j++){
+			for(var x=0;x<matrix.length;x++){
+
+				if(closestCourt[x][j][0] == listTerrain[i%listTerrain.length] && alreadyIn.indexOf(x) == -1 && pairInPoule[i].length < nInPoule)
+				{
+					kmParPoule[i] = kmParPoule[i] + matrix[x][listTerrain[i]];
+					pairInPoule[i].push(x);
+					alreadyIn.push(x);
+				}
+
+			}
+		}
+
+	}
+
+
+var maxnbrInPoule = pairInPoule[0].length
+//document.getElementById("poulesDiv").innerHTML = "";
+
+for(var i =0;i<nbrPoule;i++)
+{
+    /*
+	var row;
+
+    if(i%3 == 0){
+        row = document.createElement("div")
+        row.className = "row"
+        document.getElementById("poulesDiv").appendChild(row);
+    }
+    //Creation du panel de la poule
+    */
+    //var panel = document.getElementById("panel"+(i+1));
+    document.getElementById("list"+(i+1)).innerHTML = ""
+    document.getElementById("Leader"+(i+1)).innerHTML = ""
+
+    //row.appendChild(panel)
+
+	for(var j=0;j<pairInPoule[i].length;j++){
+			var p = createPair(pairList[pairInPoule[i][j]]);
+			document.getElementById("list"+(i+1)).appendChild(p);
+
+			//List
+			var nom1 = pairList[pairInPoule[i][j]].user1;
+			var nom2 = pairList[pairInPoule[i][j]].user2;
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom1));
+			document.getElementById("Leader"+(i+1)).appendChild(getOption(nom2));
+			document.getElementById("Leader"+(i+1)).appendChild(getSpaceOption());
+	}
+	if(pairInPoule[i].length < maxnbrInPoule){
+		var p = createEmptyPair(i+"-"+j);
+		document.getElementById("list"+(i+1)).appendChild(p);
+	}
+    
+}
+setTerrains(nbrPoule);
+
+
+
+terrainAssignement()
+leaderAssignement()
+
 $(document).ready(function(){
-    $('[data-toggle="popover"]').popover();
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
+
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover(); 
+});
+
+}
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
+
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover(); 
 });

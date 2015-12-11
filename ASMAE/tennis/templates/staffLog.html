@@ -43,7 +43,7 @@
 		</form>
 		-->
 		<div class="panel panel-default">
-			<div class="panel-heading">Historique des modifications [A REFAIRE AVEC LE NOUVEAU LOG EN MODE BIEN]</div>
+			<div class="panel-heading">Historique des modifications</div>
 			<div class="table-responsive">
 				<table class="table table-hover">
 					<thead>
@@ -101,7 +101,7 @@ function pagination(list) {
 //Recuperation des logs et stockage dans un tableau
 var log_list = [];
 {% for item in logs %}
-log_list.push(['{{ item.date }}','{{ item.user.participant.prenom }}','{{ item.user.participant.nom }}','{{ item.user.username }}','{{ item.section }}','{{ item.details }}']);
+log_list.push(['{{ item.date }}','{{ item.user.participant.prenom }}','{{ item.user.participant.nom }}','{{ item.user.username }}','{{ item.section }}','{{ item.details }}','{{ item.target }}']);
 {% endfor %}
 
 pagination(log_list);

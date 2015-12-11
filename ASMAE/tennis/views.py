@@ -24,6 +24,12 @@ from django.db import connection
 
 db_type = connection.vendor
 
+FinalPermsDict = {"Double hommes":"DoubleHommes","Tournoi des familles":"TournoiDesFamilles","Double mixte":"DoubleMixte","Double femmes":"DoubleFemmes"}
+#PermsDict["Double hommes"] = "DoubleHommes"
+#PermsDict["Tournoi des familles"] = "TournoiDesFamilles"
+#PermsDict["Double mixte"] = "DoubleMixte"
+#PermsDict["Double femmes"] = "DoubleFemmes"
+
 def home(request):
     from views_helper import home as homepage
     return homepage.view(request)
@@ -106,35 +112,42 @@ def editTerrain(request, id):
     from views_helper import user_terrain_modification
     return user_terrain_modification.view(request, id)
 
-# TODO permission QUENTIN GUSBIN
-
-
 def staffTournoi(request):
-    if request.user.is_authenticated():
-        allTitre = TournoiTitle.objects.all()
-        allTournoi = Tournoi.objects.all()
-        logs_tournois = LogActivity.objects.filter(section="Tournoi")
-        logs_tournois = logs_tournois | LogActivity.objects.filter(section="Poules")
-        logs_tournois = logs_tournois.order_by('-date')[:15]
-        for tourn in allTournoi:
-            nbrPair = len(Pair.objects.filter(tournoi=tourn, valid=True))
-            tourn.np = nbrPair
-            pouleLength = len(Poule.objects.filter(tournoi=tourn))
-            tourn.pl = pouleLength
-        return render(request, 'staffTournoi.html', locals())
+    userPermissions = request.user.user_permissions.all()
+    userGroups = request.user.groups.all()
+    #On vérifie que l'utilisateur a au moins une permission de tournoi ou fait partie du groupe admin
+    if len(userPermissions.filter(codename="DoubleHommes")) > 0 or len(userPermissions.filter(codename="DoubleFemmes")) > 0 or len(userPermissions.filter(codename="DoubleMixte")) > 0 or len(userPermissions.filter(codename="TournoiDesFamilles")) > 0 or len(userGroups.filter(name="Admin")) > 0:
+        if request.user.is_authenticated():
+            allTitre = TournoiTitle.objects.all()
+            allTournoi = Tournoi.objects.all()
+            logs_tournois = LogActivity.objects.filter(section="Tournoi")
+            logs_tournois = logs_tournois | LogActivity.objects.filter(section="Poules")
+            logs_tournois = logs_tournois.order_by('-date')[:15]
+            for tourn in allTournoi:
+                nbrPair = len(Pair.objects.filter(tournoi=tourn, valid=True))
+                tourn.np = nbrPair
+                pouleLength = len(Poule.objects.filter(tournoi=tourn))
+                tourn.pl = pouleLength
+            return render(request, 'staffTournoi.html', locals())
     return redirect(reverse(home))
 
 
 def pouleTournoi(request, name):
-    from views_helper import staff_tournoi_poules_resume
-    return staff_tournoi_poules_resume.view(request, name)
+    nomTournoi = name.split("_")
+    if(len(request.user.user_permissions.filter(codename=FinalPermsDict[nomTournoi[0]])) > 0 or len(request.user.groups.filter(name="Admin")) > 0):
+        from views_helper import staff_tournoi_poules_resume
+        return staff_tournoi_poules_resume.view(request, name)
+    return redirect(reverse(home))
 
-# TODO permissions QUENTIN GUSBIN
+
 
 
 def knockOff(request, name):
-    from views_helper import knockoff
-    return knockoff.view(request, name)
+    nomTournoi = name.split("_")
+    if(len(request.user.user_permissions.filter(codename=FinalPermsDict[nomTournoi[0]])) > 0 or len(request.user.groups.filter(name="Admin")) > 0):
+        from views_helper import knockoff
+        return knockoff.view(request, name)
+    return redirect(reverse(home))
 
 # TODO permission QUENTIN GUSBIN
 
@@ -147,34 +160,41 @@ def pouleViewScore(request, id):
         except ValueError:
             return False
     poule = Poule.objects.get(id=id)
-    if request.method == "POST":
-        poule.score.all().delete()
-        poule.status = PouleStatus.objects.get(numero=0)
-        poule.save()
-        return redirect(reverse(pouleTournoi, args={poule.tournoi.nom()}))
+    tournoiName = poule.tournoi
+    if(len(request.user.user_permissions.filter(codename=FinalPermsDict[tournoiName.titre.nom])) > 0 or len(request.user.groups.filter(name="Admin")) > 0):
+        if request.method == "POST":
+            poule.score.all().delete()
+            poule.status = PouleStatus.objects.get(numero=0)
+            poule.save()
+            return redirect(reverse(pouleTournoi, args={poule.tournoi.nom()}))
 
-    if request.user.is_authenticated():
-        scoreList = poule.score.all()
-        scoreValues = ""
-        for sco in scoreList:
-            scoreValues = scoreValues + repr(sco.paire1.id) + "-" + repr(sco.paire2.id) + "," + repr(
-                sco.point1) + "." + repr(sco.paire2.id) + "-" + repr(sco.paire1.id) + "," + repr(sco.point2) + "."
-        scoreValues = scoreValues[:-1]
-        return render(request, 'viewScore.html', locals())
+        if request.user.is_authenticated():
+            scoreList = poule.score.all()
+            scoreValues = ""
+            for sco in scoreList:
+                scoreValues = scoreValues + repr(sco.paire1.id) + "-" + repr(sco.paire2.id) + "," + repr(
+                    sco.point1) + "." + repr(sco.paire2.id) + "-" + repr(sco.paire1.id) + "," + repr(sco.point2) + "."
+            scoreValues = scoreValues[:-1]
+            return render(request, 'viewScore.html', locals())
     return redirect(reverse(home))
 
 
-# TODO permission QUENTIN GUSBIN
+
 def pouleScore(request, id):
-    from views_helper import staff_poule_score_encode
-    return staff_poule_score_encode.view(request, id)
-
-# TODO permission QUENTIN GUSBIN
-
+    poule = Poule.objects.get(id=id)
+    tournoiName = poule.tournoi
+    if(len(request.user.user_permissions.filter(codename=FinalPermsDict[tournoiName.titre.nom])) > 0 or len(request.user.groups.filter(name="Admin")) > 0):
+        from views_helper import staff_poule_score_encode
+        return staff_poule_score_encode.view(request, id)
+    return redirect(reverse(home))
 
 def generatePool(request, name):
-    from views_helper import poules_generation
-    return poules_generation.view(request, name)
+    
+    nomTournoi = name.split("_")
+    if(len(request.user.user_permissions.filter(codename=FinalPermsDict[nomTournoi[0]])) > 0 or len(request.user.groups.filter(name="Admin")) > 0):
+        from views_helper import poules_generation
+        return poules_generation.view(request, name)
+    return redirect(reverse(home))
 
 
 @permission_required('tennis.Court')
@@ -196,14 +216,13 @@ def staffExtra(request):
 
 
 def staffLog(request):
-    logs = LogActivity.objects.order_by('-date')
-    if request.user.is_authenticated():
-        return render(request, 'staffLog.html', locals())
+    if(len(request.user.groups.filter(name="staff")) > 0 or len(request.user.groups.filter(name="Admin")) > 0):
+        from views_helper import staff_historique
+        return staff_historique.view(request)
     return redirect(reverse(home))
 
 
 @permission_required('tennis.Droit')
-# TODO permission droit
 def staffPerm(request):
     from views_helper import staff_permissions
     return staff_permissions.view(request)
