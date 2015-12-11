@@ -1,9 +1,9 @@
 
 Run the following command after installing heroku CLI:
 
-heroku config:set SENDGRID_USERNAME=Asmae
-heroku config:set SENDGRID_PASSWORD =LeCharleDeLorraine2016
-heroku config:set SENDGRID_API_KEY=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
+heroku config:set SENDGRID_USERNAME=Asmae -a asmae
+heroku config:set SENDGRID_PASSWORD=LeCharleDeLorraine2016 -a asmae
+heroku config:set SENDGRID_API_KEY=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 -a asmae
 
 type heroku config and check if they are all correctly present !
 If they aren't email won't be send and error will only appear in the log.
