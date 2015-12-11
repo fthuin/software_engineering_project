@@ -458,46 +458,28 @@ a.UserLink{
 {
     @page
     {
-	margin: 0mm 0mm 0mm 0mm !important;
-        zoom: 0.75 !important;
-    }
-    body
-    {
-        margin: 0mm 0mm 0mm 0mm !important;
-        zoom: 0.75 !important;
+	margin-top: 15mm;
+	margin-left: 0mm;
+	margin-right: 0mm;
+	margin-bottom: 0mm;
     }
     #gestionTournoi
     {
-        margin: 0mm 0mm 0mm 0mm !important;
-        zoom: 0.75 !important;
-        transform: scale(0.6);
-    }
-    #my_gracket
-    {
-        margin: 0mm 0mm 0mm 0mm !important;
-        zoom: 0.75 !important;
-    }
-    #arbre_graket
-    {
-        margin: 0mm 0mm 0mm 0mm !important;
-        zoom: 0.75 !important;
+        -moz-transform: scale(0.7);
+        -moz-transform-origin: top left;
+        -o-transform: scale(0.7);
+        -o-transform-origin: top left;
+        -webkit-transform: scale(0.7);
+        -webkit-transform-origin: top left;
     }
     .g_canvas
     {
         margin: 0mm 0mm 0mm 0mm !important;
-        zoom: 0.75 !important;
     }
     .table-responsive
     {
         margin: 0mm 0mm 0mm 0mm !important;
-        zoom: 0.75 !important;
         width: 1000px !important;
-        page-break-after: always;
-    }
-    .demo
-    {
-        margin: 0mm 0mm 0mm 0mm !important;
-        zoom: 0.75 !important;
     }
     .no-print, .no-print *
     {
