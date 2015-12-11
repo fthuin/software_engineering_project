@@ -146,7 +146,6 @@ def knockOff(request, name):
         return knockoff.view(request, name)
     return redirect(reverse(home))
 
-# TODO permission QUENTIN GUSBIN
 
 
 def pouleViewScore(request, id):
