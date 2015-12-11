@@ -35,8 +35,8 @@ def view(request, id):
                 t = poule.tournoi
                 t.status = TournoiStatus.objects.get(numero=3)
                 t.save()
-            LogActivity(user=request.user, section="Tournoi", target=""+repr(id),
-                        details=u"Mise à jour des points de la poule " + repr(id) + u" dans le tournoi ").save()
+            LogActivity(user=request.user, section="Tournoi", target=""+str(id),
+                        details=u"Mise à jour des points de la poule " + str(id) + u" dans le tournoi ").save()
         poule.score.all().delete()
         pairList = poule.paires.all()
         dictionnaire = dict()

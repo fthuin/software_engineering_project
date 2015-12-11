@@ -25,10 +25,7 @@ from django.db import connection
 db_type = connection.vendor
 
 FinalPermsDict = {"Double hommes":"DoubleHommes","Tournoi des familles":"TournoiDesFamilles","Double mixte":"DoubleMixte","Double femmes":"DoubleFemmes"}
-#PermsDict["Double hommes"] = "DoubleHommes"
-#PermsDict["Tournoi des familles"] = "TournoiDesFamilles"
-#PermsDict["Double mixte"] = "DoubleMixte"
-#PermsDict["Double femmes"] = "DoubleFemmes"
+
 
 def home(request):
     from views_helper import home as homepage
@@ -149,7 +146,6 @@ def knockOff(request, name):
         return knockoff.view(request, name)
     return redirect(reverse(home))
 
-# TODO permission QUENTIN GUSBIN
 
 
 def pouleViewScore(request, id):
