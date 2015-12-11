@@ -447,7 +447,7 @@ function setLogStaff(page) {
 
 	//Ajout des logs
 	for (var i = debut; i < logList.length && i<fin; i++) {
-	    var p = '<tr><td>'+logList[i][0]+'</td><td>'+logList[i][1]+' '+logList[i][2]+' ('+logList[i][3]+')</td><td>'+logList[i][4]+'</td><td>'+logList[i][5]+'</td></tr>';
+	    var p = '<tr><td>'+logList[i][0]+'</td><td>'+logList[i][1]+' '+logList[i][2]+' ('+logList[i][3]+')</td><td>'+logList[i][4]+'</td><td>'+logList[i][6]+'</td><td>'+logList[i][5]+'</td></tr>';
 		panneau.innerHTML += p;
 	};
 

@@ -1009,11 +1009,16 @@ $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip(); 
 });
 
-
-//document.getElementById("save_button").click()
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover(); 
+});
 
 }
 
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip(); 
+});
+
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover(); 
 });
