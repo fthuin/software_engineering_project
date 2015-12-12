@@ -1,4 +1,4 @@
-Pour ajouter une table dans la base de données, il est nécessaire de modifier le fichier models.py, contenant l'ensemble des tables. Pour ce faire, il suffit d'ouvrir le fichier à l'aide de n'importe quel IDE ou éditeur de code, et de créer une nouvelle classe à la fin de celui-ci en respectant l'indentation et syntaxe python class ClassName (models.Model) : . Il faut ensuite définir l'ensemble des variables de classe (représentant les différentes informations à stocker dans la base de données), en spécifiant leurs types et les éventuelles relations. 
+Pour ajouter une table dans la base de données, il est nécessaire de modifier le fichier models.py, contenant l'ensemble des tables. Pour ce faire, il suffit d'ouvrir le fichier à l'aide de n'importe quel IDE ou éditeur de code, et de créer une nouvelle classe à la fin de celui-ci en respectant l'indentation et syntaxe python class ClassName (models.Model) : . Il faut ensuite définir l'ensemble des variables de classe (représentant les différentes informations à stocker dans la base de données), en spécifiant leurs types et les éventuelles relations.
 
 \begin{figure}[H]
 \centering
@@ -24,7 +24,7 @@ Les relations principales sont les suivantes :\\
 \item models.ForeignKey : une relation plusieurs-à-un (one to many)
 \item models.OneToOneField : une relation un-à-un
 \item models.ManyToManyField : une relation plusieurs à plusieurs\\
-\end{itemize} 
+\end{itemize}
 
 Il est également possible de passer plusieurs options en paramètres lors de la création des relations, comme le nom à utiliser pour la relation inverse depuis l’objet lié vers celui-ci, si le champ est obligatoire ou non, ...\\
 
@@ -66,7 +66,7 @@ Pour ce faire, il faut dans un premier temps créer le template, c'est à dire l
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.3]{Html.png}
+\includegraphics[scale=0.3]{html.png}
 \caption{Exemple d'une page HTML}
 \end{figure}
 
@@ -74,7 +74,7 @@ Une fois fait, il est nécessaire de créer une view dans le fichier views.py se
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.4]{Views.png}
+\includegraphics[scale=0.4]{views.png}
 \caption{Fichier views.py}
 \end{figure}
 
@@ -82,6 +82,6 @@ Enfin, il reste à ajouter au fichier urls.py (également présent dans le dossi
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.4]{Url.png}
+\includegraphics[scale=0.4]{url.png}
 \caption{Fichier urls.py}
 \end{figure}
