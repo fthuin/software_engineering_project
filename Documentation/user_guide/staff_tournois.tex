@@ -1,7 +1,189 @@
 \section{Gestion des tournois}
 
+\textbf{Si vous êtes membres du staff, et que vous avez la permission de gérer les tournois}, vous pouvez alors accéder à la page de gestion des tournois, depuis l'onglet "Staff" tout à droite du menu de navigation.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.15]{gestion-tournois/gestion-tournois.jpg}
+\caption{Page de la gestion des tournois}
+\end{figure}
+
 \subsection{Les tournois}
+
+Depuis la page staff "Gestionnaire des tournois", vous pouvez gérer tous les tournois et catégories dont vous avez eu préalablement la permission de gérer. Pour donner la permission à un utilisateur de gérer certains tournois, l'admin doit lui octroyer les permission à partir de la page "Gestionnaire des permissions".
+% TODO
+\todo[inline]{Ajouter une référence vers la page Gestionnaire des permissions}
+
+Sur cette page, vous pouvez consulter une liste de tournois. Les tournois sont catégorisés en fonction du type du tournoi :
+
+\begin{itemize}
+\item Tournoi des familles
+\item Double mixte
+\item Double hommes
+\item Double femmes
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.15]{gestion-tournois/gestion-tournois-liste.jpg}
+\caption{Page de la gestion des tournois - liste des tournois}
+\end{figure}
+
+Tous les tournois, sauf le Tournoi des familles, sont à nouveau catégorisés en fonction de l'âge des joueurs. Ces sous-tournois sont ordonnés du tournoi des plus jeunes (Pré-minimes), au plus âgés (Élites).\newline
+
+Chaque tournois indique les informations les plus importantes, à savoir :
+
+\begin{itemize}
+\item le nombre de paires inscrites
+\item le nombre de poules actuel
+\item le status du tournoi
+\end{itemize}
+\bigskip
+
+L'état du tournoi impose les opérations possibles sur le tournoi. Par exemple :
+
+\begin{itemize}
+\item  \textbf{Aucune poules} n'autorise que de générer les poules ;
+\item \textbf{Poules validées} permet d'encoder les scores ;
+\item \textbf{Poules terminées} permet de consulter les poules, et de créer l'arbre d'élimination.
+\end{itemize}
+\bigskip
+
+Il y a 3 boutons d'accès aux pages spécifiques de gestion des tournois, selon le status de celui-ci :
+
+\begin{itemize}
+\item \textit{Générer Poules} : permet de créer, modifier, et sauvegarder les poules
+\item \textit{Scores} : permet de consulter les poules crées, supprimer les poules, imprimer les score boards, et encoder les scores de chaque poule
+\item \textit{Arbre de Tournoi} : permet de créer l'arbre du tournoi, imprimer l'arbre d'élimination, et encoder les scores dans l'arbre d'élimination
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.35]{gestion-tournois/gestion-tournois-operations.jpg}
+\caption{Page de la gestion des tournois - accès aux pages spécifique de gestion}
+\end{figure}
 
 \subsection{Les poules}
 
+Toutes les fonctionnalités des tournois propres aux poules dépendent du status du tournoi, comme décrit à la section sur la liste des tournois.
+% TODO
+\todo[inline]{Ajouter une référence vers la section précédente, sur les opérations et boutons selon le status.}
+\bigskip
+
+Il existe deux pages pour interagir avec les poules d'un tournoi :
+
+\begin{itemize}
+\item \textbf{Création des poules} (Génération des poules)
+\item \textbf{Gestion des poules} (Scores)
+\end{itemize}
+
+\subsubsection{Création des poules}
+
+La première page des poules d'un tournoi est la création des poules. Ce bouton est accessible à partir de la page "Gestionnaire des tournois", en cliquant sur le bouton du tournoi qui se trouve à la colonne "Générer Poules".
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.35]{creation-poules/creation-poules-bouton.jpg}
+\caption{Bouton d'accès à la page de création des poules}
+\end{figure}
+
+Ce bouton est accessible uniquement pour les status de tournoi suivant:
+
+\begin{itemize}
+\item \textbf{Aucune poules} : c'est le status initial d'un tournoi
+\item \textbf{Poules sauvegardées} : c'est le status du tournoi lorsque les poules sont en cours de création, mais qu'elles n'ont pas encore totalement validées.
+\end{itemize}
+\bigskip
+
+La page de création de poules se présente avec un module de configuration de toutes les poules, et plusieurs modules correspondant aux poules du tournoi.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.15]{creation-poules/creation-poules.jpg}
+\caption{Page de création des poules}
+\end{figure}
+
+Le module de configuration des poules permet de connaître le nombre de paires et de terrain disponibles, de définir le nombre et la taille des poules du tournoi, et 3 boutons d'assistance à la création des poules.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.15]{creation-poules/creation-poules-configuration.jpg}
+\caption{Module de configuration de création des poules}
+\end{figure}
+
+En modifiant la taille des poules (respectivement, le nombre de poules), le nombre de poules (respect., la taille des poules) s'adaptent automatiquement pour permettre à toutes les paires d'être dans une poule.\newline
+
+Les boutons d'assistance à la création des poules sont les suivants:
+
+\begin{itemize}
+\item \textit{Génération automatique} : ce bouton permet d'assigner automatiquement les paires par poules, les leaders, et les terrains de chacunes des poules.
+\item \textit{Assigner les terrains} : ce bouton permet d'assigner automatiquement les terrains de toutes les poules.
+\item \textit{Assigner les leaders} : ce bouton permet d'assigner automatiquement les leaders de toutes les poules.
+\end{itemize}
+\bigskip
+
+Les poules peuvent, à tout moment, être éditées. Un leader peut être assigné à une poule, en sélectionnant un joueur parmi tous les joueurs de la poule. Pour ce faire, sélectionner un joueur dans la liste déroulante en titre du module de la poule.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.35]{creation-poules/creation-poules-leader.jpg}
+\caption{Sélection du leader d'une poule}
+\end{figure}
+
+\todo[inline]{Insérer image de la liste déroulante de la sélection d'un leader.}
+\bigskip
+
+Le procédé pour assigner manuellement un terrain à une poule est similaire à celui de l'assignation d'un leader, sauf que cette sélection se trouve en bas du module de la poule. En cliquant sur le bouton \textit{Choisir un terrain}, une liste déroulante propose tous les terrains disponibles.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.2]{creation-poules/creation-poules-terrain.jpg}
+\caption{Sélection d'un terrain d'une poule}
+\end{figure}
+
+Dès que le terrain a été sélectionné, les informations du terrain sont résumées, tout en indiquant le nombre de kilomètres total que les joueurs de la poule doivent parcourir au minimum. Si le terrain est déjà en cours d'utilisation dans ce tournoi ou un autre, un petit avertissement en rouge le signale. En cliquant sur ce bouton, on peut savoir rapidement dans quel tounoi ce terrain est déjà utilisé.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{creation-poules/creation-poules-avertissement.jpg}
+\caption{Avertissement d'un terrain déjà utilisé}
+\end{figure}
+
+L'information sur le kilométrage total permet d'estimer l'empreinte carbone de la poule, qui peut être un paramètre que le responsable du tournoi pourrait souhaiter minimiser. Le bouton d'assignation automatique tente de minimiser cette valeur, pour toutes les poules, tout en choisissant pour leader le joueur le plus proche du QG de ASMAE.\newline
+
+Les paires peuvent être manuellement permutées, au sein d'une poule ou entre deux poules différentes, en utilisant deux interactions possibles :
+
+\begin{itemize}
+\item la première interaction consiste à faire un \textit{drag-and-drop} d'une case d'une paire vers une autre case d'une autre paire. C'est interaction a l'avantage d'être intuitive.
+\item la deuxième interaction consiste à faire un \textit{click-and-drop} d'une case d'une paire vers une autre case d'une autre paire. Cette interaction a l'avantage d'être facilement réalisable, même avec un nombre et des tailles de poules élevés.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.25]{creation-poules/creation-poules-dragndrop.jpg}
+\caption{Interaction \textit{drag-and-drop} pour permuter deux paires}
+\end{figure}
+
+Il est aussi possible de créer les poules en prenant en compte les remarques et souhaits des paires. Chaque paire possède une icône de de bulle de dialogue à sa droite. Les bulles vides indiquent que la paire n'a aucune remarques ou commentaires, tandis que les bulles avec trois points sont des paires ayant des commentaires. En passant le curseur sur une bulle remplie, les commentaires de la paire s'affiche à l'écran.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.45]{creation-poules/creation-poules-commentaire.jpg}
+\caption{Commentaire d'une paire}
+\end{figure}
+
+Si l'on souhaite enregistrer l'état actuel de la création des poules, on peut cliquer sur le bouton \textit{Sauvegarder} en bas de la page. Dès que toutes les poules ont des leaders et terrains assignés, il est possible de finaliser la création des poules, en cliquant sur le bouton \textit{Valider}. Si des terrains ont des avertissements, la boîte de dialogue demande clairement à l'utilisateur de confirmer la validation des poules, malgré les conflits sur les terrains.
+
+\subsubsection{Gestion des poules}
+
+Ce bouton est accessible uniquement pour les status de tournoi suivant:
+\begin{itemize}
+\item \textbf{Poules validées} : c'est le status du tournoi lorsque les poules ont été totalement créées et validéés, prêtes pour imprimer les score boards et encoder les scores.
+\item \textbf{Poules terminées} : c'est le status du tournoi lorsque toutes les poules ont été encodées, et donc la création de l'arbre d'élimination peut commencer
+\end{itemize}
+
 \subsection{L'arbre d'élimination}
+
+\subsubsection{Création de l'arbre}
+
+\subsubsection{Gestion de l'arbre}
