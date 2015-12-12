@@ -1,6 +1,8 @@
-La structure des différents dossiers faisant partie du projet est la suivante (affichage via la commande tree -d dans le terminal) :
+\chapter{Hiérarchie des dossiers de contenus}
 
-\begin{figure}[H]
+La structure des différents dossiers faisant partie du projet est la suivante:
+
+\begin{figure}[!ht]
 \centering
 \includegraphics[scale=0.45]{Tree.png}
 \caption{Arbre décrivant l'architecture du répertoire}
@@ -9,9 +11,12 @@ La structure des différents dossiers faisant partie du projet est la suivante (
 Le répertoire du projet se sépare en 3 sous-dossiers :
 
 \begin{itemize}
-\item un dossier "ASMAE" contenant les fichiers propres à la création du site web,
-\item un dossier "Latex" contenant les différents rapports intermédiaires remis lors de la période de développement,
-\item et un dossier "Documentation" contenant les textes et images faisant parties de l'aide à l'utilisation du site.
+\item un dossier \enquote{ASMAE} contenant les fichiers propres à la création
+du site web ;
+\item un dossier "Latex" contenant les différents rapports intermédiaires
+remis lors de la période de développement,
+\item et un dossier "Documentation" contenant les textes et images faisant
+parties de l'aide à l'utilisation du site.
 \end{itemize}
 
 \begin{figure}[H]
@@ -37,10 +42,10 @@ Dossier ASMAE:\\
 A l'ouverture de ce dossier, on retrouve à nouveaux deux sous-dossiers :\\
 
 \begin{itemize}
-	\item le dossier "ASMAE" contient  la base de données ainsi que trois fichiers se rapportant à la configuration de Django (settings.py pour les options de Django, urls.py pour lier les views aux templates et wsgi.py pour définir l'application web), 
+	\item le dossier "ASMAE" contient  la base de données ainsi que trois fichiers se rapportant à la configuration de Django (settings.py pour les options de Django, urls.py pour lier les views aux templates et wsgi.py pour définir l'application web),
 	\item le dossier "tennis" contenant l'ensemble des ressources du site internet. On y retrouve également plusieurs fichiers :
-	\item un fichier manage.py permettant d'interragir directement avec l'application (lancer le site web, créer un superuser, effectuer les migrations de la base de données, …), 
-	\item deux fichiers textes (res\_femmes.csv et res\_hommes.csv) reprenant les informations des utilsateurs hommes et femmes utilisés pour populer la base de données, 
+	\item un fichier manage.py permettant d'interragir directement avec l'application (lancer le site web, créer un superuser, effectuer les migrations de la base de données, …),
+	\item deux fichiers textes (res\_femmes.csv et res\_hommes.csv) reprenant les informations des utilsateurs hommes et femmes utilisés pour populer la base de données,
 	\item et un fichier exécutable phantom.js utilisé quant à lui pour la gestion des envois d'email du site web.
 \end{itemize}
 
@@ -76,7 +81,7 @@ On retrouve également les fichiers suivants :\\
 	\item le fichier forms.py qui contient le formulaire de connexion au site,
 	\item le fichier mail.py qui contient le code nécessaire à l'envoi des différents types de mails (confirmation d'enregistrement, paiement, ...) du site,
 	\item le fichier models.py qui contient le code définissant les différentes classes (participant, terrain, ...) ainsi que leurs attributs, utilisés pour créer les tables dans la base de données,
-	\item le fichier pdfdocument.py qui contient le code utilisé pour la transformation des pages du site en fichier pdf imprimable, 
+	\item le fichier pdfdocument.py qui contient le code utilisé pour la transformation des pages du site en fichier pdf imprimable,
 	\item le fichier tests.py qui contient les différents tests des fonctionnalités du site que nous avons implémentés,
 	\item le fichier urls.py qui contient toutes les URL disponibles sur le site, et leurs liens vers les views contenues dans le fichier views.py
 	\item et le fichier views.py qui contient l'ensemble des views présentes sur le site.
