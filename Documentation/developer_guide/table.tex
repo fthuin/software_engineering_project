@@ -14,7 +14,7 @@ Afin d'ajouter une nouvelle table dans la base de données, il est nécessaire d
 \end{figure}
 \FloatBarrier
 
-Cette structure se complète ensuite en définissant l'ensemble des variables de classe (représentant les différentes informations à stocker dans la base de données) en spécifiant leurs types et leurs éventuelles relations et en y complétant les méthodes \textit{str} et \textit{unicode}. On peut observer un exemple d'une telle classe sur la figure~\ref{fig:Classe issue du fichier models.py représentant une table de la base de données}
+Cette structure se complète ensuite en définissant l'ensemble des variables de classe (représentant les différentes informations à stocker dans la base de données) en spécifiant leurs types et leurs éventuelles relations et en y implémentant différentes méthodes comme \textit{str} et \textit{unicode}. On peut observer un exemple d'une telle classe sur la figure~\ref{fig:Classe issue du fichier models.py représentant une table de la base de données}
 
 \section{Les types de champs possibles}
 
@@ -51,47 +51,18 @@ De même que pour les fonctions définissant le type d'un champ, il est égaleme
 \end{figure}
 \FloatBarrier
 
-\section{Mettre à jour la base de données}
+\section{Mise à jour de la base de données}
 
-Une fois terminé, il ne reste qu'à sauvegarder les modifications apportées au fichier, le fermer, et effectuer la migration de la base de données (afin que ceux-ci soient bien effectués) grâce aux commandes (dans cet ordre) : python manage.py makemigrations et python manage.py migrate. Un nouveau fichier contenant les modifications apportées à la base de données sera créé dans le dossier ASMAE/tennis/migrations, ce qui permet d'avoir une vue d'ensemble de l'évolution de la base de données mais surtout de pouvoir effectuer des restaurations à des versions antérieures (rollbacks) si besoin est.\\
+Une fois terminé, il ne reste qu'à sauvegarder les modifications apportées au fichier et effectuer la migration de la base de données (afin de rendre les différents changements effectifs) grâce aux commandes (dans cet ordre) : 
 
+\begin{verbatim}
+python manage.py makemigrations
+python manage.py migrate
+\end{verbatim}
 
-L'ensemble de la documentation se rapportant aux commandes de migration de la base de données est disponible à l'adresse suivante : https://docs.djangoproject.com/en/1.9/topics/migrations/.\\
+Un nouveau fichier contenant les modifications apportées à la base de données est alors généré dans le dossier \textit{ASMAE/tennis/migrations}, ce qui permet d'avoir une vue d'ensemble de l'évolution de la base de données mais surtout de pouvoir effectuer des restaurations à des versions antérieures (rollbacks) si nécessaire. Une fois la migration effectuée, il est possible de vérifier que les différentes modifications et ajouts ont bien été pris en compte via l'interface administration de Django.\\
 
-Une fois la migration effectuée, il est possible de directement aller vérifier sur la nouvelle table a correctement été ajoutée, ou si la ou les modifications ont bien été apportées à la base de données via l'interface administration de Django. Il suffit pour cela de se connecter à l'adresse du site web suivi de "/admin" avec les identifiants d'administrateur, et de se rendre dans l'onglet "Tennis".\\
+Il est intéressant de noter qu'il est nécessaire de suivre la même démarche lorsqu'une ou plusieurs modifications doivent être apportées à une table déjà existante dans la base de données.\\
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.4]{Admin.png}
-\caption{Interface administrateur}
-\end{figure}
+L'ensemble de la documentation se rapportant aux commandes de migration de la base de données est disponible à l'adresse suivante : \url{https://docs.djangoproject.com/en/1.9/topics/migrations/}.\\
 
-Il est intéressant de noter que la même démarche peut être suivie lorsqu'une ou plusieurs modifications doivent être apportées à une table déjà existante dans la base de données.\\
-
-Ajouter une view et template correspondant :\\
-
-Afin de rajouter du nouveau contenu sur le site internet, il est utile de pouvoir créer de nouvelles pages, et de les rendre accessibles à partir de celles déjà présentes.\\
-
-Pour ce faire, il faut dans un premier temps créer le template, c'est à dire la structure de la page en HTML. Une fois le fichier représentant la page créé, il faut l'ajouter au dossier contenant l'ensemble des pages HTML du site, c'est-à-dire "ASMAE/tennis/templates". Il est intéressant de noter que les différents éléments statiques (tels qu'un style css, police particulière, ...) doivent être ajoutés dans le sous-dossier correspondant, présent dans le répertoire "ASMAE/tennis/static/tennis".\\
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.3]{html.png}
-\caption{Exemple d'une page HTML}
-\end{figure}
-
-Une fois fait, il est nécessaire de créer une view dans le fichier views.py se trouvant dans le dossier "ASMAE/tennis", qui reprendra la page à renvoyer quand un utilisateur fera une requête pour obtenir la page. Le format le plus classique et simpliste d'une telle requête est le suivant: on définit le nom de la requête, ainsi que la page à rendre quand celle-ci est effectuée.\\
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.4]{views.png}
-\caption{Fichier views.py}
-\end{figure}
-
-Enfin, il reste à ajouter au fichier urls.py (également présent dans le dossier "ASMAE/tennis") qui contient tous les liens URL disponibles sur le site, ainsi que le lien vers le nom des views concernées. Pour ce faire, il suffit de rajouter une nouvelle ligne dans le fichier, en respectant le format suivant : url(NouveauLienUrl, NomDeLaViews), .
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.4]{url.png}
-\caption{Fichier urls.py}
-\end{figure}
