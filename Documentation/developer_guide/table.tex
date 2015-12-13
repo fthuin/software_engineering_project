@@ -1,10 +1,26 @@
-Pour ajouter une table dans la base de données, il est nécessaire de modifier le fichier models.py, contenant l'ensemble des tables. Pour ce faire, il suffit d'ouvrir le fichier à l'aide de n'importe quel IDE ou éditeur de code, et de créer une nouvelle classe à la fin de celui-ci en respectant l'indentation et syntaxe python class ClassName (models.Model) : . Il faut ensuite définir l'ensemble des variables de classe (représentant les différentes informations à stocker dans la base de données), en spécifiant leurs types et les éventuelles relations.
+Afin d'ajouter une nouvelle table dans la base de données, il est nécessaire de modifier le fichier models.py présent dans le dossier tennis (Figure~\ref{}). Pour ce faire, il suffit d'ouvrir le fichier à l'aide d'un éditeur de code (Notepad, Pycharm, etc.), et de rajouter une nouvelle classe à la fin de celui-ci en respectant l'indentation et la syntaxe python appropriée. La structure d'une classe est définie sur la figure~\ref{fig:Structure d'une classe représentant une table de la base de données}
 
-\begin{figure}[H]
+\begin{figure}[!ht]
 \centering
-\includegraphics[scale=0.4]{Classe.png}
-\caption{Représentation d'une table de la base de données}
+\begin{framed}
+\lstinputlisting[language=Python, firstline=1, lastline=8]{"developer_guide/class.py"}
+\end{framed}
+\caption{Structure d'une classe représentant une table de la base de données}
+\label{fig:Structure d'une classe représentant une table de la base de données}
 \end{figure}
+\FloatBarrier
+
+Cette structure se complète ensuite en définissant l'ensemble des variables de classe (représentant les différentes informations à stocker dans la base de données) en spécifiant leurs types et leurs éventuelles relations et en y complétant les méthodes \textit{str} et \textit{unicode}. On peut observer un exemple d'une telle classe sur la figure~\ref{fig:Classe issue du fichier models.py représentant une table de la base de données}
+
+\begin{figure}[!ht]
+\centering
+\begin{framed}
+\lstinputlisting[language=Python, firstline=9, lastline=24]{"developer_guide/class.py"}
+\end{framed}
+\caption{Classe issue du fichier \textit{models.py} représentant une table de la base de données}
+\label{fig:Classe issue du fichier models.py représentant une table de la base de données}
+\end{figure}
+\FloatBarrier
 
 Les types principaux sont les suivants :\\
 
