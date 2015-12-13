@@ -79,7 +79,7 @@ Il existe deux pages pour interagir avec les poules d'un tournoi :
 
 \subsubsection{Création des poules}
 
-La première page des poules d'un tournoi est la création des poules. Ce bouton est accessible à partir de la page "Gestionnaire des tournois", en cliquant sur le bouton du tournoi qui se trouve à la colonne "Générer Poules".
+La première page des poules d'un tournoi est la création des poules. Elle est accessible à partir de la page "Gestionnaire des tournois", en cliquant sur le bouton du tournoi qui se trouve à la colonne "Générer Poules".
 
 \begin{figure}[H]
 \centering
@@ -87,7 +87,7 @@ La première page des poules d'un tournoi est la création des poules. Ce bouton
 \caption{Bouton d'accès à la page de création des poules}
 \end{figure}
 
-Ce bouton est accessible uniquement pour les status de tournoi suivant:
+Ce bouton est cliquable uniquement pour les status de tournoi suivant:
 
 \begin{itemize}
 \item \textbf{Aucune poules} : c'est le status initial d'un tournoi
@@ -176,11 +176,51 @@ Si l'on souhaite enregistrer l'état actuel de la création des poules, on peut 
 
 \subsubsection{Gestion des poules}
 
-Ce bouton est accessible uniquement pour les status de tournoi suivant:
+La deuxième page des poules d'un tournoi est la gestion des poules. Elle est accessible à partir de la page "Gestionnaire des tournois", en cliquant sur le bouton du tournoi qui se trouve à la colonne "Scores".
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{gestion-poules/gestion-poules-bouton.jpg}
+\caption{Bouton d'accès à la gestion des poules}
+\end{figure}
+
+Ce bouton est cliquable uniquement pour les status de tournoi suivant:
 \begin{itemize}
 \item \textbf{Poules validées} : c'est le status du tournoi lorsque les poules ont été totalement créées et validéés, prêtes pour imprimer les score boards et encoder les scores.
 \item \textbf{Poules terminées} : c'est le status du tournoi lorsque toutes les poules ont été encodées, et donc la création de l'arbre d'élimination peut commencer
 \end{itemize}
+
+La page de gestion des poules se présente avec un module par poule.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.15]{gestion-poules/gestion-poules.jpg}
+\caption{Page de gestion des poules d'un tournoi}
+\end{figure}
+
+Chaque poule contient le nombre de paires, la liste de toutes les paires, le leader, et le terrain assigné. Il est possible d'obtenir le scoreboard de la poule, en cliquant sur bouton dans le coin droit supérieur du module, avec une icône d'imprimante.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.3]{gestion-poules/gestion-poules-poule.jpg}
+\caption{Module d'une poule de la page de gestion des poules}
+\end{figure}
+
+Il est possible d'encoder les scores des matchs de la poules en cliquant sur le bouton \textit{Entrer les scores}. Ce bouton permet d'accéder à un score board interactif. Les scores doivent être entrés dans les champs, où le premier champ de la case est le nombre de points de la paire sur la ligne, et le deuxième champ est le nombre de points de la paire sur la colonne. Les scores sont symétriques par rapport à la diagonale : par exemple, le score à la première ligne, deuxième colonne est à tout moment l'inverse du score à la deuxième ligne, première colonne du score board.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.15]{gestion-poules/gestion-poules-score.jpg}
+\caption{Page du score board interactif de la poule}
+\end{figure}
+
+Le score board interactif peut être enregistré, ou valider pour afficher définitivement les scores de la poule. Lorsque les scores sont validés, les scores totaux de la poule sont résumés sur la page de gestion des poules.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.3]{gestion-poules/gestion-poules-encode.jpg}
+\caption{Module d'une poule encodées dans la page de gestion des poules du tournoi}
+\end{figure}
 
 \subsection{L'arbre d'élimination}
 
