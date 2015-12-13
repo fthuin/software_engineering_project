@@ -1,12 +1,85 @@
 \chapter{Hiérarchie des dossiers de contenus}
 
+Tout d'abord, il est important de savoir qu'un projet Django se sépare en
+plusieurs parties. Une partie est destiné à l'entièreté des paramètres et
+des outils liés à tout le site, les autres parties sont des
+\enquote{applications}. \newline
+
+Ces \enquote{applications} ont pour but d'être modulaire, c'est-à-dire qu'elles
+peuvent s'intégrer facilement dans d'autres projets Django. Dans notre cas,
+il n'existe qu'une seule application : \textbf{tennis}. Elle est autonome et
+gère à la fois le visuel du site et les opérations sur le serveur. \newline
+
+Vous pouvez retrouver la hiérarchie des dossiers sur la
+figure~\ref{fig:Architecture des dossiers} 
+
 La structure des différents dossiers faisant partie du projet est la suivante:
 
 \begin{figure}[!ht]
-\centering
-\includegraphics[scale=0.45]{Tree.png}
-\caption{Arbre décrivant l'architecture du répertoire}
+	\begin{framed}
+		\dirtree{%
+			.1 /.
+			.2 \textbf{ASMAE} \ldots{} \begin{minipage}[t]{10cm}
+								Ce répertoire contient les fichiers directement
+								reliés aux paramètres généraux du projet web{.}
+								\end{minipage}.
+			.2 \textbf{tennis} \ldots{} \begin{minipage}[t]{10cm}
+								Ce répertoire contient tous les fichiers reliés
+								à l'application \enquote{tennis}, c'est-à-dire
+								tous les contenus reliés au Charles de
+								Lorraine{.}
+								\end{minipage}.
+			.3 \textbf{dump\_table} \ldots{} \begin{minipage}[t]{10cm}
+									Ce répertoire contient les fichiers
+									permettant de sortir des {.}csv depuis
+									l'interface admin{.}
+									\todo[inline]{Référencer la partie /admin}
+									\end{minipage}.
+			.3 \textbf{management}.
+			.4 \textbf{commands} \ldots{} \begin{minipage}[t]{10cm}
+									Ce répertoire contient les fichiers
+									permettant de créer des nouvelles commandes
+									à lancer avec manage{.}py
+									\end{minipage}.
+			.3 \textbf{static}.
+			.4 \textbf{tennis}.
+			.5 \textbf{css} \ldots{} \begin{minipage}[t]{10cm}
+									Ce répertoire contient les fichiers
+									permettant de gérer l'affichage du site
+									web{.}
+									\end{minipage}.
+			.5 \textbf{fonts} \ldots{} \begin{minipage}[t]{10cm}
+									Ce répertoire contient les fichiers
+									permettant de gérer les polices d'écriture{.}
+									\end{minipage}.
+			.5 \textbf{img} \ldots{} \begin{minipage}[t]{10cm}
+									Ce répertoire contient les fichiers
+									images utiles au site{.}
+									\end{minipage}.
+			.5 \textbf{js} \ldots{} \begin{minipage}[t]{10cm}
+									Ce répertoire contient les fichiers
+									permettant au navigateur d'effectuer des
+									actions sans interaction avec le serveur{.}
+									\end{minipage}.
+			.6 \textbf{images}.
+			.3 \textbf{templates} \ldots{} \begin{minipage}[t]{10cm}
+									Ce répertoire contient les fichiers
+									HTML nécessaires à l'affichage des pages
+									de l'application{.}
+									\end{minipage}.
+			.4 \textbf{mail}.
+			.3 \textbf{tests\_cases}.
+			.3 \textbf{views\_helper} \ldots{} \begin{minipage}[t]{10cm}
+									Ce répertoire contient les fichiers
+									Python permettant de gérer les interactions
+									du site avec le serveur{.}
+									\end{minipage}.
+		}
+	\end{framed}
+	\caption{Arbre décrivant l'architecture depuis le dossier racine}
+	\label{fig:Architecture des dossiers}
 \end{figure}
+\FloatBarrier
 
 Le répertoire du projet se sépare en 3 sous-dossiers :
 
