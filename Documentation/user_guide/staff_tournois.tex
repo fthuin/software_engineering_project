@@ -185,6 +185,7 @@ La deuxième page des poules d'un tournoi est la gestion des poules. Elle est ac
 \end{figure}
 
 Ce bouton est cliquable uniquement pour les status de tournoi suivant:
+
 \begin{itemize}
 \item \textbf{Poules validées} : c'est le status du tournoi lorsque les poules ont été totalement créées et validéés, prêtes pour imprimer les score boards et encoder les scores.
 \item \textbf{Poules terminées} : c'est le status du tournoi lorsque toutes les poules ont été encodées, et donc la création de l'arbre d'élimination peut commencer
@@ -224,6 +225,67 @@ Le score board interactif peut être enregistré, ou valider pour afficher défi
 
 \subsection{L'arbre d'élimination}
 
+Toutes les fonctionnalités des tournois propres aux arbres sont accessibles uniquement aux tournois dont le status sont l'un des deux suivants :
+
+\begin{itemize}
+\item \textbf{Poules terminées} : lorsque toutes les poules ont été encodées, et l'arbre d'élimination n'a pas été créé ou est non terminé (c'est-à-dire qu'il n'y a pas encore de gagnant)
+\item \textbf{Tournoi terminé} : lorsque l'arbre d'élimination a été complètement encodé, et qu'il y a un gagnant du tournoi
+\end{itemize}
+\bigskip
+
+Il y a une seule page spécifique à l'arbre d'élimination du tournoi, qui s'adapte automatiquement à 2 cas différents :
+
+\begin{itemize}
+\item Toutes les poules ont étés encodées, et aucun arbre d'élimination n'a été créé (Création de l'arbre).
+\item Toutes les poules ont été encodées, et un arbre d'élimination a été créé et enregistré (Gestion de l'arbre)
+\end{itemize}
+\bigskip
+
+Cette page est accessible de deux manières différentes :
+
+\begin{itemize}
+\item soit par la page principale de "Gestionnaire des poules, en cliquant sur le bouton sous la colonne "Arbre de tournoi".
+\item soit par la page de gestion des poules, lorsque toutes les poules ont été encodées, en cliquant sur le bouton \textit{Arbre du tournoi} en bas de page.
+\end{itemize}
+\bigskip
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.45]{creation-arbre/creation-arbre-bouton.jpg}
+\caption{Accés à la page de l'arbre d'élimination, depuis la page principale de la gestion des tournois}
+\end{figure}
+
 \subsubsection{Création de l'arbre}
+
+Si aucun arbre d'élimination n'a été préalablement enregistré, ou bien que toutes les poules ont été récemment encodées, alors les deux accès à la page de l'arbre d'élimination est accessible. En accédant à la page de l'arbre du tournoi, puisqu'aucun arbre n'a encore été créé, il est demandé à l'utilisateur de choisir les paires sélectionnées pour le tournoi d'élimination.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.15]{creation-arbre/creation-arbre-etape1.jpg}
+\caption{Première étape de la création d'un arbre - sélection des paires}
+\end{figure}
+
+Les paires sont triées par leurs points totaux au sein d'une poule, de la paire aux points les plus élevés jusqu'à la paire aux points les moins élevés. Les scores sont affichés entre parenthèses à côté des noms des joueurs de la paire. L'icône à droite de la case d'une paire indique si la paire est sélectionnée ou non pour l'arbre d'élimination. Pour modifier l'état de sélection de la paire, il faut cliquer sur la case de la paire.\newline
+
+Dès que les paires cochées sont celles que l'on souhaite avoir pour commencer l'arbre d'élimination, on peut poursuivre le processus de création de l'arbre d'élimination en cliquant sur le bouton \textit{Prochaine étape}, tout en bas de la page.\newline
+
+Sur cette deuxième et dernière page de création de l'arbre, il est demandé de choisir un terrain et l'ordre des paires au départ de l'arbre. Ces deux paramètres sont divisés en deux modules différents :
+
+\begin{itemize}
+\item Le module "Terrain" permet d'assigner un terrain, de la même manière que lors de la création des poules : soit manuellement en cliquant sur le bouton \textit{Choisir un terrain}, soit automatiquement en cliquant sur le bouton \textit{Assigner Terrain}.
+\item Le module "Premier Round", qui permet d'ordonner les paires au début de l'arbre d'élimination, en interagissant avec \textit{drag-and-drop}.
+\end{itemize}
+\bigskip
+
+Pour ordonner efficacement les paires au départ de l'arbre d'élimination, l'identifiant de la poule et la position dans la poule (ordonné selon le score total) est précisé pour chacune des paires.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.3]{creation-arbre/creation-arbre-etape2.jpg}
+\caption{Deuxième et dernière étape de la création de l'arbre - sélection du terrain et ordre des paires}
+\end{figure}
+
+Pour finaliser le processus de création de l'arbre, il suffit de cliquer sur le bouton \textit{Voir l'arbre du tournoi}, en bas de la page. N'oubliez pas d'enregistrer l'arbre dès que l'arbre a été créé, sinon vous devez recommencer le processus de création de l'arbre ! Pour enregistrer l'arbre créé, cliquez simplement sur le bouton Enregistrer en bas de la page de gestion de l'arbre d'élimination
+
 
 \subsubsection{Gestion de l'arbre}
