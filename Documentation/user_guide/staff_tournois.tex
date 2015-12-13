@@ -130,9 +130,6 @@ Les poules peuvent, à tout moment, être éditées. Un leader peut être assign
 \caption{Sélection du leader d'une poule}
 \end{figure}
 
-\todo[inline]{Insérer image de la liste déroulante de la sélection d'un leader.}
-\bigskip
-
 Le procédé pour assigner manuellement un terrain à une poule est similaire à celui de l'assignation d'un leader, sauf que cette sélection se trouve en bas du module de la poule. En cliquant sur le bouton \textit{Choisir un terrain}, une liste déroulante propose tous les terrains disponibles.
 
 \begin{figure}[H]
@@ -180,7 +177,7 @@ La deuxième page des poules d'un tournoi est la gestion des poules. Elle est ac
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.4]{gestion-poules/gestion-poules-bouton.jpg}
+\includegraphics[scale=0.45]{gestion-poules/gestion-poules-bouton.jpg}
 \caption{Bouton d'accès à la gestion des poules}
 \end{figure}
 
@@ -222,6 +219,8 @@ Le score board interactif peut être enregistré, ou valider pour afficher défi
 \includegraphics[scale=0.3]{gestion-poules/gestion-poules-encode.jpg}
 \caption{Module d'une poule encodées dans la page de gestion des poules du tournoi}
 \end{figure}
+
+En bas de la page de la gestion des poules, il est possible de télécharger les score boards de toutes les poules à la fois en cliquant sur le bouton \textit{Version PDF}. Il est également possible de supprimer toutes les poules, et revenir à l'étape de "Poules sauvegardées" du tournoi, en cliquant sur le bouton \textit{Supprimer les poules}. Enfin, le bouton \textit{Arbre de Tournoi} permet d'accéder à la page de l'arbre d'élimination, uniquement accessible lorsque toutes les poules ont été encodées.
 
 \subsection{L'arbre d'élimination}
 
@@ -289,3 +288,40 @@ Pour finaliser le processus de création de l'arbre, il suffit de cliquer sur le
 
 
 \subsubsection{Gestion de l'arbre}
+
+Si un arbre d'élimination a été enregistré, alors la page de l'arbre d'élimination du tournoi permettra d'accéder directement à la page avec l'arbre interactif du tournoi.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.15]{gestion-arbre/gestion-arbre.jpg}
+\caption{Page de gestion de l'arbre d'élimination}
+\end{figure}
+
+Cette page est divisée en deux parties :
+
+\begin{itemize}
+\item la première partie contient un module interactif d'encodage de l'arbre d'élimination.
+\item La deuxième partie contient un module d'information sur le terrain du tournoi d'élimination, avec les boutons de gestion de l'arbre en bas de la page.
+\end{itemize}
+\bigskip
+
+L'arbre d'élimination donne une représentation de l'arbre du tournoi, où chaque case est une paire. Deux cases verticalement collée entre elles représentent le match des deux paires, l'une contre l'autre.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{gestion-arbre/gestion-arbre-match.jpg}
+\caption{Match entre deux paires dans l'arbre d'élimination interactif}
+\end{figure}
+
+Pour encoder le score d'un match, il suffit de cliquer sur l'une des deux paires, et d'inscrire le score du match dans la boîte de dialogue. Ensuite, le gagnant sera automatiquement placé à l'étape suivante de l'arbre d'élimination. N'oubliez pas d'enregistrer l'arbre d'élimination après avoir encodé les scores, sinon l'arbre n'est pas mise à jour !\newline
+
+Lorsque l'arbre d'élimination est complètement encodée, c'est-à-dire lorsqu'il y a un gagnant dans le tournoi, et que l'arbre est enregistrée, alors le status du tournoi devient "Tournoi terminé".\newline
+
+En plus du bouton \textit{Enregistrer}, qui permet d'enregistrer l'état de l'arbre d'élimination, deux autres boutons se trouve en bas de la page:
+
+\begin{itemize}
+\item \textit{Version PDF} : permet d'imprimer l'arbre du tournoi et l'information du terrain.
+\item \textit{Enregistrer} : permet d'enregistrer l'état de l'arbre du tournoi.
+\item \textit{Supprimer} : permet de supprimer l'arbre d'élimination, et de revenir à l'étape de création de l'arbre d'élimination.
+\end{itemize}
+\bigskip
