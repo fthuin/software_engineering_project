@@ -1,3 +1,7 @@
+\chapter{Ajouter une table à la base de données}
+
+\section{Définir une nouvelle table}
+
 Afin d'ajouter une nouvelle table dans la base de données, il est nécessaire de modifier le fichier models.py présent dans le dossier tennis (Figure~\ref{}). Pour ce faire, il suffit d'ouvrir le fichier à l'aide d'un éditeur de code (Notepad, Pycharm, etc.), et de rajouter une nouvelle classe à la fin de celui-ci en respectant l'indentation et la syntaxe python appropriée. La structure d'une classe est définie sur la figure~\ref{fig:Structure d'une classe représentant une table de la base de données}
 
 \begin{figure}[!ht]
@@ -12,6 +16,31 @@ Afin d'ajouter une nouvelle table dans la base de données, il est nécessaire d
 
 Cette structure se complète ensuite en définissant l'ensemble des variables de classe (représentant les différentes informations à stocker dans la base de données) en spécifiant leurs types et leurs éventuelles relations et en y complétant les méthodes \textit{str} et \textit{unicode}. On peut observer un exemple d'une telle classe sur la figure~\ref{fig:Classe issue du fichier models.py représentant une table de la base de données}
 
+\section{Les types de champs possibles}
+
+La définition du type de chaque champ de la table se fait par des appels à des fonctions spécifiques. Les principales fonctions sont les suivantes :\\
+
+\begin{itemize}
+\item \textit{models.CharField()} : définit un champ contenant une chaine de caractères
+\item \textit{models.AutoField()} : définit un champ contenant un entier se remplissant de manière automatique et incrémentale en fonction des identifiants disponibles
+\item \textit{models.BooleanField()} : définit un champ contenant un booléen (True ou False)
+\item \textit{models.DecimalField()} : définit un champ contenant un nombre décimal de taille fixe
+\item \textit{models.DateTimeField()} : définit un champ contenant une date et une heure
+\item \textit{models.TextField()} : définit un champ contenant une chaine de caractère (de très grande taille)\\
+\end{itemize}
+
+En plus de fournir un type à chaque champ, il est également possible de les paramétrer (valeur par défaut, degré d'obligation du champ, éditable ou non, etc.) en précisant divers arguments aux différents appels de fonctions définis précédemment. Ces arguments sont définis dans la documentation Django disponible à l'adresse suivante: \url{https://docs.djangoproject.com/fr/1.9/ref/models/fields/}\\
+
+La définition des relations entre les tables se fait de manière semblable à la définition du type d'un champ. Ces relations sont spécifiées via des appels à des fonctions, applicables à un champ particulier. Les relations principales entre les différents champs sont les suivantes :\\
+
+\begin{itemize}
+\item \textit{models.ForeignKey()} : définit une relation plusieurs-à-un (One to many)
+\item \textit{models.OneToOneField()} : définit une relation un-à-un (One to one)
+\item \textit{models.ManyToManyField()} : définit une relation plusieurs à plusieurs (Many to many)\\
+\end{itemize}
+
+De même que pour les fonctions définissant le type d'un champ, il est également possible de définir plusieurs paramètres passés en arguments lors de la création des relations  (comme le nom à utiliser pour la relation inverse depuis l’objet lié vers celui-ci, si le champ est obligatoire ou non, etc.)\\
+
 \begin{figure}[!ht]
 \centering
 \begin{framed}
@@ -22,45 +51,10 @@ Cette structure se complète ensuite en définissant l'ensemble des variables de
 \end{figure}
 \FloatBarrier
 
-Les types principaux sont les suivants :\\
-
-\begin{itemize}
-\item models.CharField : un champ contenant une chaine de caractères
-\item models.AutoField : un champ contenant un entier se remplissant de manière automatique et incrémentale en fonction des identifiants disponibles
-\item models.BooleanField : un champ contenant un booléen (vrai ou faux)
-\item models.DecimalField : un champ contenant un nombre décimal de taille fixe
-\item models.DateTimeField : un champ contenant un date et une heure
-\item models.TextField : un champ contenant une chaine de caractère (de très grande taille)\\
-\end{itemize}
-
-A noter qu'il est également possible de spécifier divers options (à passer en paramètres lors de la création de la variable), tels que la taille maximale du champ, la valeur par défaut, si le champ est obligatoire où non, ...\\
-
-Les relations principales sont les suivantes :\\
-\begin{itemize}
-\item models.ForeignKey : une relation plusieurs-à-un (one to many)
-\item models.OneToOneField : une relation un-à-un
-\item models.ManyToManyField : une relation plusieurs à plusieurs\\
-\end{itemize}
-
-Il est également possible de passer plusieurs options en paramètres lors de la création des relations, comme le nom à utiliser pour la relation inverse depuis l’objet lié vers celui-ci, si le champ est obligatoire ou non, ...\\
-
-L'ensemble des types, relations et options sont consultables dans la documentation Django à l'adresse suivante : https://docs.djangoproject.com/fr/1.9/ref/models/fields/.\\
-
-Une fois l'ensemble des variables définies, il est également possible de définir certaines fonctions de classe, avec la syntaxe def nomDeFonction (self) : . Cela peut s'avérer utile pour retourner certains champs en particulier, ou certaines combinaisons de champs en les concaténant au préalable (adresse, informations personnelles, ...).\\
+\section{Mettre à jour la base de données}
 
 Une fois terminé, il ne reste qu'à sauvegarder les modifications apportées au fichier, le fermer, et effectuer la migration de la base de données (afin que ceux-ci soient bien effectués) grâce aux commandes (dans cet ordre) : python manage.py makemigrations et python manage.py migrate. Un nouveau fichier contenant les modifications apportées à la base de données sera créé dans le dossier ASMAE/tennis/migrations, ce qui permet d'avoir une vue d'ensemble de l'évolution de la base de données mais surtout de pouvoir effectuer des restaurations à des versions antérieures (rollbacks) si besoin est.\\
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.4]{Migration1.png}
-\caption{Migration}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.4]{Migration2.png}
-\caption{Migration}
-\end{figure}
 
 L'ensemble de la documentation se rapportant aux commandes de migration de la base de données est disponible à l'adresse suivante : https://docs.djangoproject.com/en/1.9/topics/migrations/.\\
 
