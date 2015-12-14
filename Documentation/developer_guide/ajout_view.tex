@@ -2,15 +2,15 @@
 
 \section{Création du Front-End}
 
-Avant de vouloir ajouter de nouvelles pages au site web, il est nécessaire de savoir que le framework Django utilisent des templates. Ces templates sont écrites en langage HTML mais permettent l'intégration de certaines expressions et structures comme les \textit{if...else...} ou les \textit{for}. Ces expressions et structures doivent être entourées par des balises \textit{\{\% ... \%\}} comme on peut le voir sur la figure~\ref{fig:Exemple d'un template}\\
+Avant de vouloir ajouter de nouvelles pages au site web, il est nécessaire de savoir que le framework Django utilisent des templates. Ces templates sont écrites en langage HTML mais permettent l'intégration de certaines expressions et structures comme les \textit{if...else...} ou les \textit{for}. Ces expressions et structures doivent être entourées par des balises \textit{\{\% ... \%\}} comme on peut le voir sur la figure~\ref{fig:Utilisation d'une expression if...else... dans une template}\\
 
 \begin{figure}[!ht]
 \centering
 \begin{framed}
 \lstinputlisting[language=HTML, firstline=1, lastline=8]{"developer_guide/template.html"}
 \end{framed}
-\caption{Exemple d'un template}
-\label{fig:Exemple d'un template}
+\caption{Utilisation d'une expression \textit{if...else...} dans une template}
+\label{fig:Utilisation d'une expression if...else... dans une template}
 \end{figure}
 \FloatBarrier
 
@@ -28,7 +28,7 @@ Cette ligne va permettre d'inclure et d'étendre le fichier \textit{base.html} q
 
 \subsection{Déclarer la vue et lui associer une URL}
 
-Pour représenter une vue, Django utilise une fonction définie dans le fichier \textit{views.py} (se trouvant dans le dossier \textit{ASMAE/tennis}). Cette fonction va être utile pour récupérer certaines données (de la base de données par exemple) et générer le rendu du fichier HTML créé précédemment. Un exemple d'une fonction définie dans le fichier \textit{views.py} est reprise sur la figure~\ref{fig:Exemple d'une fonction présente dans le fichier views.py}. 
+Pour représenter une vue, Django utilise une fonction définie dans le fichier \textit{views.py} (se trouvant dans le dossier \textit{ASMAE/tennis}). Cette fonction va être utile pour récupérer certaines données (de la base de données par exemple) et générer le rendu du fichier HTML créé précédemment. Un exemple d'une fonction définie dans le fichier \textit{views.py} est repris sur la figure~\ref{fig:Exemple d'une fonction présente dans le fichier views.py}. 
 
 \begin{figure}[!ht]
 \centering
@@ -40,7 +40,7 @@ Pour représenter une vue, Django utilise une fonction définie dans le fichier 
 \end{figure}
 \FloatBarrier
 
-Maintenant que la vue est déclarée, il ne reste plus qu'à l'associer à une URL. Pour ce faire, il faut modifier le fichier \textit{urls.py} (également présent dans le dossier \textit{ASMAE/tennis}) qui contient toutes les associations entre les liens URL disponibles sur le site et les vues. Pour ce faire, il suffit de rajouter une nouvelle ligne dans le fichier, plus précisément dans \textit{l'urlpatterns}, en respectant le format suivant : \textit{url(NouveauLienUrl, NomDeLaViews)}. Nous pouvons observer un exemple de fichier \textit{urls.py} sur la figure~\ref{fig:Exemple d'un fichier urls.py}. A noter que le \textit{r'\^\$'} équivaut à spécifier la racine du site web.
+Maintenant que la vue est déclarée, il ne reste plus qu'à l'associer à une URL. Pour ce faire, il faut modifier le fichier \textit{urls.py} (également présent dans le dossier \textit{ASMAE/tennis}) qui contient toutes les associations entre les liens URL disponibles sur le site et les vues. Il suffit alors de rajouter une nouvelle ligne dans le fichier, plus précisément dans \textit{l'urlpatterns}, en respectant le format suivant : \textit{url(NouveauLienUrl, NomDeLaViews)}. Nous pouvons observer un exemple de fichier \textit{urls.py} sur la figure~\ref{fig:Exemple d'un fichier urls.py}. A noter que le \textit{r'\^\$'} équivaut à spécifier la racine du site web.
 
 \begin{figure}[!ht]
 \centering
@@ -54,11 +54,49 @@ Maintenant que la vue est déclarée, il ne reste plus qu'à l'associer à une U
 
 %Ajouter passage d'arguments aux vues
 
+La nouvelle page est désormais intégrée au site web et est disponible à l'adresse spécifiée dans le fichier \textit{urls.py}
+
 \subsection{Récupération des informations de la base de données vers les pages web}
 
-Pour transmettre des informations vers les différentes pages web, il va falloir utiliser les vues et par conséquent modifier le fichier \textit{views.py}.
+Pour transmettre des informations vers les différentes pages web, il va falloir utiliser les vues et par conséquent modifier le fichier \textit{views.py}. Les vues vont être utilisées pour récupérer des informations de la base de données et les envoyer vers la page web.
+
+\begin{figure}[!ht]
+\centering
+\begin{framed}
+\lstinputlisting[language=Python, firstline=20, lastline=24]{"developer_guide/view.py"}
+\end{framed}
+\caption{Vue utilisée pour la gestion des terrains par les utilisateurs}
+\label{fig:Vue utilisée pour la gestion des terrains par les utilisateurs}
+\end{figure}
+\FloatBarrier
+
+Sur la figure~\ref{fig:Vue utilisée pour la gestion des terrains par les utilisateurs}, nous testons via la requête passée en argument si l'utilisateur courant est connecté. Si tel est le cas, nous allons alors récupérer l'ensemble des terrains enregistrés par l'utilisateur courant dans la base de données via la méthode \textit{objects.filter(user=request.user)} appliquée sur la table \textit{Court}. Une fois les terrains enregistrés dans une variable, nous pouvons envoyer cette dernière vers la page web grâce à la méthode \textit{render()} qui prend comme arguments la requête, le nom de la template et un contexte d'instances. Ce dernier peut être obtenu avec la méthode \textit{locals()} qui va retourner un dictionnaire contenant toutes les variables locales de la fonction d'où elle a été appelée (et donc notamment l'ensemble des terrains enregistré dans la variable \textit{court}).\\
+
+Maintenant que nous avons envoyé les informations souhaitées vers la page web, nous pouvons dès à présent les récupérer dans le fichier template correspondant d'une façon telle que celle présentée sur la figure~\ref{fig:Récupération des informations envoyées vers la template}. Sur cette dernière, nous constatons que nous pouvons directement interagir sur la variable \textit{court} et afficher les informations souhaitées grâce aux balises \textit{\{\{ ... \}\}}.
+
+\begin{figure}[!ht]
+\centering
+\begin{framed}
+\lstinputlisting[language=HTML, firstline=10, lastline=17]{"developer_guide/template.html"}
+\end{framed}
+\caption{Récupération des informations envoyées vers la template}
+\label{fig:Récupération des informations envoyées vers la template}
+\end{figure}
+\FloatBarrier
+
+Il est important de préciser que d'autres requêtes que celle utilisée dans la figure~\ref{fig:Vue utilisée pour la gestion des terrains par les utilisateurs} peuvent être appliquées. La liste de ces requêtes est reprise sur la documentation Django disponible à l'adresse suivante:\url{https://docs.djangoproject.com/en/1.9/topics/db/queries/}
 
 \subsection{Enregistrer des informations des pages web vers la base de données}
 
-%locals()
-%{{ }}
+Pour récupérer des informations d'une page web et les enregistrer dans la base de données, il va également être nécessaire d'utiliser les vues. Cependant, nous devons d'abord établir le lien entre les templates et le fichier \textit{views.py}. Pour ce faire nous avons deux moyens à notre disposition : \\
+
+\begin{itemize}
+\item Les formulaires\\
+
+Les formulaires constituent le moyen le plus simple pour transmettre les données d'une page web, les récupérer dans la fonction définissant la vue (issue du fichier \textit{views.py}) et ainsi les enregistrer dans la base de données.\\
+%To do
+
+\item Utilisation d'un JSON\\
+%To do
+
+\end{itemize}

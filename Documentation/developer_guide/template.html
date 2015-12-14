@@ -6,3 +6,12 @@ perms.tennis.DoubleFemmes or perms.tennis.TournoiDesFamilles %}
         <i class="fa fa-trophy fa-g no-print"></i> Tournois</span>
 </a></li>
 {% endif %}
+
+{% for elem in court %}
+    <tr>
+        <td>{{ elem.id }}</td>
+        <td>{{ elem.matiere }}</td>
+        <td>{{ elem.rue }} {{ elem.numero}}, 
+            {{ elem.codepostal }} {{ elem.localite }}</td>
+    </tr>
+{% endfor %}

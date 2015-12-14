@@ -16,3 +16,9 @@ urlpatterns = patterns('tennis.views',
                        url(r'^sponsors$', 'sponsors'),
                        url(r'^contact$', 'contact'),
                        )
+
+def terrain(request):
+    if request.user.is_authenticated():
+        court = Court.objects.filter(user=request.user)
+        return render(request, 'terrain.html', locals())
+    return redirect(reverse(home))
