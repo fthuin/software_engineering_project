@@ -1,79 +1,85 @@
 \section{Class diagram}
 
-\todo[inline]{Relire}
+\todo[inline]{Relire, mélange de noms des classes en anglais et français?}
 
 The following class diagram is a schematic representation of the various
 objects used in our implementation and their relations. In this section we will
-do a short explanation of each classes and their aims.\newline
+give a short explanation of each class, and their utility in the application.\newline
 
-First, the participant class, this class is used to represent player in the
-application. Once an account as been created on the website, a participant
-class will be created with it to store the player's data. This class also
-extends the default User class of Django which allows us to easily safely save
-password and username in database through encryption.\newline
+First, the \textit{Participant} class is used to represent a player in the
+application. Once an account as been created on the website, an instance
+of the \textit{Participant} class will be created, which will store all
+the data of the player. This class also extends the default \textit{User} class
+of Django, which is appropriate to safely store passwords and usernames in
+the database through built-in encryption.\newline
 
-If a player has not yet validated his mail address, an UserInWaitOfActivation
-class will also be created. This class contains the key which will allow them
-to validate their email as well as the date of their account creation. If an
-account has not been validated for seven days it will thus be deleted as it
-probably never will.\newline
+If a player has not yet validated his mail address, an instance of
+\textit{UserInWaitOfActivation} class will also be created. This object
+contains the key which will allow the player to validate his or her email
+address, as well as set the date for the account creation. If an
+account has not been validated for more than seven days it will automatically
+be deleted, as it will surely never be validated in the future.\newline
 
-For staff member, which are also represented through the participant class, the
-class LogActivity will also be used, storing the data of some of the various
-operation that they can effectuate on the website. \newline
+For staff members, which are also represented as instances of the
+\textit{Participant} class, the \textit{LogActivity} class will also be used
+to store the data of some operations they can perform on the website. \newline
 
-Similarly to the participant class, the court class is used to represent courts
-and contain their information. As you can see, both classes posses a latitude
-and longitude attribute which allows us to store their relative emplacement.
+Similarly to the \textit{Participant} class, the \textit{Court} class is used
+to represent courts, and to contain the corresponding information.
+As you can see, both classes holds a latitude and longitude attribute,
+allowing us to store their emplacement on a map tool, such as Google Maps.
 That information can then be used to reduce participant's travel distance
-during the tournament creation, by selecting court which accommodate a maximum
-of participant. \newline
+during the tournament creation, by selecting a court that is the closest to
+all the participants of the group. \newline
 
-As you can see the court class is also linked to three small classes,
-courtSurface, courtState and courtType, which serve to alleviate the load on
-the database by reducing data replication. The participant class is similarly
-linked to a small ranking class which serve the same purpose. \newline
+As you can see the \textit{Court} class is also linked to three small classes,
+\textit{CourtSurface}, \textit{CourtState} and \textit{CourtType}, which serve
+to alleviate the load on the database by reducing data replication.
+The \textit{Participant} class is similarly linked to a small \textit{Ranking}
+class which serve the same purpose. \newline
 
-The pair class is used to store pairs data in the application. Each pair being
-composed of two participant and of various other attribute as the list of
-extras that they chooses to pay for (through the Extra class) and if they have
-already payed at all. \newline
+The \textit{Pair} class is used to store the data of a pair in the application.
+Each pair is composed of two participants and various other attributes, such
+as the list of extras that they chooses to pay for (through the
+\textit{Extra} class), or if they have already payed at all. \newline
 
-This comes the need of the Extra class which allows us to store the data
-relative to and extra such as it's price, name and some commentary explaining
-their content.\newline
+This introduces the need of an \textit{Extra} class which stores the data
+relative to an extra, such as its price, its name, and some comment to
+briefly explain what this extra is for.\newline
 
-The Tournoi class is used along with other classes to store all data relative
-to a given tournament; It is inked to three important classes that help store
-it's data. \newline
+The \textit{Tournoi} class is used along with other classes to store all the
+data relative to a given tournament; It is inked to three important classes
+that help store its data. \newline
 
-First the tournoiCategorie class which stores the name and rules allowing to
-participate to the tournament. The rules allowing for automatic tournament
-selection at pair creation. \newline
+First of all, the \textit{TournoiCategorie} class stores the name and the rules
+which authorize players to participate to the tournament. The rules are there
+to automatically assign the pair in a tournament during the pair creation step. \newline
 
-The tournoiTitle class holds a description of the tournament, the gender both
-player should have to participate and the information regarding the day the
-tournament will be on. \newline
+The \textit{TournoiTitle} class holds a description of the tournament, such
+as the imposed gender of both players in the pair to to participate, and the
+the day in the week the tournament will be on. \newline
 
-Finally, the InfoTournoi class holds other important information regarding
-tournament such as the price or the results of the tournament once it is
-finished.
+Finally, the \textit{InfoTournoi} class holds all other important information
+in regard the tournament, such as the price or the results of the tournament
+once it is finished (\textit{i.e.}, when there is a winner).
 
-Two other classes are also necessary to the tournament organisation. Namely the
-Poule classes which each hold the data regarding a poule composed of pairs and
-the Arbre class which hold information regarding knock off tournament.\newline
+Two other classes are also necessary to the tournament organization:
+the \textit{Poule} class holds the data regarding a group, which is composed of
+pairs, and the \textit{Arbre} class holds information regarding the knock-off
+tournament.\newline
 
-The poule class holds information such has who is the poule leader or on which
-court it will take place. It is linked to a Poule status class which hold the
-name of the poule, again to alleviate the load on the database in case many
-poule had the same, and a Score class which hold the result of a confrontation
-between two pairs.\newline
+The \textit{Poule} class holds information, such has the group leader or
+the court where the group matches will take place. It is linked to a
+\textit{PouleStatus} class, which holds the ID of the group, in order again
+to alleviate the load on the database in case many groups had the index,
+and a \textit{Score} class, which hold the result of a match between two pairs.\newline
 
-The arbre class stores the data relative to a knock of tournament and the court
-it will take place on. Allowing us to store and manipulate the data.\newline
+The \textit{Arbre} class stores the data relative to the knock-off part
+of the tournament, including the court where the knock-off tournament matches
+will take place on. This structure allows us to store and manipulate the data.\newline
 
-And finally the Resultats class holds data regarding the result of a tournament
-such as the winners and finalists. \newline
+Finally, the \textit{Resultats} class holds data regarding the results of a
+tournament, such as the winners and finalists. \newline
 
 \begin{figure}[!ht]
 	\centering
