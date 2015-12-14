@@ -3,39 +3,55 @@
 
 \todo[inline]{Relire, j'ai tone down mais c'est ptet encore trop technique}
 
-In this first section, we will present the numerous architectural choices that we have made while developing our web application. In order to lighten the explanation, we have separated those choices in two categories. The \textit{back-end} category brings all the artifacts together that are related to the web server and the database, and the \textit{front-end} category gathers all the tools that are handling the design of the website.
+In this first section, we will present the numerous architectural choices that
+we have made while developing our web application. In order to lighten the
+explanation, we have separated those choices in two categories. The
+\textit{back-end} category brings all the artifacts together that are related
+to the web server and the database, and the \textit{front-end} category gathers
+all the tools that are handling the design of the website.
 
 \subsection{Back-End architecture}
 
-We have chosen to use take advantage of the framework \textbf{Django}, which is an open-source (and thus, free-to-use)
-framework which is renowned for its security, its complete administrator management tools, its ease 
-to manage a database, and finally its fairly large community. This framework is quite
-recent in comparison to the less secured PHP frameworks, while being mature and not at the bleeding edge of new technology where error support is not guaranteed. All of it makes \textit{Django} an excellent candidate overall, and this technology ensures 
-that it will not become outdated before a very long time.\newline
+We have chosen to use take advantage of the framework \textbf{Django}, which is
+an open-source (and thus, free-to-use) framework which is renowned for its
+security, its complete administrator management tools, its ease to manage a
+database, and finally its fairly large community. This framework is quite
+recent in comparison to the less secured PHP frameworks, while being mature and
+not at the bleeding edge of new technology where error support is not
+guaranteed. All of it makes \textit{Django} an excellent candidate overall, and
+this technology ensures that it will not become outdated before a very long
+time.\newline
 
-This framework uses python as the programming language, which happens to be very easy to
-learn in case the software needs to be modified. \textbf{Django} is relatively accessible 
-so any programmer should be able to make any desired modification with
-the help of our developer guide documentation, which explains how to understand, use, and improve our code.\newline
+This framework uses python as the programming language, which happens to be
+very easy to learn in case the software needs to be modified. \textbf{Django}
+is relatively accessible so any programmer should be able to make any desired
+modification with the help of our developer guide documentation, which explains
+how to understand, use, and improve our code.\newline
 
-As for the database, we have chosen to use PostgreSQL, which is an open-source database that is well recognized
-for its data reliability. If you wish to change to an sqLite or mySQL database,
-for whatever reason, it would require next to no effort in the code to make the change, as Django's database
-management writes database queries by itself. So you just have to specify the type of database that you are
-using, and \textbf{Django} will handle the queries by itself.\newline
+As for the database, we have chosen to use PostgreSQL, which is an open-source
+database that is well recognized for its data reliability. If you wish to
+change to an sqLite or mySQL database, for whatever reason, it would require
+next to no effort in the code to make the change, as Django's database
+management writes database queries by itself. So you just have to specify the
+type of database that you are using, and \textbf{Django} will handle the
+queries by itself.\newline
 
 \subsection{Front-End architecture}
 
-We have chosen to use a lot of tools to make the design of the website. The three main tools are HTML
-(which let us create website elements), CSS (which let us customize the elements with color, placement,
-and more) and JavaScript (which let us build sophisticated behavior, such as validation, animation, forms, etc...). Similarly to the back-end side, there are some frameworks that are built around those tools, making the work on the design
-easier, better, and faster. \newline
+We have chosen to use a lot of tools to make the design of the website. The
+three main tools are HTML (which let us create website elements), CSS (which
+let us customize the elements with color, placement, and more) and JavaScript
+(which let us build sophisticated behavior, such as validation, animation,
+forms, etc\ldots{}). Similarly to the back-end side, there are some frameworks
+that are built around those tools, making the work on the design easier, better,
+and faster. \newline
 
-One of these tools is \textbf{Bootstrap}, a framework that is using HTML, CSS and JavaScript for
-developing responsive website for desktop and mobile monitors. \textbf{Bootstrap} alone is not enough
-to build the whole website design, so we have included another framework, \textbf{Angular
-JS}, which extends HTML with new attributes to handle events, forms, inputs, validations, and
-more.\newline
+One of these tools is \textbf{Bootstrap}, a framework that is using HTML, CSS
+and JavaScript for developing responsive website for desktop and mobile
+monitors. \textbf{Bootstrap} alone is not enough to build the whole website
+design, so we have included another framework, \textbf{Angular JS}, which
+extends HTML with new attributes to handle events, forms, inputs, validations,
+and more.\newline
 
-With all those frameworks and some work, we were able to develop a design that can
-easily be modified by any competent programmer, should the need arise.
+With all those frameworks and some work, we were able to develop a design that
+can easily be modified by any competent programmer, should the need arise.
