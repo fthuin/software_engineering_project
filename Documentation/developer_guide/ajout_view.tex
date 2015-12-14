@@ -93,10 +93,23 @@ Pour récupérer des informations d'une page web et les enregistrer dans la base
 \begin{itemize}
 \item Les formulaires\\
 
-Les formulaires constituent le moyen le plus simple pour transmettre les données d'une page web, les récupérer dans la fonction définissant la vue (issue du fichier \textit{views.py}) et ainsi les enregistrer dans la base de données.\\
-%To do
+Les formulaires constituent le moyen le plus simple pour enregistrer des données entrées par l'utilisateur dans la base de données. Un exemple de formulaire est décrit dans le fichier \textit{register.html}.\\
+
+Une fois le formulaire correctement défini dans la template, nous pouvons nous rendre dans le fichier \textit{views.py} et modifier la fonction définissant la vue correspondante à la template. La figure~\ref{fig:Récupération des informations envoyées par l'utilisateur} décrit la récupération des données et l'enregistrement d'un nouvel utilisateur dans la base de données. 
+
+\begin{figure}[!ht]
+\centering
+\begin{framed}
+\lstinputlisting[language=Python, firstline=26, lastline=40]{"developer_guide/view.py"}
+\end{framed}
+\caption{Récupération des informations envoyées par l'utilisateur}
+\label{fig:Récupération des informations envoyées par l'utilisateur}
+\end{figure}
+\FloatBarrier
 
 \item Utilisation d'un JSON\\
-%To do
+
+Il arrive que l'on ne puisse récupérer des informations via des formulaires...
+\todo[inline]{Partie à compléter}
 
 \end{itemize}

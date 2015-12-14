@@ -22,3 +22,19 @@ def terrain(request):
         court = Court.objects.filter(user=request.user)
         return render(request, 'terrain.html', locals())
     return redirect(reverse(home))
+
+def view(request):
+    if request.method == "POST":
+        # Recuperation des donnees
+        username = request.POST['username']
+        password = request.POST['password']
+        email = request.POST['email']
+
+        # Account creation & redirect
+        user = User.objects.create_user(username, email, password)
+        user.save()
+
+        # On connecte l'utilisateur
+        user2 = authenticate(username=username, password=password)
+        login(request, user2)
+        return redirect(reverse(tournoi))
