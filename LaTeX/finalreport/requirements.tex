@@ -7,7 +7,9 @@ In this second section, we will present the various requirements on which we
 based the development of the website. All the requirements were given by the
 client in paper format or verbally, and we tried our best to fulfill most of
 them. The following section will only develop the more interesting
-and more significant ones, as there are too many of them too detail them all. An overview will be made at the end however, stating clearly and visually which requirement have been fulfilled.
+and more significant ones, as there are too many of them too detail them all.
+An overview will be made at the end however, stating clearly and visually which
+requirement have been fulfilled.
 
 \subsection{Players registration}
 \label{sub:Players registration}
@@ -22,11 +24,11 @@ register on the website. This is done through the user registration form,
 accessible from the front page of the website in the top-right menu.
 In this form, the participant has to fill in all the information needed to
 create a new account, such as his or her personal email address or the account
-password, but also information about him or herself (at least the ones that
+password, but also information about himself (at least the ones that
 are mandatory in order to be enlisted into a tournament).\newline
 
 Some of these fields are limited by a set of values, such as the gender or the
-player's rank. Each field is then automatically verified, to make sure
+player's tennis ranking. Each field is then automatically verified, to make sure
 everything has the correct format, and no mandatory information is missing.\newline
 
 Once everything is checked, an email is sent to the given email address,
@@ -41,8 +43,8 @@ of the player, allowing us to integrate the eco-friendly requirement requested
 by the client. \newline
 
 We have chosen to work with accounts instead of the old registration process.
-The advantage of a account-wide access is that everything becomes way easier
-to manage the data of the players, and which consequently eases many other
+The advantage of a account-wide access is that it becomes way easier
+to manage the data of the players which consequently eases many other
 processes such as the management of pairs, groups, and tournaments as a whole.
 
 \subsubsection{Player management}
@@ -70,7 +72,7 @@ users in the list.
 
 Once a player is registered on the website, he has to find a partner in order
 to compete in any available tournament. Since each player has only one account
-for him or herself, he or she should be able to constitute a pair with another
+for himself, he or she should be able to constitute a pair with another
 player of the website. This is done through the pair registration form,
 which only accessible for users with a confirmed email address. In this form,
 the user can go through all the others players in the system, and select
@@ -83,7 +85,7 @@ services. He also has the opportunity to leave a comment, for wishes and/or
 remarks, in a text area at the bottom of the page. When the user sends the
 pair registration demand to the partner, several automated checks are performed
 to assign the pairs to the correct tournament. These checks are based
-on the criteria given by the client for each tournament, that is the age and
+on the criteria given by the client for each tournament, such as the age and
 gender of the players. \newline
 
 Once the pair is created and correctly assigned to a tournament, a mail
@@ -138,8 +140,8 @@ pair, viewable and editable in just one click. The information on pairs are
 also editable if needed. \newline
 
 A search module is also present, with the same mechanism as the one described
-in the player management tab, with results limited to the ones having partially
-matching data. Staff members can also print a given pair in the PDF format,
+in the player management part, with results limited to the ones having partially
+matching data. Staff members can also print a given pair in PDF format,
 by simply clicking on the corresponding button.
 
 \subsection{Courts registration}
@@ -201,8 +203,8 @@ sent to all the players in the tournament when groups are validated.
 
 \todo[inline]{Relire et/ou corriger}
 
-Once the groups have been created, and all the matches of a group have
-finished, a staff members can put the scores of each match in the groups
+Once the groups have been created, and all the matches of a group are played,
+a staff members can put the scores of each match in the groups
 management page of the tournament. There, he or she can put the scores of the
 match of a group using an interactive score board. He or she can edit and save
 all the scores before validating them for good, so that the staff can gradually
@@ -225,7 +227,7 @@ An important requirement is to be able to print the groups of a given
 tournament, with all necessary information, such as the empty scoreboard, the
 pairs, and the courts. On the group tab of the staff portal, a staff member can
 print one group or all groups of a tournament in the PDF format, containing
-all the above information.
+all the cited information.
 
 \subsection{Knock-off tournaments}
 \label{sub:Knock-off tournaments}
@@ -242,11 +244,11 @@ in the afternoon by ticking the corresponding pair entry on the first page
 to create the tournament tree. Once all the desired pairs have been picked,
 the staff members can order the pairs by hand, using drag-and-dropping,
 to decide who's going to face whom in the first rounds of the knockoff table.
-If the number of pairs is even, each pair will have an opponent, and all pairs
-will play in the first round. On the other hand, if the number of pairs is odd,
-then the staff has to decide the pairs that will directly pass
-the first round, which could be based on their ranking, or any other criterion.
-\newline
+If the number of pairs is a power of 2, each pair will have an opponent, and
+all pairs will play in the first round. On the other hand, if the number of
+pairs isn't a power of 2, then the staff has to decide the pairs that will
+directly pass the first round, which could be based on their ranking, or any
+other criterion. \newline
 
 After every newly created knock-off tournament, an email will automatically be
 sent to the players, which especially contains the information on the pairs and
