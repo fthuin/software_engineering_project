@@ -34,7 +34,7 @@ sure that everything has the good format and nothing is missing."}
 Once everything is checked, an email is sent to the given email address,
 including a link to confirm the email address, indispensable to complete
 the registration process. It is also important to notice that neither the
-enrollment to a tournament nor the registration of a court will be accessible
+registration to a tournament nor the registration of a court will be accessible
 until the email address has been confirmed. All the personal information can
 be edited later on by the user, through the page of his or her profile edition,
 on the top-right menu when logged in. Finally, it is during the registration
@@ -97,48 +97,52 @@ newly created pair.
 
 \todo[inline]{Relire et/ou corriger}
 
-The payment methods are available to a pair after the enlistment to one of the
-tournaments. Each member of the pair can chose to pay for the inscription and
-extra fees, with several payment methods (MasterCard, Visa, Paypal or credit
-transfer). After the payment of the fees, the status of the pair is updated,
+The payment methods are available to a pair after the registration to one
+tournament. Each member of the pair can choose to pay for the registration and
+extra fees, with several payment methods: MasterCard, Visa, Paypal or credit
+transfer. After the payment of the fees, the status of the pair is updated,
 with the field \textit{Pair payment validated by the staff} ticked.\newline
 
-The payment methods page is implemented, but the methods themselves aren't.
-This is explained by the fact that these methods required the actual accounts
-and informations of the client to be fully functional, which we were of course
-not given. We thus decided not to implement the payment process with false
-accounts, which would have been replaced anyway by the client. At the end,
-everything is in place for the payment to be operational, exception made for
-the setup of the client's accounts.
+The payment methods page is implemented, but the payment methods processes
+themselves are not. This is due to requirement of an actual account,
+with the confidential information of the client, to be fully functional,
+which were of course not given. Thus, we have decided to not implement
+the payment process with false accounts, which would have been replaced
+by the client anyway. In the end, everything is in place for the automated
+payment process to be operational, with the exception of the setup for the
+client banking accounts.
 
 \subsubsection{Extra management}
 \label{subs:Extra management}
 
 \todo[inline]{Relire et/ou corriger}
 
-Another requirement was the ability to propose multiple extra services to the
-players. This is possible in the \textit{Extra} tab, where news extras can be
-created and existing ones modified. Their names, description and price are
-displayed and editable, and all the players that ordered these extras are
-visible on the screen. The date of the next tournament and the inscription fees
-are also modifiable in this tab.
+Another requirement is the ability to manage extra services by staff members,
+which will be suggested to the players during the pair registration form.
+This is made possible in the \textit{Extra} tab of the staff portal, in which
+new extras can be created, and existing ones can be modified or deleted.
+Their name, description and price are displayed and editable,
+and the number of players that ordered these extras are visible on the list
+of extras, on the right-side of each extra. The date of the next tournament
+and the inscription fees are also editable in this tab,
+on the upper-most module.
 
 \subsubsection{Pairs management}
 \label{subs:Pairs management}
 
 \todo[inline]{Relire et/ou corriger}
 
-The same way the player management tab allows the staff to interact with all
-the players registered on the website, the pair management tab is the page
+Similarly to the player management tab, which allows the staff to interact with
+all the registered players on the website, the pair management tab is the page
 where all the pairs are accessible to the staff. These pairs are displayed in a
-very user-friendly manner, with all the informations of both players in the
-pair obtainable and editable in one click. The pairs informations are also
-editable if needed. \newline
+very user-friendly manner, with the information of both players in the
+pair, viewable and editable in just one click. The information on pairs are
+also editable if needed. \newline
 
-A search function is also present, with the same mechanics as the one in the
-player management tab (one or multiple criteria, with the results being
-displayed directly on the page). Each staff member has also the possibility to
-print a pdf version of a given pair, by clicking on the printer icon.
+A search module is also present, with the same mechanism as the one described
+in the player management tab, with results limited to the ones having partially
+matching data. Staff members can also print a given pair in the PDF format,
+by simply clicking on the corresponding button.
 
 \subsection{Courts registration}
 \label{sub:Courts registration}
@@ -148,82 +152,86 @@ print a pdf version of a given pair, by clicking on the printer icon.
 
 \todo[inline]{Relire et/ou corriger}
 
-As soon as a player is registered on the website, he has the possibility to
-register one or multiple tennis courts that will be used for the tournaments.
-This can be done through the court registration form, directly accessible from
-the home page when the player is identified on the website. Several fields are
-needed (some of them can have limited choices imposed by the staff), such as
-the exact address and location of the court or the availabilities of the court.
-Once every mandatory field is filled, several automated checks are performed to
-be sure that the informations are valid. The address of the court is also
-checked by geo-location using Google Map. Once every field is checked and
-validated, the new court is created and displayed under the court tab of the
-website.
+As soon as a user has a registered account on the website,
+he or she has the possibility to register one or multiple tennis courts that
+will be used for the tournaments. This can be done through the court
+registration form, which is directly accessible from the navigation menu
+when the user is logged on the website. Several fields are needed to register
+a court, such as the exact address and location of the court, or the
+availability of the court. Once all the mandatory fields are filled, several
+automated checks are performed to be sure that the information are valid.
+The address of the court is also checked with geolocalisation tools.
+Once every field is checked and confirmed by the user, the new court is
+created and displayed under the court tab of the website. A staff member
+has to validate this court in order to be listed as an available court
+in the tournaments.
 
 \subsection{Group creation}
 \label{sub:Group creation}
 
 \todo[inline]{Relire et/ou corriger}
 
-One of the biggest and more challenging requirement of this project was the
-group creation. Each tournament had to be composed of several different groups,
-where players were dispatched according to their rank, age, or even their
-ecological footprint (meaning the distance between their house and the court
-they have to play on) using the geo-location. This is achieved on the
-tournament tab, available to authorized staff members. On this page, all the
+One of the biggest and more challenging requirement of this project is the
+group creation in a tournament. Each tournament has to be composed of
+several groups of players, where each players is dispatched according to
+his or her rank, age, and even the ecological footprint (that is, the distance
+from his or her house to the court to play and to the HQ of ASMAE)
+using the geolocalisation. All of it is achieved on the tournament tab, which is
+only available to authorized staff members. On this page, all the
 groups for each tournament can be automatically generated according to the
-previous criteria. The number of groups and the number of players per groups
+previous criteria. The number of groups and the number of players per group
 can also be adjusted using the corresponding fields. Once everything is set,
 one click on the generate button creates the groups. \newline
 
-After the groups are generated, it is still possible to modify them, by
-swapping two players of different groups. This can be done by drag and dropping
-the desired player onto the other one, or by clicking on the first player then
-on the second one. Each group also has to have a leader and a court to play on.
+After the groups are generated, it is still possible to modify them at will, by
+swapping two players of different groups. This can be done by dragging a pair
+entry and dropping it on another pair entry, or by clicking on two different
+pairs. Each group also has to have a leader and a court to play on.
 This is made possible by clicking on the corresponding buttons that
-automatically assign one, or they can be picked by hand by using the
-corresponding fields. The non-automated method can be used to reduce even more
-the ecological footprint, by picking a leader living the closest to the
-headquarters, or by assigning the courts the closest to the players houses.
-Finally, all the requests and comments made by the players and the court owners
-are displayed, leaving indications for the staff. \newline
+automatically assign them, or they can be picked by hand by using the
+corresponding fields. Finally, all the requests and comments made by the
+players and the court owners are displayed, giving some indications on how
+to efficiently set the pairs, leaders, and courts in the groups for the staff.
+\newline
 
 Once everything is set, the groups can be either saved (and modified later on)
-or registered, meaning that they can no longer be adjusted. A mail is then sent
-when a group is validated by an authorized member of the staff.
+or validated, meaning that they can no longer be adjusted. An email is then
+sent to all the players in the tournament when groups are validated.
 
 \subsubsection{Group scores}
 \label{subs:Group scores}
 
 \todo[inline]{Relire et/ou corriger}
 
-Once the groups are created and the first matches played, the players can enter
-and submit their score onto the tournament scoreboard available on the website.
-All these score are not definitive, an authorized member of the staff has to
+\todo[inline]{Alexandre: ce n'est pas correct, les utilisateurs ne peuvent pas soumettre des scores via le site web. (ou bien je n'ai pas trouvé où c'était sur le site...)}
+
+\color{red}{Once the groups have been created, and the first matches have finished, 
+the players can enter and submit their score onto the tournament scoreboard
+available on the website. All these score are not definitive, an authorized member of the staff has to
 validate them to be sure that nothing is  wrong or missing. If none of the
 players submit their scores, the staff members can enter manually all the
 results onto the website, based on the printed scoreboard that each player
-returns after their matches. The staff members can edit and save all the scores
-before validating them for good, allowing them to gradually completing the
-board as the scores comes. Once all the score are entered and the scoreboard is
-validated, the points are attributed to the winners and the afternoon
-tournament can be generated. \newline
-
-We thought that allowing the players to enter their scores on the website was a
-good idea, mainly to reduce the work of the staff members. There is no risks of
-fraud, because at the end it is always a staff member that verifies and
-validates each scoreboard.
+returns after their matches.}
+Once the groups have been created, and all the matches of a group have
+finished, a staff members can put the scores of each match in the groups
+management page of the tournament. There, he or she can put the scores of the
+match of a group using an interactive score board. He or she can edit and save
+all the scores before validating them for good, so that the staff can gradually
+complete the board as the scores comes. Once all the scores are entered and
+validated, the total points of each pair is computed, which will then be of
+some use in order to select the pairs for the afternoon elimination tournament.
+\newline
 
 \subsubsection{Printable version of groups}
 \label{subs:Printable version of groups}
 
 \todo[inline]{Relire et/ou corriger}
 
-An important requirement was to be able to print the groups of a given
-tournament, with all the necessary informations (the empty scoreboard, the
-players, the courts, the sponsors, and so on). On the group tab, we allow the
-staff members to print a pdf version of a given group or all groups of a
-tournament, with these informations.
+An important requirement is to be able to print the groups of a given
+tournament, with all necessary information, such as the empty scoreboard, the
+pairs, and the courts. On the group tab of the staff portal, a staff member can
+print one group or all groups of a tournament in the PDF format, containing
+all the above information.
 
 \subsection{Knock-off tournaments}
 \label{sub:Knock-off tournaments}
@@ -233,36 +241,40 @@ tournament, with these informations.
 
 \todo[inline]{Relire et/ou corriger}
 
-After the completion of the morning scoreboard, the afternoon matches have to
-be determined. The authorized staff members can choose which groups will play
-in the afternoon by ticking the corresponding boxes on the score tab of the
-tournament. Once all the players have been picked, the staff members can build
-by hand (by drag and dropping the players) the knock-off tree and decide who's
-going to face whom. If there is an even number of player, each pair will have
-an opponent and the tree will be symmetrical. On the other hand, if there is an
-odd number of players, the staff has to decide one pair that will directly pass
-the first round (based on their ranking, or any other criterion).\newline
+After completion of the morning matches, and after all the scores of all groups
+have been encoded, the afternoon matches have to be determined.
+The authorized staff members can choose which pairs will play
+in the afternoon by ticking the corresponding pair entry on the first page
+to create the tournament tree. Once all the desired pairs have been picked,
+the staff members can order the pairs by hand, using drag-and-dropping,
+to decide who's going to face whom in the first rounds of the knockoff table.
+If the number of pairs is even, each pair will have an opponent, and all pairs
+will play in the first round. On the other hand, if the number of pairs is odd,
+then the staff has to decide the pairs that will directly pass
+the first round, which could be based on their ranking, or any other criterion.
+\newline
 
-After every new knock-off tournament created, an automated mail system will
-send messages to the players with their informations (their opponents, the
-court they will be playing on and so on).
+After every newly created knock-off tournament, an email will automatically be
+sent to the players, which especially contains the information on the pairs and
+the court they will be playing on.
 
 \subsubsection{Knock-off tournament management}
 \label{subs:Knock-off tournament management}
 
 \todo[inline]{Relire et/ou modifier}
 
-Another requirement was the management of these knock-off tournaments. First of
-all, each knock-off tree is printable, in addition to the court details. These
-printings are mostly helpful to the players, as they can get any practical
-informations out of them (where, when they have to play and against whom). \newline
+Another requirement is the management of the knock-off tournaments. First of
+all, each knock-off tree is printable, including the details of the court.
+This is mostly intended to the players, as they can be told on any practical
+information, such as where and when they have to play, and against whom.
+\newline
 
-Once the first round of matches were played, all the scores can be directly
-entered onto the tree branches (since they are clickable, the staff members
-only need to select them to access the score fields). Based on the scores of
-the first round, the winners are selected and the tree automatically fills up
-his branches with their names. The next matches are thus immediately visible;
-this process goes on until every match is played and the winner is selected.
+Once a match has been played, the score can be entered onto the interactive
+tree branches: they are clickable, so staff members just have to select one of
+two pairs of a match to input the score of the match. Based on the score
+the winners is automatically put in the next step of the tree. Thus, the next
+match is immediately visible on the tree; this process goes on until every
+match is played and there is a winner of the tournament.
 
 \subsection{Staff management}
 \label{sub:Staff management}
@@ -273,21 +285,25 @@ this process goes on until every match is played and the winner is selected.
 \todo[inline]{Relire et/ou modifier}
 
 When several members of the staff are working on the same part of the website,
-it can be useful to know who modified a given value, or what has been modified.
-This was implemented on the history tab, accessible by the staff members. On
+it can be useful to know who modified a given entity, or what has been modified.
+This is implemented on the history tab, accessible by the staff members. On
 this page, the date, name of the staff member, section of the website, data
-modified and details are displayed.
+modified and details are displayed. All the staff pages have a short version of
+the history log, containing only the most recent changes made in the given
+section. For instance, on the bottom of the user management tab, there is a
+history log that contains only the last 15 changes that are related to users.
 
 \subsubsection{Permissions management}
 \label{subs:Permissions management}
 
 \todo[inline]{Relire et/ou Modifier}
 
-On such an extensive project with various position (managing the courts, the
-players, the pairs, creating the groups, and so on), assigning each member of
-the staff to a precise job can be a convenient way to work with. We choose to
-make this possible, by allowing the administrator to assign by hand which part
-of the website is attributed to which member of the staff. On the permission
-tab, every member of the staff is displayed and can be selected. Once a staff
-member is picked, the intended permissions can be ticked on the right panel,
-giving him the authorization to operate on certain parts of the website.
+On a such extensive project with various staff managing tools, assigning
+each staff member a given job can be a convenient way to work with. We have
+chosen to make this possible, by allowing the administrator to assign, by hand,
+which part of the website is permitted to whichever staff member.
+On the permission management tab of the staff portal, every user is displayed
+in a list, and can be selected. Once a user is picked, his or her current
+permissions are shown. The administration can change them, by selecting
+the intended permissions (tick to allow) on the right panel,
+giving him or her the authorization to operate on certain parts of the website.
