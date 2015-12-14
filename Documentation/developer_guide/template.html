@@ -1,0 +1,8 @@
+{% if perms.tennis.DoubleMixte or perms.tennis.DoubleHommes or 
+perms.tennis.DoubleFemmes or perms.tennis.TournoiDesFamilles %}
+<li {% block ongTournoi %}{% endblock %} id="tournoi">
+<a href="{% url "tennis.views.staffTournoi" %}">
+    <span class="visible-md visible-lg no-print">
+        <i class="fa fa-trophy fa-g no-print"></i> Tournois</span>
+</a></li>
+{% endif %}

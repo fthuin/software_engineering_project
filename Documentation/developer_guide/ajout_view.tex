@@ -1,28 +1,64 @@
 \chapter{Ajouter une page au site}
 
 \section{Création du Front-End}
+
+Avant de vouloir ajouter de nouvelles pages au site web, il est nécessaire de savoir que le framework Django utilisent des templates. Ces templates sont écrites en langage HTML mais permettent l'intégration de certaines expressions et structures comme les \textit{if...else...} ou les \textit{for}. Ces expressions et structures doivent être entourées par des balises \textit{\{\% ... \%\}} comme on peut le voir sur la figure~\ref{fig:Exemple d'un template}\\
+
+\begin{figure}[!ht]
+\centering
+\begin{framed}
+\lstinputlisting[language=HTML, firstline=1, lastline=8]{"developer_guide/template.html"}
+\end{framed}
+\caption{Exemple d'un template}
+\label{fig:Exemple d'un template}
+\end{figure}
+\FloatBarrier
+
 Afin d'inclure de nouvelles fonctionnalités, il est possible d'ajouter de nouvelles pages au site. Pour ce faire, il faut dans un premier temps créer un fichier HTML et le placer dans le dossier \textit{ASMAE/tennis/templates}. Il est intéressant de noter que les différents éléments statiques (style, polices, images ou scripts) doivent être ajoutés dans les dossiers correspondants (css, fonts, img, js)  présents dans le répertoire \textit{ASMAE/tennis/static/tennis}.\\
 
-%A changer
+Pour obtenir un design de base correspondant à l'ensemble du site web (couleurs, en-têtes, arrière plan, etc.), il est nécessaire d'ajouter au-début du fichier HTML la ligne suivante:
 
-%Une fois , il est nécessaire de créer une view dans le fichier views.py se trouvant dans le dossier "ASMAE/tennis", qui reprendra la page à renvoyer quand un utilisateur fera une requête pour obtenir la page. Le format le plus classique et simpliste d'une telle requête est le suivant: on définit le nom de la requête, ainsi que la page à rendre quand celle-ci est effectuée.\\
+\begin{verbatim}
+{% extends "base.html" %}
+\end{verbatim}
 
-%\begin{figure}[H]
-%\centering
-%\includegraphics[scale=0.4]{views.png}
-%\caption{Fichier views.py}
-%\end{figure}
-
-%Enfin, il reste à ajouter au fichier urls.py (également présent dans le dossier "ASMAE/tennis") qui contient tous les liens URL disponibles sur le site, ainsi que le lien vers le nom des views concernées. Pour ce faire, il suffit de rajouter une nouvelle ligne dans le fichier, en respectant le format suivant : url(NouveauLienUrl, NomDeLaViews), .
-
-%\begin{figure}[H]
-%\centering
-%\includegraphics[scale=0.4]{url.png}
-%\caption{Fichier urls.py}
-%\end{figure}
+Cette ligne va permettre d'inclure et d'étendre le fichier \textit{base.html} qui contient le squelette des pages du site. Le tag \textit{\{\% block \%\}} présent à plusieurs reprises dans ce fichier nous permet de redéfinir certaines parties concernées par ce tag dans notre nouvelle template. Le tag \textit{\{\% urls \%\}}, quant à lui, va nous permettre de créer des liens vers d'autres vues. D'autres tags existent et sont expliqués dans la documentation Django disponible à cette adresse: \url{https://docs.djangoproject.com/fr/1.9/ref/templates/builtins/}
 
 \section{Gestion du Back-End}
 
+\subsection{Déclarer la vue et lui associer une URL}
+
+Pour représenter une vue, Django utilise une fonction définie dans le fichier \textit{views.py} (se trouvant dans le dossier \textit{ASMAE/tennis}). Cette fonction va être utile pour récupérer certaines données (de la base de données par exemple) et générer le rendu du fichier HTML créé précédemment. Un exemple d'une fonction définie dans le fichier \textit{views.py} est reprise sur la figure~\ref{fig:Exemple d'une fonction présente dans le fichier views.py}. 
+
+\begin{figure}[!ht]
+\centering
+\begin{framed}
+\lstinputlisting[language=Python, firstline=1, lastline=2]{"developer_guide/view.py"}
+\end{framed}
+\caption{Exemple d'une fonction présente dans fichier \textit{views.py}}
+\label{fig:Exemple d'une fonction présente dans le fichier views.py}
+\end{figure}
+\FloatBarrier
+
+Maintenant que la vue est déclarée, il ne reste plus qu'à l'associer à une URL. Pour ce faire, il faut modifier le fichier \textit{urls.py} (également présent dans le dossier \textit{ASMAE/tennis}) qui contient toutes les associations entre les liens URL disponibles sur le site et les vues. Pour ce faire, il suffit de rajouter une nouvelle ligne dans le fichier, plus précisément dans \textit{l'urlpatterns}, en respectant le format suivant : \textit{url(NouveauLienUrl, NomDeLaViews)}. Nous pouvons observer un exemple de fichier \textit{urls.py} sur la figure~\ref{fig:Exemple d'un fichier urls.py}. A noter que le \textit{r'\^\$'} équivaut à spécifier la racine du site web.
+
+\begin{figure}[!ht]
+\centering
+\begin{framed}
+\lstinputlisting[language=Python, firstline=4, lastline=19]{"developer_guide/view.py"}
+\end{framed}
+\caption{Exemple d'un fichier \textit{urls.py}}
+\label{fig:Exemple d'un fichier urls.py}
+\end{figure}
+\FloatBarrier
+
+%Ajouter passage d'arguments aux vues
+
 \subsection{Récupération des informations de la base de données vers les pages web}
 
+Pour transmettre des informations vers les différentes pages web, il va falloir utiliser les vues et par conséquent modifier le fichier \textit{views.py}.
+
 \subsection{Enregistrer des informations des pages web vers la base de données}
+
+%locals()
+%{{ }}
