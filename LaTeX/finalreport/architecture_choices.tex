@@ -8,21 +8,21 @@ we have made while developing our web application. In order to lighten the
 explanation, we have separated those choices in two categories. The
 \textit{back-end} category gathers all the tools that are related
 to the web server and the database, and the \textit{front-end} category gathers
-all the tools that are handling the design of the website.
+all the tools that are handling the user experience of the website.
 
 \subsection{Back-End architecture}
 
 We have chosen to use take advantage of the framework \textbf{Django}, which is
 an open-source (and thus, free-to-use) framework which is renowned for its
 security, its complete administrator management tools, its ease to manage a
-database, and finally its fairly large community. This framework is quite
+database, and finally its fairly large support community. This framework is quite
 recent in comparison to the less secured PHP frameworks, while being mature and
-not at the bleeding edge of new technology where error support is not
+not at the bleeding edge of new technology where errors support is not
 guaranteed. All of it makes \textit{Django} an excellent candidate overall, and
 this technology ensures that it will not become outdated before a very long
 time.\newline
 
-This framework uses python as the programming language, which happens to be
+This framework uses Python as the programming language, which happens to be
 very easy to learn in case the software needs to be modified. \textbf{Django}
 is relatively accessible so any programmer should be able to make any desired
 modification with the help of our developer guide documentation, which explains
@@ -30,11 +30,13 @@ how to understand, use, and improve our code.\newline
 
 As for the database, we have chosen to use PostgreSQL, which is an open-source
 database that is well recognized for its data reliability. If you wish to
-change to an sqLite or mySQL database, for whatever reason, it would require
+change to an SQLite or MySQL database, for whatever reason, it would require
 next to no effort in the code to make the change, as Django's database
 management writes database queries by itself. So you just have to specify the
 type of database that you are using, and \textbf{Django} will handle the
-queries by itself.\newline
+queries by itself. Django does also the migration when you change tables
+properties which is very nice for a big project in which you can't predict
+everything. \newline
 
 \subsection{Front-End architecture}
 
@@ -48,10 +50,8 @@ and faster. \newline
 
 One of these tools is \textbf{Bootstrap}, a framework that is using HTML, CSS
 and JavaScript for developing responsive website for desktop and mobile
-monitors. \textbf{Bootstrap} alone is not enough to build the whole website
-design, so we have included another framework, \textbf{Angular JS}, which
-extends HTML with new attributes to handle events, forms, inputs, validations,
-and more.\newline
+monitors. We added other JavaScript libraries such as \textbf{jQuery} or
+\textbf{Gracket} to add some nice features the website needed. \newline
 
 With all those frameworks and some work, we were able to develop a design that
 can easily be modified by any competent programmer, should the need arise.
