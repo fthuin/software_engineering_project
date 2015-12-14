@@ -88,17 +88,23 @@ accompagnée d'une explication du contenu que vous y trouverez.
 
 \subsubsection{db.sqlite3}
 
+Le fichier \textit{db.sqlite3} contient la base de données du site web enregistrée au format \textit{sqlite3}. Il n'est pas conseillé de modifier directement ce fichier; des outils comme l'interface administrateur ou l'utilisation de commandes dans le terminal sont disponibles pour mettre à jour le fichier.
+
 \subsection{Dossier ASMAE}
 
 \subsubsection{settings.py}
 
 \subsubsection{urls.py}
 
+Ce fichier permet de créer de nouvelles URL pour le site. Ce premier fichier \textit{urls.py} reprend une URL pour accéder à l'interface administrateur et une URL vers le module tennis. Cette dernière URL va reprendre toutes les associations URL-views définies dans le fichier \textit{urls.py} issu du dossier \textit{tennis}.
+
 \subsubsection{wsgi.py}
 
 \subsection{Dossier tennis}
 
 \subsubsection{admin.py}
+
+Ce fichier est nécessaire pour définir et configurer l'interface administrateur du site web. On peut donc retrouver dans ce fichier le code définissant les différentes tables de la base de données à afficher, une classe permettant d'obtenir les actions récentes de l'administrateur, etc.
 
 \subsubsection{models.py}
 
@@ -112,6 +118,8 @@ accompagnée d'une explication du contenu que vous y trouverez.
 
 \subsubsection{urls.py}
 
+Comme décrit précédemment, ce fichier reprend toutes les associations du module tennis entre les URL et les vues.
+
 
 %\begin{itemize}
 %	\item le dossier "ASMAE" contient  la base de données ainsi que trois fichiers se rapportant à la configuration de Django (settings.py pour les options de Django, urls.py pour lier les views aux templates et wsgi.py pour définir l'application web),
@@ -120,20 +128,6 @@ accompagnée d'une explication du contenu que vous y trouverez.
 %	\item deux fichiers textes (res\_femmes.csv et res\_hommes.csv) reprenant les informations des utilsateurs hommes et femmes utilisés pour populer la base de données,
 %	\item et un fichier exécutable phantom.js utilisé quant à lui pour la gestion des envois d'email du site web.
 %\end{itemize}
-
-%\begin{figure}[!ht]
-%\centering
-%\includegraphics[scale=0.35]{Asmae1.png}
-%\caption{Dossier Asmae 1}
-%\end{figure}
-%\FloatBarrier
-
-%\begin{figure}[!ht]
-%\centering
-%\includegraphics[scale=0.35]{Asmae2.png}
-%\caption{Dossier Asmae 2}
-%\end{figure}
-%\FloatBarrier
 
 %Dossier tennis :\\
 
@@ -160,10 +154,3 @@ accompagnée d'une explication du contenu que vous y trouverez.
 %	\item le fichier urls.py qui contient toutes les URL disponibles sur le site, et leurs liens vers les views contenues dans le fichier views.py
 %	\item et le fichier views.py qui contient l'ensemble des views présentes sur le site.
 %\end{itemize}
-
-%\begin{figure}[!ht]
-%\centering
-%\includegraphics[scale=0.35]{tennis.png}
-%\caption{Dossier tennis}
-%\end{figure}
-%\FloatBarrier
