@@ -1,8 +1,6 @@
 \section{Architecture choices}
 \label{sec:Architecture choices}
 
-\todo[inline]{Relire, j'ai tone down mais c'est ptet encore trop technique}
-
 In this first section, we will present the numerous architectural choices that
 we have made while developing our web application. In order to lighten the
 explanation, we have separated those choices in two categories. The
@@ -23,7 +21,7 @@ this technology ensures that it will not become outdated before a very long
 time.\newline
 
 This framework uses Python as the programming language, which happens to be
-very easy to learn in case the software needs to be modified. \textbf{Django}
+very easy to learn in case the software needs to be modified. \textit{Django}
 is relatively accessible so any programmer should be able to make any desired
 modification with the help of our developer guide documentation, which explains
 how to understand, use, and improve our code.\newline
@@ -31,10 +29,10 @@ how to understand, use, and improve our code.\newline
 As for the database, we have chosen to use PostgreSQL, which is an open-source
 database that is well recognized for its data reliability. If you wish to
 change to an SQLite or MySQL database, for whatever reason, it would require
-next to no effort in the code to make the change, as Django's database
+next to no effort in the code to make the change, as \textit{Django}'s database
 management writes database queries by itself. So you just have to specify the
-type of database that you are using, and \textbf{Django} will handle the
-queries by itself. Django does also the migration when you change tables
+type of database that you are using, and \textit{Django} will handle the
+queries by itself. \textit{Django} does also the migration when you change tables
 properties which is very nice for a big project in which you can't predict
 everything. \newline
 
