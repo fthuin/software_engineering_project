@@ -1,6 +1,37 @@
 \chapter{Gestion des mails envoyés par le site web}
 \label{gestion des mails}
 
+\section{Mail settings}
+
+Le système d'email que nous avons implémenté est basé sur le module sengrid-django, 
+elle sera donc extremement robuste and évoluera avec les technologie. Mais cette
+robustesse a pour prix que sengrid devra être utiliser pour envoyer des emails.
+Bien que généralement payant, les services de sengrid resterons néanmoins gratuits 
+jusqu'a une limite de 12000 mails mensuel. Ce qui ne devrait pas être aisément dépassé
+par notre client. \newline
+
+Un compte utilisateur fut créé lors de l'implémentation, compte que nous offrons désormais
+a nos client d'utiliser afin qu'il n'aient aucune modification a réaliser sur le site.(Excepter un changement de mot de passe afin d'en garantir la sécuritée !).  \newline
+
+\begin{figure}[!ht]
+	\begin{framed}
+\verb|SENDGRID_USERNAME| = "Asmae" \newline
+\verb|SENDGRID_PASSWORD| = "LeCharleDeLorraine2016" \newline
+\verb|SENDGRID_API_KEY| = \newline \verb|"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"|
+	\end{framed}
+	\caption{Information de connection au compte}
+	\label{fig:Architecture des dossiers}
+\end{figure}
+\FloatBarrier
+
+Dans le cas ou vous désireriez vous créé un nouveaux compte, ils vous sera requis de 
+crée une API KEY afin de pouvoir faire usage de notre implémentation. La maneuvre 
+étant expliqué dans le lien suivant : 
+\url{https://sendgrid.com/docs/User_Guide/Settings/api_keys.html}. \newline
+
+En cas de modification des informations où de créations d'un nouveau compte, il sera
+néanmoins requis que vous modifiez également ces informations dans le fichier mail.py.
+
 \section{Modifier les mails}
 
 Les différents mails générés par le site web sont placés dans un dossier \textit{mail} se trouvant dans le répertoire contenant les templates (voir figure~\ref{fig:Répertoire contenant les mails générés par le site web})
@@ -13,7 +44,14 @@ Les différents mails générés par le site web sont placés dans un dossier \t
 \end{figure}
 \FloatBarrier
 
-Pour modifier les différents mails déjà existants, il suffit d'éditer le fichier texte correspondant au mail à modifier. Ces fichiers textes sont structurés de la même manière que celui présent sur la figure~\ref{fig:Exemple d'un fichier texte correspondant à un mail envoyé par le site web}. Le sujet du mail est contenu entre les balises \textit{<subject> ... </subject>} alors que le corps du mail est, quant à lui, entouré par les balises \textit{<message> ... </message>}.
+Pour modifier les différents mails déjà existants, il suffit d'éditer le fichier texte correspondant au mail à modifier. Ces fichiers textes sont structurés de la même manière que celui présent sur la figure~\ref{fig:Exemple d'un fichier texte correspondant à un mail envoyé par le site web}. Le sujet du mail est contenu entre les balises \textit{<subject> ... </subject>} alors que le corps du mail est, quant à lui, entouré par les balises \textit{<message> ... </message>}.\newline
+
+Des variables sont également présentes entre \textit{<< >>}, ces variables sont 
+utilisées par les systèmes d'envois de mails pour determiner où doivent être placer 
+les différentes informations liées au mail. La modification ou l'ajout de variables 
+peut se faire aisément depuis le fichier mail.py, grace a l'ajout/modification de 
+ligne appelant la fonction suivante : replaceVariableBaliseByValue(message, 
+variableName, TextRepresentationOfDesiredValue).
 
 \begin{figure}[!ht]
 \begin{framed}
@@ -45,4 +83,4 @@ L'équipe 'Le Charles de Lorraine'
 
 Pour permettre au site d'envoyer de nouveaux mails via certaines pages, il est d'abord nécessaire de créer un fichier texte comme présenté sur la figure~\ref{fig:Exemple d'un fichier texte correspondant à un mail envoyé par le site web} et de l'enregistrer dans le répertoire suivant: \textit{ASMAE/tennis/templates/mail}.\\
 
-Il faut ensuite écrire une nouvelle méthode dans le fichier \textit{mail.py} afin de pouvoir compléter et envoyer le mail. Cette méthode sera appelée dans le fichier \textit{views.py}.
+Il faut ensuite écrire une nouvelle méthode dans le fichier \textit{mail.py} afin de pouvoir compléter et envoyer le mail. L'appel de cette méthode depuis le fichier \textit{views.py} permettra ensuite l'envois de mails.
