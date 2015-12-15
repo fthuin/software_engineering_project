@@ -5,11 +5,18 @@
 
 Afin d'ajouter une nouvelle table dans la base de données, il est nécessaire de modifier le fichier models.py présent dans le dossier tennis (voir figure~\ref{fig:Architecture des dossiers}). Pour ce faire, il suffit d'ouvrir le fichier à l'aide d'un éditeur de code (Notepad, Pycharm, etc.), et de rajouter une nouvelle classe à la fin de celui-ci en respectant l'indentation et la syntaxe python appropriée. La structure d'une classe est définie sur la figure~\ref{fig:Structure d'une classe représentant une table de la base de données}
 
+\lstset{language=Python,
+        frame=single,
+        showstringspaces=false,
+        basicstyle=\footnotesize\ttfamily,
+        keywordstyle=\bfseries\color{red!40!white},
+        commentstyle=\itshape\color{white!30!black},
+        stringstyle=\color{green!65!black}
+        }
+
 \begin{figure}[!ht]
 \centering
-\begin{framed}
-\lstinputlisting[language=Python, firstline=1, lastline=8]{"developer_guide/class.py"}
-\end{framed}
+\lstinputlisting[firstline=1, lastline=8]{developer_guide/class.py}
 \caption{Structure d'une classe représentant une table de la base de données}
 \label{fig:Structure d'une classe représentant une table de la base de données}
 \end{figure}
@@ -44,9 +51,7 @@ De même que pour les fonctions définissant le type d'un champ, il est égaleme
 
 \begin{figure}[!ht]
 \centering
-\begin{framed}
-\lstinputlisting[language=Python, firstline=9, lastline=24]{"developer_guide/class.py"}
-\end{framed}
+\lstinputlisting[firstline=9, lastline=24]{developer_guide/class.py}
 \caption{Classe issue du fichier \textit{models.py} représentant une table de la base de données}
 \label{fig:Classe issue du fichier models.py représentant une table de la base de données}
 \end{figure}
@@ -54,7 +59,7 @@ De même que pour les fonctions définissant le type d'un champ, il est égaleme
 
 \section{Mise à jour de la base de données}
 
-Une fois terminé, il ne reste qu'à sauvegarder les modifications apportées au fichier et effectuer la migration de la base de données (afin de rendre les différents changements effectifs) grâce aux commandes (dans cet ordre) : 
+Une fois terminé, il ne reste qu'à sauvegarder les modifications apportées au fichier et effectuer la migration de la base de données (afin de rendre les différents changements effectifs) grâce aux commandes (dans cet ordre) :
 
 \begin{verbatim}
 python manage.py makemigrations
@@ -66,4 +71,3 @@ Un nouveau fichier contenant les modifications apportées à la base de données
 Il est intéressant de noter qu'il est nécessaire de suivre la même démarche lorsqu'une ou plusieurs modifications doivent être apportées à une table déjà existante dans la base de données.\\
 
 L'ensemble de la documentation se rapportant aux commandes de migration de la base de données est disponible à l'adresse suivante : \url{https://docs.djangoproject.com/en/1.9/topics/migrations/}.\\
-

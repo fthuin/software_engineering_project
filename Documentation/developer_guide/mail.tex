@@ -1,17 +1,17 @@
 \chapter{Gestion des mails envoyés par le site web}
 \label{gestion des mails}
 
-\section{Mail settings}
+\section{Configuration des mails}
 
 Le système d'email que nous avons implémenté est basé sur le module sengrid-django, 
-elle sera donc extremement robuste and évoluera avec les technologie. Mais cette
-robustesse a pour prix que sengrid devra être utiliser pour envoyer des emails.
-Bien que généralement payant, les services de sengrid resterons néanmoins gratuits 
-jusqu'a une limite de 12000 mails mensuel. Ce qui ne devrait pas être aisément dépassé
+il sera donc extremement robuste et évoluera avec les technologies. Mais cette
+robustesse a pour prix que sengrid devra être utilisé pour envoyer des emails.
+Bien que généralement payant, les services de sengrid resteront néanmoins gratuits 
+jusqu'a une limite de 12000 mails mensuel; ce qui ne devrait pas être dépassé
 par notre client. \newline
 
 Un compte utilisateur fut créé lors de l'implémentation, compte que nous offrons désormais
-a nos client d'utiliser afin qu'il n'aient aucune modification a réaliser sur le site.(Excepter un changement de mot de passe afin d'en garantir la sécuritée !).  \newline
+a notre client afin qu'il n'ait aucune modification a réaliser sur le site.(Excepter un changement de mot de passe afin d'en garantir la sécurité !).  \newline
 
 \begin{figure}[!ht]
 	\begin{framed}
@@ -24,12 +24,12 @@ a nos client d'utiliser afin qu'il n'aient aucune modification a réaliser sur l
 \end{figure}
 \FloatBarrier
 
-Dans le cas ou vous désireriez vous créé un nouveaux compte, ils vous sera requis de 
-crée une API KEY afin de pouvoir faire usage de notre implémentation. La maneuvre 
-étant expliqué dans le lien suivant : 
+Dans le cas ou vous désireriez vous créer un nouveau compte, il vous sera requis de 
+créer une API KEY afin de pouvoir faire usage de notre implémentation. La manoeuvre 
+étant expliquée dans le lien suivant : 
 \url{https://sendgrid.com/docs/User_Guide/Settings/api_keys.html}. \newline
 
-En cas de modification des informations où de créations d'un nouveau compte, il sera
+En cas de modification des informations ou de création d'un nouveau compte, il sera
 néanmoins requis que vous modifiez également ces informations dans le fichier mail.py.
 
 \section{Modifier les mails}
@@ -46,12 +46,12 @@ Les différents mails générés par le site web sont placés dans un dossier \t
 
 Pour modifier les différents mails déjà existants, il suffit d'éditer le fichier texte correspondant au mail à modifier. Ces fichiers textes sont structurés de la même manière que celui présent sur la figure~\ref{fig:Exemple d'un fichier texte correspondant à un mail envoyé par le site web}. Le sujet du mail est contenu entre les balises \textit{<subject> ... </subject>} alors que le corps du mail est, quant à lui, entouré par les balises \textit{<message> ... </message>}.\newline
 
-Des variables sont également présentes entre \textit{<< >>}, ces variables sont 
-utilisées par les systèmes d'envois de mails pour determiner où doivent être placer 
+Des variables sont également présentes entre \textit{<< >>}. Ces variables sont 
+utilisées par les systèmes d'envoi de mails pour determiner où doivent être placées 
 les différentes informations liées au mail. La modification ou l'ajout de variables 
-peut se faire aisément depuis le fichier mail.py, grace a l'ajout/modification de 
-ligne appelant la fonction suivante : replaceVariableBaliseByValue(message, 
-variableName, TextRepresentationOfDesiredValue).
+peut se faire aisément depuis le fichier mail.py, grâce a l'ajout/modification de 
+ligne appelant la fonction suivante : \textit{replaceVariableBaliseByValue(message, 
+variableName, TextRepresentationOfDesiredValue)}.
 
 \begin{figure}[!ht]
 \begin{framed}
@@ -62,7 +62,7 @@ variableName, TextRepresentationOfDesiredValue).
 Bonjour <<nameOne>>,
 
 Afin de finaliser la création de votre compte 'Le Charles de Lorraine',  
-merci de cliquer sur le lien suivant afin de validervotre adresse email.
+merci de cliquer sur le lien suivant afin de valider votre adresse email.
 
 <<link>>
 	
