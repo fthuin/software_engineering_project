@@ -79,8 +79,36 @@ L'équipe 'Le Charles de Lorraine'
 \FloatBarrier
 
 \section{Ajouter de nouveaux mails}
-\todo[inline]{Améliorer cette partie}
 
 Pour permettre au site d'envoyer de nouveaux mails via certaines pages, il est d'abord nécessaire de créer un fichier texte comme présenté sur la figure~\ref{fig:Exemple d'un fichier texte correspondant à un mail envoyé par le site web} et de l'enregistrer dans le répertoire suivant: \textit{ASMAE/tennis/templates/mail}.\\
 
-Il faut ensuite écrire une nouvelle méthode dans le fichier \textit{mail.py} afin de pouvoir compléter et envoyer le mail. L'appel de cette méthode depuis le fichier \textit{views.py} permettra ensuite l'envois de mails.
+Il faut ensuite écrire une nouvelle méthode dans le fichier \textit{mail.py} afin de pouvoir compléter et envoyer le mail. Cette méthode doit d'abord récupere le contenu du fichier
+ puis en lire les balises \textit{<subject> ... </subject>} et 
+ \textit{<message> ... </message>} en utilisant la
+sous-méthode readBalise(message, baliseName). \newline
+
+Ensuite, créez des variables pour référencer d'éventuelle valeurs que vous souhaitez 
+obtenir dynamiquement de la database et remplacez les dans le texte a l'aide de la méthode 
+replaceVariableBaliseByValue(message, variableName, TextRepresentationOfDesiredValue).\newline
+
+Finalement il ne vous reste plus qu'à faire appelle a la méthode \verb|send_mail_via_thread(subject, message, MailaddresseOfSenderInMail, [playerOneAdresseMail])|.
+Cette méthode se chargera ensuite de l'envois du mail via l'application de sendgrid. 
+Si vous désirez utilisez l'adresse sender par défault (contenue dans la variable 
+\verb|EMAIL_FROM|), il vous suffit de remplir le champ 'MailaddresseOfSenderInMail' par
+un String vide (""). \newline
+
+Vous avez maintenant créé une nouvelle méthode d'envois de mail et il ne vous reste 
+plus qu'a l'appeller depuis depuis l'une des page du site web en modifiant view.py ou
+l'un des autres fichiers en fonction de vos besoins.
+
+\section{Erreur dans les templates}
+
+Pour faciliter le débogage de vos templates, nous avons encore rajouter une fonctionnalité
+supplémentaire afin de vous permettre d'éviter vérifier longuement les logs de 
+votre application en ligne. Si l'une erreur surviens dans l'un des templates, un mail
+vous sera envoyé sur l'addresse email indiquée par le champ \verb|EMAIL_FROM|).
+\newline
+
+Ce mail indiquera précisément le template et la variable/balise concernée afin que vous
+pouissiez débugger au plus vite cette fonctionnalité crucial au bon fonctionnement du
+site web.

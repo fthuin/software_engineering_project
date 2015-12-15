@@ -91,6 +91,16 @@ Ce fichier permet d'interagir directement avec l'application; c'est-à-dire, lan
 
 Le fichier \textit{db.sqlite3} contient la base de données du site web enregistrée au format \textit{sqlite3}. Il n'est pas conseillé de modifier directement ce fichier; des outils comme l'interface administrateur ou l'utilisation de commandes dans le terminal sont disponibles pour mettre à jour le fichier.
 
+\subsubsection{phantomjs}
+
+Le fichier \textit{phantomjs} est crucial au bon fonctionnement de la fonctionnalité de vérification des classements des joueurs. Il s'agit en fait d'un exécutable que nous utilisons via Selenium pour simuler l'ouverture de page web et
+récuperer le classement des joueurs. \newline
+
+Les mise a jours de Selenium pourrait tôt ou tard
+rendre ce fichier obsolète, une version plus récente de l'exécutable devra alors être 
+téléchargé depuis le site \url{http://phantomjs.org/download.html} pour assurer le bon
+fonctionnement du site web.
+
 \subsection{Dossier ASMAE}
 
 \subsubsection{settings.py}
