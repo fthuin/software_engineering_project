@@ -1,0 +1,104 @@
+\section{Introduction}
+\label{sec:Introduction}
+
+This report contains an explaination of the tests realized on the website. We
+will first explain how we made them, then why we made them and finally we will
+summarize the results of those tests.
+
+\section{Tests framework}
+\label{sec:Tests framework}
+
+Testing a website isn't easy because it is divided in two major parts :
+
+\begin{description}
+    \item[The back-end part] : The database management and the responses to
+    requests made by any user ;
+    \item[The front-end part] : The design and the interactions between the
+    browser and the user.
+\end{description}
+
+The first part can be verified by unit testing. The goal of this kind of test
+is to verify that the functions handle well an empty case, a basic case and a
+complex case or raise the expected error. They are useful when the code is
+written by a lot of people (automatically test that everyone is doing is job
+as expected) but in a website they don't give any warranty that the user
+experience would be the one expected (because the front-end can be totally
+messed up). So we won't describe them here as it was not what was asked. \newline
+
+The second part cannot be fully tested because of the amount of web browsers
+that people use on a daily basis. Some web browsers don't implement some
+functionalities, they don't handle the display in the same way, they don't
+print pages in the same way, etc. That's why you have to limit your website to
+a restricted amount of web browsers versions. \newline
+
+The best tests that can be made to try what an user can do or can't do on a
+website are \enquote{Web Browser Automation}. To perform those test,
+we used a well-known tool : \textbf{Selenium}. The tests can be written in
+many languages (we choose Python), each one opens a web browser, performs a
+bunch of actions, then gives a trace if something is not working or returns
+that every action passed. More specifically, the tests recognized HTML elements
+by their IDs or their names and then perform actions (click, entering text,
+drag-and-drop, etc.) on them. \newline
+
+However, there are things that can't be tested on our website : automated PDF
+generation, automated CSV generation, web pages printing, automated sending of
+emails and everything that is generated from other frameworks. For this kind of
+things, we made a lot of tests by hand. \newline
+
+You can see on the Figure~\ref{fig:Selenium_code} how a code in Selenium looks
+like if you want to understand how it is tested.
+
+\lstset{language=Python,
+        frame=single,
+        showstringspaces=false,
+        basicstyle=\footnotesize\ttfamily,
+        keywordstyle=\bfseries\color{red!40!white},
+        commentstyle=\itshape\color{white!30!black},
+        stringstyle=\color{green!65!black},
+        literate=%
+        {á}{{\'a}}1
+        {é}{{\'e}}1
+        {è}{{\`e}}1
+        {í}{{\'i}}1
+        {ó}{{\'o}}1
+        {ú}{{\'u}}1,
+        breaklines=true
+        }
+
+\lstinputlisting[caption={Implementation of a test of a registration player with Selenium}, label=fig:Selenium_code]{inscription.py}
+
+\section{Tests subjects}
+\label{sec:Tests subjects}
+
+The most important parts of our tests were :
+
+\bigskip
+\begin{itemize}
+    \item The user registration
+    \item The court registration
+    \item The pair registration
+    \item The group creation
+    \item Entering scores for the groups
+    \item The knock-off tournament creation
+\end{itemize}
+\bigskip
+
+We expect everything to work well (and we are confident that it does), but those
+parts are the ones the client needed the most, so they have to work in every
+up-to-date browsers and have to be fully functional. If an automated test can
+do it, every user could do it too. \newline
+
+\section{Tests results}
+\label{sec:Tests results}
+
+Obviously, all our tests passed our final implementation with a great success.
+From the automated registration of two players to their pair registration ; From
+the court registration to the court modification and to the courts choice by
+staff members ; from the group creation to the results encoding in the
+knock-off tree : everything works as expected. \newline
+
+Our project leader is an eyewitness of those results but if you don't trust us,
+you can either try it manually on \url{asmae.herokuapp.com} or you can run
+the server locally (an how-to was given in the developer documentation) with our
+last implementation and simply execute with Python the files that are given in
+the archive containing this PDF file.
