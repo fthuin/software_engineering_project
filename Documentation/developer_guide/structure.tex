@@ -31,8 +31,7 @@ accompagnée d'une explication du contenu que vous y trouverez.
 			.3 \textbf{dump\_table} \ldots{} \begin{minipage}[t]{10cm}
 									Ce répertoire contient les fichiers
 									permettant de sortir des {.}csv depuis
-									l'interface admin{.}
-									\todo[inline]{Référencer la partie /admin}
+									l'interface admin (voir section \ref{sec:particularités interface administrateur}){.}
 									\end{minipage}.
 			.3 \textbf{management}.
 			.4 \textbf{commands} \ldots{} \begin{minipage}[t]{10cm}
@@ -86,7 +85,7 @@ accompagnée d'une explication du contenu que vous y trouverez.
 
 \subsubsection{manage.py}
 
-Ce fichier permet d'interagir directement avec l'application; c'est-à-dire, lancer le site web en version locale, ajouter un superuser, effectuer les différentes migrations de la base de données, etc... Les différentes possibilités d'utilisation de l'utilitaire \textit{manage.py} sont reprises dans la documentation Django à l'adresse suivante:\url{https://docs.djangoproject.com/fr/1.9/ref/django-admin/}
+Ce fichier permet d'interagir directement avec l'application; c'est-à-dire, lancer le site web en version locale, ajouter un superuser, effectuer les différentes migrations de la base de données, etc... Les différentes possibilités d'utilisation de l'utilitaire \textit{manage.py} sont reprises dans la documentation Django à l'adresse suivante: \url{https://docs.djangoproject.com/fr/1.9/ref/django-admin/}
 
 \subsubsection{db.sqlite3}
 
@@ -110,13 +109,11 @@ Ce fichier est nécessaire pour définir et configurer l'interface administrateu
 
 \subsubsection{models.py}
 
-Ce fichier permet d'établir la structure de la base de données et de créer les différentes tables de celle-ci. L'ajout d'une table et la configuration des champs est expliquée dans la partie ajouter une table.
-\todo[inline]{référencer partie ajouter une table}
+Ce fichier permet d'établir la structure de la base de données et de créer les différentes tables de celle-ci. L'ajout d'une table et la configuration des champs est expliquée dans la partie \textit{ajouter une table}, chapitre \ref{ajouter une table}.
 
 \subsubsection{mail.py}
 
-Le fichier \textit{mail.py} est utile pour l'envoi automatique des mails. Dans ce fichier, chaque mail est représenté par une fonction. L'utilisation des mails est expliquée dans la partie gestion des mails.
-\todo[inline]{référencer partie mail}
+Le fichier \textit{mail.py} est utile pour l'envoi automatique des mails. Dans ce fichier, chaque mail est représenté par une fonction. L'utilisation des mails est expliquée dans la partie \textit{gestion des mails}, chapitre \ref{gestion des mails}.
 
 \subsubsection{classement.py} 
 
@@ -124,15 +121,12 @@ Ce fichier est utilisé pour vérifier le classement qu'indique chaque nouvel ut
 
 \subsubsection{views.py}
 
-Le fichier \textit{views.py} contient les méthodes nécessaires à la création des différentes views.
-\todo[inline]{référencer partie ajouter une page}
+Le fichier \textit{views.py} contient les méthodes nécessaires à la création des différentes views. L'utilisation de ces méthodes est reprise au chapitre \ref{ajouter une page}, \textit{ajouter une page au site}.
 
 \subsubsection{pdfdocument.py}
 
-Cette classe gère la création de PDF à partir de données sur le serveur en utilisant le package \textit{reportlab}, installé précédemment.
-\todo[inline]{référencer section avant de commencer}
+Cette classe gère la création de PDF à partir de données sur le serveur en utilisant le package \textit{reportlab}, installé précédemment (voir section \ref{sec:Installation et configuration})
 
 \subsubsection{urls.py}
 
-Comme décrit précédemment, ce fichier permet de créer des URL en définissant des associations entre les URL et les vues (du module tennis).
-\todo[inline]{référencer partie ajouter une page}
+Comme décrit précédemment, ce fichier permet de créer des URL en définissant des associations entre les URL et les vues (du module tennis). L'utilisation de ce fichier est également détaillée au chapitre \ref{ajouter une page}.
