@@ -41,7 +41,8 @@ L'équipe 'Le Charles de Lorraine'
 \FloatBarrier
 
 \section{Ajouter de nouveaux mails}
+\todo[inline]{Améliorer cette partie}
 
-Pour permettre au site d'envoyer de nouveaux mails via certaines pages, il est d'abord nécessaire de créer un fichier texte comme présenté sur la figure~\ref{fig:Exemple d'un fichier texte correspondant à un mail envoyé par le site web} et de l'enregistrer dans le répertoire suivant: \textit{ASMAE/tennis/templates/mail}.
+Pour permettre au site d'envoyer de nouveaux mails via certaines pages, il est d'abord nécessaire de créer un fichier texte comme présenté sur la figure~\ref{fig:Exemple d'un fichier texte correspondant à un mail envoyé par le site web} et de l'enregistrer dans le répertoire suivant: \textit{ASMAE/tennis/templates/mail}.\\
 
-\todo[inline]{Expliquer comment le site peut envoyer les nouveaux mails}
+Il faut ensuite écrire une nouvelle méthode dans le fichier \textit{mail.py} afin de pouvoir compléter et envoyer le mail. Cette méthode sera appelée dans le fichier \textit{views.py}.
